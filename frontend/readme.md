@@ -1,0 +1,1 @@
+Aquí se alojarán los archivos del frontend (angular).
