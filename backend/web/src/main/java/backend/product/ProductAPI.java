@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/prod")
+@RequestMapping("/product")
 public class ProductAPI {
 
 	@Autowired ProductRepository gProdRepo;
@@ -17,7 +17,7 @@ public class ProductAPI {
     	//ItemRepository mItemRepo = gContext.getBean(ItemRepository.class);
     	
     	Product prod1 = new Product();
-		prod1.setName("product32423");
+		prod1.setName("nombre de test");
 		
 		prod1 = gProdRepo.save(prod1);
 		
