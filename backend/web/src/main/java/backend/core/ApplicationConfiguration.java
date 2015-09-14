@@ -25,7 +25,7 @@ import javax.sql.DataSource;
  * de @EnableJpaRepositories o @EnableJpa y setear el atributo: "basePackage".
  * 
  * @author tomas
- *
+ * asdasdasd
  */
 @Configuration
 @EnableJpaRepositories("backend")
