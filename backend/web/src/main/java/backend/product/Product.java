@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint;
  * un <strong>Name</strong>, 
  * una <strong>Description</strong>, 
  * una cantidad minima de stock: <strong>MinimumStock</strong>, 
- * un precio unitario: <strong>UnitaryPrice</strong>, 
+ * un precio unitario: <strong>UnitPrice</strong>, 
  * una fecha de cuando fue la ultima vez que se actualizó: <strong>LastUpdateOn</strong>, 
  * una fecha de cuando se eliminó: <strong>DeletedOn</strong>, 
  * un usuario que realizó la ultima modificación en el producto () <strong>LastUpdateUser</strong>
@@ -48,9 +48,10 @@ public class Product {
 	
 	// TODO estaba definido como float en la base de datos pero debe ser un numeric, porque sino corremos el peligro de
 	// que en la base de datos se lo redondee
-	@Column(name="unitary_price")
-	private BigDecimal iUnitaryPrice;
-	
+	@Column(name="unit_price")
+	private BigDecimal iUnitPrice;
+
+	// TODO refactorizar estas columnas de auditoría en otra entidad
 	@Column(name="last_update_on")
 	private Timestamp iLastUpdateOn;
 	
@@ -62,12 +63,18 @@ public class Product {
 	// se modificó por ejemplo el lote, o la droga del producto? si es así hay que cambiarle el nombre
 	@Column(name="last_update_user")
 	private String iLastUpdateUser;
+
+	@Column(name="cost")
+	private BigDecimal iCost;
 	
+	@Column(name="utility")
+	private BigDecimal iUtility;
+
 	
 	@Override
 	public String toString() {
 		return "Product [iId=" + iId + ", iName=" + iName + ", iDescription=" + iDescription + ", iMinimumStock="
-				+ iMinimumStock + ", iUnitaryPrice=" + iUnitaryPrice + ", iLastUpdateOn=" + iLastUpdateOn
+				+ iMinimumStock + ", iUnitPrice=" + iUnitPrice + ", iLastUpdateOn=" + iLastUpdateOn
 				+ ", iDeletedOn=" + iDeletedOn + ", iLastUpdateUser=" + iLastUpdateUser + "]";
 	}
 
@@ -95,12 +102,12 @@ public class Product {
 		this.iMinimumStock = pMinimumStock;
 	}
 
-	public BigDecimal getUnitaryPrice() {
-		return iUnitaryPrice;
+	public BigDecimal getUnitPrice() {
+		return iUnitPrice;
 	}
 
-	public void setUnitaryPrice(BigDecimal pUnitaryPrice) {
-		this.iUnitaryPrice = pUnitaryPrice;
+	public void setUnitPrice(BigDecimal pUnitPrice) {
+		this.iUnitPrice = pUnitPrice;
 	}
 
 	public Timestamp getLastUpdateOn() {
@@ -129,6 +136,22 @@ public class Product {
 
 	public Integer getId() {
 		return iId;
+	}
+
+	public BigDecimal getCost() {
+		return iCost;
+	}
+
+	public void setCost(BigDecimal pCost) {
+		this.iCost = pCost;
+	}
+
+	public BigDecimal getUtility() {
+		return iUtility;
+	}
+
+	public void setUtility(BigDecimal pUtility) {
+		this.iUtility = pUtility;
 	}
 
 }
