@@ -3,11 +3,15 @@ package backend.product;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -26,6 +30,26 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
 public class Product {
+
+	public Product(String iName, String iDescription, BigDecimal iMinimumStock, BigDecimal iUnitPrice,
+			Timestamp iLastUpdateOn, Timestamp iDeletedOn, String iLastUpdateUser, BigDecimal iCost,
+			BigDecimal iUtility, Category iCategory, Manufacturer iManufacturer, MeasureUnit iMeasureUnit,
+			Presentation iPresentation) {
+		super();
+		this.iName = iName;
+		this.iDescription = iDescription;
+		this.iMinimumStock = iMinimumStock;
+		this.iUnitPrice = iUnitPrice;
+		this.iLastUpdateOn = iLastUpdateOn;
+		this.iDeletedOn = iDeletedOn;
+		this.iLastUpdateUser = iLastUpdateUser;
+		this.iCost = iCost;
+		this.iUtility = iUtility;
+		this.iCategory = iCategory;
+		this.iManufacturer = iManufacturer;
+		this.iMeasureUnit = iMeasureUnit;
+		this.iPresentation = iPresentation;
+	}
 
 	@Id
 	@Column(name="id", nullable = false)
@@ -69,6 +93,22 @@ public class Product {
 	
 	@Column(name="utility")
 	private BigDecimal iUtility;
+
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+    @JoinColumn(name="category")
+	private Category iCategory;
+
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+    @JoinColumn(name="manufacturer")
+	private Manufacturer iManufacturer;
+
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+    @JoinColumn(name="measure_unit")
+	private MeasureUnit iMeasureUnit;
+
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+    @JoinColumn(name="presentation")
+	private Presentation iPresentation;
 
 	
 	@Override
@@ -152,6 +192,38 @@ public class Product {
 
 	public void setUtility(BigDecimal pUtility) {
 		this.iUtility = pUtility;
+	}
+
+	public Category getCategory() {
+		return iCategory;
+	}
+
+	public void setCategory(Category iCategory) {
+		this.iCategory = iCategory;
+	}
+
+	public Manufacturer getManufacturer() {
+		return iManufacturer;
+	}
+
+	public void setManufacturer(Manufacturer iManufacturer) {
+		this.iManufacturer = iManufacturer;
+	}
+
+	public MeasureUnit getMeasureUnit() {
+		return iMeasureUnit;
+	}
+
+	public void setMeasureUnit(MeasureUnit iMeasureUnit) {
+		this.iMeasureUnit = iMeasureUnit;
+	}
+
+	public Presentation getPresentation() {
+		return iPresentation;
+	}
+
+	public void setPresentation(Presentation iPresentation) {
+		this.iPresentation = iPresentation;
 	}
 
 }
