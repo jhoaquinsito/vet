@@ -3,14 +3,18 @@ package backend.product;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -30,6 +34,11 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
 public class Product {
+
+	public Product() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public Product(String iName, String iDescription, BigDecimal iMinimumStock, BigDecimal iUnitPrice,
 			Timestamp iLastUpdateOn, Timestamp iDeletedOn, String iLastUpdateUser, BigDecimal iCost,
@@ -58,7 +67,7 @@ public class Product {
 	// la que usa postgresql por defecto
     @SequenceGenerator(name="product_id_seq", sequenceName="product_id_seq", allocationSize=1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="product_id_seq")
-	private Integer iId;
+	private Long iId;
 	
 	@Column(name="name", unique = false, nullable = false, length = 100)
 	private String iName;
@@ -110,12 +119,26 @@ public class Product {
     @JoinColumn(name="presentation")
 	private Presentation iPresentation;
 
+	// TODO revisar si corresponden PERSIST and MERGE
+	// TODO revisar porque debo usar EAGER acá
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
+	@JoinTable(
+        name="product_drugs",
+        joinColumns=@JoinColumn(name="product"),
+        inverseJoinColumns=@JoinColumn(name="drug")
+    )
+    private Set<Drug> iDrugs;
+
 	
+	
+
 	@Override
 	public String toString() {
 		return "Product [iId=" + iId + ", iName=" + iName + ", iDescription=" + iDescription + ", iMinimumStock="
-				+ iMinimumStock + ", iUnitPrice=" + iUnitPrice + ", iLastUpdateOn=" + iLastUpdateOn
-				+ ", iDeletedOn=" + iDeletedOn + ", iLastUpdateUser=" + iLastUpdateUser + "]";
+				+ iMinimumStock + ", iUnitPrice=" + iUnitPrice + ", iLastUpdateOn=" + iLastUpdateOn + ", iDeletedOn="
+				+ iDeletedOn + ", iLastUpdateUser=" + iLastUpdateUser + ", iCost=" + iCost + ", iUtility=" + iUtility
+				+ ", iCategory=" + iCategory + ", iManufacturer=" + iManufacturer + ", iMeasureUnit=" + iMeasureUnit
+				+ ", iPresentation=" + iPresentation + ", iDrugs=" + iDrugs + "]";
 	}
 
 	public String getName() {
@@ -174,7 +197,7 @@ public class Product {
 		this.iLastUpdateUser = pLastUpdateUser;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return iId;
 	}
 
