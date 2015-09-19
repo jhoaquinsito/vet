@@ -39,7 +39,8 @@ public class Product {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	// TODO eliminar este constructor
 	public Product(String iName, String iDescription, BigDecimal iMinimumStock, BigDecimal iUnitPrice,
 			Timestamp iLastUpdateOn, Timestamp iDeletedOn, String iLastUpdateUser, BigDecimal iCost,
 			BigDecimal iUtility, Category iCategory, Manufacturer iManufacturer, MeasureUnit iMeasureUnit,
@@ -247,6 +248,14 @@ public class Product {
 
 	public void setPresentation(Presentation iPresentation) {
 		this.iPresentation = iPresentation;
+	}
+
+	public Set<Drug> getDrugs() {
+		return iDrugs;
+	}
+
+	public void setDrugs(Set<Drug> iDrugs) {
+		this.iDrugs = iDrugs;
 	}
 
 }
