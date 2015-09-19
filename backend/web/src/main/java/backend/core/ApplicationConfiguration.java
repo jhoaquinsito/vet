@@ -40,7 +40,13 @@ class ApplicationConfiguration {
 	// Paquete que se va a escanear para buscar clases con la annotation @Entity
 	private final String cPACKAGES_TO_SCAN_ENTITIES = "backend";
 
-	// TODO investigar que es la persistent unit
+	// A JPA Persistence Unit is a logical grouping of user defined persistable
+	// classes
+	// (entity classes, embeddable classes and mapped superclasses) that are
+	// managed by
+	// EntityManager instances in an application.
+	// This set of entity classes represents the data contained within a single
+	// data store.
 	private final String cPERSISTENCE_UNIT_NAME = "jpaData";
 
 	// Properties de Hibernate
@@ -48,11 +54,18 @@ class ApplicationConfiguration {
 	// definido abajo:
 	private final List<String[]> cHIBERNATE_PROPERTIES = Arrays
 			.asList(new String[][] { { "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect" },
-					// TODO ver que hace esta property:
+					// Write all SQL statements to console.
+					// This is an alternative to setting the log category
+					// org.hibernate.SQL to debug.
 					{ "hibernate.show_sql", "false" },
-					// TODO ver que hace esta property:
+					// Pretty print the SQL in the log and console.
 					{ "hibernate.format_sql", "false" },
-					// TODO ver que hace esta property:
+					// Automatically validates or exports schema DDL to the
+					// database when the
+					// SessionFactory is created. With create-drop, the database
+					// schema will be dropped
+					// when the SessionFactory is closed explicitly.
+					// possible values: validate | update | create | create-drop
 					{ "hibernate.hbm2ddl.auto", "create" } });
 
 	/**
@@ -72,11 +85,12 @@ class ApplicationConfiguration {
 	}
 
 	/**
-	 * El método entityManagerFactory() tiene como responsabilidad crear una factoria de administradores de
-	 * entidades de JPA.
-     * El entityManager está a cargo de las entidades (escucha, conoce las entidades, sus relaciones,
-     * persiste el ciclo de vida de ellas y su interfaz define los metodos que serán usados para interactuar
-     * con el persistence context). Está asociado a un persistence context específico donde las entidades viven.
+	 * El método entityManagerFactory() tiene como responsabilidad crear una
+	 * factoria de administradores de entidades de JPA. El entityManager está a
+	 * cargo de las entidades (escucha, conoce las entidades, sus relaciones,
+	 * persiste el ciclo de vida de ellas y su interfaz define los metodos que
+	 * serán usados para interactuar con el persistence context). Está asociado
+	 * a un persistence context específico donde las entidades viven.
 	 * 
 	 * @return factoria de administradores de entidades JPA
 	 */
@@ -84,7 +98,7 @@ class ApplicationConfiguration {
 	public EntityManagerFactory entityManagerFactory() {
 
 		HibernateJpaVendorAdapter mVendorAdapter = new HibernateJpaVendorAdapter();
-		// TODO investigar que es el DDL y para que sirve
+		// DDL: estructura de la base de datos
 		mVendorAdapter.setGenerateDdl(true);
 
 		LocalContainerEntityManagerFactoryBean mEntityManagerFactory = new LocalContainerEntityManagerFactoryBean();
@@ -92,7 +106,6 @@ class ApplicationConfiguration {
 		mEntityManagerFactory.setDataSource(this.dataSource());
 		// packages to scan for @Entity classes can be specified:
 		mEntityManagerFactory.setPackagesToScan(cPACKAGES_TO_SCAN_ENTITIES);
-		// TODO la siguiente linea quiza haya que borrarla:
 		mEntityManagerFactory.setPersistenceUnitName(cPERSISTENCE_UNIT_NAME);
 
 		// configuro que las properties se van a cargar después
@@ -103,9 +116,11 @@ class ApplicationConfiguration {
 	}
 
 	/**
-	 * El método transactionManager() tiene como responsabilidad crear el administrador de transacciones.
-     * El administrador de transacciones es responsable del acceso transaccional a los datos, dando soporta a todas
-     * las transacciones que ocurren dentro de la aplicación.
+	 * El método transactionManager() tiene como responsabilidad crear el
+	 * administrador de transacciones. El administrador de transacciones es
+	 * responsable del acceso transaccional a los datos, dando soporta a todas
+	 * las transacciones que ocurren dentro de la aplicación.
+	 * 
 	 * @return administrador de transacciones JPA
 	 */
 	@Bean // declaro que el objeto debe ser un bean del contexto
@@ -114,9 +129,11 @@ class ApplicationConfiguration {
 		mJpaTransactionManager.setEntityManagerFactory(this.entityManagerFactory());
 		return mJpaTransactionManager;
 	}
-    
+
 	/**
-	 * El método sessionFactory() se encarga de crear la factoría de sessiones de Hibernate.
+	 * El método sessionFactory() se encarga de crear la factoría de sessiones
+	 * de Hibernate.
+	 * 
 	 * @return factoría de sessiones de Hibernate
 	 */
 	@Bean // declaro que el objeto debe ser un bean del contexto
