@@ -9,30 +9,27 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
 /**
- * Una <code>Drug</code> es una representación de una droga utilizada en productos farmacéuticos
- * (de uso veterinario para nuestro dominio).
- * Una droga tiene:
- * un <strong>Id</strong>, 
- * y un <strong>Name</strong>.
+ * Una <code>Drug</code> es una representación de una droga utilizada en
+ * productos farmacéuticos (de uso veterinario para nuestro dominio). Una droga
+ * tiene: un <strong>Id</strong>, y un <strong>Name</strong>.
  */
 @Entity
-@Table(name = "drug", uniqueConstraints = {@UniqueConstraint(columnNames={})})
+@Table(name = "drug", uniqueConstraints = { @UniqueConstraint(columnNames = {}) })
 public class Drug {
 
 	@Id
-	@Column(name="id", nullable = false)
+	@Column(name = "id", nullable = false)
 	// los id se generan a partir de la siguiente secuencia
-	// NOTA: la nomenclatura del nombre de la secuencia debe respetarse porque es 
+	// NOTA: la nomenclatura del nombre de la secuencia debe respetarse porque
+	// es
 	// la que usa postgresql por defecto
-    @SequenceGenerator(name="drug_id_seq", sequenceName="drug_id_seq", allocationSize=1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="drug_id_seq")
+	@SequenceGenerator(name = "drug_id_seq", sequenceName = "drug_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "drug_id_seq")
 	private Long iId;
-	
-	@Column(name="name", unique = false, nullable = false, length = 100)
-	private String iName;
 
+	@Column(name = "name", unique = false, nullable = false, length = 100)
+	private String iName;
 
 	public Drug() {
 		super();
