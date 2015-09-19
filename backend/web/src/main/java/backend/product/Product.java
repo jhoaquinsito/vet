@@ -4,7 +4,6 @@ package backend.product;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- * Un <code>Product</code> es una representación de un tipo de producto. Un tipo de producto tiene un
+ * Un <code>Product</code> es una representación de un tipo de producto.
+ * Un tipo de producto tiene:
  * un <strong>Id</strong>, 
  * un <strong>Name</strong>, 
  * una <strong>Description</strong>, 
@@ -29,7 +29,14 @@ import javax.persistence.UniqueConstraint;
  * un precio unitario: <strong>UnitPrice</strong>, 
  * una fecha de cuando fue la ultima vez que se actualizó: <strong>LastUpdateOn</strong>, 
  * una fecha de cuando se eliminó: <strong>DeletedOn</strong>, 
- * un usuario que realizó la ultima modificación en el producto () <strong>LastUpdateUser</strong>
+ * un usuario que realizó la ultima modificación en el producto: <strong>LastUpdateUser</strong>,
+ * un costo unitario: <strong>Cost</strong>,
+ * una utilidad o ganancia: <strong>Utility</strong>,
+ * una <strong>Category</strong>,
+ * un laboratorio que lo fabricó: <strong>Manufacturer</strong>,
+ * una unidad de medida: <strong>MeasureUnit</strong>,
+ * una presentación (envase, inyectable, etc.): <strong>Presentation</strong>,
+ * una serie de drogas que lo constituyen: <strong>Drugs</strong>.
  */
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
@@ -37,28 +44,6 @@ public class Product {
 
 	public Product() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	// TODO eliminar este constructor
-	public Product(String iName, String iDescription, BigDecimal iMinimumStock, BigDecimal iUnitPrice,
-			Timestamp iLastUpdateOn, Timestamp iDeletedOn, String iLastUpdateUser, BigDecimal iCost,
-			BigDecimal iUtility, Category iCategory, Manufacturer iManufacturer, MeasureUnit iMeasureUnit,
-			Presentation iPresentation) {
-		super();
-		this.iName = iName;
-		this.iDescription = iDescription;
-		this.iMinimumStock = iMinimumStock;
-		this.iUnitPrice = iUnitPrice;
-		this.iLastUpdateOn = iLastUpdateOn;
-		this.iDeletedOn = iDeletedOn;
-		this.iLastUpdateUser = iLastUpdateUser;
-		this.iCost = iCost;
-		this.iUtility = iUtility;
-		this.iCategory = iCategory;
-		this.iManufacturer = iManufacturer;
-		this.iMeasureUnit = iMeasureUnit;
-		this.iPresentation = iPresentation;
 	}
 
 	@Id
@@ -76,12 +61,9 @@ public class Product {
 	@Column(name="description")
 	private String iDescription;
 	
-	// TODO porqué estaba definido como float en la base de datos? float no es exacto. no debería ser numeric?
 	@Column(name="minimum_stock")
 	private BigDecimal iMinimumStock;
 	
-	// TODO estaba definido como float en la base de datos pero debe ser un numeric, porque sino corremos el peligro de
-	// que en la base de datos se lo redondee
 	@Column(name="unit_price")
 	private BigDecimal iUnitPrice;
 
@@ -222,40 +204,40 @@ public class Product {
 		return iCategory;
 	}
 
-	public void setCategory(Category iCategory) {
-		this.iCategory = iCategory;
+	public void setCategory(Category pCategory) {
+		this.iCategory = pCategory;
 	}
 
 	public Manufacturer getManufacturer() {
 		return iManufacturer;
 	}
 
-	public void setManufacturer(Manufacturer iManufacturer) {
-		this.iManufacturer = iManufacturer;
+	public void setManufacturer(Manufacturer pManufacturer) {
+		this.iManufacturer = pManufacturer;
 	}
 
 	public MeasureUnit getMeasureUnit() {
 		return iMeasureUnit;
 	}
 
-	public void setMeasureUnit(MeasureUnit iMeasureUnit) {
-		this.iMeasureUnit = iMeasureUnit;
+	public void setMeasureUnit(MeasureUnit pMeasureUnit) {
+		this.iMeasureUnit = pMeasureUnit;
 	}
 
 	public Presentation getPresentation() {
 		return iPresentation;
 	}
 
-	public void setPresentation(Presentation iPresentation) {
-		this.iPresentation = iPresentation;
+	public void setPresentation(Presentation pPresentation) {
+		this.iPresentation = pPresentation;
 	}
 
 	public Set<Drug> getDrugs() {
 		return iDrugs;
 	}
 
-	public void setDrugs(Set<Drug> iDrugs) {
-		this.iDrugs = iDrugs;
+	public void setDrugs(Set<Drug> pDrugs) {
+		this.iDrugs = pDrugs;
 	}
 
 }

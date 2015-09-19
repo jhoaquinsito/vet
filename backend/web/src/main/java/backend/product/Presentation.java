@@ -9,19 +9,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * Una <code>Presentation</code> es una representación del tipo de presentación de un producto.
+ * Una presentación tiene:
+ * un <strong>Id</strong>, 
+ * y un <strong>Name</strong>.
+ */
 @Entity
 @Table(name = "presentation", uniqueConstraints = {@UniqueConstraint(columnNames={})})
 public class Presentation {
-
-	public Presentation(String iName) {
-		super();
-		this.iName = iName;
-	}
-
-	public Presentation() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	@Id
 	@Column(name="id", nullable = false)
@@ -31,16 +27,26 @@ public class Presentation {
     @SequenceGenerator(name="presentation_id_seq", sequenceName="presentation_id_seq", allocationSize=1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="presentation_id_seq")
 	private Long iId;
-	
+
 	@Column(name="name", unique = false, nullable = false, length = 100)
 	private String iName;
+
+
+	public Presentation(String pName) {
+		super();
+		this.iName = pName;
+	}
+
+	public Presentation() {
+		super();
+	}
 
 	public String getName() {
 		return iName;
 	}
 
-	public void setName(String iName) {
-		this.iName = iName;
+	public void setName(String pName) {
+		this.iName = pName;
 	}
 
 	public Long getId() {

@@ -9,21 +9,17 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+
+/**
+ * Una <code>Drug</code> es una representación de una droga utilizada en productos farmacéuticos
+ * (de uso veterinario para nuestro dominio).
+ * Una droga tiene:
+ * un <strong>Id</strong>, 
+ * y un <strong>Name</strong>.
+ */
 @Entity
 @Table(name = "drug", uniqueConstraints = {@UniqueConstraint(columnNames={})})
 public class Drug {
-
-	
-
-	public Drug() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Drug(String iName) {
-		super();
-		this.iName = iName;
-	}
 
 	@Id
 	@Column(name="id", nullable = false)
@@ -37,12 +33,22 @@ public class Drug {
 	@Column(name="name", unique = false, nullable = false, length = 100)
 	private String iName;
 
+
+	public Drug() {
+		super();
+	}
+
+	public Drug(String pName) {
+		super();
+		this.iName = pName;
+	}
+
 	public String getName() {
 		return iName;
 	}
 
-	public void setName(String iName) {
-		this.iName = iName;
+	public void setName(String pName) {
+		this.iName = pName;
 	}
 
 	public Long getId() {

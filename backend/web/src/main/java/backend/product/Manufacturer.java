@@ -9,19 +9,16 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * Un <code>Manufacturer</code> es una representación de un laboratorio o fábrica que haya creado
+ * un producto.
+ * Una fabrica tiene:
+ * un <strong>Id</strong>, 
+ * y un <strong>Name</strong>.
+ */
 @Entity
 @Table(name = "manufacturer", uniqueConstraints = {@UniqueConstraint(columnNames={})})
 public class Manufacturer {
-
-	public Manufacturer(String iName) {
-		super();
-		this.iName = iName;
-	}
-
-	public Manufacturer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	@Id
 	@Column(name="id", nullable = false)
@@ -35,12 +32,22 @@ public class Manufacturer {
 	@Column(name="name", unique = false, nullable = false, length = 100)
 	private String iName;
 
+
+	public Manufacturer(String pName) {
+		super();
+		this.iName = pName;
+	}
+
+	public Manufacturer() {
+		super();
+	}
+
 	public String getName() {
 		return iName;
 	}
 
-	public void setName(String iName) {
-		this.iName = iName;
+	public void setName(String pName) {
+		this.iName = pName;
 	}
 
 	public Long getId() {
