@@ -11,7 +11,7 @@ public class BusinessException extends Exception{
 	public String iMethodName;
 	public String iExMessage;
 	public String iRequestUrl;
-	
+	public HttpStatus iStatusCode;
 	
     public BusinessException(String p, int id ){
         super("NotFoundException with Entity: "+ p + ", id="+id);
@@ -26,14 +26,14 @@ public class BusinessException extends Exception{
 	 * @param iExMessage
 	 * @param iRequestUrl
 	 */
-	public BusinessException(String pClassName, String pMethodName, String pExMessage, String pRequestUrl) {
+	public BusinessException(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
 		super("CLASS: " + pClassName + " - METHOD: " + pMethodName +" - EX MESSAGE: " + pExMessage  );
 		
 		this.iClassName 	= pClassName;
 		this.iMethodName 	= pMethodName;
 		this.iExMessage 	= pExMessage;
 		this.iRequestUrl 	= pRequestUrl;
-		
+		this.iStatusCode	= pStatusCode;
 		
 	}
 
@@ -77,5 +77,19 @@ public class BusinessException extends Exception{
 
 	public void setRequestUrl(String pRequestUrl) {
 		this.iRequestUrl = pRequestUrl;
+	}
+
+
+
+
+	public HttpStatus getiStatusCode() {
+		return iStatusCode;
+	}
+
+
+
+
+	public void setiStatusCode(HttpStatus iStatusCode) {
+		this.iStatusCode = iStatusCode;
 	}
 }

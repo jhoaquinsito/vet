@@ -113,7 +113,7 @@ public class ApplicationRESTController {
 		Product product = gProdRepo.findOne((long) id);
 		if (product == null) {
 			//BusinessException(String pClassName, String pMethodName, String pExMessage, String pRequestUrl)
-			throw new BusinessException("Product","getProductById","Entidad no encontrada", "url");
+			throw new BusinessException("Product","getProductById","Entidad no encontrada", "url",HttpStatus.NOT_FOUND);
 		}
 		return product;
 	}
@@ -133,7 +133,7 @@ public class ApplicationRESTController {
 				List<Product> list = (List<Product>) gProdRepo.findAll();
 				
 				if(list == null || list.get(0) == null)
-					throw new BusinessException("Product","getProductById","No hay entidades", "url");
+					throw new BusinessException("Product","getProductById","No hay entidades", "url",HttpStatus.FAILED_DEPENDENCY);
 				return list.get(0);
 			}
 			case 1:  
@@ -145,14 +145,14 @@ public class ApplicationRESTController {
 				}
 			case 2:  
 				{
-					throw new BusinessException("Product","errorProduct","Porque seleccionaste el 2!!! ESTE NO ANDAAA KAPOW", "url");
+					throw new BusinessException("Product","errorProduct","Porque seleccionaste el 2!!! ESTE NO ANDAAA KAPOW", "url",HttpStatus.NO_CONTENT);
 					
 				}
 			}
 			
 		} catch (Exception e) {
 			//Capturamos la excepcion Generica.
-			throw new BusinessException("Product","errorProduct",e.getMessage(), "url");
+			throw new BusinessException("Product","errorProduct",e.getMessage(), "url",HttpStatus.BAD_GATEWAY);
 		}
 		return null;
 		
@@ -160,8 +160,8 @@ public class ApplicationRESTController {
 	}
 	
 	@ExceptionHandler(BusinessException.class)
-	public @ResponseBody ExceptionJSONInfo handleBusinessException(HttpServletRequest request, BusinessException ex){
-	     
+	public @ResponseBody ResponseEntity<ExceptionJSONInfo> handleBusinessException(HttpServletRequest request, BusinessException ex){
+		
 		// Obtenemos datos del Request. - Ahora no lo uso par anada.
 		String requestURL 		= request.getRequestURL().toString();
 		String exceptionMessage = ex.getExMessage();
@@ -169,11 +169,12 @@ public class ApplicationRESTController {
 		String methodName		= ex.getMethodName();
 		
 		//Creamos el objeto json que sera el que viaje al cliente.
-	    ExceptionJSONInfo response = new ExceptionJSONInfo();
-	    response.setUrl(request.getRequestURL().toString());
-	    response.setMessage(ex.getMessage());
-	    response.setiStackTrace(ex.getStackTrace().toString());
-	    response.setiDetail(ex.getExMessage());
+	    ExceptionJSONInfo exceptionDTO = new ExceptionJSONInfo();
+	    exceptionDTO.setUrl(request.getRequestURL().toString());
+	    exceptionDTO.setMessage(ex.getMessage());
+	    exceptionDTO.setiStackTrace(ex.getStackTrace().toString());
+	    exceptionDTO.setiDetail(ex.getExMessage());
+	    ResponseEntity<ExceptionJSONInfo> response = new ResponseEntity<ExceptionJSONInfo>(exceptionDTO,ex.getiStatusCode());
 	    
 	    return response;
 	}
