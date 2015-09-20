@@ -1,4 +1,4 @@
-package backend.product;
+package backend.product.presentation;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

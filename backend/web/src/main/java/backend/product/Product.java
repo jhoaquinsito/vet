@@ -18,6 +18,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import backend.product.category.Category;
+import backend.product.drug.Drug;
+import backend.product.manufacturer.Manufacturer;
+import backend.product.measure_unit.MeasureUnit;
+import backend.product.presentation.Presentation;
+
 /**
  * Un <code>Product</code> es una representación de un tipo de producto. Un tipo
  * de producto tiene: un <strong>Id</strong>, un <strong>Name</strong>, una

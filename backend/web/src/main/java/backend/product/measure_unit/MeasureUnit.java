@@ -1,4 +1,4 @@
-package backend.product;
+package backend.product.measure_unit;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

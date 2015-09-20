@@ -1,4 +1,4 @@
-package backend.product;
+package backend.product.drug;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
