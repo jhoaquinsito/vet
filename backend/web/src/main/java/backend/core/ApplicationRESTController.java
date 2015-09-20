@@ -1,4 +1,4 @@
-package backend.product;
+package backend.core;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -22,7 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import backend.core.CommandAndQueries;
+import backend.exception.BusinessException;
+import backend.exception.BusinessExceptionDTO;
+import backend.product.Product;
+import backend.product.ProductDTO;
+import backend.product.ProductRepository;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;

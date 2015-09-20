@@ -1,4 +1,4 @@
-package backend.product;
+package backend.exception;
 
 import org.springframework.http.HttpStatus;
 

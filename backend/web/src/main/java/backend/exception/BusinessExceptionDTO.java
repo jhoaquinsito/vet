@@ -1,4 +1,4 @@
-package backend.product;
+package backend.exception;
 
 /**
  * Un <code>ExceptionJSONInfo</code> es una clase de tipo DTO, que sirve para almacenar
