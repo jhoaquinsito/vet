@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import backend.exceptions.ProductNotFoundException;
-import backend.helpers.MyError;
-
 /**
  * Este <code>Controlador</code> es el encargado de recibir los request
  * desde la interfaz, procesarlos, y devolver la respuesta al cliente. 
@@ -63,9 +60,9 @@ public class ProductAPI {
 
 	@RequestMapping(value = "/{id}?name=algo", method = RequestMethod.GET)
 	public Product getProductById(@PathVariable int id) throws Exception {
-		Product product = null;// gProdRepo.findOne((long) id);
+		Product product = gProdRepo.findOne((long) id);
 		if (product == null) {
-			throw new ProductNotFoundException(id);
+			//throw new ProductNotFoundException(id);
 		}
 		return product;
 	}
@@ -77,14 +74,14 @@ public class ProductAPI {
 
 	
 	
-	@ExceptionHandler(ProductNotFoundException.class)
-	public ResponseEntity<MyError> businessExceptionHandler(ProductNotFoundException e) {
-		/*
-		 * BusinessExcepcion : Clase 
-		 */
-		
-		long spittleId = e.getProductId();
-		MyError error = new MyError(4, "Product [" + spittleId + "] not found");
-		return new ResponseEntity<MyError>(error, HttpStatus.NOT_FOUND);
-	}
+//	@ExceptionHandler(ProductNotFoundException.class)
+//	public ResponseEntity<MyError> businessExceptionHandler(ProductNotFoundException e) {
+//		/*
+//		 * BusinessExcepcion : Clase 
+//		 */
+//		
+//		long spittleId = e.getProductId();
+//		MyError error = new MyError(4, "Product [" + spittleId + "] not found");
+//		return new ResponseEntity<MyError>(error, HttpStatus.NOT_FOUND);
+//	}
 }
