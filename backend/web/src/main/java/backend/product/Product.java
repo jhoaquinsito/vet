@@ -1,6 +1,7 @@
 package backend.product;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import javax.persistence.Column;
@@ -25,7 +26,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
-public class Product {
+public class Product implements Serializable{
 
 	@Id
 	@Column(name="id", nullable = false)
