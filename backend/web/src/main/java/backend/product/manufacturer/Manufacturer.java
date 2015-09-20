@@ -1,4 +1,4 @@
-package backend.product;
+package backend.product.manufacturer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,12 +10,13 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- * Una <code>MeasureUnit</code> es una representación una unidad de medida. Una
- * unidad de medida tiene: un <strong>Id</strong>, y un <strong>Name</strong>.
+ * Un <code>Manufacturer</code> es una representación de un laboratorio o
+ * fábrica que haya creado un producto. Una fabrica tiene: un
+ * <strong>Id</strong>, y un <strong>Name</strong>.
  */
 @Entity
-@Table(name = "measure_unit", uniqueConstraints = { @UniqueConstraint(columnNames = {}) })
-public class MeasureUnit {
+@Table(name = "manufacturer", uniqueConstraints = { @UniqueConstraint(columnNames = {}) })
+public class Manufacturer {
 
 	@Id
 	@Column(name = "id", nullable = false)
@@ -23,19 +24,19 @@ public class MeasureUnit {
 	// NOTA: la nomenclatura del nombre de la secuencia debe respetarse porque
 	// es
 	// la que usa postgresql por defecto
-	@SequenceGenerator(name = "measure_unit_id_seq", sequenceName = "measure_unit_id_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "measure_unit_id_seq")
+	@SequenceGenerator(name = "manufacturer_id_seq", sequenceName = "manufacturer_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "manufacturer_id_seq")
 	private Long iId;
 
 	@Column(name = "name", unique = false, nullable = false, length = 100)
 	private String iName;
 
-	public MeasureUnit(String pName) {
+	public Manufacturer(String pName) {
 		super();
 		this.iName = pName;
 	}
 
-	public MeasureUnit() {
+	public Manufacturer() {
 		super();
 	}
 
