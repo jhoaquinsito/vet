@@ -99,7 +99,7 @@ public class ApplicationRESTController {
 	 * Metodo API que permite recuperar la lista de los distintos Product
 	 * @return Lista de productos.
 	 */
-	@RequestMapping(value = "product/",method = RequestMethod.GET)
+	@RequestMapping(value = "product",method = RequestMethod.GET)
 	public @ResponseBody List<Product> getList() {
 		
 		List<Product> list = (List<Product>) gProdRepo.findAll();
@@ -128,7 +128,7 @@ public class ApplicationRESTController {
 	 * @param product : Producto especificado para guardar en la BD.
 	 * @return long   : Identificador del nuevo producto en la BD.
 	 */
-	@RequestMapping(value = "product/product", method = RequestMethod.POST)
+	@RequestMapping(value = "product", method = RequestMethod.POST)
 	public long insertProduct(@RequestBody Product product)  {
 		return gProdRepo.save(product).getId();
 	}
