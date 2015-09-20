@@ -1,5 +1,7 @@
 package backend.product;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.core.CommandAndQueries;
@@ -90,8 +91,11 @@ public class ApplicationRESTController {
 		return prod1.toString() + "--------> ID =" + mId.toString();
 	}
 	
-	
-	@RequestMapping(value = "product/list",method = RequestMethod.GET)
+	/**
+	 * Metodo API que permite recuperar la lista de los distintos Product
+	 * @return Lista de productos.
+	 */
+	@RequestMapping(value = "product/",method = RequestMethod.GET)
 	public @ResponseBody List<Product> getList() {
 		
 		List<Product> list = (List<Product>) gProdRepo.findAll();
@@ -99,82 +103,68 @@ public class ApplicationRESTController {
 		return list;
 	}
 	
-	@RequestMapping(value = "product/first",method = RequestMethod.GET)
-	public @ResponseBody Product getFirst() {
-		
-		
-		List<Product> list = (List<Product>) gProdRepo.findAll();
-		
-		return list.get(0);
-	}
-
+	/**
+	 * Metodo API que permite recuperar un Product especificando su ID
+	 * @param id : Identificador de la entidad buscada.
+	 * @return Product : producto buscado.
+	 * @throws Exception : Excepcion de negocio, manejada por: handleBusinessException
+	 */
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
 	public Product getProductById(@PathVariable int id) throws Exception {
 		Product product = gProdRepo.findOne((long) id);
 		if (product == null) {
-			//BusinessException(String pClassName, String pMethodName, String pExMessage, String pRequestUrl)
 			throw new BusinessException("Product","getProductById","Entidad no encontrada", "url",HttpStatus.NOT_FOUND);
 		}
 		return product;
 	}
 	
+	
+	/**
+	 * Metodo API que permite recuperar un Product especificando su ID
+	 * @param product : Producto especificado para guardar en la BD.
+	 * @return long   : Identificador del nuevo producto en la BD.
+	 */
 	@RequestMapping(value = "product/product", method = RequestMethod.POST)
-	public String insertProduct(@RequestBody Product product)  {
-		return product.getName();
+	public long insertProduct(@RequestBody Product product)  {
+		return gProdRepo.save(product).getId();
 	}
 	
-	@RequestMapping(value = "product/error/{id}", method = RequestMethod.POST)
-	public Product errorProduct (@PathVariable int id) throws Exception
-	{
-		try {
-			switch (id) {
-			case 0:
-			{
-				List<Product> list = (List<Product>) gProdRepo.findAll();
-				
-				if(list == null || list.get(0) == null)
-					throw new BusinessException("Product","getProductById","No hay entidades", "url",HttpStatus.FAILED_DEPENDENCY);
-				return list.get(0);
-			}
-			case 1:  
-				{
-					//Hacemos una excepcion por Division de Zero
-					int i = 0;
-					i = -1/i;
-			        break;
-				}
-			case 2:  
-				{
-					throw new BusinessException("Product","errorProduct","Porque seleccionaste el 2!!! ESTE NO ANDAAA KAPOW", "url",HttpStatus.NO_CONTENT);
-					
-				}
-			}
-			
-		} catch (Exception e) {
-			//Capturamos la excepcion Generica.
-			throw new BusinessException("Product","errorProduct",e.getMessage(), "url",HttpStatus.BAD_GATEWAY);
-		}
-		return null;
+	
+	/**
+	 * Este metodo es un "error handling method", uno que permite manejar las excepciones
+	 * que se producen en los distintos metodos del controllador.
+	 * 
+	 * Solamente maneja las excepciones cuyo tipo son: BusinessException
+	 * 
+	 * Los parametros de entrada a este metodo llegan de forma automatica.
+	 * 
+	 * @param request : Este parametro contiene la informacion del request generado desde el cliente
+	 * 					Ejemplo: request.getRequestURL() devuelve la URL del servicio consumido ej ("www.genesis.com/product/1")
+	 * @param ex	  : Este parametro contiene la excepcion que se genero durante la ejecucion de un metodo 
+	 *  				en el controlador. Tiene informacion sobre la clase, metodo, y detalles de la excepcion.
+	 * @return ResponseEntity<ExceptionJSONInfo>
+	 * 					El ResponseEntity contiene la informacion del codigo HTTP retornado al cliente (EJ: 404, 500, etc.)
+	 * 					Tambien contiene la informacion de la clase T que envuelve, en este caso ExceptionJSONInfo
+	 * 					En conclusion, el cliente recibe no solamente el codigo de error, sino tambien detalles gracias a la
+	 * 					entidad envuelta.
+	 */
+	@ExceptionHandler(BusinessException.class)
+	public @ResponseBody ResponseEntity<BusinessExceptionDTO> handleBusinessException(HttpServletRequest request, BusinessException ex){
 		
 
-	}
-	
-	@ExceptionHandler(BusinessException.class)
-	public @ResponseBody ResponseEntity<ExceptionJSONInfo> handleBusinessException(HttpServletRequest request, BusinessException ex){
-		
-		// Obtenemos datos del Request. - Ahora no lo uso par anada.
-		String requestURL 		= request.getRequestURL().toString();
-		String exceptionMessage = ex.getExMessage();
-		String className 		= ex.getClassName();
-		String methodName		= ex.getMethodName();
-		
 		//Creamos el objeto json que sera el que viaje al cliente.
-	    ExceptionJSONInfo exceptionDTO = new ExceptionJSONInfo();
+	    BusinessExceptionDTO exceptionDTO = new BusinessExceptionDTO();
 	    exceptionDTO.setUrl(request.getRequestURL().toString());
-	    exceptionDTO.setMessage(ex.getMessage());
-	    exceptionDTO.setiStackTrace(ex.getStackTrace().toString());
 	    exceptionDTO.setiDetail(ex.getExMessage());
-	    ResponseEntity<ExceptionJSONInfo> response = new ResponseEntity<ExceptionJSONInfo>(exceptionDTO,ex.getiStatusCode());
+	    exceptionDTO.setMessage(ex.getFriendlyMessage());
+	    exceptionDTO.setiDetail(ex.getExMessage());
+	    
+	    //Obtengo el StackTrace para pasarlo como String.
+		    StringWriter stackTrace = new StringWriter();
+			ex.printStackTrace(new PrintWriter(stackTrace));
+	    exceptionDTO.setStackTrace(stackTrace.toString());
+		
+	    ResponseEntity<BusinessExceptionDTO> response = new ResponseEntity<BusinessExceptionDTO>(exceptionDTO,ex.getiStatusCode());
 	    
 	    return response;
 	}

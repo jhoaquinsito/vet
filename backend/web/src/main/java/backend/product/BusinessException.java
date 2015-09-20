@@ -1,30 +1,43 @@
 package backend.product;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Employee Not Found") //404
+
+/**
+ * Un <code>BusinessException</code> es una <strong>EXCEPCION</strong>, que sirve para encpsular los 
+ * casos donde el flujo normal no puede seguir adelante, o bien, que suceda un flujo realmente de excepcion.
+ * <br>
+ *
+ * Su mision es encapsular las excepciones controladas y no controladas, en cualquiera de las distintas
+ * capas de la arquitectura, y comunicarla mediante el throw de ella misma, hasta llegar al RestController
+ * pertinente, donde será serializada via la clase BusinessExceptionDTO
+ * <br><br>
+ * Un <code>BusinessException</code> contiene:<br><br>
+ * <strong>ClassName</strong>, el nombre de la clase desde el cual el flujo de excepcion comenzo.<br>
+ * <strong>MethodName</strong>, el nombre del metodo que disparo la excepcion.<br>
+ * <strong>ExMessage</strong>, el mensaje de excepcion, <strong>NO user-friendly</strong>, opcional, que puede provenir de una excepcion <br>
+ * <strong>FriendlyMessage</strong>, el mensaje de excepcion, <strong>user-friendly</strong>, que indica que sucedio. (Por default: "Ha ocurrido una excepcion". <br>
+ * <strong>StatusCode</strong>, el <code>HttpStatus Code</code> que identifica que tipo de codigo HTTP tendra que viajar al cliente (Ej. 404).<br>
+ * 
+ * @author genesis
+ *
+ */
 public class BusinessException extends Exception{
 	private static final long serialVersionUID = -3332292346834265371L;
 	 
 	public String iClassName;
 	public String iMethodName;
 	public String iExMessage;
-	public String iRequestUrl;
+	public String iFriendlyMessage;
 	public HttpStatus iStatusCode;
 	
-    public BusinessException(String p, int id ){
-        super("NotFoundException with Entity: "+ p + ", id="+id);
-    }
-
-    
     
     
 	/**
 	 * @param iClassName
 	 * @param iMethodName
 	 * @param iExMessage
-	 * @param iRequestUrl
+	 * @param iFriendlyMessage
 	 */
 	public BusinessException(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
 		super("CLASS: " + pClassName + " - METHOD: " + pMethodName +" - EX MESSAGE: " + pExMessage  );
@@ -32,7 +45,7 @@ public class BusinessException extends Exception{
 		this.iClassName 	= pClassName;
 		this.iMethodName 	= pMethodName;
 		this.iExMessage 	= pExMessage;
-		this.iRequestUrl 	= pRequestUrl;
+		this.iFriendlyMessage 	= pRequestUrl;
 		this.iStatusCode	= pStatusCode;
 		
 	}
@@ -70,13 +83,13 @@ public class BusinessException extends Exception{
 	}
 
 
-	public String getRequestUrl() {
-		return iRequestUrl;
+	public String getFriendlyMessage() {
+		return iFriendlyMessage;
 	}
 
 
-	public void setRequestUrl(String pRequestUrl) {
-		this.iRequestUrl = pRequestUrl;
+	public void setFriendlyMessage(String pFriendlyMessage) {
+		this.iFriendlyMessage = pFriendlyMessage;
 	}
 
 
