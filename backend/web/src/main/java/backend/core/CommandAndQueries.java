@@ -3,7 +3,21 @@ package backend.core;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
+import backend.product.category.Category;
+import backend.product.category.CategoryDTO;
+import backend.product.drug.Drug;
+import backend.product.drug.DrugDTO;
+import backend.product.manufacturer.Manufacturer;
+import backend.product.manufacturer.ManufacturerDTO;
+import backend.product.measure_unit.MeasureUnit;
+import backend.product.measure_unit.MeasureUnitDTO;
+import backend.product.presentation.Presentation;
+import backend.product.presentation.PresentationDTO;
 import backend.utils.CustomMapper;
+import backend.utils.OrikaMapperFactory;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 
 /**
  * <code>CommandAndQueries</code> representa el conjunto de comandos y consultas posibles de realizar al dominio.
@@ -19,16 +33,16 @@ import backend.utils.CustomMapper;
  *
  */
 public class CommandAndQueries {
-	// TODO implementar un mapeador mejor (librería quizás)
-	private CustomMapper iMapper;
-	
+	// MapperFacade de Orika (librería para mapping)
+	private MapperFacade iMapper; 
 	
 	/**
 	 * Constructor.
 	 */
 	public CommandAndQueries() {
 		super();
-		this.iMapper = new CustomMapper();
+		// obtengo un mapper facade de la factory Orika
+		this.iMapper = OrikaMapperFactory.getMapperFacade();
 	}
 	
 	/**
@@ -42,7 +56,7 @@ public class CommandAndQueries {
 		ProductService mProdSer = new ProductService();
 		
 		// map dto to domain object
-		Product mProduct = this.iMapper.productDTOToProduct(pProductDTO);
+		Product mProduct = iMapper.map(pProductDTO, Product.class);
 		
 		mProduct = mProdSer.save(mProduct);
 		
