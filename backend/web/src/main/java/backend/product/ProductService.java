@@ -2,13 +2,11 @@ package backend.product;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
 import backend.core.ApplicationConfiguration;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
 // bien aplicar Singleton pattern
-// TODO testear este objeto
 /**
  * Un <code>ProductService</code> representa un conjunto de servicios relacionados a <code>Product</code>.
  * 

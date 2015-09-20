@@ -3,20 +3,8 @@ package backend.core;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
-import backend.product.category.Category;
-import backend.product.category.CategoryDTO;
-import backend.product.drug.Drug;
-import backend.product.drug.DrugDTO;
-import backend.product.manufacturer.Manufacturer;
-import backend.product.manufacturer.ManufacturerDTO;
-import backend.product.measure_unit.MeasureUnit;
-import backend.product.measure_unit.MeasureUnitDTO;
-import backend.product.presentation.Presentation;
-import backend.product.presentation.PresentationDTO;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 
 /**
  * <code>CommandAndQueries</code> representa el conjunto de comandos y consultas posibles de realizar al dominio.
