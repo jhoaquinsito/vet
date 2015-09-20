@@ -9,7 +9,6 @@ import backend.core.ApplicationConfiguration;
 // TODO revisar si no hay que usar inyección de dependencias acá o
 // bien aplicar Singleton pattern
 // TODO testear este objeto
-// TODO ver si no hay que sacar la annotation Component
 /**
  * Un <code>ProductService</code> representa un conjunto de servicios relacionados a <code>Product</code>.
  * 
@@ -19,7 +18,6 @@ import backend.core.ApplicationConfiguration;
  * @author tomas
  *
  */
-@Component
 public class ProductService {
 	
 	private ProductRepository iProductRepository;
