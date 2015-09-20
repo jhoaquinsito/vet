@@ -26,18 +26,18 @@ import backend.product.measure_unit.MeasureUnit;
 import backend.product.presentation.Presentation;
 
 /**
-* Un <code>Product</code> es una representación de un tipo de producto. Un tipo
+* Un <code>Product</code> es una representaciÃ³n de un tipo de producto. Un tipo
 * de producto tiene: un <strong>Id</strong>, un <strong>Name</strong>, una
 * <strong>Description</strong>, una cantidad minima de stock:
 * <strong>MinimumStock</strong>, un precio unitario: <strong>UnitPrice</strong>
-* , una fecha de cuando fue la ultima vez que se actualizó:
-* <strong>LastUpdateOn</strong>, una fecha de cuando se eliminó:
-* <strong>DeletedOn</strong>, un usuario que realizó la ultima modificación en
+* , una fecha de cuando fue la ultima vez que se actualizÃ³:
+* <strong>LastUpdateOn</strong>, una fecha de cuando se eliminÃ³:
+* <strong>DeletedOn</strong>, un usuario que realizÃ³ la ultima modificaciÃ³n en
 * el producto: <strong>LastUpdateUser</strong>, un costo unitario:
 * <strong>Cost</strong>, una utilidad o ganancia: <strong>Utility</strong>, una
-* <strong>Category</strong>, un laboratorio que lo fabricó:
+* <strong>Category</strong>, un laboratorio que lo fabricÃ³:
 * <strong>Manufacturer</strong>, una unidad de medida:
-* <strong>MeasureUnit</strong>, una presentación (envase, inyectable, etc.):
+* <strong>MeasureUnit</strong>, una presentaciÃ³n (envase, inyectable, etc.):
 * <strong>Presentation</strong>, una serie de drogas que lo constituyen:
 * <strong>Drugs</strong>.
  */
