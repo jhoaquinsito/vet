@@ -28,8 +28,8 @@ import javax.sql.DataSource;
  *
  */
 @Configuration
-@EnableJpaRepositories("backend")
-class ApplicationConfiguration {
+@EnableJpaRepositories(basePackages = {"backend"})
+public class ApplicationConfiguration {
 
 	// Configuración de la base de datos:
 	private final String cDATABASE_DRIVER_CLASS_NAME = "org.postgresql.Driver";
