@@ -1,11 +1,15 @@
-package backend.product;
+package backend.core;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import backend.core.CommandAndQueries;
+import backend.exception.BusinessException;
+import backend.exception.BusinessExceptionDTO;
+import backend.product.Product;
+import backend.product.ProductDTO;
+import backend.product.ProductRepository;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
@@ -87,8 +95,11 @@ public class ApplicationRESTController {
 		return prod1.toString() + "--------> ID =" + mId.toString();
 	}
 	
-	
-	@RequestMapping(value = "product/list",method = RequestMethod.GET)
+	/**
+	 * Metodo API que permite recuperar la lista de los distintos Product
+	 * @return Lista de productos.
+	 */
+	@RequestMapping(value = "product",method = RequestMethod.GET)
 	public @ResponseBody List<Product> getList() {
 		
 		List<Product> list = (List<Product>) gProdRepo.findAll();
@@ -96,39 +107,71 @@ public class ApplicationRESTController {
 		return list;
 	}
 	
-	@RequestMapping(value = "product/first",method = RequestMethod.GET)
-	public @ResponseBody Product getFirst() {
-		
-		
-		List<Product> list = (List<Product>) gProdRepo.findAll();
-		
-		return list.get(0);
-	}
-
+	/**
+	 * Metodo API que permite recuperar un Product especificando su ID
+	 * @param id : Identificador de la entidad buscada.
+	 * @return Product : producto buscado.
+	 * @throws Exception : Excepcion de negocio, manejada por: handleBusinessException
+	 */
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
 	public Product getProductById(@PathVariable int id) throws Exception {
 		Product product = gProdRepo.findOne((long) id);
 		if (product == null) {
-			//throw new ProductNotFoundException(id);
+			throw new BusinessException("Product","getProductById","Entidad no encontrada", "url",HttpStatus.NOT_FOUND);
 		}
 		return product;
 	}
 	
-	@RequestMapping(value = "product/product", method = RequestMethod.POST)
-	public String insertProduct(@RequestBody Product product)  {
-		return product.getName();
+	
+	/**
+	 * Metodo API que permite recuperar un Product especificando su ID
+	 * @param product : Producto especificado para guardar en la BD.
+	 * @return long   : Identificador del nuevo producto en la BD.
+	 */
+	@RequestMapping(value = "product", method = RequestMethod.POST)
+	public long insertProduct(@RequestBody Product product)  {
+		return gProdRepo.save(product).getId();
 	}
+	
+	
+	/**
+	 * Este metodo es un "error handling method", uno que permite manejar las excepciones
+	 * que se producen en los distintos metodos del controllador.
+	 * 
+	 * Solamente maneja las excepciones cuyo tipo son: BusinessException
+	 * 
+	 * Los parametros de entrada a este metodo llegan de forma automatica.
+	 * 
+	 * @param request : Este parametro contiene la informacion del request generado desde el cliente
+	 * 					Ejemplo: request.getRequestURL() devuelve la URL del servicio consumido ej ("www.genesis.com/product/1")
+	 * @param ex	  : Este parametro contiene la excepcion que se genero durante la ejecucion de un metodo 
+	 *  				en el controlador. Tiene informacion sobre la clase, metodo, y detalles de la excepcion.
+	 * @return ResponseEntity<ExceptionJSONInfo>
+	 * 					El ResponseEntity contiene la informacion del codigo HTTP retornado al cliente (EJ: 404, 500, etc.)
+	 * 					Tambien contiene la informacion de la clase T que envuelve, en este caso ExceptionJSONInfo
+	 * 					En conclusion, el cliente recibe no solamente el codigo de error, sino tambien detalles gracias a la
+	 * 					entidad envuelta.
+	 */
+	@ExceptionHandler(BusinessException.class)
+	public @ResponseBody ResponseEntity<BusinessExceptionDTO> handleBusinessException(HttpServletRequest request, BusinessException ex){
+		
 
+		//Creamos el objeto json que sera el que viaje al cliente.
+	    BusinessExceptionDTO exceptionDTO = new BusinessExceptionDTO();
+	    exceptionDTO.setUrl(request.getRequestURL().toString());
+	    exceptionDTO.setiDetail(ex.getExMessage());
+	    exceptionDTO.setMessage(ex.getFriendlyMessage());
+	    exceptionDTO.setiDetail(ex.getExMessage());
+	    
+	    //Obtengo el StackTrace para pasarlo como String.
+		    StringWriter stackTrace = new StringWriter();
+			ex.printStackTrace(new PrintWriter(stackTrace));
+	    exceptionDTO.setStackTrace(stackTrace.toString());
+		
+	    ResponseEntity<BusinessExceptionDTO> response = new ResponseEntity<BusinessExceptionDTO>(exceptionDTO,ex.getiStatusCode());
+	    
+	    return response;
+	}
 	
-	
-//	@ExceptionHandler(ProductNotFoundException.class)
-//	public ResponseEntity<MyError> businessExceptionHandler(ProductNotFoundException e) {
-//		/*
-//		 * BusinessExcepcion : Clase 
-//		 */
-//		
-//		long spittleId = e.getProductId();
-//		MyError error = new MyError(4, "Product [" + spittleId + "] not found");
-//		return new ResponseEntity<MyError>(error, HttpStatus.NOT_FOUND);
-//	}
+
 }
