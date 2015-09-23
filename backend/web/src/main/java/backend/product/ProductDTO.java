@@ -17,9 +17,6 @@ public class ProductDTO {
 	private String iDescription;
 	private BigDecimal iMinimumStock;
 	private BigDecimal iUnitPrice;
-	private Timestamp iLastUpdateOn;
-	private Timestamp iDeletedOn;
-	private String iLastUpdateUser;
 	private BigDecimal iCost;
 	private BigDecimal iUtility;
 	private CategoryDTO iCategory;
