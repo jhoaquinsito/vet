@@ -1,9 +1,15 @@
 package backend.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import backend.exception.BusinessException;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
+import backend.product.presentation.Presentation;
+import backend.product.presentation.PresentationDTO;
+import backend.product.presentation.PresentationService;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
 
@@ -50,6 +56,20 @@ public class CommandAndQueries {
 		mProduct = mProductService.save(mProduct);
 		
 		return mProduct.getId();
+	}
+	
+	public List<PresentationDTO> getPresentations(){
+		PresentationService mPresentationService = new PresentationService();
+		
+		Iterable<Presentation> mPresentations = mPresentationService.getAll();
+		
+		List<PresentationDTO> mPresentationDTOList = new ArrayList<PresentationDTO>();
+		
+		for (Presentation bPresentation : mPresentations){
+			mPresentationDTOList.add(this.iMapper.map(bPresentation,PresentationDTO.class));
+		}
+		
+		return mPresentationDTOList;
 	}
 
 }

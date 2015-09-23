@@ -16,6 +16,7 @@ import backend.exception.BusinessException;
 import backend.exception.BusinessExceptionDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
+import backend.product.presentation.PresentationDTO;
 
 /**
  * Este <code>Controlador</code> es el encargado de recibir los request desde la
@@ -67,6 +68,19 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
 	public Product getProductById(@PathVariable int id) throws Exception {
 		throw new UnsupportedOperationException("La operación que intentaste realizar aún no está implementada.");
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de Presentaciones.
+	 * @return Lista de presentaciones.
+	 */
+	@RequestMapping(value = "presentation", method = RequestMethod.GET)
+	public List<PresentationDTO> listPresentations() {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<PresentationDTO> mPresentationDTOList = mCNQ.getPresentations();
+
+		return mPresentationDTOList;
 	}
 
 	/**
