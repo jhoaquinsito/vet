@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import backend.exception.BusinessExceptionDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductRepository;
+import backend.product.ProductService;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
@@ -48,8 +50,8 @@ public class ApplicationRESTController {
 	ProductRepository gProdRepo;
 
 	@RequestMapping(value = "home",method = RequestMethod.GET)
-	public String home() {
-
+	public String home(BindingResult binding) {
+			
 		ProductDTO prod1 = new ProductDTO();
 		prod1.setName("Producto1 nombre");
 		prod1.setDescription("Descripción 1");
@@ -127,9 +129,13 @@ public class ApplicationRESTController {
 	 * Metodo API que permite recuperar un Product especificando su ID
 	 * @param product : Producto especificado para guardar en la BD.
 	 * @return long   : Identificador del nuevo producto en la BD.
+	 * @throws BusinessException 
 	 */
 	@RequestMapping(value = "product", method = RequestMethod.POST)
-	public long insertProduct(@RequestBody Product product)  {
+	public long insertProduct(@RequestBody Product product) throws BusinessException  {
+		ProductService service = new ProductService();
+		//TODO - GG A TOMAS - Man, fijate, este metodo lo deje asi, para que se pueda probar rapido la validacion, seguro esta remal, por favor fijate, osea esta mal la llamada, no debe ser asi el proceso.
+		service.validate(product);
 		return gProdRepo.save(product).getId();
 	}
 	

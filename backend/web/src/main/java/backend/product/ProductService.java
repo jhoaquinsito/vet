@@ -2,7 +2,10 @@ package backend.product;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.http.HttpStatus;
+
 import backend.core.ApplicationConfiguration;
+import backend.exception.BusinessException;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
@@ -40,6 +43,49 @@ public class ProductService {
 	public Product save(Product pProductToSave) {
 		//TODO - Metodo private bool validate(Product pProductToSave) throws Exception
 		return this.iProductRepository.save(pProductToSave);
+	}
+	
+	/**
+	 * Metodo que permite validar un <strong>producto</strong>, antes de enviarlo a la capa de Repository
+	 * Estas validaciones corresponden directamente con el modelo.
+	 * 
+	 * @param Product :
+	 * @return void
+	 * @throws BusinessException - Una excepcion de negocio con el detalle del error.
+	 */
+	public void validate(Product pProduct) throws BusinessException{
+
+		String friendlyMessage = "Producto NO valido: ";
+		
+		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
+		
+		if(pProduct.getName().length() == 0){
+			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + "  Nombre vacio ", HttpStatus.CONFLICT);
+		}
+		if(pProduct.getName().length() > 100){
+			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (100) ", HttpStatus.CONFLICT);
+		}
+		
+		if(pProduct.getCategory() == null){
+			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " Categoria vacia ", HttpStatus.CONFLICT);
+		}
+		
+		if(pProduct.getDrugs().isEmpty() ){
+			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " No ha especificado ninguna Droga  ", HttpStatus.CONFLICT);
+		}
+		
+		if(pProduct.getManufacturer() == null){
+			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " Manufacturero vacio ", HttpStatus.CONFLICT);
+		}
+		
+		if(pProduct.getMeasureUnit() == null){
+			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + "  Unidad de Medida vacia  ", HttpStatus.CONFLICT);
+		}
+		
+		if(pProduct.getPresentation() == null){
+			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " Presnetacion vacio ", HttpStatus.CONFLICT);
+			
+		}
 	}
 
 }
