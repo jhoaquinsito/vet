@@ -40,12 +40,12 @@ public class CommandAndQueries {
 	 */
 	public Long saveProduct(ProductDTO pProductDTO) {
 		
-		ProductService mProdSer = new ProductService();
+		ProductService mProductService = new ProductService();
 		
 		// map dto to domain object
 		Product mProduct = iMapper.map(pProductDTO, Product.class);
 		
-		mProduct = mProdSer.save(mProduct);
+		mProduct = mProductService.save(mProduct);
 		
 		return mProduct.getId();
 	}
