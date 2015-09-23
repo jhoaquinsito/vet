@@ -65,30 +65,6 @@ public class ProductDTO {
 		this.iUnitPrice = pUnitPrice;
 	}
 
-	public Timestamp getLastUpdateOn() {
-		return iLastUpdateOn;
-	}
-
-	public void setLastUpdateOn(Timestamp pLastUpdateOn) {
-		this.iLastUpdateOn = pLastUpdateOn;
-	}
-
-	public Timestamp getDeletedOn() {
-		return iDeletedOn;
-	}
-
-	public void setDeletedOn(Timestamp pDeletedOn) {
-		this.iDeletedOn = pDeletedOn;
-	}
-
-	public String getLastUpdateUser() {
-		return iLastUpdateUser;
-	}
-
-	public void setLastUpdateUser(String pLastUpdateUser) {
-		this.iLastUpdateUser = pLastUpdateUser;
-	}
-
 	public BigDecimal getCost() {
 		return iCost;
 	}
