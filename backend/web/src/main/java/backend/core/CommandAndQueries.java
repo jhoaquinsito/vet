@@ -1,5 +1,6 @@
 package backend.core;
 
+import backend.exception.BusinessException;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
@@ -37,8 +38,9 @@ public class CommandAndQueries {
 	 * 
 	 * @param pProductDTO producto a guardar
 	 * @return identificador del producto guardado
+	 * @throws BusinessException 
 	 */
-	public Long saveProduct(ProductDTO pProductDTO) {
+	public Long saveProduct(ProductDTO pProductDTO) throws BusinessException {
 		
 		ProductService mProductService = new ProductService();
 		

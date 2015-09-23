@@ -34,9 +34,10 @@ public class ApplicationRESTController {
 	 * @param ProductDTO
 	 *            : datos del producto a crear
 	 * @return Long : Identificador del nuevo producto en la BD.
+	 * @throws BusinessException 
 	 */
 	@RequestMapping(value = "product", method = RequestMethod.POST)
-	public Long createProduct(@RequestBody ProductDTO product) {
+	public Long createProduct(@RequestBody ProductDTO product) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
 		Long mId = mCNQ.saveProduct(product);
