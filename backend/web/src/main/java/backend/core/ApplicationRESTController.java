@@ -82,6 +82,21 @@ public class ApplicationRESTController {
 
 		return mPresentationDTOList;
 	}
+	
+	/**
+	 * Método API que permite crear una <code>Presentation</code>
+	 * @param presentation presentación a guardar
+	 * @return identificador de la presentación guardada
+	 * @throws BusinessException errores de negocio producidos
+	 */
+	@RequestMapping(value = "presentation", method = RequestMethod.POST)
+	public Long createPresentation(@RequestBody PresentationDTO presentation) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.savePresentation(presentation);
+
+		return mId;
+	}
 
 	/**
 	 * Este metodo es un "error handling method", uno que permite manejar las
