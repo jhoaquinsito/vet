@@ -69,8 +69,8 @@ public class PresentationService {
 	 * @throws BusinessException
 	 *             errores de negocio encontrados
 	 */
-	public Presentation create(Presentation pNewPresentation) throws BusinessException {
-		// guardo la presentación
+	public Presentation create(Presentation pNewPresentation) throws BusinessException {		
+		
 		Presentation mPresentationSaved;
 
 		if (!this.exists(pNewPresentation)) {
@@ -78,7 +78,7 @@ public class PresentationService {
 			mPresentationSaved = this.save(pNewPresentation);
 		} else {
 			// ya existe la presentación
-			throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
+			throw new BusinessException(this.getClass().toString(), "PresentationService", "validate",
 					PresentationService.cEXISTING_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
 		}
 
@@ -104,17 +104,17 @@ public class PresentationService {
 					// demas son datos que se pueden sacar del contexto)
 
 					// nombre con más caracteres que lo permitido
-					throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
+					throw new BusinessException(this.getClass().toString(), "PresentationService", "validate",
 							PresentationService.cLONG_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
 				}
 			} else {
 				// nombre vacío
-				throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
+				throw new BusinessException(this.getClass().toString(), "PresentationService", "validate",
 						PresentationService.cEMPTY_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
 			}
 		} else {
 			// nombre con valor NULL
-			throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
+			throw new BusinessException(this.getClass().toString(), "PresentationService", "validate",
 					PresentationService.cNULL_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
 		}
 	}
