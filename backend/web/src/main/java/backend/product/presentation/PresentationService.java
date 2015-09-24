@@ -135,7 +135,7 @@ public class PresentationService {
 		// itero para verificar si existe
 		for (Presentation bPresentation : mPresentationList) {
 			// me fijo si tienen el mismo nombre
-			if (bPresentation.getName().equals(pPresentation.getName())) {
+			if (bPresentation.getName().equalsIgnoreCase(pPresentation.getName())) {
 				mPresentationExists = true;
 			}
 		}
