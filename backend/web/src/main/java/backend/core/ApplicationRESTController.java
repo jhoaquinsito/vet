@@ -93,7 +93,7 @@ public class ApplicationRESTController {
 	public Long createPresentation(@RequestBody PresentationDTO presentation) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.savePresentation(presentation);
+		Long mId = mCNQ.createPresentation(presentation);
 
 		return mId;
 	}
