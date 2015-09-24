@@ -60,7 +60,8 @@ public class ProductService {
 	 * @throws BusinessException - Una excepcion de negocio con el detalle del error.
 	 */
 	private void validate(Product pProduct) throws BusinessException{
-
+		// TODO eliminar hardcode strings
+		// TODO usar convenciones para las variables
 		String friendlyMessage = "Producto NO valido: ";
 		
 		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
