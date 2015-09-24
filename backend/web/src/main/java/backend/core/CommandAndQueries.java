@@ -46,6 +46,7 @@ public class CommandAndQueries {
 	 * @return identificador del producto guardado
 	 * @throws BusinessException 
 	 */
+	// TODO cambiar nombre de este método por "createProduct"
 	public Long saveProduct(ProductDTO pProductDTO) throws BusinessException {
 		
 		ProductService mProductService = new ProductService();
@@ -58,6 +59,7 @@ public class CommandAndQueries {
 		return mProduct.getId();
 	}
 	
+	// TODO comentar este método
 	public List<PresentationDTO> getPresentations(){
 		PresentationService mPresentationService = new PresentationService();
 		
@@ -70,6 +72,23 @@ public class CommandAndQueries {
 		}
 		
 		return mPresentationDTOList;
+	}
+	
+	/**
+	 * Este método es un comando que permite guardar una presentación.
+	 * @param pPresentationDTO presentación a guardar
+	 * @return identificador de la presentación guardada
+	 * @throws BusinessException errores de negocio producidos
+	 */
+	public Long createPresentation(PresentationDTO pPresentationDTO) throws BusinessException{
+		PresentationService mPresentationService = new PresentationService();
+		
+		// map dto to domain object
+		Presentation mPresentation = iMapper.map(pPresentationDTO, Presentation.class);
+		
+		mPresentation = mPresentationService.create(mPresentation);
+		
+		return mPresentation.getId();
 	}
 
 }
