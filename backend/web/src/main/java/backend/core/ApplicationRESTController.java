@@ -16,6 +16,7 @@ import backend.exception.BusinessException;
 import backend.exception.BusinessExceptionDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
+import backend.product.drug.DrugDTO;
 import backend.product.presentation.PresentationDTO;
 
 /**
@@ -94,6 +95,34 @@ public class ApplicationRESTController {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
 		Long mId = mCNQ.createPresentation(presentation);
+
+		return mId;
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de drogas.
+	 * @return Lista de drogas.
+	 */
+	@RequestMapping(value = "drug", method = RequestMethod.GET)
+	public List<DrugDTO> listDrugs() {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<DrugDTO> mDrugDTOList = mCNQ.getDrugs();
+
+		return mDrugDTOList;
+	}
+	
+	/**
+	 * Método API que permite crear una <code>Drug</code>
+	 * @param drug droga a guardar
+	 * @return identificador de la droga guardada
+	 * @throws BusinessException errores de negocio producidos
+	 */
+	@RequestMapping(value = "drug", method = RequestMethod.POST)
+	public Long createDrug(@RequestBody DrugDTO drug) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.createDrug(drug);
 
 		return mId;
 	}

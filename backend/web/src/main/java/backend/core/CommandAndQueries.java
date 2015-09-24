@@ -7,6 +7,9 @@ import backend.exception.BusinessException;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
+import backend.product.drug.Drug;
+import backend.product.drug.DrugDTO;
+import backend.product.drug.DrugService;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
 import backend.product.presentation.PresentationService;
@@ -89,6 +92,41 @@ public class CommandAndQueries {
 		mPresentation = mPresentationService.create(mPresentation);
 		
 		return mPresentation.getId();
+	}
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de drogas
+	 * @return lista de drogas
+	 */
+	public List<DrugDTO> getDrugs(){
+		DrugService mDrugService = new DrugService();
+		
+		Iterable<Drug> mDrugs = mDrugService.getAll();
+		
+		List<DrugDTO> mDrugDTOList = new ArrayList<DrugDTO>();
+		
+		for (Drug bDrug : mDrugs){
+			mDrugDTOList.add(this.iMapper.map(bDrug,DrugDTO.class));
+		}
+		
+		return mDrugDTOList;
+	}
+	
+	/**
+	 * Este método es un comando que permite guardar una droga.
+	 * @param pDrugDTO presentación a guardar
+	 * @return identificador de la presentación guardada
+	 * @throws BusinessException errores de negocio producidos
+	 */
+	public Long createDrug(DrugDTO pDrugDTO) throws BusinessException{
+		DrugService mDrugService = new DrugService();
+		
+		// map dto to domain object
+		Drug mDrug = iMapper.map(pDrugDTO, Drug.class);
+		
+		mDrug = mDrugService.create(mDrug);
+		
+		return mDrug.getId();
 	}
 
 }
