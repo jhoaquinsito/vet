@@ -16,6 +16,8 @@ import backend.exception.BusinessException;
 import backend.exception.BusinessExceptionDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
+	import backend.product.category.CategoryDTO;
+import backend.product.drug.DrugDTO;
 import backend.product.presentation.PresentationDTO;
 
 /**
@@ -81,6 +83,78 @@ public class ApplicationRESTController {
 		List<PresentationDTO> mPresentationDTOList = mCNQ.getPresentations();
 
 		return mPresentationDTOList;
+	}
+	
+	@RequestMapping(value = "category", method = RequestMethod.POST)
+	public long saveCategory(@RequestBody CategoryDTO pCategory) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.saveCategory(pCategory);
+
+	}
+	
+	@RequestMapping(value = "category/{id}", method = RequestMethod.GET)
+	public CategoryDTO getCategory(@PathVariable long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		CategoryDTO mCategoryDTO = mCNQ.getCategory(id);
+
+		return mCategoryDTO;
+	}
+	
+	@RequestMapping(value = "category", method = RequestMethod.GET)
+	public List<CategoryDTO> listCategorys() {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<CategoryDTO> mCategoryDTOList = mCNQ.getCategorys();
+
+		return mCategoryDTOList;
+	}
+	
+	
+	
+	
+	/**
+	 * Método API que permite crear una <code>Presentation</code>
+	 * @param presentation presentación a guardar
+	 * @return identificador de la presentación guardada
+	 * @throws BusinessException errores de negocio producidos
+	 */
+	@RequestMapping(value = "presentation", method = RequestMethod.POST)
+	public Long createPresentation(@RequestBody PresentationDTO presentation) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.createPresentation(presentation);
+
+		return mId;
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de drogas.
+	 * @return Lista de drogas.
+	 */
+	@RequestMapping(value = "drug", method = RequestMethod.GET)
+	public List<DrugDTO> listDrugs() {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<DrugDTO> mDrugDTOList = mCNQ.getDrugs();
+
+		return mDrugDTOList;
+	}
+	
+	/**
+	 * Método API que permite crear una <code>Drug</code>
+	 * @param drug droga a guardar
+	 * @return identificador de la droga guardada
+	 * @throws BusinessException errores de negocio producidos
+	 */
+	@RequestMapping(value = "drug", method = RequestMethod.POST)
+	public Long createDrug(@RequestBody DrugDTO drug) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.createDrug(drug);
+
+		return mId;
 	}
 
 	/**

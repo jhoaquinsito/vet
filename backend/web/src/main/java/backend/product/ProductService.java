@@ -60,32 +60,33 @@ public class ProductService {
 	 * @throws BusinessException - Una excepcion de negocio con el detalle del error.
 	 */
 	private void validate(Product pProduct) throws BusinessException{
-
+		// TODO eliminar hardcode strings
+		// TODO usar convenciones para las variables
 		String friendlyMessage = "Producto NO valido: ";
 		
 		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
 		
 		if(pProduct.getName().length() == 0){
-			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + "  Nombre vacio ", HttpStatus.CONFLICT);
+			throw new BusinessException("ProductService","Producto no válido", "validate",  friendlyMessage + "  Nombre vacio ", HttpStatus.CONFLICT);
 		}
 		if(pProduct.getName().length() > 100){
-			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (100) ", HttpStatus.CONFLICT);
+			throw new BusinessException("ProductService","Producto no válido", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (100) ", HttpStatus.CONFLICT);
 		}
 		
 		if(pProduct.getCategory() == null){
-			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " Categoria vacia ", HttpStatus.CONFLICT);
+			throw new BusinessException("ProductService","Producto no válido", "validate",  friendlyMessage + " Categoria vacia ", HttpStatus.CONFLICT);
 		}
 		
 		if(pProduct.getDrugs().isEmpty() ){
-			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " No ha especificado ninguna Droga  ", HttpStatus.CONFLICT);
+			throw new BusinessException("ProductService","Producto no válido", "validate",  friendlyMessage + " No ha especificado ninguna Droga  ", HttpStatus.CONFLICT);
 		}
 		
 		if(pProduct.getManufacturer() == null){
-			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + " Manufacturero vacio ", HttpStatus.CONFLICT);
+			throw new BusinessException("ProductService","Producto no válido", "validate",  friendlyMessage + " Manufacturero vacio ", HttpStatus.CONFLICT);
 		}
 		
 		if(pProduct.getMeasureUnit() == null){
-			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + "  Unidad de Medida vacia  ", HttpStatus.CONFLICT);
+			throw new BusinessException("ProductService","Producto no válido", "validate",  friendlyMessage + "  Unidad de Medida vacia  ", HttpStatus.CONFLICT);
 		}
 		
 		if(pProduct.getPresentation() == null){
@@ -95,3 +96,4 @@ public class ProductService {
 	}
 
 }
+
