@@ -80,6 +80,7 @@ public class CommandAndQueries {
 		return mPresentationDTOList;
 	}
 	
+
 	public List<CategoryDTO> getCategorys(){
 		CategoryService mCategoryService = new CategoryService();
 		
@@ -114,6 +115,7 @@ public class CommandAndQueries {
 	
 	
 	
+
 	/**
 	 * Este método es un comando que permite guardar una presentación.
 	 * @param pPresentationDTO presentación a guardar
