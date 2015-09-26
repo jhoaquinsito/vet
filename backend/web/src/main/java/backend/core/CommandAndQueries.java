@@ -13,6 +13,9 @@ import backend.product.category.CategoryService;
 import backend.product.drug.Drug;
 import backend.product.drug.DrugDTO;
 import backend.product.drug.DrugService;
+import backend.product.laboratory.Laboratory;
+import backend.product.laboratory.LaboratoryDTO;
+import backend.product.laboratory.LaboratoryService;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
 import backend.product.presentation.PresentationService;
@@ -81,7 +84,12 @@ public class CommandAndQueries {
 	}
 	
 
-	public List<CategoryDTO> getCategorys(){
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Categorías
+	 * @return lista de Categorías
+	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 */
+	public List<CategoryDTO> getCategorys() throws BusinessException{
 		CategoryService mCategoryService = new CategoryService();
 		
 		Iterable<Category> mCategory = mCategoryService.getAll();
@@ -95,6 +103,12 @@ public class CommandAndQueries {
 		return mCategoryDTOList;
 	}
 
+	/**
+	 * Este método es un comando que permite guardar una Categoría
+	 * @param pCategory : Categoría a guardar
+	 * @return identificador de la categoria guardado
+	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 */
 	public long saveCategory(CategoryDTO pCategory) throws BusinessException {
 		CategoryService mCategoryService = new CategoryService();
 		
@@ -112,8 +126,47 @@ public class CommandAndQueries {
 		return this.iMapper.map(mCategoryService.getById(pId),CategoryDTO.class);
 	}
 	
-	
-	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de laboratorios
+	 * @return lista de laboratorios
+	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 */
+	public List<LaboratoryDTO> getLaboratorys() throws BusinessException{
+		LaboratoryService mLaboratoryService = new LaboratoryService();
+		
+		Iterable<Laboratory> mLaboratory = mLaboratoryService.getAll();
+		
+		List<LaboratoryDTO> mLaboratoryDTOList = new ArrayList<LaboratoryDTO>();
+		
+		for (Laboratory bLaboratory : mLaboratory){
+			mLaboratoryDTOList.add(this.iMapper.map(bLaboratory,LaboratoryDTO.class));
+		}
+		
+		return mLaboratoryDTOList;
+	}
+
+	/**
+	 * Este método es un comando que permite guardar un Laboratorio
+	 * @param pLaboratory : Laboratorio a guardar
+	 * @return identificador del laboratorio guardado
+	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 */
+	public long saveLaboratory(LaboratoryDTO pLaboratory) throws BusinessException {
+		LaboratoryService mLaboratoryService = new LaboratoryService();
+		
+		Laboratory bLaboratory = new Laboratory();
+		
+		bLaboratory = this.iMapper.map(pLaboratory,Laboratory.class);
+		
+		return this.iMapper.map(mLaboratoryService.save(bLaboratory),LaboratoryDTO.class).getId();
+		
+	}
+
+	public LaboratoryDTO getLaboratory(long pId) throws BusinessException{
+		LaboratoryService mLaboratoryService = new LaboratoryService();
+		
+		return this.iMapper.map(mLaboratoryService.getById(pId),LaboratoryDTO.class);
+	}
 	
 
 	/**

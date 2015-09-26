@@ -18,6 +18,7 @@ import backend.product.Product;
 import backend.product.ProductDTO;
 	import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
+import backend.product.laboratory.LaboratoryDTO;
 import backend.product.presentation.PresentationDTO;
 
 /**
@@ -103,7 +104,7 @@ public class ApplicationRESTController {
 	}
 	
 	@RequestMapping(value = "category", method = RequestMethod.GET)
-	public List<CategoryDTO> listCategorys() {
+	public List<CategoryDTO> listCategorys() throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
 		List<CategoryDTO> mCategoryDTOList = mCNQ.getCategorys();
@@ -111,6 +112,32 @@ public class ApplicationRESTController {
 		return mCategoryDTOList;
 	}
 	
+	
+	@RequestMapping(value = "laboratory", method = RequestMethod.POST)
+	public long saveLaboratory(@RequestBody LaboratoryDTO pLaboratory) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.saveLaboratory(pLaboratory);
+
+	}
+	
+	@RequestMapping(value = "laboratory/{id}", method = RequestMethod.GET)
+	public LaboratoryDTO getLaboratory(@PathVariable long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		LaboratoryDTO mLaboratoryDTO = mCNQ.getLaboratory(id);
+
+		return mLaboratoryDTO;
+	}
+	
+	@RequestMapping(value = "laboratory", method = RequestMethod.GET)
+	public List<LaboratoryDTO> listLaboratorys() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<LaboratoryDTO> mLaboratoryDTOList = mCNQ.getLaboratorys();
+
+		return mLaboratoryDTOList;
+	}
 	
 	
 	
