@@ -10,7 +10,7 @@ CREATE TABLE batch
   last_update_on timestamp without time zone,
   deleted_on timestamp without time zone,
   last_update_user character varying,
-  product integer,
+  product integer NOT NULL,
   iso_due_date integer,
   CONSTRAINT pk_batch PRIMARY KEY (id),
   CONSTRAINT fk_product_product FOREIGN KEY (product)
