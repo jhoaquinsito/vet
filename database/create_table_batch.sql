@@ -5,7 +5,6 @@
 CREATE TABLE batch
 (
   id serial NOT NULL,
-  due_date date,
   stock numeric(17,4),
   last_update_on timestamp without time zone,
   deleted_on timestamp without time zone,
@@ -16,7 +15,7 @@ CREATE TABLE batch
   CONSTRAINT fk_product_product FOREIGN KEY (product)
       REFERENCES product (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT uk_iso_due_date UNIQUE (iso_due_date)
+  CONSTRAINT uk_iso_due_date_product UNIQUE (iso_due_date, product)
 )
 WITH (
   OIDS=FALSE
