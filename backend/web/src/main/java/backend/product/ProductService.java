@@ -65,7 +65,7 @@ public class ProductService {
 		String friendlyMessage = "Producto NO valido: ";
 		
 		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
-		
+		// TODO falta validar que el nombre venga en null
 		if(pProduct.getName().length() == 0){
 			throw new BusinessException("ProductService","ProductService", "validate",  friendlyMessage + "  Nombre vacio ", HttpStatus.CONFLICT);
 		}
