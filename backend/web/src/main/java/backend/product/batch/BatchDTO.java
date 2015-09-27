@@ -8,7 +8,6 @@ import backend.product.Product;
 public class BatchDTO {
 
 	private Long iId;
-	private Date iDueDate;
 	private BigDecimal iStock;
 	private Integer iIsoDueDate;
 	private Product iProduct;
@@ -18,12 +17,6 @@ public class BatchDTO {
 	}
 	public void setId(Long pId) {
 		this.iId = pId;
-	}
-	public Date getDueDate() {
-		return iDueDate;
-	}
-	public void setDueDate(Date pDueDate) {
-		this.iDueDate = pDueDate;
 	}
 	public BigDecimal getStock() {
 		return iStock;
