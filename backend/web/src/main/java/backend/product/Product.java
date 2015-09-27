@@ -14,9 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import backend.product.batch.Batch;
 import backend.product.category.Category;
 import backend.product.drug.Drug;
 import backend.product.manufacturer.Manufacturer;
@@ -86,9 +89,10 @@ public class Product {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
     @JoinColumn(name="presentation")
 	private Presentation iPresentation;
+	
+	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.REMOVE}, fetch=FetchType.EAGER)
+	private Set<Batch> iBatches;
 
-	// TODO revisar si corresponden PERSIST and MERGE
-	// TODO revisar porque debo usar EAGER acá
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
 	@JoinTable(
         name="product_drugs",
@@ -188,6 +192,18 @@ public class Product {
 
 	public void setDrugs(Set<Drug> pDrugs) {
 		this.iDrugs = pDrugs;
+	}
+
+	public Set<Batch> getBatches() {
+		return iBatches;
+	}
+
+	public void setBatches(Set<Batch> pBatches) {
+		this.iBatches = pBatches;
+	}
+
+	public void setId(Long pId) {
+		this.iId = pId;
 	}
 
 }

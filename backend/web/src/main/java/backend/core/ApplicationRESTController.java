@@ -64,13 +64,15 @@ public class ApplicationRESTController {
 	 * 
 	 * @param id
 	 *            : Identificador de la entidad buscada.
-	 * @return Product : producto buscado.
+	 * @return ProductDTO : producto buscado.
 	 * @throws Exception
 	 *             : Excepcion de negocio, manejada por: handleBusinessException
 	 */
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
-	public Product getProductById(@PathVariable int id) throws Exception {
-		throw new UnsupportedOperationException("La operación que intentaste realizar aún no está implementada.");
+	public ProductDTO getProductById(@PathVariable Long id) {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		
+		return mCNQ.getProduct(id);
 	}
 	
 	/**
