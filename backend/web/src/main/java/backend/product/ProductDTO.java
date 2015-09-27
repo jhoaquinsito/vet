@@ -3,6 +3,7 @@ package backend.product;
 import java.math.BigDecimal;
 import java.util.Set;
 
+import backend.product.batch.BatchDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
@@ -23,6 +24,7 @@ public class ProductDTO {
 	private MeasureUnitDTO iMeasureUnit;
 	private PresentationDTO iPresentation;
 	private Set<DrugDTO> iDrugs;
+	private Set<BatchDTO> iBatches;
 
 	public Long getId() {
 		return iId;
@@ -118,6 +120,14 @@ public class ProductDTO {
 
 	public void setDrugs(Set<DrugDTO> pDrugs) {
 		this.iDrugs = pDrugs;
+	}
+
+	public Set<BatchDTO> getBatches() {
+		return iBatches;
+	}
+
+	public void setBatches(Set<BatchDTO> pBatches) {
+		this.iBatches = pBatches;
 	}
 
 }

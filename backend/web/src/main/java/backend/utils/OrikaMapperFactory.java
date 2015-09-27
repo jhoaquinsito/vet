@@ -2,6 +2,8 @@ package backend.utils;
 
 import backend.product.Product;
 import backend.product.ProductDTO;
+import backend.product.batch.Batch;
+import backend.product.batch.BatchDTO;
 import backend.product.category.Category;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.Drug;
@@ -52,6 +54,9 @@ public class OrikaMapperFactory {
 
 		// MeasureUnitDTO to MeasureUnit
 		mapperFactory.classMap(MeasureUnitDTO.class, MeasureUnit.class).byDefault().register();
+		
+		// BacthDTO to BatchUnit
+		mapperFactory.classMap(BatchDTO.class, Batch.class).byDefault().register();
 
 		// ProductDTO to Product
 		mapperFactory.classMap(ProductDTO.class, Product.class).byDefault().register();

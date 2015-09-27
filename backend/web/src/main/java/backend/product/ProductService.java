@@ -94,5 +94,14 @@ public class ProductService {
 			
 		}
 	}
+	
+	/**
+	 * Método que permite obtener un producto a partir de su identificador.
+	 * @param pId identificador del producto
+	 * @return producto encontrado
+	 */
+	public Product get(Long pId){
+		return this.iProductRepository.findOne(pId);
+	}
 
 }

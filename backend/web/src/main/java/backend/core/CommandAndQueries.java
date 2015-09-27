@@ -128,5 +128,21 @@ public class CommandAndQueries {
 		
 		return mDrug.getId();
 	}
+	
+	/**
+	 * Este método es una consulta que obtiene un producto a partir de
+	 * su identificador.
+	 * @param pProductId identificador del producto
+	 * @return producto encontrado
+	 */
+	public ProductDTO getProduct(Long pProductId){
+		ProductService mProductService = new ProductService();
+		
+		Product mProduct = mProductService.get(pProductId);
+		
+		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
+		
+		return mProductDTO;
+	}
 
 }
