@@ -51,5 +51,9 @@ public class Manufacturer {
 	public Long getId() {
 		return iId;
 	}
+	
+	public void setId(Long pId) {
+		this.iId = pId;
+	}
 
 }

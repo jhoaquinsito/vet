@@ -52,4 +52,8 @@ public class Presentation {
 		return iId;
 	}
 
+	public void setId(Long pId) {
+		this.iId = pId;
+	}
+
 }

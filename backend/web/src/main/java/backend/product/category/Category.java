@@ -51,5 +51,9 @@ public class Category {
 	public void setName(String pName) {
 		this.iName = pName;
 	}
+	
+	public void setId(Long pId) {
+		this.iId = pId;
+	}
 
 }
