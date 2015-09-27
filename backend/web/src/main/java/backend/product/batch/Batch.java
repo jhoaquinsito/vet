@@ -50,9 +50,7 @@ public class Batch {
 	@Column(name = "iso_due_date")
 	private Integer iIsoDueDate;
 
-	// TODO revisar si corresponden PERSIST and MERGE
-	// TODO revisar porque debo usar EAGER acá
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToOne()
 	@JoinColumn(name = "product", nullable = false)
 	private Product iProduct;
 
@@ -82,6 +80,10 @@ public class Batch {
 
 	public Long getId() {
 		return iId;
+	}
+	
+	public void setId(Long pId) {
+		this.iId = pId;
 	}
 
 }

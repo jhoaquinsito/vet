@@ -90,11 +90,9 @@ public class Product {
     @JoinColumn(name="presentation")
 	private Presentation iPresentation;
 	
-	@OneToMany(mappedBy="iProduct", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.REMOVE}, fetch=FetchType.EAGER)
 	private Set<Batch> iBatches;
 
-	// TODO revisar si corresponden PERSIST and MERGE
-	// TODO revisar porque debo usar EAGER acá
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
 	@JoinTable(
         name="product_drugs",
@@ -202,6 +200,10 @@ public class Product {
 
 	public void setBatches(Set<Batch> pBatches) {
 		this.iBatches = pBatches;
+	}
+
+	public void setId(Long pId) {
+		this.iId = pId;
 	}
 
 }
