@@ -36,10 +36,10 @@ public class LaboratoryService {
 	}
 	
 	/**
-	 * M√©todo que permite guardar laboratorios. Puede ser un laboratorio nuevo (creaciÛn) o
-	 * un laboratorio existente que est· modificado (actualizaciÛn)
+	 * M√©todo que permite guardar laboratorios. Puede ser un laboratorio nuevo (creaci√≥n) o
+	 * un laboratorio existente que est√° modificado (actualizaci√≥n)
 	 * @param pLaboratoryToSave producto que se desea guardar
-	 * @return Laboratory tal cual quedÛ guardada
+	 * @return Laboratory tal cual qued√≥ guardada
 	 * @throws BusinessException 
 	 */
 	public Laboratory save(Laboratory pLaboratoryToSave) throws BusinessException {
@@ -87,13 +87,13 @@ public class LaboratoryService {
 		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
 		
 		if(pLaboratory.getName().length() == 0){
-			throw new BusinessException("LaboratoryService","Laboratory no v·lido", "validate",  friendlyMessage + " Nombre vacio ", HttpStatus.CONFLICT);
+			throw new BusinessException("LaboratoryService","Laboratory no v√°lido", "validate",  friendlyMessage + " Nombre vacio ", HttpStatus.CONFLICT);
 		}
 		if(pLaboratory.getName().length() > 30){
-			throw new BusinessException("LaboratoryService","Laboratory no v·lido", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (30) ", HttpStatus.CONFLICT);
+			throw new BusinessException("LaboratoryService","Laboratory no v√°lido", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (30) ", HttpStatus.CONFLICT);
 		}
 		if(!this.getByName(pLaboratory.getName()).isEmpty()){
-			throw new BusinessException("LaboratoryService","Laboratory no v·lido", "validate",  friendlyMessage + " Ya existe un laboratorÌo bajo el mismo nombre ( " + pLaboratory.getName() + " )", HttpStatus.CONFLICT);
+			throw new BusinessException("LaboratoryService","Laboratory no v√°lido", "validate",  friendlyMessage + " Ya existe un laboratorio bajo el mismo nombre ( " + pLaboratory.getName() + " )", HttpStatus.CONFLICT);
 		}
 		
 		

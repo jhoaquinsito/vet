@@ -85,9 +85,9 @@ public class CommandAndQueries {
 	
 
 	/**
-	 * Este método es una consulta que devuelve la lista completa de Categorías
-	 * @return lista de Categorías
-	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 * Este mÃ©todo es una consulta que devuelve la lista completa de CategorÃ­as
+	 * @return lista de Categorias
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<CategoryDTO> getCategorys() throws BusinessException{
 		CategoryService mCategoryService = new CategoryService();
@@ -104,10 +104,10 @@ public class CommandAndQueries {
 	}
 
 	/**
-	 * Este método es un comando que permite guardar una Categoría
-	 * @param pCategory : Categoría a guardar
+	 * Este mÃ©todo es un comando que permite guardar una CategorÃ­a
+	 * @param pCategory : CategorÃ­a a guardar
 	 * @return identificador de la categoria guardado
-	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 * @throws BusinessException : ExcepciÃ³n con detalles de los errores de negocio
 	 */
 	public long saveCategory(CategoryDTO pCategory) throws BusinessException {
 		CategoryService mCategoryService = new CategoryService();
@@ -127,9 +127,9 @@ public class CommandAndQueries {
 	}
 	
 	/**
-	 * Este método es una consulta que devuelve la lista completa de laboratorios
+	 * Este mÃ©todo es una consulta que devuelve la lista completa de laboratorios
 	 * @return lista de laboratorios
-	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 * @throws BusinessException : ExcepciÃ³n con detalles de los errores de negocio
 	 */
 	public List<LaboratoryDTO> getLaboratorys() throws BusinessException{
 		LaboratoryService mLaboratoryService = new LaboratoryService();
@@ -146,10 +146,10 @@ public class CommandAndQueries {
 	}
 
 	/**
-	 * Este método es un comando que permite guardar un Laboratorio
+	 * Este mÃ©todo es un comando que permite guardar un Laboratorio
 	 * @param pLaboratory : Laboratorio a guardar
 	 * @return identificador del laboratorio guardado
-	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 * @throws BusinessException : ExcepciÃ³n con detalles de los errores de negocio
 	 */
 	public long saveLaboratory(LaboratoryDTO pLaboratory) throws BusinessException {
 		LaboratoryService mLaboratoryService = new LaboratoryService();

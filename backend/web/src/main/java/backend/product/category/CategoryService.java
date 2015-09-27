@@ -15,6 +15,7 @@ import backend.exception.BusinessException;
  * Un <code>CategoryService</code> representa un conjunto de servicios relacionados a <code>Category</code>.
  * 
  * Este conjunto de servicios tiene:
+ * TODO repositorio de categor√≠as deber√≠a decir:
  * el repositorio de productos: <strong>ProductRepository</strong>.
  * 
  * @author genesis
@@ -36,10 +37,10 @@ public class CategoryService {
 	}
 	
 	/**
-	 * M√©todo que permite guardar categorias. Puede ser una categoria nueva (creaciÛn) o
-	 * una categoria existente que est· modificado (actualizaciÛn)
+	 * M√©todo que permite guardar categorias. Puede ser una categoria nueva (creaci√≥n) o
+	 * una categoria existente que est√° modificado (actualizaci√≥n)
 	 * @param pCategoryToSave producto que se desea guardar
-	 * @return Categoria tal cual quedÛ guardada
+	 * @return Categoria tal cual qued√≥ guardada
 	 * @throws BusinessException 
 	 */
 	public Category save(Category pCategoryToSave) throws BusinessException {
@@ -87,13 +88,13 @@ public class CategoryService {
 		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
 		
 		if(pCategory.getName().length() == 0){
-			throw new BusinessException("CategoryService","Category no v·lido", "validate",  friendlyMessage + "  Nombre vacio ", HttpStatus.CONFLICT);
+			throw new BusinessException("CategoryService","Category no v√°lido", "validate",  friendlyMessage + "  Nombre vacio ", HttpStatus.CONFLICT);
 		}
 		if(pCategory.getName().length() > 30){
-			throw new BusinessException("CategoryService","Category no v·lido", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (30) ", HttpStatus.CONFLICT);
+			throw new BusinessException("CategoryService","Category no v√°lido", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (30) ", HttpStatus.CONFLICT);
 		}
 		if(!this.getByName(pCategory.getName()).isEmpty()){
-			throw new BusinessException("CategoryService","Category no v·lido", "validate",  friendlyMessage + " Ya existe una categorÌa bajo el mismo nombre( " + pCategory.getName() + " )", HttpStatus.CONFLICT);
+			throw new BusinessException("CategoryService","Category no v√°lido", "validate",  friendlyMessage + " Ya existe una categor√≠a bajo el mismo nombre( " + pCategory.getName() + " )", HttpStatus.CONFLICT);
 		}
 		
 		

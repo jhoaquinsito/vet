@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- * Una <code>Laboratory</code> es una representación de un Laboratorio
+ * Una <code>Laboratory</code> es una representaciÃ³n de un Laboratorio
  * Un laboratorio de productos tiene: un <strong>Id</strong>, y un
  * <strong>Name</strong>.
  */
