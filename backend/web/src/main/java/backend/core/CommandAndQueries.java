@@ -13,9 +13,9 @@ import backend.product.category.CategoryService;
 import backend.product.drug.Drug;
 import backend.product.drug.DrugDTO;
 import backend.product.drug.DrugService;
-import backend.product.laboratory.Laboratory;
-import backend.product.laboratory.LaboratoryDTO;
-import backend.product.laboratory.LaboratoryService;
+import backend.product.manufacturer.Manufacturer;
+import backend.product.manufacturer.ManufacturerDTO;
+import backend.product.manufacturer.ManufacturerService;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
 import backend.product.presentation.PresentationService;
@@ -131,41 +131,41 @@ public class CommandAndQueries {
 	 * @return lista de laboratorios
 	 * @throws BusinessException : Excepción con detalles de los errores de negocio
 	 */
-	public List<LaboratoryDTO> getLaboratorys() throws BusinessException{
-		LaboratoryService mLaboratoryService = new LaboratoryService();
+	public List<ManufacturerDTO> getManufacturers() throws BusinessException{
+		ManufacturerService mManufacturerService = new ManufacturerService();
 		
-		Iterable<Laboratory> mLaboratory = mLaboratoryService.getAll();
+		Iterable<Manufacturer> mManufacturer = mManufacturerService.getAll();
 		
-		List<LaboratoryDTO> mLaboratoryDTOList = new ArrayList<LaboratoryDTO>();
+		List<ManufacturerDTO> mManufacturerDTOList = new ArrayList<ManufacturerDTO>();
 		
-		for (Laboratory bLaboratory : mLaboratory){
-			mLaboratoryDTOList.add(this.iMapper.map(bLaboratory,LaboratoryDTO.class));
+		for (Manufacturer bManufacturer : mManufacturer){
+			mManufacturerDTOList.add(this.iMapper.map(bManufacturer,ManufacturerDTO.class));
 		}
 		
-		return mLaboratoryDTOList;
+		return mManufacturerDTOList;
 	}
 
 	/**
 	 * Este método es un comando que permite guardar un Laboratorio
-	 * @param pLaboratory : Laboratorio a guardar
+	 * @param pManufacturer : Laboratorio a guardar
 	 * @return identificador del laboratorio guardado
 	 * @throws BusinessException : Excepción con detalles de los errores de negocio
 	 */
-	public long saveLaboratory(LaboratoryDTO pLaboratory) throws BusinessException {
-		LaboratoryService mLaboratoryService = new LaboratoryService();
+	public long saveManufacturer(ManufacturerDTO pManufacturer) throws BusinessException {
+		ManufacturerService mManufacturerService = new ManufacturerService();
 		
-		Laboratory bLaboratory = new Laboratory();
+		Manufacturer bManufacturer = new Manufacturer();
 		
-		bLaboratory = this.iMapper.map(pLaboratory,Laboratory.class);
+		bManufacturer = this.iMapper.map(pManufacturer,Manufacturer.class);
 		
-		return this.iMapper.map(mLaboratoryService.save(bLaboratory),LaboratoryDTO.class).getId();
+		return this.iMapper.map(mManufacturerService.save(bManufacturer),ManufacturerDTO.class).getId();
 		
 	}
 
-	public LaboratoryDTO getLaboratory(long pId) throws BusinessException{
-		LaboratoryService mLaboratoryService = new LaboratoryService();
+	public ManufacturerDTO getManufacturer(long pId) throws BusinessException{
+		ManufacturerService mManufacturerService = new ManufacturerService();
 		
-		return this.iMapper.map(mLaboratoryService.getById(pId),LaboratoryDTO.class);
+		return this.iMapper.map(mManufacturerService.getById(pId),ManufacturerDTO.class);
 	}
 	
 

@@ -1,16 +1,16 @@
-package backend.product.laboratory;
+package backend.product.manufacturer;
 
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * La interfaz <code>LaboratoryRepository</code> es la definicion del repositorio
- * para entidades <strong>Laboratory</strong>. Los repositorios son responsables de
+ * La interfaz <code>ManufacturerRepository</code> es la definicion del repositorio
+ * para entidades <strong>Manufacturer</strong>. Los repositorios son responsables de
  * proveer y implementar consultas así como recibir y persistir sobre entidades.
  */
 @Repository
-public interface LaboratoryRepository extends CrudRepository<Laboratory, Long> {
+public interface ManufacturerRepository extends CrudRepository<Manufacturer, Long> {
 
 	// NOTA: acá se pueden agregar firmas para metodos complejos que no estén
 	// definidos en CrudRepository. Por ejemplo:
