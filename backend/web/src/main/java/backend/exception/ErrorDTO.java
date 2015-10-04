@@ -1,7 +1,7 @@
 package backend.exception;
 
 /**
- * Un <code>ExceptionJSONInfo</code> es una clase de tipo DTO, que sirve para almacenar
+ * Un <code>ErrorDTO</code> es una clase de tipo DTO, que sirve para almacenar
  * la informacion pertinente a una excepcion generada en alguna de las distintas capas de la arquitectura.
  * <br>
  * Su mision es almacenar y transmitir esta informacion al cliente, quien debera debidamente mostrarla.
@@ -14,7 +14,7 @@ package backend.exception;
  * @author genesis
  *
  */
-public class BusinessExceptionDTO {
+public class ErrorDTO {
 
     private String iMessage;
     private String iStackTrace;

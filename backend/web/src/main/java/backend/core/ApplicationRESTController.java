@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
-import backend.exception.BusinessExceptionDTO;
+import backend.exception.ErrorDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
 	import backend.product.category.CategoryDTO;
@@ -227,15 +227,15 @@ public class ApplicationRESTController {
 	 *         la entidad envuelta.
 	 */
 	@ExceptionHandler(BusinessException.class)
-	public @ResponseBody ResponseEntity<BusinessExceptionDTO> handleBusinessException(HttpServletRequest request,
+	public @ResponseBody ResponseEntity<ErrorDTO> handleBusinessException(HttpServletRequest request,
 			BusinessException ex) {
 
 		// Creamos el objeto json que sera el que viaje al cliente.
-		BusinessExceptionDTO mExceptionDTO = new BusinessExceptionDTO();
-		mExceptionDTO.setMessage(ex.getMessage());
-		mExceptionDTO.setStackTrace(ex.getStackTraceString());
+		ErrorDTO mErrorDTO = new ErrorDTO();
+		mErrorDTO.setMessage(ex.getMessage());
+		mErrorDTO.setStackTrace(ex.getStackTraceString());
 
-		ResponseEntity<BusinessExceptionDTO> mResponse = new ResponseEntity<BusinessExceptionDTO>(mExceptionDTO,
+		ResponseEntity<ErrorDTO> mResponse = new ResponseEntity<ErrorDTO>(mErrorDTO,
 				HttpStatus.CONFLICT);
 
 		return mResponse;
