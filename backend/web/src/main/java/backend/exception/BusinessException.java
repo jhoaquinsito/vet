@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
  *
  * Su mision es encapsular las excepciones controladas y no controladas, en cualquiera de las distintas
  * capas de la arquitectura, y comunicarla mediante el throw de ella misma, hasta llegar al RestController
- * pertinente, donde ser· serializada via la clase BusinessExceptionDTO
+ * pertinente, donde ser√° serializada via la clase BusinessExceptionDTO
  * <br><br>
  * Un <code>BusinessException</code> contiene:<br><br>
  * <strong>ClassName</strong>, el nombre de la clase desde el cual el flujo de excepcion comenzo.<br>
@@ -49,6 +49,8 @@ public class BusinessException extends Exception{
 		this.iStatusCode	= pStatusCode;
 		
 	}
+
+	
 
 
 

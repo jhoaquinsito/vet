@@ -1,9 +1,9 @@
 package backend.product;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Set;
 
+import backend.product.batch.BatchDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
@@ -17,9 +17,6 @@ public class ProductDTO {
 	private String iDescription;
 	private BigDecimal iMinimumStock;
 	private BigDecimal iUnitPrice;
-	private Timestamp iLastUpdateOn;
-	private Timestamp iDeletedOn;
-	private String iLastUpdateUser;
 	private BigDecimal iCost;
 	private BigDecimal iUtility;
 	private CategoryDTO iCategory;
@@ -27,6 +24,7 @@ public class ProductDTO {
 	private MeasureUnitDTO iMeasureUnit;
 	private PresentationDTO iPresentation;
 	private Set<DrugDTO> iDrugs;
+	private Set<BatchDTO> iBatches;
 
 	public Long getId() {
 		return iId;
@@ -66,30 +64,6 @@ public class ProductDTO {
 
 	public void setUnitPrice(BigDecimal pUnitPrice) {
 		this.iUnitPrice = pUnitPrice;
-	}
-
-	public Timestamp getLastUpdateOn() {
-		return iLastUpdateOn;
-	}
-
-	public void setLastUpdateOn(Timestamp pLastUpdateOn) {
-		this.iLastUpdateOn = pLastUpdateOn;
-	}
-
-	public Timestamp getDeletedOn() {
-		return iDeletedOn;
-	}
-
-	public void setDeletedOn(Timestamp pDeletedOn) {
-		this.iDeletedOn = pDeletedOn;
-	}
-
-	public String getLastUpdateUser() {
-		return iLastUpdateUser;
-	}
-
-	public void setLastUpdateUser(String pLastUpdateUser) {
-		this.iLastUpdateUser = pLastUpdateUser;
 	}
 
 	public BigDecimal getCost() {
@@ -146,6 +120,14 @@ public class ProductDTO {
 
 	public void setDrugs(Set<DrugDTO> pDrugs) {
 		this.iDrugs = pDrugs;
+	}
+
+	public Set<BatchDTO> getBatches() {
+		return iBatches;
+	}
+
+	public void setBatches(Set<BatchDTO> pBatches) {
+		this.iBatches = pBatches;
 	}
 
 }

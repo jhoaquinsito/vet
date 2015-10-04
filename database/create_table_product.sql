@@ -16,8 +16,9 @@ CREATE TABLE product
   utility numeric(17,4),
   category integer,
   presentation integer,
-  measure_unit integer,
+  measure_unit integer NOT NULL,
   manufacturer integer,
+  active boolean,
   CONSTRAINT pk_product PRIMARY KEY (id),
   CONSTRAINT fk_category_category FOREIGN KEY (category)
       REFERENCES category (id) MATCH SIMPLE

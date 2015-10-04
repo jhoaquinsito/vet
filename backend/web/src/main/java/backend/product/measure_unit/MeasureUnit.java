@@ -50,5 +50,9 @@ public class MeasureUnit {
 	public Long getId() {
 		return iId;
 	}
+	
+	public void setId(Long pId) {
+		this.iId = pId;
+	}
 
 }
