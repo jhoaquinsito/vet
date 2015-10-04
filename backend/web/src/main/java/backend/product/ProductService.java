@@ -67,9 +67,11 @@ public class ProductService {
 		// valido si el producto tiene datos válidos
 		this.validate(pProductToSave);
 		
-		// asocio el producto a sus lotes
-		for (Batch bBatch : pProductToSave.getBatches()){
-			bBatch.setProduct(pProductToSave);
+		// asocio el producto a sus lotes (si tiene)
+		if (pProductToSave.getBatches() != null){
+			for (Batch bBatch : pProductToSave.getBatches()){
+				bBatch.setProduct(pProductToSave);
+			}
 		}
 		
 		// marco el producto como activo
