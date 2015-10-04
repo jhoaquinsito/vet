@@ -231,18 +231,14 @@ public class ApplicationRESTController {
 			BusinessException ex) {
 
 		// Creamos el objeto json que sera el que viaje al cliente.
-		BusinessExceptionDTO exceptionDTO = new BusinessExceptionDTO();
-		exceptionDTO.setMessage(ex.getMessage());
+		BusinessExceptionDTO mExceptionDTO = new BusinessExceptionDTO();
+		mExceptionDTO.setMessage(ex.getMessage());
+		mExceptionDTO.setStackTrace(ex.getStackTraceString());
 
-		// Obtengo el StackTrace para pasarlo como String.
-		StringWriter stackTrace = new StringWriter();
-		ex.printStackTrace(new PrintWriter(stackTrace));
-		exceptionDTO.setStackTrace(stackTrace.toString());
-
-		ResponseEntity<BusinessExceptionDTO> response = new ResponseEntity<BusinessExceptionDTO>(exceptionDTO,
+		ResponseEntity<BusinessExceptionDTO> mResponse = new ResponseEntity<BusinessExceptionDTO>(mExceptionDTO,
 				HttpStatus.CONFLICT);
 
-		return response;
+		return mResponse;
 	}
 
 }
