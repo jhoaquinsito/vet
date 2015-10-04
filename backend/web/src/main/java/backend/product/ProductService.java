@@ -1,11 +1,13 @@
 package backend.product;
 
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.product.batch.Batch;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
@@ -36,7 +38,7 @@ public class ProductService {
 		super();
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iProductRepository = (ProductRepository) mAppContext.getBean(ProductRepository.class);
+		this.iProductRepository = mAppContext.getBean(ProductRepository.class);
 	}
 	
 	/**
@@ -91,6 +93,28 @@ public class ProductService {
 	 */
 	public Product get(Long pId){
 		return this.iProductRepository.findOne(pId);
+	}
+	
+	/**
+	 * Método que permite eliminar un producto a partir de su identificador.
+	 * Al eliminar el producto, sus los lotes asociados son eliminados físicamente.
+	 * @param pId identificador del producto a eliminar
+	 * @throws BusinessException errores de negocio al intentar realizar la operación
+	 */
+	public void delete(Long pId) throws BusinessException{
+		
+		// busco el producto por id
+		Product mProductToDelete = this.get(pId);
+		
+		// desactivo el producto
+		mProductToDelete.setActive(false);
+		
+		// limpio la lista de lotes asociados
+		mProductToDelete.getBatches().clear();
+		
+		// almaceno el producto desactivado y sin los lotes
+		this.save(mProductToDelete);
+		
 	}
 
 }

@@ -236,5 +236,19 @@ public class CommandAndQueries {
 		
 		return mProductDTO;
 	}
+	
+	/**
+	 * Este método es un comando que elimina un producto a partir de su identificador.
+	 * Al eliminar el producto, sus los lotes asociados son eliminados físicamente.
+	 * @param pProductId identificador del producto a eliminar
+	 * @throws BusinessException errores de negocio al intentar hacer la operación
+	 */
+	public void deleteProduct(Long pProductId) throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		// elimino el producto
+		mProductService.delete(pProductId);
+		
+	}
 
 }

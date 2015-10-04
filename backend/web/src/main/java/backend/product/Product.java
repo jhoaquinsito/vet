@@ -37,7 +37,8 @@ import backend.product.presentation.Presentation;
 * <strong>Manufacturer</strong>, una unidad de medida:
 * <strong>MeasureUnit</strong>, una presentación (envase, inyectable, etc.):
 * <strong>Presentation</strong>, una serie de drogas que lo constituyen:
-* <strong>Drugs</strong>.
+* <strong>Drugs</strong>, una lista de lotes: <strong>Batches</strong> y también
+* si está activo o no: <strong>Active</strong>.
  */
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
@@ -73,6 +74,9 @@ public class Product {
 	
 	@Column(name="utility")
 	private BigDecimal iUtility;
+	
+	@Column(name="active")
+	private Boolean iActive;
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
     @JoinColumn(name="category")
@@ -90,7 +94,7 @@ public class Product {
     @JoinColumn(name="presentation")
 	private Presentation iPresentation;
 	
-	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.REMOVE}, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
 	private Set<Batch> iBatches;
 
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
@@ -204,6 +208,14 @@ public class Product {
 
 	public void setId(Long pId) {
 		this.iId = pId;
+	}
+
+	public Boolean isActive() {
+		return iActive;
+	}
+
+	public void setActive(Boolean pActive) {
+		this.iActive = pActive;
 	}
 
 }

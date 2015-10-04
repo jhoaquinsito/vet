@@ -76,6 +76,20 @@ public class ApplicationRESTController {
 	}
 	
 	/**
+	 * Metodo que permite eliminar un producto a partir de su identificador.
+	 * Al eliminar el producto, sus los lotes asociados son eliminados físicamente.
+	 * 
+	 * @param id identificador del producto a eliminar
+	 * @throws BusinessException errores al intentar realizar la operación
+	 */
+	@RequestMapping(value = "product/{id}", method = RequestMethod.DELETE)
+	public void deleteProduct(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		
+		mCNQ.deleteProduct(id);
+	}
+	
+	/**
 	 * Método que permite recuperar la lista completa de Presentaciones.
 	 * @return Lista de presentaciones.
 	 */
