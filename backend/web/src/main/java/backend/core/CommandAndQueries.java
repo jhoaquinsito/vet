@@ -3,6 +3,8 @@ package backend.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+
 import backend.exception.BusinessException;
 import backend.product.Product;
 import backend.product.ProductDTO;
@@ -38,6 +40,8 @@ import ma.glasnost.orika.MapperFacade;
 public class CommandAndQueries {
 	// MapperFacade de Orika (librería para mapping)
 	private MapperFacade iMapper; 
+	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
+	
 	
 	/**
 	 * Constructor.
@@ -61,7 +65,13 @@ public class CommandAndQueries {
 		ProductService mProductService = new ProductService();
 		
 		// map dto to domain object
-		Product mProduct = iMapper.map(pProductDTO, Product.class);
+		Product mProduct;
+		if (pProductDTO != null){
+			mProduct = iMapper.map(pProductDTO, Product.class);
+		} else {
+			throw new BusinessException("CommandAndQueries","Producto null", "saveProduct", CommandAndQueries.cPRODUCT_NULL_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+		}
+		
 		
 		mProduct = mProductService.save(mProduct);
 		
