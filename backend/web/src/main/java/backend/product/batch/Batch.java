@@ -16,8 +16,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.springframework.http.HttpStatus;
-
 import backend.exception.BusinessException;
 import backend.product.Product;
 
@@ -102,10 +100,8 @@ public class Batch {
 		try {
 			// uso el formatter para parsear la fecha en formato ISO (si hay un error, lanza una excepción)
 			mDueDate = mDateFormatter.parse(this.iIsoDueDate.toString());
-		} catch (ParseException e) {
-			// TODO mejorar el uso de excepciones, no debería porque aclarar la clase y el método, tampoco el HTTP status acá
-			// TODO la excepción BusinessException debería encapsular la otra excepción ParseException
-			throw new BusinessException(Batch.class.toString(), "getDueDate", Batch.cDUEDATE_PARSING_EXCEPTION, "nose", HttpStatus.CONFLICT);
+		} catch (ParseException bParseException) {
+			throw new BusinessException(Batch.cDUEDATE_PARSING_EXCEPTION, bParseException);
 		}
 		
 		return mDueDate;

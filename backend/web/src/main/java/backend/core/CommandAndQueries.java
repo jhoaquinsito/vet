@@ -3,8 +3,6 @@ package backend.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-
 import backend.exception.BusinessException;
 import backend.product.Product;
 import backend.product.ProductDTO;
@@ -69,7 +67,7 @@ public class CommandAndQueries {
 		if (pProductDTO != null){
 			mProduct = iMapper.map(pProductDTO, Product.class);
 		} else {
-			throw new BusinessException("CommandAndQueries","Producto null", "saveProduct", CommandAndQueries.cPRODUCT_NULL_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(CommandAndQueries.cPRODUCT_NULL_EXCEPTION_MESSAGE);
 		}
 		
 		

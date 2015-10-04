@@ -64,8 +64,10 @@ public class ManufacturerService {
 				if(mManufacturer.getName().toLowerCase().equalsIgnoreCase(pManufacturerName.toLowerCase()))
 					mResult.add(mManufacturer);
 			}
-		} catch (Exception e) {
-			throw new BusinessException("ManufacturerService","getByName", e.getMessage(),  "Se ha producido una excepcion", HttpStatus.CONFLICT);
+		// TODO catchear la excepción que corresponde y no la más general de todas
+		} catch (Exception bException) {
+			// TODO usar constantes y dar un mensaje mas amigable y que sirva
+			throw new BusinessException(bException.getMessage(), bException);
 		}
 		
 		
@@ -82,19 +84,23 @@ public class ManufacturerService {
 	 * @throws BusinessException - Una excepcion de negocio con el detalle del error.
 	 */
 	private void validate(Manufacturer pManufacturer) throws BusinessException{
-
+		// TODO revisar convenciones de código
+		// TODO no hardcodear, usar constantes
 		String friendlyMessage = "Manufacturer NO valido: ";
 		
 		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
 		
 		if(pManufacturer.getName().length() == 0){
-			throw new BusinessException("ManufacturerService","Manufacturer no válido", "validate",  friendlyMessage + " Nombre vacio ", HttpStatus.CONFLICT);
+			// TODO no hardcodear, usar constantes
+			throw new BusinessException(friendlyMessage + " Nombre vacio ");
 		}
 		if(pManufacturer.getName().length() > 30){
-			throw new BusinessException("ManufacturerService","Manufacturer no válido", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (30) ", HttpStatus.CONFLICT);
+			// TODO no hardcodear, usar constantes
+			throw new BusinessException(friendlyMessage + " Nombre excede el limite de caracteres (30) ");
 		}
 		if(!this.getByName(pManufacturer.getName()).isEmpty()){
-			throw new BusinessException("ManufacturerService","Manufacturer no válido", "validate",  friendlyMessage + " Ya existe un manufacturer bajo el mismo nombre ( " + pManufacturer.getName() + " )", HttpStatus.CONFLICT);
+			// TODO no hardcodear, usar constantes
+			throw new BusinessException(friendlyMessage + " Ya existe un manufacturer bajo el mismo nombre ( " + pManufacturer.getName() + " )");
 		}
 		
 		

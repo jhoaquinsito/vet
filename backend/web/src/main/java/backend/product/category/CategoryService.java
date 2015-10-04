@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.http.HttpStatus;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -64,8 +63,10 @@ public class CategoryService {
 				if(mCategory.getName().toLowerCase().equalsIgnoreCase(pCategoryName.toLowerCase()))
 					mResult.add(mCategory);
 			}
+		// TODO catchear la excepción que corresponde y no una general
 		} catch (Exception e) {
-			throw new BusinessException("CategoryService","getByName", e.getMessage(),  "Se ha producido una excepcion", HttpStatus.CONFLICT);
+			// TODO enviar un mensaje más amigable
+			throw new BusinessException(e.getMessage());
 		}
 		
 		
@@ -83,18 +84,23 @@ public class CategoryService {
 	 */
 	private void validate(Category pCategory) throws BusinessException{
 
+		//TODO revisar las convenciones de código
+		//TODO usar constantes y no hardcodear:
 		String friendlyMessage = "Category NO valido: ";
 		
 		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
 		
 		if(pCategory.getName().length() == 0){
-			throw new BusinessException("CategoryService","Category no válido", "validate",  friendlyMessage + "  Nombre vacio ", HttpStatus.CONFLICT);
+			//TODO usar constantes y no hardcodear:
+			throw new BusinessException(friendlyMessage + "  Nombre vacio ");
 		}
 		if(pCategory.getName().length() > 30){
-			throw new BusinessException("CategoryService","Category no válido", "validate",  friendlyMessage + " Nombre excede el limite de caracteres (30) ", HttpStatus.CONFLICT);
+			//TODO usar constantes y no hardcodear:
+			throw new BusinessException(friendlyMessage + " Nombre excede el limite de caracteres (30) ");
 		}
 		if(!this.getByName(pCategory.getName()).isEmpty()){
-			throw new BusinessException("CategoryService","Category no válido", "validate",  friendlyMessage + " Ya existe una categoría bajo el mismo nombre( " + pCategory.getName() + " )", HttpStatus.CONFLICT);
+			//TODO usar constantes y no hardcodear:
+			throw new BusinessException(friendlyMessage + " Ya existe una categoría bajo el mismo nombre( " + pCategory.getName() + " )");
 		}
 		
 		

@@ -3,8 +3,6 @@ package backend.product;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.http.HttpStatus;
-
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
@@ -60,7 +58,7 @@ public class ProductService {
 				this.get(pProductToSave.getId());
 			} catch (BusinessException bBusinessException){
 				// o no existe o sino está eliminado
-				throw new BusinessException("ProductService","Producto no se puede guardar", "save", ProductService.cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+				throw new BusinessException(ProductService.cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE, bBusinessException);
 			}
 		}
 		
@@ -94,19 +92,19 @@ public class ProductService {
 	private void validate(Product pProduct) throws BusinessException{
 		// valido que el nombre del producto no sea null
 		if (pProduct.getName() == null){
-			throw new BusinessException("ProductService","Producto no válido", "validate",  ProductService.cNULL_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(ProductService.cNULL_NAME_EXCEPTION_MESSAGE);
 		}
 		// valido que el nombre del producto no esté vacío
 		if(pProduct.getName().length() == 0){
-			throw new BusinessException("ProductService","Producto no válido", "validate",  ProductService.cEMPTY_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(ProductService.cEMPTY_NAME_EXCEPTION_MESSAGE);
 		}
 		// valido que el nombre del producto sea menor a 100 caracteres
 		if(pProduct.getName().length() > 100){
-			throw new BusinessException("ProductService","Producto no válido", "validate", ProductService.cLONG_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(ProductService.cLONG_NAME_EXCEPTION_MESSAGE);
 		}
 		// valido que la unidad de medida no sea null
 		if(pProduct.getMeasureUnit() == null){
-			throw new BusinessException("ProductService","Producto no válido", "validate", ProductService.cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(ProductService.cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE);
 		}
 	}
 
@@ -121,12 +119,12 @@ public class ProductService {
 		
 		// si es null, es porque no existe ningún producto con dicho id
 		if (mStoredProduct == null) {
-			throw new BusinessException("ProductService","Producto no existe", "get", ProductService.cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(ProductService.cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE);
 		}
 
 		// checkeo si el producto NO está activo
 		if (!mStoredProduct.isActive()){
-			throw new BusinessException("ProductService","Producto eliminado", "get", ProductService.cDELETED_PRODUCT_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(ProductService.cDELETED_PRODUCT_EXCEPTION_MESSAGE);
 		}
 		
 		return mStoredProduct;

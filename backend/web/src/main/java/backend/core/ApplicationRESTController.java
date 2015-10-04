@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -230,10 +232,7 @@ public class ApplicationRESTController {
 
 		// Creamos el objeto json que sera el que viaje al cliente.
 		BusinessExceptionDTO exceptionDTO = new BusinessExceptionDTO();
-		exceptionDTO.setUrl(request.getRequestURL().toString());
-		exceptionDTO.setiDetail(ex.getExMessage());
-		exceptionDTO.setMessage(ex.getFriendlyMessage());
-		exceptionDTO.setiDetail(ex.getExMessage());
+		exceptionDTO.setMessage(ex.getMessage());
 
 		// Obtengo el StackTrace para pasarlo como String.
 		StringWriter stackTrace = new StringWriter();
@@ -241,7 +240,7 @@ public class ApplicationRESTController {
 		exceptionDTO.setStackTrace(stackTrace.toString());
 
 		ResponseEntity<BusinessExceptionDTO> response = new ResponseEntity<BusinessExceptionDTO>(exceptionDTO,
-				ex.getiStatusCode());
+				HttpStatus.CONFLICT);
 
 		return response;
 	}
