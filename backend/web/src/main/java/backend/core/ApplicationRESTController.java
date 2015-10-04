@@ -65,14 +65,29 @@ public class ApplicationRESTController {
 	 * @param id
 	 *            : Identificador de la entidad buscada.
 	 * @return ProductDTO : producto buscado.
+	 * @throws BusinessException el producto estaba eliminado lógicamente
 	 * @throws Exception
 	 *             : Excepcion de negocio, manejada por: handleBusinessException
 	 */
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
-	public ProductDTO getProductById(@PathVariable Long id) {
+	public ProductDTO getProductById(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 		
 		return mCNQ.getProduct(id);
+	}
+	
+	/**
+	 * Metodo que permite eliminar un producto a partir de su identificador.
+	 * Al eliminar el producto, sus los lotes asociados son eliminados físicamente.
+	 * 
+	 * @param id identificador del producto a eliminar
+	 * @throws BusinessException errores al intentar realizar la operación
+	 */
+	@RequestMapping(value = "product/{id}", method = RequestMethod.DELETE)
+	public void deleteProduct(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		
+		mCNQ.deleteProduct(id);
 	}
 	
 	/**

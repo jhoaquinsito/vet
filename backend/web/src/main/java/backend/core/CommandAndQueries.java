@@ -226,8 +226,9 @@ public class CommandAndQueries {
 	 * su identificador.
 	 * @param pProductId identificador del producto
 	 * @return producto encontrado
+	 * @throws BusinessException el producto estaba eliminado lógicamente
 	 */
-	public ProductDTO getProduct(Long pProductId){
+	public ProductDTO getProduct(Long pProductId) throws BusinessException{
 		ProductService mProductService = new ProductService();
 		
 		Product mProduct = mProductService.get(pProductId);
@@ -235,6 +236,20 @@ public class CommandAndQueries {
 		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
 		
 		return mProductDTO;
+	}
+	
+	/**
+	 * Este método es un comando que elimina un producto a partir de su identificador.
+	 * Al eliminar el producto, sus los lotes asociados son eliminados físicamente.
+	 * @param pProductId identificador del producto a eliminar
+	 * @throws BusinessException errores de negocio al intentar hacer la operación
+	 */
+	public void deleteProduct(Long pProductId) throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		// elimino el producto
+		mProductService.delete(pProductId);
+		
 	}
 
 }

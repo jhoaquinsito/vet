@@ -111,4 +111,8 @@ public class Batch {
 		return mDueDate;
 	}
 
+	public void setProduct(Product pProduct) {
+		this.iProduct = pProduct;
+	}
+
 }
