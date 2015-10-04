@@ -53,6 +53,11 @@ public class ProductService {
 		// valido si el producto tiene datos válidos
 		this.validate(pProductToSave);
 		
+		// asocio el producto a sus lotes
+		for (Batch bBatch : pProductToSave.getBatches()){
+			bBatch.setProduct(pProductToSave);
+		}
+		
 		// guardo el producto
 		Product mProductSaved = this.iProductRepository.save(pProductToSave);
 		
