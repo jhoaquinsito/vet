@@ -65,11 +65,12 @@ public class ApplicationRESTController {
 	 * @param id
 	 *            : Identificador de la entidad buscada.
 	 * @return ProductDTO : producto buscado.
+	 * @throws BusinessException el producto estaba eliminado lógicamente
 	 * @throws Exception
 	 *             : Excepcion de negocio, manejada por: handleBusinessException
 	 */
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
-	public ProductDTO getProductById(@PathVariable Long id) {
+	public ProductDTO getProductById(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 		
 		return mCNQ.getProduct(id);

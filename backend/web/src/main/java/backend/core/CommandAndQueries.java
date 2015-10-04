@@ -226,8 +226,9 @@ public class CommandAndQueries {
 	 * su identificador.
 	 * @param pProductId identificador del producto
 	 * @return producto encontrado
+	 * @throws BusinessException el producto estaba eliminado lógicamente
 	 */
-	public ProductDTO getProduct(Long pProductId){
+	public ProductDTO getProduct(Long pProductId) throws BusinessException{
 		ProductService mProductService = new ProductService();
 		
 		Product mProduct = mProductService.get(pProductId);

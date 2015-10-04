@@ -30,6 +30,9 @@ public class ProductService {
 	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre vacio ";
 	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre excede el limite de caracteres (100) ";
 	private static final String cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE = "Producto NO valido: Unidad de Medida vacia  ";
+	private static final String cDELETED_PRODUCT_EXCEPTION_MESSAGE = "Intentaste obtener un producto eliminado lógicamente.";
+	private static final String cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE = "Intentaste obtener un producto que no existe.";
+	private static final String cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE = "El producto que intentas guardar no se puede guardar: o no existe o está eliminado lógicamente.";
 	
 	/**
 	 * Constructor.
@@ -50,6 +53,17 @@ public class ProductService {
 	 * @throws BusinessException 
 	 */
 	public Product save(Product pProductToSave) throws BusinessException {
+		// verifico que el producto que se intenta guardar no esté eliminado
+		// o que traiga un identificador que no existe
+		if (pProductToSave.getId() != null){
+			try{
+				this.get(pProductToSave.getId());
+			} catch (BusinessException bBusinessException){
+				// o no existe o sino está eliminado
+				throw new BusinessException("ProductService","Producto no se puede guardar", "save", ProductService.cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			}
+		}
+		
 		// valido si el producto tiene datos válidos
 		this.validate(pProductToSave);
 		
@@ -57,6 +71,9 @@ public class ProductService {
 		for (Batch bBatch : pProductToSave.getBatches()){
 			bBatch.setProduct(pProductToSave);
 		}
+		
+		// marco el producto como activo
+		pProductToSave.setActive(true);
 		
 		// guardo el producto
 		Product mProductSaved = this.iProductRepository.save(pProductToSave);
@@ -95,9 +112,22 @@ public class ProductService {
 	 * Método que permite obtener un producto a partir de su identificador.
 	 * @param pId identificador del producto
 	 * @return producto encontrado
+	 * @throws BusinessException intentó obtener un producto eliminado lógicamente
 	 */
-	public Product get(Long pId){
-		return this.iProductRepository.findOne(pId);
+	public Product get(Long pId) throws BusinessException{
+		Product mStoredProduct = this.iProductRepository.findOne(pId);
+		
+		// si es null, es porque no existe ningún producto con dicho id
+		if (mStoredProduct == null) {
+			throw new BusinessException("ProductService","Producto no existe", "get", ProductService.cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+		}
+
+		// checkeo si el producto NO está activo
+		if (!mStoredProduct.isActive()){
+			throw new BusinessException("ProductService","Producto eliminado", "get", ProductService.cDELETED_PRODUCT_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+		}
+		
+		return mStoredProduct;
 	}
 	
 	/**
