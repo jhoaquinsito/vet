@@ -1,5 +1,3 @@
-app.service('ProductService', function($http, config) {
-  this.elements = function() {
-    return $http.get(config.API_URL + '/productList');
-  };
+app.factory('ProductService', function($resource, config) {
+    return $resource(config.API_BASE_URL + '/product/:id');
 });

@@ -1,1 +1,91 @@
-<div>Formulario de producto</div>
+<form ng-submit="saveProductAction()">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Agregar producto</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label>Nombre (*)</label>
+                        <input type="text" class="form-control" ng-model="form.product.name" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Unidad de medida (*)</label>
+                        <input type="text" class="form-control" ng-model="form.product.measureUnit.name" required>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea class="form-control" ng-model="form.product.description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <input type="text" class="form-control" ng-model="form.product.category.name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Laboratorio</label>
+                        <input type="text" class="form-control" ng-model="form.product.manufacturer.name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Droga</label>
+                        <input type="text" class="form-control" ng-model="form.product.drugs[0].name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Presentación</label>
+                        <input type="text" class="form-control" ng-model="form.product.presentation.name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <input type="text" class="form-control" ng-model="form.product.provider">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Costo</label>
+                        <input type="number" class="form-control" ng-model="form.product.cost">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Utilidad</label>
+                        <input type="number" class="form-control" ng-model="form.product.utility">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Precio unitario</label>
+                        <input type="number" class="form-control" ng-model="form.product.unitPrice">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Stock mínimo</label>
+                        <input type="number" class="form-control" ng-model="form.product.minimumStock">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <button type="button" class="btn btn-danger">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>

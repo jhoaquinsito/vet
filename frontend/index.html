@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="es" ng-app="app">
-  <head>
-    <title>Veterinaria El Universo</title>
+    <head>
+        <title>Veterinaria El Universo</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- Metadatas -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-    <!-- Url base -->
-    <base href="/TheUniverse/frontend/">
+        <!-- Base URL -->
+        <base href="/Veterinaria/frontend/">
 
-    <!-- Bootstrap -->
-    <link href="assets/libs/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <!-- Bootstrap -->
+        <link href="assets/libs/bootstrap/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="main-wrapper">
+            <div ng-include="'app/views/layout/header-view.html'"></div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3" ng-include="'app/views/layout/sidebar-view.html'"></div>
+                    <div class="col-md-9" ng-view></div>
+                </div>
+            </div>
+        </div>
 
-    <!-- Estilos personalizados -->
-    <link href="assets/css/app.css" rel="stylesheet">
-  </head>
-  <body>
-    <div ng-view></div>
+        <!-- Angular -->
+        <script src="assets/libs/angular/angular.js"></script>
+        <script src="assets/libs/angular/angular-resource.js"></script>
+        <script src="assets/libs/angular/angular-route.js"></script>
 
-    <!-- Angular -->
-    <script src="assets/libs/angular/angular.js"></script>
-    <script src="assets/libs/angular/angular-route.js"></script>
-
-    <!-- App: configuración -->
-    <script src="app/app.module.js"></script>
-    <script src="app/app.config.js"></script>
-    <script src="app/app.routes.js"></script>
-
-    <!-- App: controladores -->
-    <script src="app/controllers/ProductController.js"></script>
-
-    <!-- App: servicios -->
-    <script src="app/services/ProductService.js"></script>
-  </body>
+        <!-- App: configuración de módulos y rutas -->
+        <script src="app/app.module.js"></script>
+        <script src="app/app.config.js"></script>
+        <script src="app/app.routes.js"></script>
+        <!-- App: controladores -->
+        <script src="app/controllers/ProductController.js"></script>
+        <!-- App: servicios -->
+        <script src="app/services/CategoryService.js"></script>
+        <script src="app/services/DrugService.js"></script>
+        <script src="app/services/ManufacturerService.js"></script>
+        <script src="app/services/PresentationService.js"></script>
+        <script src="app/services/ProductService.js"></script>
+    </body>
 </html>
