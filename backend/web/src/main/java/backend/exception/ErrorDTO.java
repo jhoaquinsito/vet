@@ -6,10 +6,9 @@ package backend.exception;
  * <br>
  * Su mision es almacenar y transmitir esta informacion al cliente, quien debera debidamente mostrarla.
  * <br><br>
- * Un <code>ExceptionJSONInfo</code> contiene:
+ * Un <code>ErrorDTO</code> contiene:
  * <strong>Message</strong>, el mensaje de tipo user-friendly para informar al usuario final.<br>
- * <strong>StackTrace</strong>, el <code>stackTrace</code> (opcional) que se comunica. Este es opcional
- * 								pues solo estara completo en el caso de excepciones no controladas.<br>
+ * <strong>StackTrace</strong>, el <code>stackTrace</code> de la excepción generada.<br>
  * 
  * @author genesis
  *
