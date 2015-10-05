@@ -1,3 +1,3 @@
 app.constant('config', {
-  API_URL: 'http://localhost/TheUniverse/backend/api'
+    API_BASE_URL: 'http://localhost:8080/web'
 });
