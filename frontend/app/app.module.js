@@ -7,3 +7,16 @@ app.config(function($locationProvider, RestangularProvider, config) {
     //configuración de url base para el uso de servicios REST
     RestangularProvider.setBaseUrl(config.API_BASE_URL);
 });
+
+app.run(function($rootScope) {
+    $rootScope.layout = {};
+    $rootScope.layout.isMiniSidebar = false;
+
+    $rootScope.setTitle = function(title) {
+        $rootScope.layout.title = title;
+    };
+
+    $rootScope.toggleSidebar = function() {
+        $rootScope.layout.isMiniSidebar = !$rootScope.layout.isMiniSidebar;
+    };
+});
