@@ -128,12 +128,6 @@ public class CommandAndQueries {
 		
 	}
 
-	public CategoryDTO getCategory(long pId) throws BusinessException{
-		CategoryService mCategoryService = new CategoryService();
-		
-		return this.iMapper.map(mCategoryService.getById(pId),CategoryDTO.class);
-	}
-	
 	/**
 	 * Este método es una consulta que devuelve la lista completa de laboratorios
 	 * @return lista de laboratorios
@@ -170,12 +164,7 @@ public class CommandAndQueries {
 		
 	}
 
-	public ManufacturerDTO getManufacturer(long pId) throws BusinessException{
-		ManufacturerService mManufacturerService = new ManufacturerService();
-		
-		return this.iMapper.map(mManufacturerService.getById(pId),ManufacturerDTO.class);
-	}
-	
+
 
 	/**
 	 * Este método es un comando que permite guardar una presentación.

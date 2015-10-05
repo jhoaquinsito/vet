@@ -115,14 +115,7 @@ public class ApplicationRESTController {
 
 	}
 
-	@RequestMapping(value = "category/{id}", method = RequestMethod.GET)
-	public CategoryDTO getCategory(@PathVariable long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-
-		CategoryDTO mCategoryDTO = mCNQ.getCategory(id);
-
-		return mCategoryDTO;
-	}
+	
 
 	@RequestMapping(value = "category", method = RequestMethod.GET)
 	public List<CategoryDTO> listCategorys() throws BusinessException {
@@ -141,14 +134,7 @@ public class ApplicationRESTController {
 
 	}
 
-	@RequestMapping(value = "manufacturer/{id}", method = RequestMethod.GET)
-	public ManufacturerDTO getManufacturer(@PathVariable long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-
-		ManufacturerDTO mManufacturerDTO = mCNQ.getManufacturer(id);
-
-		return mManufacturerDTO;
-	}
+	
 
 	@RequestMapping(value = "manufacturer", method = RequestMethod.GET)
 	public List<ManufacturerDTO> listManufacturers() throws BusinessException {

@@ -108,10 +108,10 @@ public class ManufacturerService {
 	public Iterable<Manufacturer> getAll() {
 		return this.iManufacturerRepository.findAll();
 	}
-	
+	/*
 	public Manufacturer getById(long id){
 		return this.iManufacturerRepository.findOne(id);
 	}
-	
+	*/
 	
 }

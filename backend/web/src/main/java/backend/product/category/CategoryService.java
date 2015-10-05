@@ -109,10 +109,10 @@ public class CategoryService {
 	public Iterable<Category> getAll() {
 		return this.iCategoryRepository.findAll();
 	}
-	
+	/*
 	public Category getById(long id){
 		return this.iCategoryRepository.findOne(id);
 	}
-	
+	*/
 	
 }
