@@ -1,3 +1,3 @@
-app.factory('ProductService', function($resource, config) {
-    return $resource(config.API_BASE_URL + '/product/:id');
+app.factory('ProductService', function(Restangular) {
+    return Restangular.service('product');
 });

@@ -31,7 +31,18 @@ app.controller('ProductController', function($scope, $route, CategoryService, Dr
     };
 
     $scope.saveProductAction = function() {
-        ProductService.save($scope.form.product);
+        var request = ProductService.post($scope.form.product);
+
+        request.success = function(response) {
+            $scope.resetFormData();
+
+            alert('Producto cargado con éxito.');
+        };
+        request.error = function(response) {
+            alert('No se pudo cargar el producto.');
+        };
+
+        request.then(request.success, request.error);
     };
 
     $scope.resetFormData = function() {
@@ -52,10 +63,21 @@ app.controller('ProductController', function($scope, $route, CategoryService, Dr
     };
 
     $scope.refreshFormDropdownsData = function() {
-        $scope.form.categories = CategoryService.query();
-        $scope.form.drugs = DrugService.query();
-        $scope.form.manufacturers = ManufacturerService.query();
-        $scope.form.presentations = PresentationService.query();
+        CategoryService.getList().then(function(response) {
+            $scope.form.categories = response;
+        });
+
+        DrugService.getList().then(function(response) {
+            $scope.form.drugs = response;
+        });
+
+        ManufacturerService.getList().then(function(response) {
+            $scope.form.manufacturers = response;
+        });
+
+        PresentationService.getList().then(function(response) {
+            $scope.form.presentations = response;
+        });
     };
 
     $scope.init();

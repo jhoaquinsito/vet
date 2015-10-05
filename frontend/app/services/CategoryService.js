@@ -1,3 +1,3 @@
-app.factory('CategoryService', function($resource, config) {
-    return $resource(config.API_BASE_URL + '/category/:id');
+app.factory('CategoryService', function(Restangular) {
+    return Restangular.service('category');
 });
