@@ -2,7 +2,6 @@ package backend.product.presentation;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.http.HttpStatus;
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 
@@ -78,8 +77,7 @@ public class PresentationService {
 			mPresentationSaved = this.save(pNewPresentation);
 		} else {
 			// ya existe la presentación
-			throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
-					PresentationService.cEXISTING_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(PresentationService.cEXISTING_NAME_EXCEPTION_MESSAGE);
 		}
 
 		return mPresentationSaved;
@@ -99,23 +97,16 @@ public class PresentationService {
 				if (pPresentation.getName().length() <= 30) {
 					// nombre OK
 				} else {
-					// TODO refactorizar como estamos usando la excepción, con
-					// el mensaje debería ser suficiente para lanzarla (los
-					// demas son datos que se pueden sacar del contexto)
-
 					// nombre con más caracteres que lo permitido
-					throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
-							PresentationService.cLONG_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+					throw new BusinessException(PresentationService.cLONG_NAME_EXCEPTION_MESSAGE);
 				}
 			} else {
 				// nombre vacío
-				throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
-						PresentationService.cEMPTY_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+				throw new BusinessException(PresentationService.cEMPTY_NAME_EXCEPTION_MESSAGE);
 			}
 		} else {
 			// nombre con valor NULL
-			throw new BusinessException(this.getClass().toString(), "ProductService", "validate",
-					PresentationService.cNULL_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(PresentationService.cNULL_NAME_EXCEPTION_MESSAGE);
 		}
 	}
 

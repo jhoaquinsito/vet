@@ -2,7 +2,6 @@ package backend.product.drug;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.http.HttpStatus;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -79,8 +78,7 @@ public class DrugService {
 			mDrugSaved = this.save(pNewDrug);
 		} else {
 			// ya existe la droga
-			throw new BusinessException(this.getClass().toString(), "DrugService", "validate",
-					DrugService.cEXISTING_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(DrugService.cEXISTING_NAME_EXCEPTION_MESSAGE);
 		}
 
 		return mDrugSaved;
@@ -100,23 +98,16 @@ public class DrugService {
 				if (pDrug.getName().length() <= 30) {
 					// nombre OK
 				} else {
-					// TODO refactorizar como estamos usando la excepción, con
-					// el mensaje debería ser suficiente para lanzarla (los
-					// demas son datos que se pueden sacar del contexto)
-
 					// nombre con más caracteres que lo permitido
-					throw new BusinessException(this.getClass().toString(), "DrugService", "validate",
-							DrugService.cLONG_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+					throw new BusinessException(DrugService.cLONG_NAME_EXCEPTION_MESSAGE);
 				}
 			} else {
 				// nombre vacío
-				throw new BusinessException(this.getClass().toString(), "DrugService", "validate",
-						DrugService.cEMPTY_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+				throw new BusinessException(DrugService.cEMPTY_NAME_EXCEPTION_MESSAGE);
 			}
 		} else {
 			// nombre con valor NULL
-			throw new BusinessException(this.getClass().toString(), "DrugService", "validate",
-					DrugService.cNULL_NAME_EXCEPTION_MESSAGE, HttpStatus.CONFLICT);
+			throw new BusinessException(DrugService.cNULL_NAME_EXCEPTION_MESSAGE);
 		}
 	}
 
