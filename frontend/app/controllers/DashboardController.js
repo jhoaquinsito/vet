@@ -4,7 +4,7 @@ app.controller('DashboardController', function($scope, $rootScope, $route) {
 
     $scope.init = function() {
         switch ($scope.action) {
-            case 'show':
+            case 'dashboard.show':
                 $scope.showDashboardAction();
                 break;
         }

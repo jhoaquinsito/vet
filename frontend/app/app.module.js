@@ -8,9 +8,14 @@ app.config(function($locationProvider, RestangularProvider, config) {
     RestangularProvider.setBaseUrl(config.API_BASE_URL);
 });
 
-app.run(function($rootScope) {
+app.run(function($rootScope, $location) {
     $rootScope.layout = {};
     $rootScope.layout.isMiniSidebar = false;
+
+    $rootScope.$on('$routeChangeSuccess', function(scope, current, previous) {
+        //asigna la primera parte de la acción de la ruta (que corresponde a la funcionalidad en general)
+        $rootScope.layout.activeSidebarOption = current.action.split('.')[0];
+    });
 
     $rootScope.setTitle = function(title, subtitle) {
         $rootScope.layout.title = title;

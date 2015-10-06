@@ -3,26 +3,26 @@ app.config(function($routeProvider) {
     $routeProvider.when('/dashboard', {
         controller: 'DashboardController',
         templateUrl: 'app/views/dashboard/show-view.html',
-        action: 'show'
+        action: 'dashboard.show'
     });
 
     //productos
     $routeProvider.when('/products', {
         controller: 'ProductController',
         templateUrl: 'app/views/product/table-view.html',
-        action: 'list'
+        action: 'product.list'
     });
 
     $routeProvider.when('/products/add', {
         controller: 'ProductController',
         templateUrl: 'app/views/product/form-view.html',
-        action: 'add'
+        action: 'product.add'
     });
 
     $routeProvider.when('/products/edit/:id', {
         controller: 'ProductController',
         templateUrl: 'app/views/product/form-view.html',
-        action: 'edit'
+        action: 'product.edit'
     });
 
     //ruta no encontrada

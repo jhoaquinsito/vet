@@ -51,6 +51,7 @@ body {
     width: 250px;
     height: 100%;
     top: 50px;
+    overflow: hidden;
 }
 #sidebar .list-group-item {
     background-color: transparent;
@@ -60,7 +61,12 @@ body {
     font-size: 14px;
     padding: 15px;
     border-left: 4px solid transparent;
+    width: 250px;
 }
+#sidebar .list-group-item span {
+    opacity: 1;
+}
+#sidebar .list-group-item.active,
 #sidebar .list-group-item:hover,
 #sidebar .list-group-item:focus {
     background-color: #293846;
@@ -82,14 +88,15 @@ body {
     width: 60px;
 }
 #sidebar.mini-sidebar .list-group-item span {
-    display: none;
+    opacity: 0;
 }
 #sidebar.mini-sidebar + #content-wrapper {
     margin-left: 60px;
 }
 #sidebar,
+#sidebar .list-group-item span,
 #content-wrapper {
-    transition: width 0.4s, margin-left 0.4s;
+    transition: all 0.4s;
 }
 
 /* Contentedor de contenido */

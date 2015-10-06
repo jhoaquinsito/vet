@@ -6,13 +6,13 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
     $scope.init = function() {
         switch ($scope.action) {
-            case 'list':
+            case 'product.list':
                 $scope.listProductsAction();
                 break;
-            case 'add':
+            case 'product.add':
                 $scope.addProductAction();
                 break;
-            case 'edit':
+            case 'product.edit':
                 $scope.editProductAction();
                 break;
         }
