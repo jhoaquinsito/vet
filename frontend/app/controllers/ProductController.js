@@ -1,4 +1,4 @@
-app.controller('ProductController', function($scope, $rootScope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService) {
+app.controller('ProductController', function($scope, $location, $rootScope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.products = [];
@@ -26,7 +26,6 @@ app.controller('ProductController', function($scope, $rootScope, $route, Categor
         $rootScope.setTitle($scope.name, 'Agregar producto');
 
         $scope.refreshFormDropdownsData();
-        $scope.resetFormData();
     };
 
     $scope.editProductAction = function() {
@@ -34,16 +33,16 @@ app.controller('ProductController', function($scope, $rootScope, $route, Categor
     };
 
     $scope.saveProductAction = function(form) {
-        if (form.$invalid) {
+        if ($scope.formValidation(form)) {
             return null;
         }
 
         var request = ProductService.post($scope.form.product);
 
         request.success = function(response) {
-            $scope.resetFormData();
-
             alert('Producto cargado con éxito.');
+
+            $location.path('products');
         };
         request.error = function(response) {
             alert('No se pudo cargar el producto.');
@@ -85,6 +84,16 @@ app.controller('ProductController', function($scope, $rootScope, $route, Categor
         PresentationService.getList().then(function(response) {
             $scope.form.presentations = response;
         });
+    };
+
+    $scope.formValidation = function(form) {
+        angular.forEach(form, function(object) {
+            if (angular.isObject(object) && angular.isDefined(object.$setDirty)) {
+                object.$setDirty();
+            }
+        })
+
+        return form.$invalid;
     };
 
     $scope.init();

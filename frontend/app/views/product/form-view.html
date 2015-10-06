@@ -1,19 +1,19 @@
-<form ng-submit="saveProductAction(productForm)" name="productForm">
+<form ng-submit="saveProductAction(productForm)" name="productForm" novalidate>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-9">
-                    <div class="form-group form-group-sm" ng-class="{'has-error': productForm.name.$dirty.required && productForm.name.$error.required}">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': productForm.name.$dirty && productForm.name.$error.required}">
                         <label class="control-label mandatory">Nombre</label>
                         <input type="text" class="form-control" name="name" ng-model="form.product.name" required>
-                        <span ng-show="productForm.name.$dirty.required && productForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
+                        <span ng-show="productForm.name.$dirty && productForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group form-group-sm" ng-class="{'has-error': productForm.measureUnit.$dirty.required && productForm.measureUnit.$error.required}">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': productForm.measureUnit.$dirty && productForm.measureUnit.$error.required}">
                         <label class="control-label mandatory">Unidad de medida</label>
                         <input type="text" class="form-control" name="measureUnit" ng-model="form.product.measureUnit.name" required>
-                        <span ng-show="productForm.measureUnit.$dirty.required && productForm.measureUnit.$error.required" class="help-block">Este campo es obligatorio</span>
+                        <span ng-show="productForm.measureUnit.$dirty && productForm.measureUnit.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-12">
