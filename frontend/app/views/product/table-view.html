@@ -1,19 +1,7 @@
-<div class="panel panel-primary">
-    <div class="panel-heading">Listado de productos</div>
+<div class="panel panel-default">
     <div class="panel-body">
-        <table class="table table-bordered table-hover">
-            <tr>
-                <th>Nombre</th>
-                <th>Laboratorio</th>
-                <th>Presentación</th>
-                <th>Categoría</th>
-            </tr>
-            <tr ng-repeat="product in products">
-                <td>{{product.name}}</td>
-                <td>{{product.manufacturer}}</td>
-                <td>{{product.presentation}}</td>
-                <td>{{product.category}}</td>
-            </tr>
-        </table>
+        <div class="action-buttons">
+            <a ng-href="products/add" class="btn btn-icon btn-default"><i class="fa fa-plus"></i>Agregar</a>
+        </div>
     </div>
 </div>

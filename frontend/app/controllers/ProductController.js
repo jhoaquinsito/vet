@@ -1,4 +1,5 @@
-app.controller('ProductController', function($scope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService) {
+app.controller('ProductController', function($scope, $location, $rootScope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService) {
+    $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.products = [];
     $scope.form = {};
@@ -18,25 +19,30 @@ app.controller('ProductController', function($scope, $route, CategoryService, Dr
     };
 
     $scope.listProductsAction = function() {
-
+        $rootScope.setTitle($scope.name, 'Listado de productos');
     };
 
     $scope.addProductAction = function() {
+        $rootScope.setTitle($scope.name, 'Agregar producto');
+
         $scope.refreshFormDropdownsData();
-        $scope.resetFormData();
     };
 
     $scope.editProductAction = function() {
-
+        $rootScope.setTitle($scope.name, 'Editar producto');
     };
 
-    $scope.saveProductAction = function() {
+    $scope.saveProductAction = function(form) {
+        if ($scope.formValidation(form)) {
+            return null;
+        }
+
         var request = ProductService.post($scope.form.product);
 
         request.success = function(response) {
-            $scope.resetFormData();
-
             alert('Producto cargado con éxito.');
+
+            $location.path('products');
         };
         request.error = function(response) {
             alert('No se pudo cargar el producto.');
@@ -49,10 +55,10 @@ app.controller('ProductController', function($scope, $route, CategoryService, Dr
         $scope.form.product = {
             name: null,
             description: null,
-            category: {name: ''},
-            manufacturer: {name: ''},
-            presentation: {name: ''},
-            measureUnit: {name: ''},
+            category: null,
+            manufacturer: null,
+            presentation: null,
+            measureUnit: null,
             drugs: [],
             provider: null,
             cost: null,
@@ -78,6 +84,16 @@ app.controller('ProductController', function($scope, $route, CategoryService, Dr
         PresentationService.getList().then(function(response) {
             $scope.form.presentations = response;
         });
+    };
+
+    $scope.formValidation = function(form) {
+        angular.forEach(form, function(object) {
+            if (angular.isObject(object) && angular.isDefined(object.$setDirty)) {
+                object.$setDirty();
+            }
+        })
+
+        return form.$invalid;
     };
 
     $scope.init();
