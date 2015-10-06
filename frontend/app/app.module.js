@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'restangular']);
+var app = angular.module('app', ['ngRoute', 'restangular', 'ngToast']);
 
 app.config(function($locationProvider, RestangularProvider, config) {
     //modo html5 para url más limpias

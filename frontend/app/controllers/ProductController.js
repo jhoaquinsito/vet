@@ -1,4 +1,4 @@
-app.controller('ProductController', function($scope, $location, $rootScope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService) {
+app.controller('ProductController', function($scope, $location, $rootScope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService, MessageService) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.products = [];
@@ -40,12 +40,14 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         var request = ProductService.post($scope.form.product);
 
         request.success = function(response) {
-            alert('Producto cargado con éxito.');
+            MessageService.message('El producto se creó correctamente', 'success');
 
             $location.path('products');
         };
         request.error = function(response) {
-            alert('No se pudo cargar el producto.');
+            MessageService.message('Ocurrió un error al intentar crear el producto.', 'danger');
+
+            $location.path('products');
         };
 
         request.then(request.success, request.error);
@@ -91,7 +93,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             if (angular.isObject(object) && angular.isDefined(object.$setDirty)) {
                 object.$setDirty();
             }
-        })
+        });
 
         return form.$invalid;
     };
