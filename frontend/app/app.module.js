@@ -8,7 +8,7 @@ app.config(function($locationProvider, RestangularProvider, config) {
     RestangularProvider.setBaseUrl(config.API_BASE_URL);
 });
 
-app.run(function($rootScope, $location) {
+app.run(function($rootScope) {
     $rootScope.layout = {};
     $rootScope.layout.isMiniSidebar = false;
 
