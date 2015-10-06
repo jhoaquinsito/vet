@@ -1,7 +1,16 @@
 /* Aspectos generales */
+html,
+body {
+    height: 100%;
+}
 body {
     font-family: 'Montserrat';
     background-color: #f0f3f3;
+}
+
+/* Contenedor principal */
+#main-wrapper {
+    height: 100%;
 }
 
 /* Header */
@@ -87,6 +96,7 @@ body {
 #content-wrapper {
     margin-left: 250px;
     padding-top: 50px;
+    height: 100%;
 }
 #content-wrapper .page-header {
     padding: 13px 15px;
@@ -102,8 +112,23 @@ body {
     height: 50px;
     line-height: initial;
 }
+#content-wrapper .page-header i {
+    margin-left: 10px;
+    margin-right: 10px;
+}
 #content-wrapper > .container-fluid {
     padding-top: 65px;
+    padding-bottom: 15px;
+    height: 100%;
+}
+#content-wrapper > .container-fluid > .panel {
+    margin-bottom: 0;
+    height: 100%;
+}
+
+/* Botones de acción */
+.action-buttons {
+    margin-bottom: 15px;
 }
 
 /* Paneles */
@@ -125,16 +150,26 @@ body {
 .btn:active:focus {
     outline: none;
 }
+.btn-icon i {
+    margin-right: 10px;
+    font-size: 18px;
+}
 
 /* Formularios */
 .form-control {
     border-radius: 2px;
 }
-.form-group-sm label {
+.form-group-sm .control-label {
     font-size: 14px;
 }
 .form-group label.mandatory:after {
     color: #e74c3c;
     content: '*';
     margin-left: 5px;
+}
+.form-group .help-block {
+    font-size: 14px;
+}
+textarea.form-control {
+    resize: none;
 }

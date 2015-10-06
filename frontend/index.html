@@ -26,7 +26,7 @@
             <div id="header" ng-include="'app/views/layout/header-view.html'"></div>
             <div id="sidebar" ng-class="{'mini-sidebar': layout.isMiniSidebar}" ng-include="'app/views/layout/sidebar-view.html'"></div>
             <div id="content-wrapper">
-                <div class="page-header">{{layout.title}}</div>
+                <div class="page-header">{{layout.title}}<i ng-if="layout.subtitle != null" class="fa fa-angle-right"></i>{{layout.subtitle}}</div>
                 <div class="container-fluid" ng-view></div>
             </div>
         </div>
@@ -44,6 +44,7 @@
         <script src="app/app.config.js"></script>
         <script src="app/app.routes.js"></script>
         <!-- App: controladores -->
+        <script src="app/controllers/DashboardController.js"></script>
         <script src="app/controllers/ProductController.js"></script>
         <!-- App: servicios -->
         <script src="app/services/CategoryService.js"></script>

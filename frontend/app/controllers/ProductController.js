@@ -1,4 +1,5 @@
 app.controller('ProductController', function($scope, $rootScope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService) {
+    $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.products = [];
     $scope.form = {};
@@ -18,21 +19,25 @@ app.controller('ProductController', function($scope, $rootScope, $route, Categor
     };
 
     $scope.listProductsAction = function() {
-        $rootScope.setTitle('Listado de productos');
+        $rootScope.setTitle($scope.name, 'Listado de productos');
     };
 
     $scope.addProductAction = function() {
-        $rootScope.setTitle('Agregar producto');
+        $rootScope.setTitle($scope.name, 'Agregar producto');
 
         $scope.refreshFormDropdownsData();
         $scope.resetFormData();
     };
 
     $scope.editProductAction = function() {
-        $rootScope.setTitle('Editar producto');
+        $rootScope.setTitle($scope.name, 'Editar producto');
     };
 
-    $scope.saveProductAction = function() {
+    $scope.saveProductAction = function(form) {
+        if (form.$invalid) {
+            return null;
+        }
+
         var request = ProductService.post($scope.form.product);
 
         request.success = function(response) {

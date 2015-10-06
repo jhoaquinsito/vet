@@ -1,4 +1,11 @@
 app.config(function($routeProvider) {
+    //dashboard
+    $routeProvider.when('/dashboard', {
+        controller: 'DashboardController',
+        templateUrl: 'app/views/dashboard/show-view.html',
+        action: 'show'
+    });
+
     //productos
     $routeProvider.when('/products', {
         controller: 'ProductController',
@@ -19,5 +26,5 @@ app.config(function($routeProvider) {
     });
 
     //ruta no encontrada
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.otherwise({redirectTo: '/dashboard'});
 });

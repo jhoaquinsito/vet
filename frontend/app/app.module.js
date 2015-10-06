@@ -12,8 +12,9 @@ app.run(function($rootScope) {
     $rootScope.layout = {};
     $rootScope.layout.isMiniSidebar = false;
 
-    $rootScope.setTitle = function(title) {
+    $rootScope.setTitle = function(title, subtitle) {
         $rootScope.layout.title = title;
+        $rootScope.layout.subtitle = subtitle;
     };
 
     $rootScope.toggleSidebar = function() {

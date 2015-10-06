@@ -1,89 +1,91 @@
-<form ng-submit="saveProductAction()">
+<form ng-submit="saveProductAction(productForm)" name="productForm">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-9">
-                    <div class="form-group form-group-sm">
-                        <label class="mandatory">Nombre</label>
-                        <input type="text" class="form-control" ng-model="form.product.name" required>
+                    <div class="form-group form-group-sm" ng-class="{'has-error': productForm.name.$dirty.required && productForm.name.$error.required}">
+                        <label class="control-label mandatory">Nombre</label>
+                        <input type="text" class="form-control" name="name" ng-model="form.product.name" required>
+                        <span ng-show="productForm.name.$dirty.required && productForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group form-group-sm">
-                        <label class="mandatory">Unidad de medida</label>
-                        <input type="text" class="form-control" ng-model="form.product.measureUnit.name" required>
+                    <div class="form-group form-group-sm" ng-class="{'has-error': productForm.measureUnit.$dirty.required && productForm.measureUnit.$error.required}">
+                        <label class="control-label mandatory">Unidad de medida</label>
+                        <input type="text" class="form-control" name="measureUnit" ng-model="form.product.measureUnit.name" required>
+                        <span ng-show="productForm.measureUnit.$dirty.required && productForm.measureUnit.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group form-group-sm">
-                        <label>Descripción</label>
-                        <textarea class="form-control" ng-model="form.product.description"></textarea>
+                        <label class="control-label">Descripción</label>
+                        <textarea class="form-control" name="description" ng-model="form.product.description"></textarea>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label>Categoría</label>
-                        <input type="text" class="form-control" ng-model="form.product.category.name">
+                        <label class="control-label">Categoría</label>
+                        <input type="text" class="form-control" name="category" ng-model="form.product.category.name">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label>Laboratorio</label>
-                        <input type="text" class="form-control" ng-model="form.product.manufacturer.name">
+                        <label class="control-label">Laboratorio</label>
+                        <input type="text" class="form-control" name="manufacturer" ng-model="form.product.manufacturer.name">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label>Droga</label>
-                        <input type="text" class="form-control" ng-model="form.product.drugs[0].name">
+                        <label class="control-label">Droga</label>
+                        <input type="text" class="form-control" name="drugs" ng-model="form.product.drugs[0].name">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label>Presentación</label>
-                        <input type="text" class="form-control" ng-model="form.product.presentation.name">
+                        <label class="control-label">Presentación</label>
+                        <input type="text" class="form-control" name="presentation" ng-model="form.product.presentation.name">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label>Proveedor</label>
-                        <input type="text" class="form-control" ng-model="form.product.provider">
+                        <label class="control-label">Proveedor</label>
+                        <input type="text" class="form-control" name="provider" ng-model="form.product.provider">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label>Costo</label>
-                        <input type="number" class="form-control" ng-model="form.product.cost">
+                        <label class="control-label">Costo</label>
+                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label>Utilidad</label>
-                        <input type="number" class="form-control" ng-model="form.product.utility">
+                        <label class="control-label">Utilidad</label>
+                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label>Precio unitario</label>
-                        <input type="number" class="form-control" ng-model="form.product.unitPrice">
+                        <label class="control-label">Precio unitario</label>
+                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label>Stock mínimo</label>
-                        <input type="number" class="form-control" ng-model="form.product.minimumStock">
+                        <label class="control-label">Stock mínimo</label>
+                        <input type="number" class="form-control" name="minimumStock" ng-model="form.product.minimumStock">
                     </div>
                 </div>
             </div>
         </div>
         <div class="panel-footer">
             <div class="text-right">
-                <button type="button" class="btn btn-danger">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
             </div>
         </div>
     </div>
