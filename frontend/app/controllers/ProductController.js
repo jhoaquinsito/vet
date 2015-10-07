@@ -43,12 +43,12 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         var request = ProductService.post($scope.form.product);
 
         request.success = function(response) {
-            MessageService.message('El producto se creó correctamente', 'success');
+            MessageService.genericMessage('producto', $routeParams.id == null ? 'add' : 'edit', 'success', 'male');
 
             $location.path('products');
         };
         request.error = function(response) {
-            MessageService.message('Ocurrió un error al intentar crear el producto.', 'danger');
+            MessageService.genericMessage('producto', $routeParams.id == null ? 'add' : 'edit', 'error', 'male');
 
             $location.path('products');
         };
