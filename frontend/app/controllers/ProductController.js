@@ -1,4 +1,4 @@
-app.controller('ProductController', function($scope, $location, $rootScope, $route, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService, MessageService) {
+app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService, MessageService) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.products = [];
@@ -30,6 +30,9 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
     $scope.editProductAction = function() {
         $rootScope.setTitle($scope.name, 'Editar producto');
+
+        $scope.refreshFormData();
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.saveProductAction = function(form) {
@@ -70,21 +73,27 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         };
     };
 
+    $scope.refreshFormData = function() {
+        ProductService.one($routeParams.id).get().then(function(response) {
+            $scope.form.product = response.plain();
+        });
+    };
+
     $scope.refreshFormDropdownsData = function() {
         CategoryService.getList().then(function(response) {
-            $scope.form.categories = response;
+            $scope.form.categories = response.plain();
         });
 
         DrugService.getList().then(function(response) {
-            $scope.form.drugs = response;
+            $scope.form.drugs = response.plain();
         });
 
         ManufacturerService.getList().then(function(response) {
-            $scope.form.manufacturers = response;
+            $scope.form.manufacturers = response.plain();
         });
 
         PresentationService.getList().then(function(response) {
-            $scope.form.presentations = response;
+            $scope.form.presentations = response.plain();
         });
     };
 
