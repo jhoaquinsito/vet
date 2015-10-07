@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'restangular', 'ngToast']);
+var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap']);
 
 app.config(function($locationProvider, RestangularProvider, config) {
     //modo html5 para url más limpias

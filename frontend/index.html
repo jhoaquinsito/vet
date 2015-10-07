@@ -14,10 +14,10 @@
 
         <!-- Bootstrap -->
         <link href="assets/libs/bootstrap/css/bootstrap-flatly.css" rel="stylesheet">
+        <!-- Angular Motion -->
+        <link href="assets/libs/angular-motion/angular-motion.css" rel="stylesheet">
         <!-- Font Awesome -->
         <link href="assets/libs/font-awesome/css/font-awesome.css" rel="stylesheet">
-        <!-- Toast -->
-        <link href="assets/libs/toast/ngToast.css" rel="stylesheet">
 
         <!-- App: estilos -->
         <link href="assets/css/app.css" rel="stylesheet">
@@ -27,11 +27,11 @@
         <div id="main-wrapper">
             <div id="header" ng-include="'app/views/layout/header-view.html'"></div>
             <div id="sidebar" ng-class="{'mini-sidebar': layout.isMiniSidebar}" ng-include="'app/views/layout/sidebar-view.html'"></div>
+            <div id="alert-wrapper"></div>
             <div id="content-wrapper">
                 <div class="page-header">{{layout.title}}<i ng-if="layout.subtitle != null" class="fa fa-angle-right"></i>{{layout.subtitle}}</div>
                 <div class="container-fluid" ng-view></div>
             </div>
-            <toast id="message-wrapper"></toast>
         </div>
 
         <!-- Angular -->
@@ -43,8 +43,9 @@
         <script src="assets/libs/underscore/underscore.js"></script>
         <!-- Restangular -->
         <script src="assets/libs/restangular/restangular.js"></script>
-        <!-- Toast -->
-        <script src="assets/libs/toast/ngToast.js"></script>
+        <!-- Angular Strap -->
+        <script src="assets/libs/angular-strap/angular-strap.js"></script>
+        <script src="assets/libs/angular-strap/angular-strap.tpl.js"></script>
 
         <!-- App: configuración de módulos y rutas -->
         <script src="app/app.module.js"></script>

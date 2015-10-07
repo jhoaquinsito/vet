@@ -1,4 +1,4 @@
-app.service('MessageService', function(ngToast) {
+app.service('MessageService', function($alert) {
     this.articles = {
         female: 'la',
         male: 'el'
@@ -61,11 +61,11 @@ app.service('MessageService', function(ngToast) {
                 break;
         }
 
-        ngToast.create({
-            className: type,
+        $alert({
+            container: '#alert-wrapper',
             content: '<i class="fa fa-' + iconName + '"></i>' + text,
-            dismissButton: true,
-            timeout: 5000
+            type: type,
+            duration: 5
         });
     };
 });
