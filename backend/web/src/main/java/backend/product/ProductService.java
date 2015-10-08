@@ -148,7 +148,7 @@ public class ProductService {
 		mProductToDelete.getBatches().clear();
 		
 		// almaceno el producto desactivado y sin los lotes
-		this.save(mProductToDelete);
+		this.iProductRepository.save(mProductToDelete);
 		
 	}
 
