@@ -85,7 +85,7 @@ public class ApplicationIT extends TestCase {
 			fail("No se pudo obtener el prox. numero de la secuencia");
 		}
 		
-		this.performPost("/product", "/post_product/onlyrequired_request")
+		this.performPost("/product", "/integration/post_product/onlyrequired_request")
 				.andExpect(status().isOk())
 				.andExpect(content().string(mSequenceNextValue));
 	}
