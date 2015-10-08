@@ -164,7 +164,10 @@ body {
 }
 
 /* Formularios */
-.form-control {
+.form-group {
+    position: relative;
+}
+.form-group-sm .form-control {
     border-radius: 2px;
 }
 .form-group-sm .control-label {
@@ -180,6 +183,11 @@ body {
 }
 textarea.form-control {
     resize: none;
+}
+.typeahead.dropdown-menu {
+    font-size: 13px;
+    width: 100%;
+    border-radius: 2px;
 }
 
 /* Contenedor de alertas */

@@ -27,13 +27,13 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Categoría</label>
-                        <input type="text" class="form-control" name="category" ng-model="form.product.category.name">
+                        <input type="text" class="form-control" name="category" ng-model="form.product.category" ng-change="addFormDropdownValue('category')" bs-options="category as category.name for category in form.categories" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Laboratorio</label>
-                        <input type="text" class="form-control" name="manufacturer" ng-model="form.product.manufacturer.name">
+                        <input type="text" class="form-control" name="manufacturer" ng-model="form.product.manufacturer" ng-change="addFormDropdownValue('manufacturer')" bs-options="manufacturer as manufacturer.name for manufacturer in form.manufacturers" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -45,7 +45,7 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Presentación</label>
-                        <input type="text" class="form-control" name="presentation" ng-model="form.product.presentation.name">
+                        <input type="text" class="form-control" name="presentation" ng-model="form.product.presentation" ng-change="addFormDropdownValue('presentation')" bs-options="presentation as presentation.name for presentation in form.presentations" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">

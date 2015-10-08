@@ -121,6 +121,12 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         });
     };
 
+    $scope.addFormDropdownValue = function(attribute) {
+        if ($scope.form.product[attribute].id == null) {
+            $scope.form.product[attribute] = {id: null, name: $scope.form.product[attribute]};
+        }
+    };
+
     $scope.formValidation = function(form) {
         angular.forEach(form, function(object) {
             if (angular.isObject(object) && angular.isDefined(object.$setDirty)) {
