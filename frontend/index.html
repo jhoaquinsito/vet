@@ -29,11 +29,11 @@
         <div id="main-wrapper">
             <div id="header" ng-include="'app/views/layout/header-view.html'"></div>
             <div id="sidebar" ng-class="{'mini-sidebar': layout.isMiniSidebar}" ng-include="'app/views/layout/sidebar-view.html'"></div>
-            <div id="alert-wrapper"></div>
             <div id="content-wrapper">
                 <div class="page-header">{{layout.title}}<i ng-if="layout.subtitle != null" class="fa fa-angle-right"></i>{{layout.subtitle}}</div>
                 <div class="container-fluid" ng-view></div>
             </div>
+            <div id="alert-wrapper"></div>
         </div>
 
         <!-- Angular -->
