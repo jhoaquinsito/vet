@@ -37,41 +37,30 @@ public abstract class ApplicationRestIT extends TestCase {
 	@Autowired
 	private WebApplicationContext iWebApplicationContext;
 	private MockMvc iMockMvc;
-	private Connection iDatabaseConnection;
 	
 	public static final String cAPPLICATION_JSON_UTF_8 = "application/json;charset=UTF-8";
 	
 	@Before
 	public void setup() throws Exception {
+		
 		this.iMockMvc = MockMvcBuilders.webAppContextSetup(this.iWebApplicationContext).build();
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException e1) {
-			throw new ClassNotFoundException("Test: no se encontró la clase del driver de la base de datos", e1);
-		}
-		String url = "jdbc:postgresql://localhost:5432/vet?user=vet&password=vet";
-		try {
-			this.iDatabaseConnection = DriverManager.getConnection(url);
-		} catch (SQLException e) {
-			throw new SQLException("Test: no se pudo crear la conexión a la base.", e);
-		}
+		
+		// TODO databaseutils debería ser un atributo de esta clase
+		DatabaseUtils.start();
+		
 	}
 
 	/**
 	 * Per-test teardown
 	 */
 	public void tearDown() throws Exception {
-		try {
-			this.iDatabaseConnection.close();
-		} catch (SQLException e) {
-			throw new SQLException("Test: no se pudo cerrar la conexión de la base de datos", e);
-		}
+		
+		DatabaseUtils.shutdown();
+		
 	}
 	
-
 	protected ResultSet executeDatabaseQuery(String pQuery) throws Exception {
-		Statement mStatement = this.iDatabaseConnection.createStatement();
-		return mStatement.executeQuery(pQuery);
+		return DatabaseUtils.executeQuery(pQuery);
 	}
 	
 	protected ResultActions performPost(String pURL, String pJsonRequestPath) throws Exception{
