@@ -100,5 +100,15 @@ public abstract class ApplicationRestIT extends TestCase {
 		return mJsonAsString;
 	}
 	
-	
+	protected String getNextValueFromSequence(String pSequenceName) throws Exception {
+		ResultSet mResultSet = this.executeDatabaseQuery("select (last_value+increment_by) AS next_value from "+ pSequenceName);
+
+		String mSequenceNextValue = null;
+		if (mResultSet.next()) {
+			mSequenceNextValue = mResultSet.getString("next_value");
+		} else {
+			fail("No se pudo obtener el próximo número de la secuencia");
+		}
+		return mSequenceNextValue;
+	}
 }
