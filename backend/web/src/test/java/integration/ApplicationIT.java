@@ -28,7 +28,37 @@ public class ApplicationIT extends ApplicationRestIT {
 		
 		super.performPost("/product", "/integration/post_product/withoutrequiredfields_request")
 				.andExpect(status().isConflict());
-				//.andExpect(content().string(mSequenceNextValue));
+	}
+	
+	@Test
+	public void postProduct_emptyJSON() throws Exception {
+		
+		super.performPost("/product", "/integration/post_product/emptyjson_request")
+				.andExpect(status().isConflict());
+	}
+	
+	@Test
+	public void deleteProduct() throws Exception {
+		super.performDelete("/product/71")
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void deleteProduct_whichNotExists() throws Exception {
+		super.performDelete("/product/1111111")
+				.andExpect(status().isConflict());
+	}
+	
+	@Test
+	public void getProduct() throws Exception {
+		super.performGet("/product/72")
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void getProduct_whichNotExists() throws Exception {
+		super.performGet("/product/1111111")
+				.andExpect(status().isConflict());
 	}
 	
 }

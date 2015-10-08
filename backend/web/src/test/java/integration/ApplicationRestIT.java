@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -65,7 +66,7 @@ public abstract class ApplicationRestIT extends TestCase {
 	
 	protected ResultActions performPost(String pURL, String pJsonRequestPath) throws Exception{
 	return this.iMockMvc.perform(
-			post(pURL)
+			MockMvcRequestBuilders.post(pURL)
 			.contentType(ApplicationRestIT.cAPPLICATION_JSON_UTF_8)
 			.accept(MediaType.parseMediaType(ApplicationRestIT.cAPPLICATION_JSON_UTF_8))
 			.content(this.readJsonFile(pJsonRequestPath)));
@@ -99,5 +100,17 @@ public abstract class ApplicationRestIT extends TestCase {
 			fail("No se pudo obtener el próximo número de la secuencia");
 		}
 		return mSequenceNextValue;
+	}
+	
+	protected ResultActions performDelete(String pURL) throws Exception{
+		return this.iMockMvc.perform(
+				MockMvcRequestBuilders.delete(pURL)
+				.contentType(ApplicationRestIT.cAPPLICATION_JSON_UTF_8));
+	}
+	
+	protected ResultActions performGet(String pURL) throws Exception {
+		return this.iMockMvc.perform(
+				MockMvcRequestBuilders.get(pURL)
+				.contentType(ApplicationRestIT.cAPPLICATION_JSON_UTF_8));
 	}
 }
