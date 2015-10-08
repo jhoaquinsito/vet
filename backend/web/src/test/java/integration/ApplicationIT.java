@@ -39,6 +39,7 @@ public class ApplicationIT extends ApplicationRestIT {
 	
 	@Test
 	public void deleteProduct() throws Exception {
+		// TODO verificar en la base/archivo, si elimino el producto
 		super.performDelete("/product/71")
 				.andExpect(status().isOk());
 	}
@@ -51,6 +52,10 @@ public class ApplicationIT extends ApplicationRestIT {
 	
 	@Test
 	public void getProduct() throws Exception {
+		// TODO traer el producto de la base/archivo
+		
+		// TODO comparar el producto de la base con el que trajo
+		
 		super.performGet("/product/72")
 				.andExpect(status().isOk());
 	}
