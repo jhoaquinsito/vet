@@ -1,0 +1,14 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" ng-show="title">
+                <div class="modal-title" ng-bind="title"></div>
+            </div>
+            <div class="modal-body" ng-bind="content"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-icon btn-danger" ng-click="cancel()"><i class="fa fa-close"></i>Cancelar</button>
+                <button type="button" class="btn btn-icon btn-primary" ng-click="accept()"><i class="fa fa-check"></i>Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>

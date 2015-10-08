@@ -1,4 +1,4 @@
-app.service('MessageService', function($alert) {
+app.service('MessageService', function($alert, $modal, $q) {
     this.articles = {
         female: 'la',
         male: 'el'
@@ -7,15 +7,20 @@ app.service('MessageService', function($alert) {
     this.verbs = {
         add: {success: 'agregó', error: 'agregar'},
         edit: {success: 'editó', error: 'editar'},
-        remove: {success: 'borró', error: 'borrar'}
+        remove: {success: 'borró', error: 'borrar', confirm: 'borrar'}
     };
 
     this.texts = {
         success: '{article} {entity} se {verb} correctamente',
-        error: 'ocurrió un error al intentar {verb} {article} {entity}'
+        error: 'Ocurrió un error al intentar {verb} {article} {entity}',
+        confirm: '¿Seguro desea {verb} {article} {entity}?'
     };
 
-    this.getText = function(entity, action, type, gender) {
+    this.capitalize = function(text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    };
+
+    this.text = function(entity, action, type, gender) {
         var article = this.articles[gender];
         var verb = this.verbs[action][type];
         var text = this.texts[type];
@@ -25,22 +30,6 @@ app.service('MessageService', function($alert) {
         text = text.replace('{entity}', entity);
 
         return this.capitalize(text);
-    };
-
-    this.capitalize = function(text) {
-        return text.charAt(0).toUpperCase() + text.slice(1);
-    };
-
-    this.genericMessage = function(entity, action, type, gender) {
-        var text = this.getText(entity, action, type, gender);
-
-        switch (type) {
-            case 'error':
-                type = 'danger';
-                break;
-        }
-
-        this.message(text, type);
     };
 
     this.message = function(text, type) {
@@ -67,5 +56,32 @@ app.service('MessageService', function($alert) {
             type: type,
             duration: 5
         });
+    };
+
+    this.confirm = function(message) {
+        var deferred = $q.defer();
+
+        $modal({
+            title: 'Confirmación',
+            content: message,
+            show: true,
+            backdrop: 'static',
+            keyboard: false,
+            templateUrl: 'app/views/layout/confirm-popup-view.html',
+            resolve: {},
+            controller: function($scope) {
+                $scope.accept = function() {
+                    deferred.resolve();
+                    $scope.$hide();
+                };
+
+                $scope.cancel = function() {
+                    deferred.reject();
+                    $scope.$hide();
+                };
+            }
+        });
+
+        return deferred.promise;
     };
 });
