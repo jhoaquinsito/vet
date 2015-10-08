@@ -1,4 +1,4 @@
-package backend.core;
+package integration;
 
 import org.junit.Before;
 import org.junit.Test;
