@@ -331,3 +331,8 @@ textarea.form-control {
     border-bottom-right-radius: 2px;
     border-top-right-radius: 2px;
 }
+
+/* Tooltips */
+.tooltip {
+    font-family: inherit;
+}

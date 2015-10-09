@@ -27,8 +27,8 @@
                 </td>
                 <td class="table-cell-number">${{product.unitPrice}}</td>
                 <td class="table-cell-actions">
-                    <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
-                    <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-info"><i class="fa fa-trash"></i></button>
+                    <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></a>
+                    <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-info" data-title="Borrar" bs-tooltip><i class="fa fa-trash"></i></button>
                 </td>
             </tr>
             <tr ng-if="products.length == 0 || filtered.length == 0">
