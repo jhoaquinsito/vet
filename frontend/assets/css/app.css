@@ -193,7 +193,7 @@ textarea.form-control {
 
 /* Contenedor de alertas */
 #alert-wrapper {
-    position: absolute;
+    position: fixed;
     z-index: 200;
     right: 15px;
     top: 15px;
