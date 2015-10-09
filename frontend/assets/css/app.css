@@ -1,7 +1,7 @@
 /* Aspectos generales */
 html,
 body {
-    height: 100%;
+    min-height: 100%;
 }
 body {
     font-size: 14px;
@@ -11,7 +11,7 @@ body {
 
 /* Contenedor principal */
 #main-wrapper {
-    height: 100%;
+    min-height: 100%;
 }
 
 /* Header */
@@ -104,7 +104,7 @@ body {
 #content-wrapper {
     margin-left: 250px;
     padding-top: 50px;
-    height: 100%;
+    min-height: 100%;
 }
 #content-wrapper .page-header {
     padding: 13px 15px;
@@ -127,11 +127,9 @@ body {
 #content-wrapper > .container-fluid {
     padding-top: 65px;
     padding-bottom: 15px;
-    height: 100%;
 }
 #content-wrapper > .container-fluid > .panel {
     margin-bottom: 0;
-    height: 100%;
 }
 
 /* Botones de acción */
