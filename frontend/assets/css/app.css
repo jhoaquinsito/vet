@@ -288,10 +288,11 @@ textarea.form-control {
 /* Paginación de tablas */
 .table-pagination {
     text-align: right;
+    height: 42px;
+    margin-top: 15px;
 }
 .pagination {
-    margin-top: 15px;
-    margin-bottom: 0;
+    margin: 0;
 }
 .pagination > li > a,
 .pagination > li > span {
