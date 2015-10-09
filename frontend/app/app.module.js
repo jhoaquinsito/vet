@@ -1,11 +1,14 @@
-var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap']);
+var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap', 'angularUtils.directives.dirPagination']);
 
-app.config(function($locationProvider, RestangularProvider, config) {
+app.config(function($locationProvider, RestangularProvider, paginationTemplateProvider, config) {
     //modo html5 para url más limpias
     $locationProvider.html5Mode(true);
 
     //configuración de url base para el uso de servicios REST
     RestangularProvider.setBaseUrl(config.API_BASE_URL);
+
+    //configuración de path del template para el paginado de las tablas
+    paginationTemplateProvider.setPath('app/views/layout/table-pagination-view.html');
 });
 
 app.run(function($rootScope) {

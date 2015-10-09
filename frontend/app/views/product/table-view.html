@@ -1,7 +1,13 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="action-buttons">
-            <a ng-href="products/add" class="btn btn-icon btn-default"><i class="fa fa-plus"></i>Agregar</a>
+            <a ng-href="products/add" class="btn btn-icon btn-info"><i class="fa fa-plus"></i>Agregar</a>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" name="search" ng-model="table.search">
+            </div>
         </div>
         <table class="table table-bordered table-hover table-main">
             <tr>
@@ -10,9 +16,9 @@
                 <th class="col-xs-2">Precio</th>
                 <th class="col-xs-1"></th>
             </tr>
-            <tr ng-repeat="product in products">
+            <tr dir-paginate="product in filtered = (products | filter: table.search | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
-                    <div><span class="text-important">{{product.name}}</span><i class="fa fa-angle-double-right text-separator"></i>{{product.category}}</div>
+                    <div><span class="text-important">{{product.name}}</span><i class="fa fa-angle-right text-separator"></i><span class="text-info">{{product.category}}</span></div>
                     <div>{{product.description}}</div>
                 </td>
                 <td class="table-cell-detail">
@@ -21,13 +27,16 @@
                 </td>
                 <td class="table-cell-number">${{product.unitPrice}}</td>
                 <td class="table-cell-actions">
-                    <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i></a>
-                    <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-default"><i class="fa fa-trash"></i></button>
+                    <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
+                    <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-info"><i class="fa fa-trash"></i></button>
                 </td>
             </tr>
-            <tr ng-if="products.length == 0">
+            <tr ng-if="products.length == 0 || filtered.length == 0">
                 <td colspan="4" class="table-cell-empty">No hay productos para mostrar</td>
             </tr>
         </table>
+        <div class="table-pagination">
+            <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
+        </div>
     </div>
 </div>

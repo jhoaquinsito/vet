@@ -1,7 +1,8 @@
-app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService, MessageService) {
+app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService, MessageService, config) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.products = [];
+    $scope.table = {};
     $scope.form = {};
 
     $scope.init = function() {
@@ -20,6 +21,8 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
     $scope.listProductsAction = function() {
         $rootScope.setTitle($scope.name, 'Listado de productos');
+
+        $scope.table.pageSize = config.TABLE_PAGE_SIZE;
 
         $scope.refreshTableData();
     };

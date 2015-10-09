@@ -186,6 +186,10 @@ textarea.form-control {
     width: 100%;
     border-radius: 2px;
 }
+.input-group-sm > .input-group-addon {
+    border-radius: 2px;
+    border-width: 2px;
+}
 
 /* Contenedor de alertas */
 #alert-wrapper {
@@ -244,9 +248,18 @@ textarea.form-control {
 .table-main {
     margin-bottom: 0;
 }
+.table-bordered > tbody > tr > th,
+.table-bordered > tbody > tr > td {
+    border-left: 0;
+    border-right: 0;
+}
+.table-hover > tbody > tr > th {
+    background-color: #ecf0f1;
+}
 .table .table-cell-detail .text-important {
     font-size: 16px;
     font-weight: 700;
+    text-transform: uppercase;
 }
 .table .table-cell-detail .text-separator {
     margin-left: 8px;
@@ -270,4 +283,40 @@ textarea.form-control {
 }
 .table .table-cell-empty {
     text-align: center;
+}
+
+/* Paginación de tablas */
+.table-pagination {
+    text-align: right;
+}
+.pagination {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+.pagination > li > a,
+.pagination > li > span {
+    background-color: #95a5a6;
+    margin-left: 0;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+    background-color: #798d8f;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    background-color: #798d8f;
+}
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+    background-color: #95a5a6;
 }
