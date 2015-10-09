@@ -79,7 +79,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             manufacturer: null,
             presentation: null,
             measureUnit: null,
-            drugs: [],
+            drug: null,
             provider: null,
             cost: null,
             utility: null,

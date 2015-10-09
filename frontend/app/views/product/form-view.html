@@ -39,7 +39,7 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Droga</label>
-                        <input type="text" class="form-control" name="drugs" ng-model="form.product.drugs[0].name">
+                        <input type="text" class="form-control" name="drug" ng-model="form.product.drug" ng-change="addFormDropdownValue('drug')" bs-options="drug as drug.name for drug in form.drugs" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
