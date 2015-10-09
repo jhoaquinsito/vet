@@ -4,6 +4,7 @@ body {
     height: 100%;
 }
 body {
+    font-size: 14px;
     font-family: 'Montserrat';
     background-color: #f0f3f3;
 }
@@ -151,6 +152,7 @@ body {
 /* Botones */
 .btn {
     border-radius: 2px;
+    font-size: 14px;
 }
 .btn,
 .btn:active,
@@ -159,8 +161,7 @@ body {
     outline: none;
 }
 .btn-icon i {
-    margin-right: 10px;
-    font-size: 18px;
+    margin-right: 8px;
 }
 
 /* Formularios */
@@ -168,10 +169,8 @@ body {
     position: relative;
 }
 .form-group-sm .form-control {
-    border-radius: 2px;
-}
-.form-group-sm .control-label {
     font-size: 14px;
+    border-radius: 2px;
 }
 .form-group label.mandatory:after {
     color: #e74c3c;
