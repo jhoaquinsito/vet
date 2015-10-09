@@ -239,3 +239,35 @@ textarea.form-control {
 .modal-footer .btn + .btn {
     margin-left: 0;
 }
+
+/* Tablas */
+.table-main {
+    margin-bottom: 0;
+}
+.table .table-cell-detail .text-important {
+    font-size: 16px;
+    font-weight: 700;
+}
+.table .table-cell-detail .text-separator {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+.table .table-cell-detail .text-icon i {
+    margin-right: 8px;
+}
+.table .table-cell-number {
+    font-size: 18px;
+    text-align: right;
+    vertical-align: middle;
+}
+.table .table-cell-actions {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.table .table-cell-actions .btn {
+    padding: 8px 12px;
+}
+.table .table-cell-empty {
+    text-align: center;
+}

@@ -20,6 +20,8 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
     $scope.listProductsAction = function() {
         $rootScope.setTitle($scope.name, 'Listado de productos');
+
+        $scope.refreshTableData();
     };
 
     $scope.addProductAction = function() {
@@ -69,6 +71,12 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         };
 
         request.then(request.success, request.error);
+    };
+
+    $scope.refreshTableData = function() {
+        ProductService.getList().then(function(response) {
+            $scope.products = response.plain();
+        });
     };
 
     $scope.resetFormData = function() {

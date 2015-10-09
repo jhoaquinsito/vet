@@ -2,8 +2,32 @@
     <div class="panel-body">
         <div class="action-buttons">
             <a ng-href="products/add" class="btn btn-icon btn-default"><i class="fa fa-plus"></i>Agregar</a>
-            <a ng-href="products/edit/50" class="btn btn-icon btn-info"><i class="fa fa-pencil"></i>Editar (id = 50 para testear)</a>
-            <button ng-click="removeProductAction(50)" class="btn btn-icon btn-info"><i class="fa fa-trash"></i>Borrar (id = 50 para testear)</button>
         </div>
+        <table class="table table-bordered table-hover table-main">
+            <tr>
+                <th class="col-xs-6">Producto</th>
+                <th class="col-xs-3">Detalles</th>
+                <th class="col-xs-2">Precio</th>
+                <th class="col-xs-1"></th>
+            </tr>
+            <tr ng-repeat="product in products">
+                <td class="table-cell-detail">
+                    <div><span class="text-important">{{product.name}}</span><i class="fa fa-angle-double-right text-separator"></i>{{product.category}}</div>
+                    <div>{{product.description}}</div>
+                </td>
+                <td class="table-cell-detail">
+                    <div class="text-icon"><i class="fa fa-industry"></i>{{product.manufacturer}}</div>
+                    <div class="text-icon"><i class="fa fa-eyedropper"></i>{{product.drug}}</div>
+                </td>
+                <td class="table-cell-number">${{product.unitPrice}}</td>
+                <td class="table-cell-actions">
+                    <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-default"><i class="fa fa-pencil"></i></a>
+                    <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-default"><i class="fa fa-trash"></i></button>
+                </td>
+            </tr>
+            <tr ng-if="products.length == 0">
+                <td colspan="4" class="table-cell-empty">No hay productos para mostrar</td>
+            </tr>
+        </table>
     </div>
 </div>
