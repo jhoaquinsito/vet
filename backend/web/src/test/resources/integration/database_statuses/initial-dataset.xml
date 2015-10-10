@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <category id="1" name="Categor&#237;a &#250;nica"/>
+  <drug id="1" name="marihuana"/>
+  <drug id="2" name="marihuana destilada"/>
+  <manufacturer id="1" name="Coca Cola Company"/>
+  <measure_unit id="1" name="Kilos"/>
+  <presentation id="1" name="Botella"/>
+  <product id="1" name="Remedio para caballo" description="Saca caballos en un instante" minimum_stock="0.0000" unit_price="10.0000" cost="10.0000" utility="35.0000" category="1" presentation="1" measure_unit="1" manufacturer="1" active="true"/>
+  <product_drugs product="1" drug="1"/>
+  <product_drugs product="1" drug="2"/>
+  <batch id="1" stock="0.0000" product="1" iso_due_date="20151010"/>
+  <batch id="2" stock="1.0000" product="1" iso_due_date="20151011"/>
+  <batch id="3" stock="2.0000" product="1" iso_due_date="20151013"/>
+</dataset>
