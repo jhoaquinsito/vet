@@ -17,7 +17,7 @@ app.run(function($rootScope) {
 
     $rootScope.$on('$routeChangeSuccess', function(scope, current, previous) {
         //asigna la primera parte de la acción de la ruta (que corresponde a la funcionalidad en general)
-        $rootScope.layout.activeSidebarOption = current.action.split('.')[0];
+        $rootScope.layout.activeSidebarOption = current.action != null ? current.action.split('.')[0] : null;
     });
 
     $rootScope.setTitle = function(title, subtitle) {
