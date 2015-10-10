@@ -24,7 +24,7 @@ public class ApplicationIT extends ApplicationRestIT {
 		
 		String mSequenceNextValue = super.getNextValueFromSequence("product_id_seq");
 		
-		super.performPost("/product", "/integration/post_product/onlyrequired_request")
+		super.performPost("/product", "/integration/api/post_product/onlyrequired_request")
 				.andExpect(status().isOk())
 				.andExpect(content().string(mSequenceNextValue));
 	}
@@ -34,27 +34,27 @@ public class ApplicationIT extends ApplicationRestIT {
 		
 		String mSequenceNextValue = super.getNextValueFromSequence("product_id_seq");
 		
-		super.performPost("/product", "/integration/post_product/withallfields_request")
+		super.performPost("/product", "/integration/api/post_product/withallfields_request")
 				.andExpect(status().isOk())
 				.andExpect(content().string(mSequenceNextValue));
 	}
 	
-	@ExpectedDatabase(assertionMode= DatabaseAssertionMode.NON_STRICT, value="file:src/test/resources/initial-dataset.xml")
+	@ExpectedDatabase(assertionMode= DatabaseAssertionMode.NON_STRICT, value="file:src/test/resources/integration/database_statuses/initial-dataset.xml")
 	@Test
 	public void postProduct_withoutRequiredFields() throws Exception {
 		
-		super.performPost("/product", "/integration/post_product/withoutrequiredfields_request")
+		super.performPost("/product", "/integration/api/post_product/withoutrequiredfields_request")
 				.andExpect(status().isConflict());
 	}
 	
 	@Test
 	public void postProduct_emptyJSON() throws Exception {
 		
-		super.performPost("/product", "/integration/post_product/emptyjson_request")
+		super.performPost("/product", "/integration/api/post_product/emptyjson_request")
 				.andExpect(status().isConflict());
 	}
 	
-	@ExpectedDatabase(assertionMode= DatabaseAssertionMode.NON_STRICT, value= "file:src/test/resources/data-product1-deleted.xml")
+	@ExpectedDatabase(assertionMode= DatabaseAssertionMode.NON_STRICT, value= "file:src/test/resources/integration/database_statuses/data-product1-deleted.xml")
 	@Test
 	public void deleteProduct() throws Exception {
 		// TODO verificar en la base/archivo, si elimino el producto
@@ -69,12 +69,12 @@ public class ApplicationIT extends ApplicationRestIT {
 				.andExpect(status().isConflict());
 	}
 	
-	@ExpectedDatabase(assertionMode= DatabaseAssertionMode.NON_STRICT, value="file:src/test/resources/initial-dataset.xml")
+	@ExpectedDatabase(assertionMode= DatabaseAssertionMode.NON_STRICT, value="file:src/test/resources/integration/database_statuses/initial-dataset.xml")
 	@Test
 	public void getProduct() throws Exception {
 		
 		// TODO comparar el producto de la base con el que trajo
-		String mExpectedJSONResponse = super.readJsonFile("/integration/get_product/productone_response");
+		String mExpectedJSONResponse = super.readJsonFile("/integration/api/get_product/productone_response");
 		
 		super.performGet("/product/1")
 				.andDo(MockMvcResultHandlers.print())

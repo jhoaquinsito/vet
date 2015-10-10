@@ -36,7 +36,7 @@ import junit.framework.TestCase;
     DbUnitTestExecutionListener.class })
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml" })
-@DatabaseSetup("file:src/test/resources/initial-dataset.xml")
+@DatabaseSetup("file:src/test/resources/integration/database_statuses/initial-dataset.xml")
 public abstract class ApplicationRestIT extends TestCase {
 
 	@Autowired
