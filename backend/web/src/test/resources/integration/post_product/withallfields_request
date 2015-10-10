@@ -1,0 +1,23 @@
+{
+  "name": "nombre a eliminar",
+  "description": "description  eliminar ",
+  "unitPrice": 3.1,
+  "minimumStock": 3.1,
+  "utility": 3.1,
+  "cost": 3.1,
+  "manufacturer": {
+    "name": "eliminar manufacturer"
+  },
+  "measureUnit": {
+    "name": "eliminar measureUnit"
+  },
+  "presentation": {
+    "name": "eliminar presentation"
+  },
+  "category": {
+    "name": "eliminar category"
+  },
+  "drugs":[{
+    "name": "eliminar category"
+  }]
+}
