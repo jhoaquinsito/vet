@@ -1,0 +1,55 @@
+{
+  "id": 1,
+  "drugs": [
+    {
+      "id": 2,
+      "name": "marihuana destilada"
+    },
+    {
+      "id": 1,
+      "name": "marihuana"
+    }
+  ],
+  "presentation": {
+    "id": 1,
+    "name": "Botella"
+  },
+  "batches": [
+    {
+      "id": 3,
+      "product": null,
+      "stock": 2,
+      "isoDueDate": 20151013
+    },
+    {
+      "id": 2,
+      "product": null,
+      "stock": 1,
+      "isoDueDate": 20151011
+    },
+    {
+      "id": 1,
+      "product": null,
+      "stock": 0,
+      "isoDueDate": 20151010
+    }
+  ],
+  "minimumStock": 0,
+  "unitPrice": 10,
+  "cost": 10,
+  "utility": 35,
+  "category": {
+    "id": 1,
+    "name": "Categoría única"
+  },
+  "manufacturer": {
+    "id": 1,
+    "name": "Coca Cola Company"
+  },
+  "measureUnit": {
+    "id": 1,
+    "name": "Kilos"
+  },
+  "description": "Saca caballos en un instante",
+  "name": "Remedio para caballo"
+}
