@@ -18,14 +18,14 @@
             </tr>
             <tr dir-paginate="product in filtered = (products | filter: table.search | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
-                    <div><span class="text-important">{{product.name}}</span><i class="fa fa-angle-right text-separator"></i><span class="text-info">{{product.category}}</span></div>
-                    <div>{{product.description}}</div>
+                    <div><span class="text-important">{{product.name}}</span><i class="fa fa-angle-right text-separator"></i><span class="text-info">{{product.category.name ? product.category.name : 'Sin categoría'}}</span></div>
+                    <div>{{product.description ? product.description : 'Sin descripción'}}</div>
                 </td>
                 <td class="table-cell-detail">
-                    <div class="text-icon"><i class="fa fa-industry"></i>{{product.manufacturer}}</div>
-                    <div class="text-icon"><i class="fa fa-eyedropper"></i>{{product.drug}}</div>
+                    <div class="text-icon"><i class="fa fa-industry"></i>{{product.manufacturer.name ? product.manufacturer.name : 'Sin especificar'}}</div>
+                    <div class="text-icon"><i class="fa fa-eyedropper"></i>{{product.drug.name ? product.drug.name : 'Sin especificar'}}</div>
                 </td>
-                <td class="table-cell-number">${{product.unitPrice}}</td>
+                <td class="table-cell-number">${{product.unitPrice|number: 2}}</td>
                 <td class="table-cell-actions">
                     <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></a>
                     <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-info" data-title="Borrar" bs-tooltip><i class="fa fa-trash"></i></button>
