@@ -2,6 +2,7 @@
     <div class="panel-body">
         <div class="action-buttons">
             <a ng-href="products/add" class="btn btn-icon btn-info"><i class="fa fa-plus"></i>Agregar</a>
+            <a ng-href="products/stock" class="btn btn-icon btn-info"><i class="fa fa-cube"></i>Actualizar stock</a>
         </div>
         <div class="form-group form-group-sm">
             <div class="input-group input-group-sm">
@@ -25,7 +26,7 @@
                     <div class="text-icon"><i class="fa fa-industry"></i>{{product.manufacturer.name ? product.manufacturer.name : 'Sin especificar'}}</div>
                     <div class="text-icon"><i class="fa fa-eyedropper"></i>{{product.drug.name ? product.drug.name : 'Sin especificar'}}</div>
                 </td>
-                <td class="table-cell-number">${{product.unitPrice|number: 2}}</td>
+                <td class="table-cell-number">{{product.unitPrice|currency}}</td>
                 <td class="table-cell-actions">
                     <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></a>
                     <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-info" data-title="Borrar" bs-tooltip><i class="fa fa-trash"></i></button>
