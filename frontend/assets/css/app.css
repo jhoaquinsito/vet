@@ -52,7 +52,7 @@ body {
     width: 250px;
     height: 100%;
     top: 50px;
-    overflow: hidden;
+    z-index: 110;
 }
 #sidebar .list-group-item {
     background-color: transparent;
@@ -63,9 +63,11 @@ body {
     padding: 15px;
     border-left: 4px solid transparent;
     width: 250px;
+    overflow: hidden;
 }
 #sidebar .list-group-item span {
     opacity: 1;
+    position: absolute;
 }
 #sidebar .list-group-item.active,
 #sidebar .list-group-item:hover,
@@ -85,7 +87,8 @@ body {
     margin-right: 10px;
     vertical-align: middle;
 }
-#sidebar.mini-sidebar {
+#sidebar.mini-sidebar,
+#sidebar.mini-sidebar .list-group-item {
     width: 60px;
 }
 #sidebar.mini-sidebar .list-group-item span {
@@ -95,6 +98,7 @@ body {
     margin-left: 60px;
 }
 #sidebar,
+#sidebar .list-group-item,
 #sidebar .list-group-item span,
 #content-wrapper {
     transition: all 0.4s;

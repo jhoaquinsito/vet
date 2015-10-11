@@ -1,4 +1,8 @@
 <div class="list-group">
-    <a ng-href="dashboard" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'dashboard'}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
-    <a ng-href="products" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'product'}"><i class="fa fa-industry"></i><span>Productos</span></a>
+    <a ng-href="dashboard" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'dashboard'}" data-title="Dashboard" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
+        <i class="fa fa-dashboard"></i><span>Dashboard</span>
+    </a>
+    <a ng-href="products" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'product'}" data-title="Productos" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
+        <i class="fa fa-industry"></i><span>Productos</span>
+    </a>
 </div>
