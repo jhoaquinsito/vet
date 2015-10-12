@@ -1,19 +1,43 @@
-<div class="panel panel-primary">
-    <div class="panel-heading">Listado de productos</div>
+<div class="panel panel-default">
     <div class="panel-body">
-        <table class="table table-bordered table-hover">
+        <div class="action-buttons">
+            <a ng-href="products/add" class="btn btn-icon btn-info"><i class="fa fa-plus"></i>Agregar</a>
+            <a ng-href="products/stock" class="btn btn-icon btn-info"><i class="fa fa-cube"></i>Actualizar stock</a>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" name="search" ng-model="table.search" placeholder="Ingrese su búsqueda">
+            </div>
+        </div>
+        <table class="table table-bordered table-hover table-main">
             <tr>
-                <th>Nombre</th>
-                <th>Laboratorio</th>
-                <th>Presentación</th>
-                <th>Categoría</th>
+                <th class="col-xs-6">Producto</th>
+                <th class="col-xs-3">Detalles</th>
+                <th class="col-xs-2">Precio</th>
+                <th class="col-xs-1"></th>
             </tr>
-            <tr ng-repeat="product in products">
-                <td>{{product.name}}</td>
-                <td>{{product.manufacturer}}</td>
-                <td>{{product.presentation}}</td>
-                <td>{{product.category}}</td>
+            <tr dir-paginate="product in filtered = (products | filter: table.search | itemsPerPage: table.pageSize)">
+                <td class="table-cell-detail">
+                    <div><span class="text-important">{{product.name}}</span><i class="fa fa-angle-right text-separator"></i><span class="text-info">{{product.category.name ? product.category.name : 'Sin categoría'}}</span></div>
+                    <div>{{product.description ? product.description : 'Sin descripción'}}</div>
+                </td>
+                <td class="table-cell-detail">
+                    <div class="text-icon"><i class="fa fa-industry"></i>{{product.manufacturer.name ? product.manufacturer.name : 'Sin especificar'}}</div>
+                    <div class="text-icon"><i class="fa fa-eyedropper"></i>{{product.drug.name ? product.drug.name : 'Sin especificar'}}</div>
+                </td>
+                <td class="table-cell-number">{{product.unitPrice|currency}}</td>
+                <td class="table-cell-actions">
+                    <a ng-href="products/edit/{{product.id}}" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></a>
+                    <button ng-click="removeProductAction(product.id)" class="btn btn-sm btn-info" data-title="Borrar" bs-tooltip><i class="fa fa-trash"></i></button>
+                </td>
+            </tr>
+            <tr ng-if="products.length == 0 || filtered.length == 0">
+                <td colspan="4" class="table-cell-empty">No hay productos para mostrar</td>
             </tr>
         </table>
+        <div class="table-pagination">
+            <div dir-pagination-controls boundary-links="true"></div>
+        </div>
     </div>
 </div>
