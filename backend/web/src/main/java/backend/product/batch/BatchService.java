@@ -1,5 +1,7 @@
 package backend.product.batch;
 
+import java.math.BigDecimal;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -57,7 +59,10 @@ public class BatchService {
 			throw new BusinessException(BatchService.cEMPTY_STOCK_EXCEPTION_MESSAGE);
 		}
 		// valido que el stock del producto este entre 0-100
-		if(pBatch.getStock().intValue() < 0  || pBatch.getStock().intValue() > 100){
+		
+		BigDecimal min = new BigDecimal(0);
+		BigDecimal max = new BigDecimal(100);
+		if(pBatch.getStock().compareTo(min) < -1  || pBatch.getStock().compareTo(max) > 1){
 			throw new BusinessException(BatchService.cRANGE_STOCK_EXCEPTION_MESSAGE);
 		}
 		
