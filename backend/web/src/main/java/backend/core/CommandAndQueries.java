@@ -76,6 +76,25 @@ public class CommandAndQueries {
 		return mProduct.getId();
 	}
 	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Productos
+	 * @return lista de Producto
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<ProductDTO> getProducts() throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		Iterable<Product> mProduct = mProductService.getAll();
+		
+		List<ProductDTO> mProductDTOList = new ArrayList<ProductDTO>();
+		
+		for (Product bProduct : mProduct){
+			mProductDTOList.add(this.iMapper.map(bProduct,ProductDTO.class));
+		}
+		
+		return mProductDTOList;
+	}
+	
 	// TODO comentar este método
 	public List<PresentationDTO> getPresentations(){
 		PresentationService mPresentationService = new PresentationService();

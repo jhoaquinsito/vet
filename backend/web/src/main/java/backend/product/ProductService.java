@@ -1,12 +1,15 @@
 package backend.product;
 
 
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
 import backend.product.batch.BatchService;
+import backend.product.category.Category;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
@@ -117,6 +120,15 @@ public class ProductService {
 		
 	}
 
+	/**
+	 * Método que permite obtener la lista de productos de forma completa.
+	 * @return Iterable<Product> Lista de productos.
+	 * @throws BusinessException
+	 */
+	public Iterable<Product> getAll() throws BusinessException {
+		return this.iProductRepository.findAll();
+	}
+	
 	/**
 	 * Método que permite obtener un producto a partir de su identificador.
 	 * @param pId identificador del producto
