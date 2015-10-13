@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap', 'angularUtils.directives.dirPagination']);
+var app = angular.module('app', ['ngAnimate', 'ngCookies', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap', 'angularUtils.directives.dirPagination']);
 
 app.config(function($locationProvider, RestangularProvider, paginationTemplateProvider, config) {
     //modo html5 para url más limpias
@@ -11,9 +11,9 @@ app.config(function($locationProvider, RestangularProvider, paginationTemplatePr
     paginationTemplateProvider.setPath('app/views/layout/table-pagination-view.html');
 });
 
-app.run(function($rootScope) {
+app.run(function($rootScope, $cookies) {
     $rootScope.layout = {};
-    $rootScope.layout.isMiniSidebar = false;
+    $rootScope.layout.isMiniSidebar = JSON.parse($cookies.get('layout.isMiniSidebar'));
 
     $rootScope.$on('$routeChangeSuccess', function(scope, current, previous) {
         //asigna la primera parte de la acción de la ruta (que corresponde a la funcionalidad en general)
@@ -27,5 +27,6 @@ app.run(function($rootScope) {
 
     $rootScope.toggleSidebar = function() {
         $rootScope.layout.isMiniSidebar = !$rootScope.layout.isMiniSidebar;
+        $cookies.put('layout.isMiniSidebar', $rootScope.layout.isMiniSidebar);
     };
 });
