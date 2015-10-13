@@ -52,11 +52,16 @@ public class ApplicationRESTController {
 	/**
 	 * Metodo API que permite recuperar la lista de los distintos Product.
 	 * 
-	 * @return Lista de productos.
+	 * @return List<ProductDTO>
+	 * 							: Lista de productos completa
+	 * @throws BusinessException 
+	 * 							: Excepcion de negocio, manejada por: handleBusinessException
 	 */
 	@RequestMapping(value = "product", method = RequestMethod.GET)
-	public @ResponseBody List<Product> listProducts() {
-		throw new UnsupportedOperationException("La operación que intentaste realizar aún no está implementada.");
+	public @ResponseBody List<ProductDTO> listProducts() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.getProducts();
 	}
 
 	/**
