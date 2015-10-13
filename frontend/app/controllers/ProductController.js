@@ -45,6 +45,8 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             var request = ProductService.one(productId).remove();
 
             request.success = function(response) {
+                $scope.refreshTableData();
+
                 MessageService.message(MessageService.text('producto', 'remove', 'success', 'male'), 'success');
             };
             request.error = function(response) {
