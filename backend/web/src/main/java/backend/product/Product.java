@@ -36,8 +36,8 @@ import backend.product.presentation.Presentation;
 * <strong>Category</strong>, un laboratorio que lo fabricó:
 * <strong>Manufacturer</strong>, una unidad de medida:
 * <strong>MeasureUnit</strong>, una presentación (envase, inyectable, etc.):
-* <strong>Presentation</strong>, una serie de drogas que lo constituyen:
-* <strong>Drugs</strong>, una lista de lotes: <strong>Batches</strong> y también
+* <strong>Presentation</strong>, una droga:
+* <strong>Drug</strong>, una lista de lotes: <strong>Batches</strong> y también
 * si está activo o no: <strong>Active</strong>.
  */
 @Entity
@@ -97,13 +97,9 @@ public class Product {
 	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
 	private Set<Batch> iBatches;
 
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
-	@JoinTable(
-        name="product_drugs",
-        joinColumns=@JoinColumn(name="product"),
-        inverseJoinColumns=@JoinColumn(name="drug")
-    )
-    private Set<Drug> iDrugs;
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name="drug")
+    private Drug iDrug;
 
 
 	public String getName() {
@@ -190,12 +186,12 @@ public class Product {
 		this.iPresentation = pPresentation;
 	}
 
-	public Set<Drug> getDrugs() {
-		return iDrugs;
+	public Drug getDrug() {
+		return iDrug;
 	}
 
-	public void setDrugs(Set<Drug> pDrugs) {
-		this.iDrugs = pDrugs;
+	public void setDrug(Drug pDrug) {
+		this.iDrug = pDrug;
 	}
 
 	public Set<Batch> getBatches() {

@@ -6,8 +6,6 @@
   <manufacturer id="1" name="Coca Cola Company"/>
   <measure_unit id="1" name="Kilos"/>
   <presentation id="1" name="Botella"/>
-  <product id="1" name="Remedio para caballo" description="Saca caballos en un instante" minimum_stock="0.0000" unit_price="10.0000" cost="10.0000" utility="35.0000" category="1" presentation="1" measure_unit="1" manufacturer="1" active="false"/>
-  <product_drugs product="1" drug="1"/>
-  <product_drugs product="1" drug="2"/>
+  <product id="1" name="Remedio para caballo" description="Saca caballos en un instante" minimum_stock="0.0000" unit_price="10.0000" cost="10.0000" utility="35.0000" category="1" presentation="1" measure_unit="1" manufacturer="1" active="false" drug="2"/>
   <batch />
 </dataset>

@@ -23,7 +23,7 @@ public class ProductDTO {
 	private ManufacturerDTO iManufacturer;
 	private MeasureUnitDTO iMeasureUnit;
 	private PresentationDTO iPresentation;
-	private Set<DrugDTO> iDrugs;
+	private DrugDTO iDrug;
 	private Set<BatchDTO> iBatches;
 
 	public Long getId() {
@@ -114,12 +114,12 @@ public class ProductDTO {
 		this.iPresentation = pPresentation;
 	}
 
-	public Set<DrugDTO> getDrugs() {
-		return iDrugs;
+	public DrugDTO getDrug() {
+		return iDrug;
 	}
 
-	public void setDrugs(Set<DrugDTO> pDrugs) {
-		this.iDrugs = pDrugs;
+	public void setDrug(DrugDTO pDrug) {
+		this.iDrug = pDrug;
 	}
 
 	public Set<BatchDTO> getBatches() {

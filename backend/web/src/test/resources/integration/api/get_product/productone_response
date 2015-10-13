@@ -1,15 +1,9 @@
 {
   "id": 1,
-  "drugs": [
-    {
-      "id": 2,
-      "name": "marihuana destilada"
-    },
-    {
-      "id": 1,
-      "name": "marihuana"
-    }
-  ],
+  "drug": {
+	  "id": 2,
+	  "name": "marihuana destilada"
+	},
   "presentation": {
     "id": 1,
     "name": "Botella"
