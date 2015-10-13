@@ -29,7 +29,7 @@ import backend.product.presentation.PresentationDTO;
  *
  */
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("api/")
 public class ApplicationRESTController {
 
 	/**

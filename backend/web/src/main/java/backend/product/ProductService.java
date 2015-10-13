@@ -6,6 +6,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
+import backend.product.batch.BatchService;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
@@ -106,6 +107,14 @@ public class ProductService {
 		if(pProduct.getMeasureUnit() == null){
 			throw new BusinessException(ProductService.cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE);
 		}
+		
+		// Validamos todos los Batches - Si hay
+		if(pProduct.getBatches() != null && pProduct.getBatches().size() > 0)
+		for(Batch mBatch : pProduct.getBatches())
+		{
+			BatchService.validate(mBatch);
+		}
+		
 	}
 
 	/**

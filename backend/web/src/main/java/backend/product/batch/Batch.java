@@ -45,8 +45,8 @@ public class Batch {
 	// NOTA: la nomenclatura del nombre de la secuencia debe respetarse porque
 	// es
 	// la que usa postgresql por defecto
-	@SequenceGenerator(name = "product_id_seq", sequenceName = "product_id_seq", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")
+	@SequenceGenerator(name = "batch_id_seq", sequenceName = "batch_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "batch_id_seq")
 	private Long iId;
 
 	@Column(name = "stock")
