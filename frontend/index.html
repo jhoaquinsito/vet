@@ -26,6 +26,7 @@
         <link href="assets/css/fonts.css" rel="stylesheet">
     </head>
     <body>
+        <div id="preloader-wrapper" ng-if="layout.isLoading"></div>
         <div id="main-wrapper">
             <div id="header" ng-include="'app/views/layout/header-view.html'"></div>
             <div id="sidebar" ng-class="{'mini-sidebar': layout.isMiniSidebar}" ng-include="'app/views/layout/sidebar-view.html'"></div>
