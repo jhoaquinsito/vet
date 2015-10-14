@@ -25,6 +25,12 @@ app.config(function($routeProvider) {
         action: 'product.edit'
     });
 
+    $routeProvider.when('/products/stock', {
+        controller: 'ProductController',
+        templateUrl: 'app/views/product/stock-view.html',
+        action: 'product.stock'
+    });
+
     //ruta no encontrada
     $routeProvider.otherwise({redirectTo: '/dashboard'});
 });
