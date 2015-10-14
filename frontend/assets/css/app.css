@@ -193,6 +193,15 @@ body {
 .form-group .help-block {
     font-size: 12px;
 }
+.form-control.input-sm[type=number],
+.form-group-sm .form-control[type=number] {
+    padding-bottom: 5px;
+}
+input.form-control[type=number]::-webkit-inner-spin-button,
+input.form-control[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 textarea.form-control {
     resize: none;
 }
@@ -200,6 +209,9 @@ textarea.form-control {
     font-size: 13px;
     width: 100%;
     border-radius: 2px;
+}
+.input-group-sm .typeahead.dropdown-menu {
+    width: calc(100% - 33px);
 }
 .input-group-sm > .input-group-addon {
     border-radius: 2px;
@@ -271,10 +283,14 @@ textarea.form-control {
 .table > tbody > tr > th {
     background-color: #ecf0f1;
 }
+.table .table-cell-detail {
+    vertical-align: middle;
+}
 .table .table-cell-detail .text-important {
     font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
+    line-height: 1em;
 }
 .table .table-cell-detail .text-separator {
     margin-left: 8px;
@@ -288,6 +304,11 @@ textarea.form-control {
     text-align: right;
     vertical-align: middle;
 }
+.table .table-cell-input .form-control {
+    font-size: 14px;
+    padding: 6px 9px;
+    height: 41px;
+}
 .table .table-cell-actions {
     width: 1%;
     white-space: nowrap;
@@ -298,9 +319,6 @@ textarea.form-control {
 }
 .table .table-cell-empty {
     text-align: center;
-}
-.table .table-cell-input .form-control {
-    height: 41px;
 }
 
 /* Paginación de tablas */
