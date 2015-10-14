@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ngAnimate', 'ngCookies', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap', 'angularUtils.directives.dirPagination']);
 
-app.config(function($locationProvider, RestangularProvider, paginationTemplateProvider, config) {
+app.config(function($locationProvider, RestangularProvider, paginationTemplateProvider, $datepickerProvider, config) {
     //modo html5 para url más limpias
     $locationProvider.html5Mode(true);
 
@@ -9,6 +9,15 @@ app.config(function($locationProvider, RestangularProvider, paginationTemplatePr
 
     //configuración de path del template para el paginado de las tablas
     paginationTemplateProvider.setPath('app/views/layout/table-pagination-view.html');
+
+    //configuración predeterminada de los datepickers
+    angular.extend($datepickerProvider.defaults, {
+        dateFormat: 'dd/MM/yy',
+        placement: 'auto',
+        autoclose: true,
+        iconLeft: 'fa fa-chevron-left',
+        iconRight: 'fa fa-chevron-right'
+    });
 });
 
 app.run(function($rootScope, $cookies) {
