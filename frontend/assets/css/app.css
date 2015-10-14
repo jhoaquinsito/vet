@@ -268,7 +268,7 @@ textarea.form-control {
     border-left: 0;
     border-right: 0;
 }
-.table-hover > tbody > tr > th {
+.table > tbody > tr > th {
     background-color: #ecf0f1;
 }
 .table .table-cell-detail .text-important {
@@ -298,6 +298,9 @@ textarea.form-control {
 }
 .table .table-cell-empty {
     text-align: center;
+}
+.table .table-cell-input .form-control {
+    height: 41px;
 }
 
 /* Paginación de tablas */

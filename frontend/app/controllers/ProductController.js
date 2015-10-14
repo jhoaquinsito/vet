@@ -1,9 +1,10 @@
 app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService, MessageService, config) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
-    $scope.products = [];
     $scope.table = {};
     $scope.form = {};
+
+    $scope.products = [];
 
     $scope.init = function() {
         switch ($scope.action) {
@@ -15,6 +16,9 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
                 break;
             case 'product.edit':
                 $scope.editProductAction();
+                break;
+            case 'product.stock':
+                $scope.stockProductAction();
                 break;
         }
     };
@@ -45,8 +49,6 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             var request = ProductService.one(productId).remove();
 
             request.success = function(response) {
-                $scope.refreshTableData();
-
                 MessageService.message(MessageService.text('producto', 'remove', 'success', 'male'), 'success');
             };
             request.error = function(response) {
@@ -55,6 +57,12 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
             request.then(request.success, request.error);
         });
+    };
+
+    $scope.stockProductAction = function() {
+        $rootScope.setTitle($scope.name, 'Actualizar stock');
+
+        $scope.refreshTableData();
     };
 
     $scope.saveProductAction = function(form) {
@@ -148,6 +156,56 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         });
 
         return form.$invalid;
+    };
+
+    $scope.productsForStockTable = function() {
+        var products = [];
+
+        for (var i = 0; i < $scope.products.length; i++) {
+            var product = $scope.products[i];
+
+            if (product.inserted !== true) {
+                products.push(product);
+            }
+        }
+
+        return products;
+    };
+
+    $scope.addProductToStockTable = function(event) {
+        if (event.keyCode != 13 || !angular.isObject($scope.form.product)) {
+            return null;
+        }
+
+        if ($scope.form.stockTable == null) {
+            $scope.form.stockTable = [];
+        }
+
+        $scope.form.stockTable.push($scope.form.product);
+
+        //TODO: se puede sustituir por un método que lo resuelva
+        for (var i = 0; i < $scope.products.length; i++) {
+            var product = $scope.products[i];
+
+            if (product.id == $scope.form.product.id) {
+                product.inserted = true;
+                break;
+            }
+        }
+
+        $scope.form.product = null;
+    };
+
+    $scope.removeProductFromStockTable = function(productId) {
+        for (var i = 0; i < $scope.form.stockTable.length; i++) {
+            var product = $scope.form.stockTable[i];
+
+            if (product.id == productId) {
+                product.inserted = false;
+                $scope.form.stockTable.splice(i, 1);
+                break;
+            }
+        }
     };
 
     $scope.init();
