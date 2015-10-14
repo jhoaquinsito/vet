@@ -22,10 +22,24 @@
         <link href="assets/libs/font-awesome/css/font-awesome.css" rel="stylesheet">
 
         <!-- App: estilos -->
+        <link href="assets/css/preloader.css" rel="stylesheet">
         <link href="assets/css/app.css" rel="stylesheet">
         <link href="assets/css/fonts.css" rel="stylesheet">
     </head>
     <body>
+        <div id="preloader-wrapper" ng-if="layout.isLoading">
+            <div class="loader">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square last"></div>
+                <div class="square clear"></div>
+                <div class="square"></div>
+                <div class="square last"></div>
+                <div class="square clear"></div>
+                <div class="square "></div>
+                <div class="square last"></div>
+            </div>
+        </div>
         <div id="main-wrapper">
             <div id="header" ng-include="'app/views/layout/header-view.html'"></div>
             <div id="sidebar" ng-class="{'mini-sidebar': layout.isMiniSidebar}" ng-include="'app/views/layout/sidebar-view.html'"></div>

@@ -13,6 +13,7 @@ app.config(function($locationProvider, RestangularProvider, paginationTemplatePr
 
 app.run(function($rootScope, $cookies) {
     $rootScope.layout = {};
+    $rootScope.layout.isLoading = false;
     $rootScope.layout.isMiniSidebar = $cookies.get('layout.isMiniSidebar') == null ? false : JSON.parse($cookies.get('layout.isMiniSidebar'));
 
     $rootScope.$on('$routeChangeSuccess', function(scope, current, previous) {
