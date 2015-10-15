@@ -25,6 +25,12 @@ app.config(function($routeProvider) {
         action: 'product.edit'
     });
 
+    $routeProvider.when('/products/show/:id', {
+        controller: 'ProductController',
+        templateUrl: 'app/views/product/show-view.html',
+        action: 'product.show'
+    });
+
     $routeProvider.when('/products/stock', {
         controller: 'ProductController',
         templateUrl: 'app/views/product/stock-view.html',
