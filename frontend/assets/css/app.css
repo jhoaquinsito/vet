@@ -229,7 +229,6 @@ textarea.form-control {
 /* Alertas */
 .alert {
     border: none;
-
 }
 .alert-danger {
     background-color: rgba(231, 76, 60, 0.75);
@@ -371,4 +370,15 @@ textarea.form-control {
 /* Tooltips */
 .tooltip {
     font-family: inherit;
+}
+
+/* Datepicker */
+.datepicker.dropdown-menu {
+    border-radius: 2px;
+    background-color: #95a5a6;
+    padding: 5px;
+    font-size: 14px;
+}
+.datepicker.dropdown-menu table > tbody .btn {
+    padding: 10px;
 }
