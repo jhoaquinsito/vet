@@ -25,10 +25,10 @@ app.config(function($routeProvider) {
         action: 'product.edit'
     });
 
-    $routeProvider.when('/products/show/:id', {
+    $routeProvider.when('/products/detail/:id', {
         controller: 'ProductController',
-        templateUrl: 'app/views/product/show-view.html',
-        action: 'product.show'
+        templateUrl: 'app/views/product/detail-view.html',
+        action: 'product.detail'
     });
 
     $routeProvider.when('/products/stock', {
