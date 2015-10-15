@@ -1,3 +1,9 @@
 app.factory('DrugService', function(Restangular) {
-    return Restangular.service('drug');
+    var service = Restangular.service('drug');
+
+    this.getList = function() {
+        return service.getList();
+    };
+
+    return this;
 });

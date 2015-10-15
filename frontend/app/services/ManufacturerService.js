@@ -1,3 +1,9 @@
 app.factory('ManufacturerService', function(Restangular) {
-    return Restangular.service('manufacturer');
+    var service = Restangular.service('manufacturer');
+
+    this.getList = function() {
+        return service.getList();
+    };
+
+    return this;
 });

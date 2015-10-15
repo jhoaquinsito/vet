@@ -1,3 +1,9 @@
 app.factory('CategoryService', function(Restangular) {
-    return Restangular.service('category');
+    var service = Restangular.service('category');
+
+    this.getList = function() {
+        return service.getList();
+    };
+
+    return this;
 });

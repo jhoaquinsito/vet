@@ -46,7 +46,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
     $scope.removeProductAction = function(productId) {
         MessageService.confirm(MessageService.text('producto', 'remove', 'confirm', 'male')).then(function() {
-            var request = ProductService.one(productId).remove();
+            var request = ProductService.remove(productId);
 
             request.success = function(response) {
                 MessageService.message(MessageService.text('producto', 'remove', 'success', 'male'), 'success');
@@ -70,7 +70,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             return null;
         }
 
-        var request = ProductService.post($scope.form.product);
+        var request = ProductService.save($scope.form.product);
 
         request.success = function(response) {
             MessageService.message(MessageService.text('producto', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
@@ -110,7 +110,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
     };
 
     $scope.refreshFormData = function() {
-        var request = ProductService.one($routeParams.id).get();
+        var request = ProductService.getById($routeParams.id);
 
         request.success = function(response) {
             $scope.form.product = response.plain();
@@ -183,7 +183,6 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
         $scope.form.stockTable.push($scope.form.product);
 
-        //TODO: se puede sustituir por un método que lo resuelva
         for (var i = 0; i < $scope.products.length; i++) {
             var product = $scope.products[i];
 
