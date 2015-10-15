@@ -92,6 +92,11 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             return null;
         }
 
+        if ($scope.form.stockTable == null || $scope.form.stockTable.length == 0) {
+            MessageService.message('Debe agregar algún producto para poder actualizar el stock', 'danger');
+            return null;
+        }
+
         MessageService.message('No se pudo actualizar el stock debido a que la funcionalidad no está implementada', 'warning');
 
         $location.path('products');

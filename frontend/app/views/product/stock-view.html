@@ -1,16 +1,16 @@
-<form ng-submit="saveStockAction(stockForm)" name="stockForm" novalidate>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group form-group-sm">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                            <input type="text" class="form-control" name="product" ng-model="form.product" placeholder="Ingrese un producto" ng-keyup="addProductToStockTable($event)" bs-options="product as product.name for product in productsForStockTable()" bs-typeahead>
-                        </div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group form-group-sm">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control" name="product" ng-model="form.product" placeholder="Ingrese un producto" ng-keyup="addProductToStockTable($event)" bs-options="product as product.name for product in productsForStockTable()" bs-typeahead>
                     </div>
                 </div>
             </div>
+        </div>
+        <form name="stockForm" novalidate>
             <table class="table table-bordered table-main">
                 <tr>
                     <th class="col-xs-5">Producto</th>
@@ -56,12 +56,12 @@
                     <td colspan="7" class="table-cell-empty">No hay productos para mostrar</td>
                 </tr>
             </table>
-        </div>
-        <div class="panel-footer">
-            <div class="text-right">
-                <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
-                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
-            </div>
+        </form>
+    </div>
+    <div class="panel-footer">
+        <div class="text-right">
+            <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+            <button type="button" ng-click="saveStockAction(stockForm)" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
         </div>
     </div>
-</form>
+</div>

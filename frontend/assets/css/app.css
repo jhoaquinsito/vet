@@ -205,14 +205,6 @@ input.form-control[type=number]::-webkit-outer-spin-button {
 textarea.form-control {
     resize: none;
 }
-.typeahead.dropdown-menu {
-    font-size: 13px;
-    width: 100%;
-    border-radius: 2px;
-}
-.input-group-sm .typeahead.dropdown-menu {
-    width: calc(100% - 33px);
-}
 .input-group-sm > .input-group-addon {
     border-radius: 2px;
     border-width: 2px;
@@ -384,4 +376,14 @@ textarea.form-control {
 }
 .datepicker.dropdown-menu table > tbody .btn {
     padding: 10px;
+}
+
+/* Autocompletar */
+.typeahead.dropdown-menu {
+    font-size: 13px;
+    width: 100%;
+    border-radius: 2px;
+}
+.input-group-sm .typeahead.dropdown-menu {
+    width: calc(100% - 33px);
 }
