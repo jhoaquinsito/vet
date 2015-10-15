@@ -19,7 +19,7 @@
             </tr>
             <tr dir-paginate="product in filtered = (products | filter: table.search | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
-                    <div><span class="text-important">{{product.name}}</span><i class="fa fa-angle-right text-separator"></i><span class="text-info">{{product.category.name ? product.category.name : 'Sin categoría'}}</span></div>
+                    <div><a ng-href="products/detail/{{product.id}}" class="text-important">{{product.name}}</a><i class="fa fa-angle-right text-separator"></i><span class="text-info">{{product.category.name ? product.category.name : 'Sin categoría'}}</span></div>
                     <div>{{product.description ? product.description : 'Sin descripción'}}</div>
                 </td>
                 <td class="table-cell-detail">

@@ -17,6 +17,9 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             case 'product.edit':
                 $scope.editProductAction();
                 break;
+            case 'product.detail':
+                $scope.productDetailAction();
+                break;
             case 'product.stock':
                 $scope.stockProductAction();
                 break;
@@ -42,6 +45,12 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
         $scope.refreshFormData();
         $scope.refreshFormDropdownsData();
+    };
+
+    $scope.productDetailAction = function() {
+        $rootScope.setTitle($scope.name, 'Detalle de producto');
+
+        $scope.refreshFormData();
     };
 
     $scope.removeProductAction = function(productId) {

@@ -152,6 +152,16 @@ body {
     margin-bottom: 15px;
 }
 
+/* Títulos */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: inherit; 
+}
+
 /* Paneles */
 .panel {
     border-radius: 0;
@@ -208,6 +218,10 @@ textarea.form-control {
 .input-group-sm > .input-group-addon {
     border-radius: 2px;
     border-width: 2px;
+}
+.form-group-sm .form-control-static {
+    font-size: 14px;
+    padding-left: 0;
 }
 
 /* Contenedor de alertas */
@@ -278,8 +292,10 @@ textarea.form-control {
     vertical-align: middle;
 }
 .table .table-cell-detail .text-important {
+    color: #2c3e50;
     font-size: 16px;
     font-weight: 700;
+    text-decoration: none;
     text-transform: uppercase;
     line-height: 1em;
 }

@@ -1,0 +1,100 @@
+<form ng-submit="saveProductAction(productForm)" name="productForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Nombre</label>
+                        <p class="form-control-static">{{form.product.name}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Unidad de medida</label>
+                        <p class="form-control-static">{{form.product.measureUnit.name}}</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Descripción</label>
+                        <p class="form-control-static">{{form.product.description}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Categoría</label>
+                        <p class="form-control-static">{{form.product.category.name}}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Laboratorio</label>
+                        <p class="form-control-static">{{form.product.manufacturer.name}}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Droga</label>
+                        <p class="form-control-static">{{form.product.drug.name}}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Presentación</label>
+                        <p class="form-control-static">{{form.product.presentation.name}}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Proveedor</label>
+                        <p class="form-control-static">{{form.product.provider}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Costo</label>
+                        <p class="form-control-static">{{form.product.cost}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Utilidad</label>
+                        <p class="form-control-static">{{form.product.utility}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Precio unitario</label>
+                        <p class="form-control-static">{{form.product.unitPrice}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Stock mínimo</label>
+                        <p class="form-control-static">{{form.product.minimumStock}}</p>
+                    </div>
+                </div>
+            </div>
+            <h4>Información de stock</h4>
+            <table class="table table-bordered table-hover table-main">
+                <tr>
+                    <th class="col-xs-6">Vencimiento</th>
+                    <th class="col-xs-6">Cantidad en stock</th>
+                </tr>
+                <tr ng-repeat="batch in form.product.batches">
+                    <td>{{batch.isoDueDate}}</td>
+                    <td>{{stock}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-arrow-left"></i>Volver</a>
+            </div>
+        </div>
+    </div>
+</form>
