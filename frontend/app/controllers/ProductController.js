@@ -89,6 +89,10 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
     $scope.refreshTableData = function() {
         ProductService.getList().then(function(response) {
             $scope.products = response.plain();
+
+            //PARA TESTING
+            $scope.form.stockTable = [];
+            $scope.form.stockTable.push($scope.products[10]);
         });
     };
 
@@ -205,6 +209,14 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
                 break;
             }
         }
+    };
+
+    $scope.updateUtility = function(product) {
+        product.utility = ProductService.calculateUtility(product.cost, product.unitPrice);
+    };
+
+    $scope.updateUnitPrice = function(product) {
+        product.unitPrice = ProductService.calculateUnitPrice(product.cost, product.utility);
     };
 
     $scope.init();

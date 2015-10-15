@@ -25,13 +25,13 @@
                     <span class="text-important">{{product.name}}</span>
                 </td>
                 <td class="table-cell-input">
-                    <input type="number" class="form-control" ng-model="product.cost">
+                    <input type="number" class="form-control" ng-model="product.cost" ng-change="updateUnitPrice(product)">
                 </td>
                 <td class="table-cell-input">
-                    <input type="number" class="form-control" ng-model="product.utility">
+                    <input type="number" class="form-control" ng-model="product.utility" ng-change="updateUnitPrice(product)">
                 </td>
                 <td class="table-cell-input">
-                    <input type="number" class="form-control" ng-model="product.unitPrice">
+                    <input type="number" class="form-control" ng-model="product.unitPrice" ng-change="updateUtility(product)">
                 </td>
                 <td class="table-cell-input">
                     <input type="text" class="form-control" ng-model="product.isoDueDate" bs-datepicker>
