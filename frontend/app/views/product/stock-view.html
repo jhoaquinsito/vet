@@ -1,57 +1,67 @@
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group form-group-sm">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <input type="text" class="form-control" name="product" ng-model="form.product" placeholder="Ingrese un producto" ng-keyup="addProductToStockTable($event)" bs-options="product as product.name for product in productsForStockTable()" bs-typeahead>
+<form ng-submit="saveStockAction(stockForm)" name="stockForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control" name="product" ng-model="form.product" placeholder="Ingrese un producto" ng-keyup="addProductToStockTable($event)" bs-options="product as product.name for product in productsForStockTable()" bs-typeahead>
+                        </div>
                     </div>
                 </div>
             </div>
+            <table class="table table-bordered table-main">
+                <tr>
+                    <th class="col-xs-5">Producto</th>
+                    <th>Costo</th>
+                    <th>Utilidad</th>
+                    <th>Precio</th>
+                    <th>Vencimiento</th>
+                    <th>Cantidad</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="product in form.stockTable">
+                    <td class="table-cell-detail">
+                        <span class="text-important">{{product.name}}</span>
+                    </td>
+                    <td class="table-cell-input">
+                        <div class="form-group" ng-class="{'has-error': stockForm['cost-' + product.id].$dirty && stockForm['cost-' + product.id].$error.required}">
+                            <input type="number" class="form-control" name="cost-{{product.id}}" ng-model="product.cost" ng-change="updateUnitPrice(product)" required>
+                        </div>
+                    </td>
+                    <td class="table-cell-input">
+                        <div class="form-group" ng-class="{'has-error': stockForm['utility-' + product.id].$dirty && stockForm['utility-' + product.id].$error.required}">
+                            <input type="number" class="form-control" name="utility-{{product.id}}" ng-model="product.utility" ng-change="updateUnitPrice(product)" required>
+                        </div>
+                    </td>
+                    <td class="table-cell-input">
+                        <div class="form-group" ng-class="{'has-error': stockForm['unitPrice-' + product.id].$dirty && stockForm['unitPrice-' + product.id].$error.required}">
+                            <input type="number" class="form-control" name="unitPrice-{{product.id}}" ng-model="product.unitPrice" ng-change="updateUtility(product)" required>
+                        </div>
+                    </td>
+                    <td class="table-cell-input">
+                        <input type="text" class="form-control" ng-model="product.isoDueDate" bs-datepicker>
+                    </td>
+                    <td class="table-cell-input">
+                        <div class="form-group" ng-class="{'has-error': stockForm['quantity-' + product.id].$dirty && stockForm['quantity-' + product.id].$error.required}">
+                            <input type="number" class="form-control" name="quantity-{{product.id}}" ng-model="product.quantity" required>
+                        </div>
+                    </td>
+                    <td class="table-cell-actions">
+                        <button ng-click="removeProductFromStockTable(product.id)" class="btn btn-sm btn-info" data-title="Quitar" bs-tooltip><i class="fa fa-close"></i></button>
+                    </td>
+                </tr>
+                <tr ng-if="form.stockTable.length == 0 || form.stockTable == null">
+                    <td colspan="7" class="table-cell-empty">No hay productos para mostrar</td>
+                </tr>
+            </table>
         </div>
-        <table class="table table-bordered table-main">
-            <tr>
-                <th class="col-xs-5">Producto</th>
-                <th>Costo</th>
-                <th>Utilidad</th>
-                <th>Precio</th>
-                <th>Vencimiento</th>
-                <th>Cantidad</th>
-                <th></th>
-            </tr>
-            <tr ng-repeat="product in form.stockTable">
-                <td class="table-cell-detail">
-                    <span class="text-important">{{product.name}}</span>
-                </td>
-                <td class="table-cell-input">
-                    <input type="number" class="form-control" ng-model="product.cost" ng-change="updateUnitPrice(product)">
-                </td>
-                <td class="table-cell-input">
-                    <input type="number" class="form-control" ng-model="product.utility" ng-change="updateUnitPrice(product)">
-                </td>
-                <td class="table-cell-input">
-                    <input type="number" class="form-control" ng-model="product.unitPrice" ng-change="updateUtility(product)">
-                </td>
-                <td class="table-cell-input">
-                    <input type="text" class="form-control" ng-model="product.isoDueDate" bs-datepicker>
-                </td>
-                <td class="table-cell-input">
-                    <input type="number" class="form-control">
-                </td>
-                <td class="table-cell-actions">
-                    <button ng-click="removeProductFromStockTable(product.id)" class="btn btn-sm btn-info" data-title="Quitar" bs-tooltip><i class="fa fa-close"></i></button>
-                </td>
-            </tr>
-            <tr ng-if="form.stockTable.length == 0 || form.stockTable == null">
-                <td colspan="7" class="table-cell-empty">No hay productos para mostrar</td>
-            </tr>
-        </table>
-    </div>
-    <div class="panel-footer">
-        <div class="text-right">
-            <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
-            <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+            </div>
         </div>
     </div>
-</div>
+</form>

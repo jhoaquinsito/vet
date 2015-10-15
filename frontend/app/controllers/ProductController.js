@@ -86,13 +86,20 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         request.then(request.success, request.error);
     };
 
+    $scope.saveStockAction = function(form) {
+        if ($scope.formValidation(form)) {
+            MessageService.message('Debe completar todos los datos obligatorios para poder actualizar el stock', 'danger');
+            return null;
+        }
+
+        MessageService.message('No se pudo actualizar el stock debido a que la funcionalidad no está implementada', 'warning');
+
+        $location.path('products');
+    };
+
     $scope.refreshTableData = function() {
         ProductService.getList().then(function(response) {
             $scope.products = response.plain();
-
-            //PARA TESTING
-            $scope.form.stockTable = [];
-            $scope.form.stockTable.push($scope.products[10]);
         });
     };
 

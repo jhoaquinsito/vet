@@ -303,6 +303,9 @@ textarea.form-control {
     text-align: right;
     vertical-align: middle;
 }
+.table .table-cell-input .form-group {
+    margin-bottom: 0;
+}
 .table .table-cell-input .form-control {
     font-size: 14px;
     padding: 6px 9px;
