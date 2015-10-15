@@ -142,6 +142,10 @@ body {
 #content-wrapper > .container-fluid {
     padding-top: 65px;
     padding-bottom: 15px;
+    position: absolute;
+}
+#content-wrapper > .container-fluid.ng-enter-active {
+    position: fixed;
 }
 #content-wrapper > .container-fluid > .panel {
     margin-bottom: 0;
