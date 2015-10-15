@@ -87,7 +87,10 @@
                 </tr>
                 <tr ng-repeat="batch in form.product.batches">
                     <td>{{batch.isoDueDate}}</td>
-                    <td>{{stock}}</td>
+                    <td>{{batch.stock}}</td>
+                </tr>
+                <tr ng-if="form.product.batches.length == 0 || form.product == null">
+                    <td colspan="2" class="table-cell-empty">No hay lotes para mostrar</td>
                 </tr>
             </table>
         </div>
