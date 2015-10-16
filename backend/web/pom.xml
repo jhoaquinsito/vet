@@ -193,6 +193,12 @@
 			<artifactId>jsonassert</artifactId>
 			<version>1.2.3</version>
 		</dependency>
+		<!-- Liquibase: usado para db changelog -->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>3.4.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -230,6 +236,27 @@
 					<mainClass>org.test.int1.Main</mainClass>
 				</configuration>
 			</plugin>
+			<!-- Liquibase -->
+			<plugin>
+		        <groupId>org.liquibase</groupId>
+		        <artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.4.1</version>
+				<configuration>
+					<url>jdbc:postgresql://localhost:5432/vet</url>
+					<driver>org.postgresql.Driver</driver>
+					<username>vet</username>
+					<password>vet</password>
+					<changeLogFile>src/main/resources/database/changelog/changelog.xml</changeLogFile>
+				</configuration>
+				<executions>
+				    <execution>
+				    	<phase>process-resources</phase>
+				        <goals>
+						    <goal>update</goal>
+						</goals>
+				    </execution>
+				</executions>
+		    </plugin>
 		</plugins>
 	</build>
 </project>
