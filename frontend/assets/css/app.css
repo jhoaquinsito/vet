@@ -120,6 +120,7 @@ body {
     margin-left: 250px;
     padding-top: 50px;
     min-height: 100%;
+    position: relative;
 }
 #content-wrapper .page-header {
     padding: 13px 15px;
@@ -143,6 +144,7 @@ body {
     padding-top: 65px;
     padding-bottom: 15px;
     position: absolute;
+    width: 100%;
 }
 #content-wrapper > .container-fluid.ng-enter-active {
     position: fixed;
