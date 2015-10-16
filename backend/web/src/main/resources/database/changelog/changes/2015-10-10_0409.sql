@@ -1,4 +1,8 @@
-﻿-- elimino tabla que relacionaba muchos a muchos
+﻿--liquibase formatted sql
+--changeset tomas:drugs_to_drug splitStatements:false
+
+
+-- elimino tabla que relacionaba muchos a muchos
 DROP TABLE product_drugs;
 
 -- agrego campo droga al producto
