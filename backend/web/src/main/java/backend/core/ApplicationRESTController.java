@@ -19,6 +19,7 @@ import backend.product.ProductDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
+import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
 
 /**
@@ -110,6 +111,20 @@ public class ApplicationRESTController {
 		List<PresentationDTO> mPresentationDTOList = mCNQ.getPresentations();
 
 		return mPresentationDTOList;
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de Unidades de medida.
+	 * 
+	 * @return Lista de unidades de medida.
+	 */
+	@RequestMapping(value = "measure_unit", method = RequestMethod.GET)
+	public List<MeasureUnitDTO> listMeasureUnits() {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<MeasureUnitDTO> mMeasureUnitDTOList = mCNQ.getMeasureUnits();
+
+		return mMeasureUnitDTOList;
 	}
 
 	@RequestMapping(value = "category", method = RequestMethod.POST)

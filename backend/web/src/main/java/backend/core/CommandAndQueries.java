@@ -16,6 +16,9 @@ import backend.product.drug.DrugService;
 import backend.product.manufacturer.Manufacturer;
 import backend.product.manufacturer.ManufacturerDTO;
 import backend.product.manufacturer.ManufacturerService;
+import backend.product.measure_unit.MeasureUnit;
+import backend.product.measure_unit.MeasureUnitDTO;
+import backend.product.measure_unit.MeasureUnitService;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
 import backend.product.presentation.PresentationService;
@@ -109,6 +112,24 @@ public class CommandAndQueries {
 		
 		return mPresentationDTOList;
 	}
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de unidades de medida.
+	 * @return lista de unidades de medida
+	 */
+	public List<MeasureUnitDTO> getMeasureUnits(){
+		MeasureUnitService mMeasureUnitService = new MeasureUnitService();
+		
+		Iterable<MeasureUnit> mMeasureUnits = mMeasureUnitService.getAll();
+		
+		List<MeasureUnitDTO> mMeasureUnitDTOList = new ArrayList<MeasureUnitDTO>();
+		
+		for (MeasureUnit bMeasureUnit : mMeasureUnits){
+			mMeasureUnitDTOList.add(this.iMapper.map(bMeasureUnit,MeasureUnitDTO.class));
+		}
+		
+		return mMeasureUnitDTOList;
+	}	
 	
 
 	/**
