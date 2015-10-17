@@ -11,20 +11,26 @@ import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 
 /**
- * Un <code>CategoryService</code> representa un conjunto de servicios relacionados a <code>Category</code>.
+ * Un <code>CategoryService</code> representa un conjunto de servicios
+ * relacionados a <code>Category</code>.
  * 
- * Este conjunto de servicios tiene:
- * TODO repositorio de categorías debería decir:
- * el repositorio de productos: <strong>ProductRepository</strong>.
+ * Este conjunto de servicios tiene: el repositorio de categorias:
+ * <strong>ProductRepository</strong>.
  * 
  * @author genesis
  *
  */
 
 public class CategoryService {
-	
+
 	private CategoryRepository iCategoryRepository;
-	
+
+	// constantes para mensajes de excepciones:
+	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Categoría no válida: nombre sin valor.";
+	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Categoría no válida: nombre vacío.";
+	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Categoría no válida: nombre con más de 30 caracteres.";
+	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Categoría no válida: el nombre ya existe en la base de datos.";
+
 	/**
 	 * Constructor.
 	 */
@@ -32,87 +38,86 @@ public class CategoryService {
 		super();
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iCategoryRepository = (CategoryRepository) mAppContext.getBean(CategoryRepository.class);
+		this.iCategoryRepository = mAppContext.getBean(CategoryRepository.class);
 	}
-	
+
 	/**
-	 * Método que permite guardar categorias. Puede ser una categoria nueva (creación) o
-	 * una categoria existente que está modificado (actualización)
-	 * @param pCategoryToSave producto que se desea guardar
+	 * Método que permite guardar categorias. Puede ser una categoria nueva
+	 * (creación) o una categoria existente que está modificado (actualización)
+	 * 
+	 * @param pCategoryToSave
+	 *            producto que se desea guardar
 	 * @return Categoria tal cual quedó guardada
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	public Category save(Category pCategoryToSave) throws BusinessException {
 		// Valido si el producto tiene datos válidos
 		this.validate(pCategoryToSave);
-		
+
 		// Guardo la categoria
 		Category mCategorySaved = this.iCategoryRepository.save(pCategoryToSave);
-		
+
 		return mCategorySaved;
 	}
-	
+
+	// TODO comentar este método
 	public List<Category> getByName(String pCategoryName) throws BusinessException {
 		List<Category> mResult = new ArrayList<Category>();
-		
+
 		try {
 			Iterator<Category> mIterator = this.iCategoryRepository.findAll().iterator();
-			
-			while(mIterator.hasNext()){
+
+			while (mIterator.hasNext()) {
 				Category mCategory = mIterator.next();
-				if(mCategory.getName().toLowerCase().equalsIgnoreCase(pCategoryName.toLowerCase()))
+				if (mCategory.getName().toLowerCase().equalsIgnoreCase(pCategoryName.toLowerCase()))
 					mResult.add(mCategory);
 			}
-		// TODO catchear la excepción que corresponde y no una general
+			// TODO catchear la excepción que corresponde y no una general
 		} catch (Exception e) {
 			// TODO enviar un mensaje más amigable
 			throw new BusinessException(e.getMessage());
 		}
-		
-		
+
 		return mResult;
-		
+
 	}
-	
+
 	/**
-	 * Metodo que permite validar una <strong>Categoria</strong>, antes de enviarlo a la capa de Repository
-	 * Estas validaciones corresponden directamente con el modelo.
+	 * Metodo que permite validar una <strong>Categoria</strong>, antes de
+	 * enviarlo a la capa de Repository Estas validaciones corresponden
+	 * directamente con el modelo.
 	 * 
-	 * @param Category : Categoria a Validar
+	 * @param Category
+	 *            : Categoria a Validar
 	 * @return void
-	 * @throws BusinessException - Una excepcion de negocio con el detalle del error.
+	 * @throws BusinessException
+	 *             - Una excepcion de negocio con el detalle del error.
 	 */
-	private void validate(Category pCategory) throws BusinessException{
+	private void validate(Category pCategory) throws BusinessException {
 
-		//TODO revisar las convenciones de código
-		//TODO usar constantes y no hardcodear:
-		String friendlyMessage = "Category NO valido: ";
-		
-		//(String pClassName, String pMethodName, String pExMessage, String pRequestUrl, HttpStatus pStatusCode) {
-		
-		if(pCategory.getName().length() == 0){
-			//TODO usar constantes y no hardcodear:
-			throw new BusinessException(friendlyMessage + "  Nombre vacio ");
+		String mCategoryName = pCategory.getName();
+
+		if (pCategory.getName().length() == 0) {
+			throw new BusinessException(CategoryService.cEMPTY_NAME_EXCEPTION_MESSAGE);
 		}
-		if(pCategory.getName().length() > 30){
-			//TODO usar constantes y no hardcodear:
-			throw new BusinessException(friendlyMessage + " Nombre excede el limite de caracteres (30) ");
+		if (pCategory.getName().length() > 30) {
+			throw new BusinessException(CategoryService.cLONG_NAME_EXCEPTION_MESSAGE);
 		}
-		if(!this.getByName(pCategory.getName()).isEmpty()){
-			//TODO usar constantes y no hardcodear:
-			throw new BusinessException(friendlyMessage + " Ya existe una categoría bajo el mismo nombre( " + pCategory.getName() + " )");
+		// verifica si existia una categoria con el mismo nombre, distinta de la
+		// que estoy tratando de insertar (distinto id)
+		if (!this.getByName(mCategoryName).isEmpty()) {
+			for (Category bCategory : this.getByName(mCategoryName)) {
+				if (bCategory.getId() != pCategory.getId()) {
+					throw new BusinessException(CategoryService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+				}
+			}
 		}
-		
-		
+
 	}
 
+	// TODO para que sirve esto? refactorizarlo y documentarlo
 	public Iterable<Category> getAll() {
 		return this.iCategoryRepository.findAll();
 	}
-	/*
-	public Category getById(long id){
-		return this.iCategoryRepository.findOne(id);
-	}
-	*/
-	
+
 }
