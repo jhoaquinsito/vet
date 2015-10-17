@@ -10,6 +10,11 @@ import backend.exception.BusinessException;
 import backend.product.batch.Batch;
 import backend.product.batch.BatchService;
 import backend.product.category.Category;
+import backend.product.category.CategoryService;
+import backend.product.drug.DrugService;
+import backend.product.manufacturer.ManufacturerService;
+import backend.product.presentation.PresentationService;
+import backend.product.measure_unit.MeasureUnitService;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
@@ -26,6 +31,12 @@ import backend.product.category.Category;
 public class ProductService {
 	
 	private ProductRepository iProductRepository;
+	private BatchService iBatchService;
+	private CategoryService iCategoryService;
+	private DrugService iDrugService;
+	private ManufacturerService iManufacturerService;
+	private MeasureUnitService iMeasureUnitService;
+	private PresentationService iPresentationService;
 
 
 	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre sin valor ";
@@ -44,6 +55,12 @@ public class ProductService {
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 		this.iProductRepository = mAppContext.getBean(ProductRepository.class);
+		this.iBatchService = new BatchService();
+		this.iCategoryService = new CategoryService();
+		this.iDrugService = new DrugService();
+		this.iManufacturerService = new ManufacturerService();
+		this.iMeasureUnitService = new MeasureUnitService();
+		this.iPresentationService = new PresentationService();
 	}
 	
 	/**
@@ -69,6 +86,7 @@ public class ProductService {
 		// valido si el producto tiene datos válidos
 		this.validate(pProductToSave);
 		
+		//TODO esto debería estar en otra capa anterior (al mapear DTO con domain)
 		// asocio el producto a sus lotes (si tiene)
 		if (pProductToSave.getBatches() != null){
 			for (Batch bBatch : pProductToSave.getBatches()){
@@ -78,6 +96,17 @@ public class ProductService {
 		
 		// marco el producto como activo
 		pProductToSave.setActive(true);
+		
+		// guardo la categoria
+		this.iCategoryService.save(pProductToSave.getCategory());
+		// guardo las drogas
+		this.iDrugService.save(pProductToSave.getDrug());
+		// guardo los laboratorios
+		this.iManufacturerService.save(pProductToSave.getManufacturer());
+		// guardo las unidades de medida
+		this.iMeasureUnitService.save(pProductToSave.getMeasureUnit());
+		// guardo las presentaciones
+		this.iPresentationService.save(pProductToSave.getPresentation());
 		
 		// guardo el producto
 		Product mProductSaved = this.iProductRepository.save(pProductToSave);

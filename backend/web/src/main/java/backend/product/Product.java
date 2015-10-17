@@ -78,26 +78,26 @@ public class Product {
 	@Column(name="active")
 	private Boolean iActive;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+	@ManyToOne()
     @JoinColumn(name="category")
 	private Category iCategory;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+	@ManyToOne()
     @JoinColumn(name="manufacturer")
 	private Manufacturer iManufacturer;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+	@ManyToOne()
     @JoinColumn(name="measure_unit")
 	private MeasureUnit iMeasureUnit;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+	@ManyToOne()
     @JoinColumn(name="presentation")
 	private Presentation iPresentation;
 	
 	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
 	private Set<Batch> iBatches;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne()
     @JoinColumn(name="drug")
     private Drug iDrug;
 
