@@ -17,6 +17,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.domain.Persistable;
 
@@ -59,6 +61,8 @@ public class Product implements Persistable<Long> {
 	private Long iId;
 	
 	@Column(name="name", unique = false, nullable = false, length = 100)
+	@Size(min=1, max=100, message= ProductConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = ProductConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 	
 	@Column(name="description")
@@ -89,6 +93,7 @@ public class Product implements Persistable<Long> {
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="measure_unit")
+	@NotNull(message=ProductConsts.cMEASURE_UNIT_NOTNULL_VIOLATION_MESSAGE)
 	private MeasureUnit iMeasureUnit;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
