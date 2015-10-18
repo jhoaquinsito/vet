@@ -219,11 +219,11 @@ public class Product implements Persistable<Long> {
 	@Override
 	public boolean isNew() {
 		boolean mProductoIsNew = (this.getId() == null);
-		boolean mCategoryIsNew = (this.getCategory().getId() == null);
-		boolean mPresentationIsNew = (this.getPresentation().getId() == null);
-		boolean mMeasureUnitIsNew = (this.getMeasureUnit().getId() == null);
-		boolean mDrugIsNew = (this.getDrug().getId() == null);
-		boolean mManufacturerIsNew = (this.getManufacturer().getId() == null);
+		boolean mCategoryIsNew = (this.getCategory() == null || this.getCategory().getId() == null);
+		boolean mPresentationIsNew = (this.getPresentation() == null || this.getPresentation().getId() == null);
+		boolean mMeasureUnitIsNew = (this.getMeasureUnit() == null || this.getMeasureUnit().getId() == null);
+		boolean mDrugIsNew = (this.getDrug() == null || this.getDrug().getId() == null);
+		boolean mManufacturerIsNew = (this.getManufacturer() == null || this.getManufacturer().getId() == null);
 		
 		return mProductoIsNew && mCategoryIsNew && mPresentationIsNew 
 				&& mMeasureUnitIsNew && mDrugIsNew && mManufacturerIsNew;
