@@ -1,5 +1,6 @@
 package backend.product.drug;
 
+import javax.inject.Singleton;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.*;
 
 /**
  * Una <code>Drug</code> es una representación de una droga utilizada en
@@ -29,6 +31,7 @@ public class Drug {
 	private Long iId;
 
 	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Size(min=1, max=30, message="Nombre de droga muy largo.")
 	private String iName;
 
 	public Drug() {

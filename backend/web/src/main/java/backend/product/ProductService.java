@@ -2,8 +2,6 @@ package backend.product;
 
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -11,12 +9,7 @@ import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
 import backend.product.batch.BatchService;
-import backend.product.category.Category;
-import backend.product.category.CategoryService;
-import backend.product.drug.DrugService;
-import backend.product.manufacturer.ManufacturerService;
-import backend.product.presentation.PresentationService;
-import backend.product.measure_unit.MeasureUnitService;
+import backend.utils.EntityValidator;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
@@ -33,12 +26,7 @@ import backend.product.measure_unit.MeasureUnitService;
 public class ProductService {
 	
 	private ProductRepository iProductRepository;
-	private BatchService iBatchService;
-	private CategoryService iCategoryService;
-	private DrugService iDrugService;
-	private ManufacturerService iManufacturerService;
-	private MeasureUnitService iMeasureUnitService;
-	private PresentationService iPresentationService;
+	private EntityValidator iEntityValidator;
 
 
 	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre sin valor ";
@@ -57,12 +45,8 @@ public class ProductService {
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 		this.iProductRepository = mAppContext.getBean(ProductRepository.class);
-		this.iBatchService = new BatchService();
-		this.iCategoryService = new CategoryService();
-		this.iDrugService = new DrugService();
-		this.iManufacturerService = new ManufacturerService();
-		this.iMeasureUnitService = new MeasureUnitService();
-		this.iPresentationService = new PresentationService();
+		this.iEntityValidator = new EntityValidator();
+		
 	}
 	
 	/**
@@ -101,6 +85,8 @@ public class ProductService {
 		// marco el producto como activo
 		pProductToSave.setActive(true);
 		
+		//valido la entidad
+		this.iEntityValidator.validate(pProductToSave);
 		
 		// guardo el producto
 		Product mProductSaved = this.iProductRepository.save(pProductToSave);

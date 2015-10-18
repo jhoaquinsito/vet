@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
 
 import org.springframework.data.domain.Persistable;
 
@@ -99,6 +100,7 @@ public class Product implements Persistable<Long> {
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="drug")
+	@Valid
     private Drug iDrug;
 
 
