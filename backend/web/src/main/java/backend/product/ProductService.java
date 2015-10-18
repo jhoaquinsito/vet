@@ -8,7 +8,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
-import backend.product.batch.BatchService;
 import backend.utils.EntityValidator;
 
 
@@ -69,9 +68,6 @@ public class ProductService {
 			}
 		}
 		
-		// valido si el producto tiene datos válidos
-		this.validate(pProductToSave);
-		
 		//TODO esto debería estar en otra capa anterior (al mapear DTO con domain)
 		// asocio el producto a sus lotes (si tiene)
 		if (pProductToSave.getBatches() != null){
@@ -92,41 +88,6 @@ public class ProductService {
 		Product mProductSaved = this.iProductRepository.save(pProductToSave);
 		
 		return mProductSaved;
-	}
-	
-	/**
-	 * Metodo que permite validar un <strong>producto</strong>, antes de enviarlo a la capa de Repository
-	 * Estas validaciones corresponden directamente con el modelo.
-	 * 
-	 * @param Product :
-	 * @return void
-	 * @throws BusinessException - Una excepcion de negocio con el detalle del error.
-	 */
-	private void validate(Product pProduct) throws BusinessException{
-		// valido que el nombre del producto no sea null
-		if (pProduct.getName() == null){
-			throw new BusinessException(ProductService.cNULL_NAME_EXCEPTION_MESSAGE);
-		}
-		// valido que el nombre del producto no esté vacío
-		if(pProduct.getName().length() == 0){
-			throw new BusinessException(ProductService.cEMPTY_NAME_EXCEPTION_MESSAGE);
-		}
-		// valido que el nombre del producto sea menor a 100 caracteres
-		if(pProduct.getName().length() > 100){
-			throw new BusinessException(ProductService.cLONG_NAME_EXCEPTION_MESSAGE);
-		}
-		// valido que la unidad de medida no sea null
-		if(pProduct.getMeasureUnit() == null){
-			throw new BusinessException(ProductService.cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE);
-		}
-		
-		// Validamos todos los Batches - Si hay
-		if(pProduct.getBatches() != null && pProduct.getBatches().size() > 0)
-		for(Batch mBatch : pProduct.getBatches())
-		{
-			BatchService.validate(mBatch);
-		}
-		
 	}
 
 	/**
