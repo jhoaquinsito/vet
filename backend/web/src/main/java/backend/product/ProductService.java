@@ -1,7 +1,9 @@
 package backend.product;
 
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -92,21 +94,13 @@ public class ProductService {
 			for (Batch bBatch : pProductToSave.getBatches()){
 				bBatch.setProduct(pProductToSave);
 			}
+		} else {
+			pProductToSave.setBatches(new HashSet<Batch>());
 		}
 		
 		// marco el producto como activo
 		pProductToSave.setActive(true);
 		
-		// guardo la categoria
-		this.iCategoryService.save(pProductToSave.getCategory());
-		// guardo las drogas
-		this.iDrugService.save(pProductToSave.getDrug());
-		// guardo los laboratorios
-		this.iManufacturerService.save(pProductToSave.getManufacturer());
-		// guardo las unidades de medida
-		this.iMeasureUnitService.save(pProductToSave.getMeasureUnit());
-		// guardo las presentaciones
-		this.iPresentationService.save(pProductToSave.getPresentation());
 		
 		// guardo el producto
 		Product mProductSaved = this.iProductRepository.save(pProductToSave);

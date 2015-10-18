@@ -19,6 +19,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.springframework.data.domain.Persistable;
+
 import backend.product.batch.Batch;
 import backend.product.category.Category;
 import backend.product.drug.Drug;
@@ -42,7 +44,7 @@ import backend.product.presentation.Presentation;
  */
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
-public class Product {
+public class Product implements Persistable<Long> {
 
 	public Product() {
 		super();
@@ -78,26 +80,26 @@ public class Product {
 	@Column(name="active")
 	private Boolean iActive;
 
-	@ManyToOne()
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="category")
 	private Category iCategory;
 
-	@ManyToOne()
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="manufacturer")
 	private Manufacturer iManufacturer;
 
-	@ManyToOne()
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="measure_unit")
 	private MeasureUnit iMeasureUnit;
 
-	@ManyToOne()
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="presentation")
 	private Presentation iPresentation;
 	
 	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
 	private Set<Batch> iBatches;
 
-	@ManyToOne()
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="drug")
     private Drug iDrug;
 
@@ -214,4 +216,16 @@ public class Product {
 		this.iActive = pActive;
 	}
 
+	@Override
+	public boolean isNew() {
+		boolean mProductoIsNew = (this.getId() == null);
+		boolean mCategoryIsNew = (this.getCategory().getId() == null);
+		boolean mPresentationIsNew = (this.getPresentation().getId() == null);
+		boolean mMeasureUnitIsNew = (this.getMeasureUnit().getId() == null);
+		boolean mDrugIsNew = (this.getDrug().getId() == null);
+		boolean mManufacturerIsNew = (this.getManufacturer().getId() == null);
+		
+		return mProductoIsNew && mCategoryIsNew && mPresentationIsNew 
+				&& mMeasureUnitIsNew && mDrugIsNew && mManufacturerIsNew;
+	}
 }
