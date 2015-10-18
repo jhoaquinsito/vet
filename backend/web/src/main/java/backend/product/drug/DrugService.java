@@ -1,10 +1,17 @@
 package backend.product.drug;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.product.category.Category;
 
 /**
  * Un <code>DrugService</code> representa un conjunto de servicios
@@ -36,10 +43,20 @@ public class DrugService {
 	/**
 	 * Método que permite leer todas las drogas.
 	 * 
-	 * @return lista de drogas
+	 * @return lista de drogas , ordenadas alfabeticamente de forma ascendente.
 	 */
 	public Iterable<Drug> getAll() {
-		return this.iDrugRepository.findAll();
+		
+		//Creamos la Direccion y la lista de Propiedades para hacer el Sorting.
+		Direction direction = Direction.ASC;
+		List<String> properties = new ArrayList<String>();
+		properties.add("iName");
+		//Creamos el objeto Sort para pasarle al query.
+		Sort sort = new Sort(direction,properties);
+		
+		//Usamos el nuevo findAll con el Sorting.
+		return this.iDrugRepository.findAll(sort);
+		
 	}
 
 	/**
