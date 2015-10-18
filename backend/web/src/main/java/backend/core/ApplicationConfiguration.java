@@ -57,9 +57,9 @@ public class ApplicationConfiguration {
 					// Write all SQL statements to console.
 					// This is an alternative to setting the log category
 					// org.hibernate.SQL to debug.
-					{ "hibernate.show_sql", "false" },
+					{ "hibernate.show_sql", "true" },
 					// Pretty print the SQL in the log and console.
-					{ "hibernate.format_sql", "false" },
+					{ "hibernate.format_sql", "true" },
 					// Automatically validates or exports schema DDL to the
 					// database when the
 					// SessionFactory is created. With create-drop, the database

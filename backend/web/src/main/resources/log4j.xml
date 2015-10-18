@@ -32,10 +32,19 @@
 		<level value="info" />
 	</logger>
 
+	<logger name="org.hibernate.SQL">
+		<level value="DEBUG"></level>
+	</logger>
+	<logger name="org.hibernate.type">
+		<level value="TRACE"></level>
+	</logger>
+
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />
 	</root>
+	
+	
 	
 </log4j:configuration>
