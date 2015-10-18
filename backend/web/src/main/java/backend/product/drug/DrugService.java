@@ -53,6 +53,12 @@ public class DrugService {
 	public Drug save(Drug pDrugToSave) throws BusinessException {
 		// valido la droga
 		this.validate(pDrugToSave);
+		
+		// si va a ser una inserción, valido que no exista
+		if (pDrugToSave.getId()==null && this.exists(pDrugToSave)) {
+			// ya existe el nombre
+			throw new BusinessException(DrugService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+		}
 
 		// guardo la droga
 		Drug mDrugSaved = this.iDrugRepository.save(pDrugToSave);

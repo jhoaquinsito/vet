@@ -52,6 +52,12 @@ public class PresentationService {
 	public Presentation save(Presentation pPresentationToSave) throws BusinessException {
 		// valido la presentación
 		this.validate(pPresentationToSave);
+		
+		// si va a ser una inserción, valido que no exista
+		if (pPresentationToSave.getId()==null && this.exists(pPresentationToSave)) {
+			// ya existe el nombre
+			throw new BusinessException(PresentationService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+		}
 
 		// guardo la presentación
 		Presentation mPresentationSaved = this.iPresentationRepository.save(pPresentationToSave);

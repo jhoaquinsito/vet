@@ -48,7 +48,13 @@ public class MeasureUnitService {
 	public MeasureUnit save(MeasureUnit pMeasureUnitToSave) throws BusinessException {
 		// valido la unidad de medida
 		this.validate(pMeasureUnitToSave);
-
+		
+		// si va a ser una inserción, valido que no exista
+		if (pMeasureUnitToSave.getId()==null && this.exists(pMeasureUnitToSave)) {
+			// ya existe la unidad de medida
+			throw new BusinessException(MeasureUnitService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+		}
+		
 		// guardo la unidad de medida
 		MeasureUnit mMeasureUnitSaved = this.iMeasureUnitRepository.save(pMeasureUnitToSave);
 
