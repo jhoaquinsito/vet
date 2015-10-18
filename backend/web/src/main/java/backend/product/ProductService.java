@@ -27,11 +27,6 @@ public class ProductService {
 	private ProductRepository iProductRepository;
 	private EntityValidator iEntityValidator;
 
-
-	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre sin valor ";
-	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre vacio ";
-	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre excede el limite de caracteres (100) ";
-	private static final String cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE = "Producto NO valido: Unidad de Medida vacia  ";
 	private static final String cDELETED_PRODUCT_EXCEPTION_MESSAGE = "Intentaste obtener un producto eliminado lógicamente.";
 	private static final String cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE = "Intentaste obtener un producto que no existe.";
 	private static final String cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE = "El producto que intentas guardar no se puede guardar: o no existe o está eliminado lógicamente.";
