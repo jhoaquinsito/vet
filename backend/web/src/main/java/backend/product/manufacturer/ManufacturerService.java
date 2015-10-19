@@ -9,6 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.utils.EntityValidator;
 
 /**
  * Un <code>ManufacturerService</code> representa un conjunto de servicios

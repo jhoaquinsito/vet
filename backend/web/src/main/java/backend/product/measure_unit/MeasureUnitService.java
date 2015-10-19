@@ -8,6 +8,7 @@ import backend.exception.BusinessException;
 import backend.product.measure_unit.MeasureUnit;
 import backend.product.measure_unit.MeasureUnitRepository;
 import backend.product.measure_unit.MeasureUnitService;
+import backend.utils.EntityValidator;
 
 public class MeasureUnitService {
 	
