@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -51,7 +52,7 @@ public class Batch {
 	private Long iId;
 
 	@Column(name = "stock")
-	@Size(min=0, message= BatchConsts.cSTOCK_SIZE_VIOLATION_MESSAGE)
+	@DecimalMin(value="0", message= BatchConsts.cSTOCK_SIZE_VIOLATION_MESSAGE)
 	@NotNull(message = BatchConsts.cSTOCK_NOTNULL_VIOLATION_MESSAGE)
 	private BigDecimal iStock;
 
