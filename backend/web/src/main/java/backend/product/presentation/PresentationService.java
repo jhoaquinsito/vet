@@ -4,6 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.utils.EntityValidator;
 
 /**
  * Un <code>PresentationService</code> representa un conjunto de servicios
@@ -16,10 +17,9 @@ import backend.exception.BusinessException;
 public class PresentationService {
 
 	private PresentationRepository iPresentationRepository;
+	private EntityValidator iEntityValidator;
+	
 	// constantes para mensajes de excepciones:
-	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Presentación no válida: nombre sin valor.";
-	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Presentación no válida: nombre vacío.";
-	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Presentación no válida: nombre con más de 30 caracteres.";
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Presentación no válida: el nombre ya existe en la base de datos.";
 
 	/**
@@ -29,7 +29,8 @@ public class PresentationService {
 		super();
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iPresentationRepository = (PresentationRepository) mAppContext.getBean(PresentationRepository.class);
+		this.iPresentationRepository = mAppContext.getBean(PresentationRepository.class);
+		this.iEntityValidator = new EntityValidator();
 	}
 
 	/**
@@ -51,7 +52,7 @@ public class PresentationService {
 	 */
 	public Presentation save(Presentation pPresentationToSave) throws BusinessException {
 		// valido la presentación
-		this.validate(pPresentationToSave);
+		this.iEntityValidator.validate(pPresentationToSave);
 		
 		// si va a ser una inserción, valido que no exista
 		if (pPresentationToSave.getId()==null && this.exists(pPresentationToSave)) {
@@ -87,33 +88,6 @@ public class PresentationService {
 		}
 
 		return mPresentationSaved;
-	}
-
-	/**
-	 * Método que valida si una presentación es correcta en términos del
-	 * dominio.
-	 * 
-	 * @param pPresentation
-	 *            presentación a validar
-	 * @throws BusinessException
-	 */
-	private void validate(Presentation pPresentation) throws BusinessException {
-		if (pPresentation.getName() != null) {
-			if (pPresentation.getName().length() > 0) {
-				if (pPresentation.getName().length() <= 30) {
-					// nombre OK
-				} else {
-					// nombre con más caracteres que lo permitido
-					throw new BusinessException(PresentationService.cLONG_NAME_EXCEPTION_MESSAGE);
-				}
-			} else {
-				// nombre vacío
-				throw new BusinessException(PresentationService.cEMPTY_NAME_EXCEPTION_MESSAGE);
-			}
-		} else {
-			// nombre con valor NULL
-			throw new BusinessException(PresentationService.cNULL_NAME_EXCEPTION_MESSAGE);
-		}
 	}
 
 	/**

@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Una <code>Presentation</code> es una representación del tipo de presentación
@@ -29,6 +31,8 @@ public class Presentation {
 	private Long iId;
 
 	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Size(min=1, max=30, message= PresentationConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = PresentationConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 
 	public Presentation(String pName) {
