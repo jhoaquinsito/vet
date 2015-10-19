@@ -85,22 +85,27 @@ public class Product implements Persistable<Long> {
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="category")
+	@Valid
 	private Category iCategory;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="manufacturer")
+	@Valid
 	private Manufacturer iManufacturer;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="measure_unit")
 	@NotNull(message=ProductConsts.cMEASURE_UNIT_NOTNULL_VIOLATION_MESSAGE)
+	@Valid
 	private MeasureUnit iMeasureUnit;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="presentation")
+	@Valid
 	private Presentation iPresentation;
 	
 	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
+	@Valid
 	private Set<Batch> iBatches;
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
