@@ -5,6 +5,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.utils.EntityValidator;
 
 /**
  * Un <code>DrugService</code> representa un conjunto de servicios
@@ -17,10 +18,8 @@ import backend.exception.BusinessException;
 public class DrugService {
 
 	private DrugRepository iDrugRepository;
+	private EntityValidator iEntityValidator;
 	// constantes para mensajes de excepciones:
-	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Droga no válida: nombre sin valor.";
-	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Droga no válida: nombre vacío.";
-	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Droga no válida: nombre con más de 30 caracteres.";
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Droga no válida: el nombre ya existe en la base de datos.";
 
 	/**
@@ -30,7 +29,8 @@ public class DrugService {
 		super();
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iDrugRepository = (DrugRepository) mAppContext.getBean(DrugRepository.class);
+		this.iDrugRepository = mAppContext.getBean(DrugRepository.class);
+		this.iEntityValidator = new EntityValidator();
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class DrugService {
 	 */
 	public Drug save(Drug pDrugToSave) throws BusinessException {
 		// valido la droga
-		this.validate(pDrugToSave);
+		this.iEntityValidator.validate(pDrugToSave);
 		
 		// si va a ser una inserción, valido que no exista
 		if (pDrugToSave.getId()==null && this.exists(pDrugToSave)) {
@@ -88,33 +88,6 @@ public class DrugService {
 		}
 
 		return mDrugSaved;
-	}
-
-	/**
-	 * Método que valida si una droga es correcta en términos del
-	 * dominio.
-	 * 
-	 * @param pDrug
-	 *            droga a validar
-	 * @throws BusinessException
-	 */
-	private void validate(Drug pDrug) throws BusinessException {
-		if (pDrug.getName() != null) {
-			if (pDrug.getName().length() > 0) {
-				if (pDrug.getName().length() <= 30) {
-					// nombre OK
-				} else {
-					// nombre con más caracteres que lo permitido
-					throw new BusinessException(DrugService.cLONG_NAME_EXCEPTION_MESSAGE);
-				}
-			} else {
-				// nombre vacío
-				throw new BusinessException(DrugService.cEMPTY_NAME_EXCEPTION_MESSAGE);
-			}
-		} else {
-			// nombre con valor NULL
-			throw new BusinessException(DrugService.cNULL_NAME_EXCEPTION_MESSAGE);
-		}
 	}
 
 	/**

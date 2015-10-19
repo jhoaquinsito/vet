@@ -31,7 +31,8 @@ public class Drug {
 	private Long iId;
 
 	@Column(name = "name", unique = false, nullable = false, length = 100)
-	@Size(min=1, max=30, message="Nombre de droga muy largo.")
+	@Size(min=1, max=30, message= DrugConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = DrugConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 
 	public Drug() {
