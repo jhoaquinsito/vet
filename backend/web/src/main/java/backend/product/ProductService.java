@@ -5,23 +5,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
-import backend.product.batch.BatchService;
-import backend.product.category.Category;
-import backend.product.category.CategoryService;
-import backend.product.drug.DrugService;
-import backend.product.manufacturer.ManufacturerService;
-import backend.product.presentation.PresentationService;
-import backend.product.measure_unit.MeasureUnitService;
+import backend.utils.EntityValidator;
 
 
 // TODO revisar si no hay que usar inyección de dependencias acá o
@@ -38,20 +32,11 @@ import backend.product.measure_unit.MeasureUnitService;
 public class ProductService {
 	
 	private ProductRepository iProductRepository;
-	private BatchService iBatchService;
-	private CategoryService iCategoryService;
-	private DrugService iDrugService;
-	private ManufacturerService iManufacturerService;
-	private MeasureUnitService iMeasureUnitService;
-	private PresentationService iPresentationService;
+	private EntityValidator iEntityValidator;
 
-
-	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre sin valor ";
-	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre vacio ";
-	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Producto NO valido: Nombre excede el limite de caracteres (100) ";
-	private static final String cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE = "Producto NO valido: Unidad de Medida vacia  ";
 	private static final String cDELETED_PRODUCT_EXCEPTION_MESSAGE = "Intentaste obtener un producto eliminado lógicamente.";
 	private static final String cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE = "Intentaste obtener un producto que no existe.";
+	private static final String cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Hubo un problema con alguna de las restricciones de la base de datos. Muy probablemente el nombre de un producto, o alguno de sus hijos, violó una restricción unique.";
 	private static final String cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE = "El producto que intentas guardar no se puede guardar: o no existe o está eliminado lógicamente.";
 	
 	/**
@@ -62,12 +47,8 @@ public class ProductService {
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 		this.iProductRepository = mAppContext.getBean(ProductRepository.class);
-		this.iBatchService = new BatchService();
-		this.iCategoryService = new CategoryService();
-		this.iDrugService = new DrugService();
-		this.iManufacturerService = new ManufacturerService();
-		this.iMeasureUnitService = new MeasureUnitService();
-		this.iPresentationService = new PresentationService();
+		this.iEntityValidator = new EntityValidator();
+		
 	}
 	
 	/**
@@ -90,9 +71,6 @@ public class ProductService {
 			}
 		}
 		
-		// valido si el producto tiene datos válidos
-		this.validate(pProductToSave);
-		
 		//TODO esto debería estar en otra capa anterior (al mapear DTO con domain)
 		// asocio el producto a sus lotes (si tiene)
 		if (pProductToSave.getBatches() != null){
@@ -106,46 +84,14 @@ public class ProductService {
 		// marco el producto como activo
 		pProductToSave.setActive(true);
 		
+		//valido la entidad
+		this.iEntityValidator.validate(pProductToSave);
 		
 		// guardo el producto
-		Product mProductSaved = this.iProductRepository.save(pProductToSave);
+		Product mProductSaved = this.tryToSave(pProductToSave);
+		
 		
 		return mProductSaved;
-	}
-	
-	/**
-	 * Metodo que permite validar un <strong>producto</strong>, antes de enviarlo a la capa de Repository
-	 * Estas validaciones corresponden directamente con el modelo.
-	 * 
-	 * @param Product :
-	 * @return void
-	 * @throws BusinessException - Una excepcion de negocio con el detalle del error.
-	 */
-	private void validate(Product pProduct) throws BusinessException{
-		// valido que el nombre del producto no sea null
-		if (pProduct.getName() == null){
-			throw new BusinessException(ProductService.cNULL_NAME_EXCEPTION_MESSAGE);
-		}
-		// valido que el nombre del producto no esté vacío
-		if(pProduct.getName().length() == 0){
-			throw new BusinessException(ProductService.cEMPTY_NAME_EXCEPTION_MESSAGE);
-		}
-		// valido que el nombre del producto sea menor a 100 caracteres
-		if(pProduct.getName().length() > 100){
-			throw new BusinessException(ProductService.cLONG_NAME_EXCEPTION_MESSAGE);
-		}
-		// valido que la unidad de medida no sea null
-		if(pProduct.getMeasureUnit() == null){
-			throw new BusinessException(ProductService.cNULL_MEASURE_UNIT_EXCEPTION_MESSAGE);
-		}
-		
-		// Validamos todos los Batches - Si hay
-		if(pProduct.getBatches() != null && pProduct.getBatches().size() > 0)
-		for(Batch mBatch : pProduct.getBatches())
-		{
-			BatchService.validate(mBatch);
-		}
-		
 	}
 
 	/**
@@ -224,6 +170,28 @@ public class ProductService {
 		// almaceno el producto desactivado y sin los lotes
 		this.iProductRepository.save(mProductToDelete);
 		
+	}
+	
+	/**
+	 * Método que guarda un producto en la base de datos.
+	 * 
+	 * @param pProductToSave producto a guardar
+	 * @return producto guardado o null, si hubo un error y no se pudo guardar
+	 * 
+	 * @throws BusinessException Excepcion producida si el producto no se pudo
+	 * guardar por problemas de restricciones en las tablas de la base de datos.
+	 */
+	private Product tryToSave(Product pProductToSave) throws BusinessException {
+		Product mProductSaved = null;
+		
+		try {
+			mProductSaved = this.iProductRepository.save(pProductToSave);
+		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
+			//TODO revisar por cual de las constraints falló (si fue por la de producto, o la de alguno de sus hijos)
+			throw new BusinessException(ProductService.cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+		}
+		
+		return mProductSaved;
 	}
 
 }

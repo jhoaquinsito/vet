@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Un <code>Manufacturer</code> es una representación de un laboratorio o
@@ -28,7 +30,9 @@ public class Manufacturer {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "manufacturer_id_seq")
 	private Long iId;
 
-	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Column(name = "name", unique = true, nullable = false, length = 100)
+	@Size(min=1, max=30, message= ManufacturerConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = ManufacturerConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 
 	public Manufacturer(String pName) {

@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.domain.Persistable;
 
@@ -57,7 +60,9 @@ public class Product implements Persistable<Long> {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="product_id_seq")
 	private Long iId;
 	
-	@Column(name="name", unique = false, nullable = false, length = 100)
+	@Column(name="name", unique = true, nullable = false, length = 100)
+	@Size(min=1, max=100, message= ProductConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = ProductConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 	
 	@Column(name="description")
@@ -80,25 +85,32 @@ public class Product implements Persistable<Long> {
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="category")
+	@Valid
 	private Category iCategory;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="manufacturer")
+	@Valid
 	private Manufacturer iManufacturer;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="measure_unit")
+	@NotNull(message=ProductConsts.cMEASURE_UNIT_NOTNULL_VIOLATION_MESSAGE)
+	@Valid
 	private MeasureUnit iMeasureUnit;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="presentation")
+	@Valid
 	private Presentation iPresentation;
 	
 	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
+	@Valid
 	private Set<Batch> iBatches;
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="drug")
+	@Valid
     private Drug iDrug;
 
 

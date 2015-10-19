@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Una <code>Category</code> es una representación de una categoría de
@@ -28,7 +30,9 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_id_seq")
 	private Long iId;
 
-	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Column(name = "name", unique = true, nullable = false, length = 100)
+	@Size(min=1, max=30, message= CategoryConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = CategoryConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 
 	public Category() {

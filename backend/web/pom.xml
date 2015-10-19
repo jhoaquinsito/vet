@@ -48,6 +48,12 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.6.0.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.2.2.Final</version>
+		</dependency>
+
 
 		<!-- Spring Data JPA -->
 		<dependency>
