@@ -24,10 +24,8 @@ import backend.exception.BusinessException;
 public class ManufacturerService {
 
 	private ManufacturerRepository iManufacturerRepository;
+	private EntityValidator iEntityValidator;
 	// constantes para mensajes de excepciones:
-	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Laboratorio no válido: nombre sin valor.";
-	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Laboratorio no válido: nombre vacío.";
-	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Laboratorio no válido: nombre con más de 30 caracteres.";
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Laboratorio no válido: el nombre ya existe en la base de datos.";
 
 	/**
@@ -39,6 +37,7 @@ public class ManufacturerService {
 		@SuppressWarnings("resource")
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 		this.iManufacturerRepository = mAppContext.getBean(ManufacturerRepository.class);
+		this.iEntityValidator = new EntityValidator();
 	}
 
 	/**
@@ -52,7 +51,7 @@ public class ManufacturerService {
 	 */
 	public Manufacturer save(Manufacturer pManufacturerToSave) throws BusinessException {
 		// Valido si el producto tiene datos válidos
-		this.validate(pManufacturerToSave);
+		this.iEntityValidator.validate(pManufacturerToSave);
 
 		// Guardo el laboratorio
 		Manufacturer mManufacturerSaved = this.iManufacturerRepository.save(pManufacturerToSave);
@@ -81,35 +80,6 @@ public class ManufacturerService {
 
 		return mResult;
 
-	}
-
-	/**
-	 * Metodo que permite validar una <strong>Laboratorio</strong>, antes de
-	 * enviarlo a la capa de Repository Estas validaciones corresponden
-	 * directamente con el modelo.
-	 * 
-	 * @param Manufacturer
-	 *            : Categoria a Validar
-	 * @return void
-	 * @throws BusinessException
-	 *             - Una excepcion de negocio con el detalle del error.
-	 */
-	private void validate(Manufacturer pManufacturer) throws BusinessException {
-		String mManufacturerName = pManufacturer.getName();
-
-		if (pManufacturer.getName().length() == 0) {
-			throw new BusinessException(ManufacturerService.cEMPTY_NAME_EXCEPTION_MESSAGE);
-		}
-		if (pManufacturer.getName().length() > 30) {
-			throw new BusinessException(ManufacturerService.cLONG_NAME_EXCEPTION_MESSAGE);
-		}
-		if (!this.getByName(mManufacturerName).isEmpty()) {
-			for (Manufacturer bManufacturer : this.getByName(mManufacturerName)) {
-				if (bManufacturer.getId() != pManufacturer.getId()) {
-					throw new BusinessException(ManufacturerService.cEXISTING_NAME_EXCEPTION_MESSAGE);
-				}
-			}
-		}
 	}
 
 	// TODO para que sirve esto? refactorizarlo y documentarlo

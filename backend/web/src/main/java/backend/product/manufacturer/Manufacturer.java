@@ -29,6 +29,8 @@ public class Manufacturer {
 	private Long iId;
 
 	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Size(min=1, max=30, message= ManufacturerConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = ManufacturerConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 
 	public Manufacturer(String pName) {
