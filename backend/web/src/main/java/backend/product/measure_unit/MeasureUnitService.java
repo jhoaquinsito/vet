@@ -1,7 +1,12 @@
 package backend.product.measure_unit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -32,9 +37,25 @@ public class MeasureUnitService {
 	 * Método que permite leer todas las unidades de medida.
 	 * 
 	 * @return lista de unidades de medida
+	 * @throws BusinessException 
 	 */
-	public Iterable<MeasureUnit> getAll() {
-		return this.iMeasureUnitRepository.findAll();
+	public Iterable<MeasureUnit> getAll() throws BusinessException {
+		try {
+			//Creamos la Direccion y la lista de Propiedades para hacer el Sorting.
+			Direction direction = Direction.ASC;
+			List<String> properties = new ArrayList<String>();
+			properties.add("iName");
+			//Creamos el objeto Sort para pasarle al query.
+			Sort sort = new Sort(direction,properties);
+		
+			return this.iMeasureUnitRepository.findAll(sort);
+	
+
+		} catch (Exception e) {
+			// TODO enviar un mensaje más amigable
+			throw new BusinessException(e.getMessage());
+		}
+
 	}
 
 	/**
@@ -119,8 +140,9 @@ public class MeasureUnitService {
 	 * @param pMeasureUnit
 	 *            presentación a checkear si existe
 	 * @return true si existe, false si no existe en la base de datos
+	 * @throws BusinessException 
 	 */
-	private Boolean exists(MeasureUnit pMeasureUnit) {
+	private Boolean exists(MeasureUnit pMeasureUnit) throws BusinessException {
 		// obtengo la lista completa
 		Iterable<MeasureUnit> mMeasureUnitList = this.getAll();
 

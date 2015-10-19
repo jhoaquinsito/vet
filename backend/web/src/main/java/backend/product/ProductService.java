@@ -1,12 +1,17 @@
 package backend.product;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
@@ -149,7 +154,32 @@ public class ProductService {
 	 * @throws BusinessException
 	 */
 	public Iterable<Product> getAll() throws BusinessException {
-		return this.iProductRepository.findAll();
+		List<Product> mResult = new ArrayList<Product>();
+		try {
+			//Creamos la Direccion y la lista de Propiedades para hacer el Sorting.
+			Direction direction = Direction.ASC;
+			List<String> properties = new ArrayList<String>();
+			properties.add("iName");
+			//Creamos el objeto Sort para pasarle al query.
+			Sort sort = new Sort(direction,properties);
+		
+			Iterator<Product> mIterator = this.iProductRepository.findAll(sort).iterator();
+	
+			while (mIterator.hasNext()) {
+				Product mProduct = mIterator.next();
+				if (mProduct.isActive())
+					mResult.add(mProduct);
+			}
+			// TODO catchear la excepción que corresponde y no una general
+		} catch (Exception e) {
+			// TODO enviar un mensaje más amigable
+			throw new BusinessException(e.getMessage());
+		}
+		
+		//Usamos el nuevo findAll con el Sorting.
+		return mResult;
+	
+
 	}
 	
 	/**

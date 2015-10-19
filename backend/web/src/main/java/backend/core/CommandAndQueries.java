@@ -99,7 +99,7 @@ public class CommandAndQueries {
 	}
 	
 	// TODO comentar este método
-	public List<PresentationDTO> getPresentations(){
+	public List<PresentationDTO> getPresentations() throws BusinessException{
 		PresentationService mPresentationService = new PresentationService();
 		
 		Iterable<Presentation> mPresentations = mPresentationService.getAll();
@@ -116,8 +116,9 @@ public class CommandAndQueries {
 	/**
 	 * Este método es una consulta que devuelve la lista completa de unidades de medida.
 	 * @return lista de unidades de medida
+	 * @throws BusinessException 
 	 */
-	public List<MeasureUnitDTO> getMeasureUnits(){
+	public List<MeasureUnitDTO> getMeasureUnits() throws BusinessException{
 		MeasureUnitService mMeasureUnitService = new MeasureUnitService();
 		
 		Iterable<MeasureUnit> mMeasureUnits = mMeasureUnitService.getAll();

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -113,8 +115,23 @@ public class ManufacturerService {
 	}
 
 	// TODO para que sirve esto? refactorizarlo y documentarlo
-	public Iterable<Manufacturer> getAll() {
-		return this.iManufacturerRepository.findAll();
+	public Iterable<Manufacturer> getAll() throws BusinessException {
+		try {
+			//Creamos la Direccion y la lista de Propiedades para hacer el Sorting.
+			Direction direction = Direction.ASC;
+			List<String> properties = new ArrayList<String>();
+			properties.add("iName");
+			//Creamos el objeto Sort para pasarle al query.
+			Sort sort = new Sort(direction,properties);
+		
+			return this.iManufacturerRepository.findAll(sort);
+	
+
+		} catch (Exception e) {
+			// TODO enviar un mensaje más amigable
+			throw new BusinessException(e.getMessage());
+		}
+
 	}
 
 }

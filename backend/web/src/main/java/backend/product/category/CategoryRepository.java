@@ -2,6 +2,8 @@ package backend.product.category;
 
 
 import org.springframework.stereotype.Repository;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -18,4 +20,16 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
 	// Tener en cuenta que, además de CrudRepository, existen otras clases que
 	// ofrecen funcionalidades, como las de paginación, que también se pueden
 	// utilizar en los repositorios.
+	/***
+	 * Método extendido de findAll del CrudRepository.
+	 * Obtiene la lista de <strong>Category</strong> pero ordenadas bajo el objeto <strong>Sort</strong>
+	 * pasado como parámetro.
+	 * El ordenamiento es realizado mediante SQL
+	 * @param sort:
+	 * 				Objeto de ordenamiento que especifica la <strong>Direction</strong> y los campos por 
+	 * 				el cual se hace el ordenamiento.
+	 * @return
+	 * 			Lista de <strong>Category</strong> ordenada por el objeto <strong>Sort</strong>
+	 */
+	Iterable<Category> findAll(Sort sort);
 }

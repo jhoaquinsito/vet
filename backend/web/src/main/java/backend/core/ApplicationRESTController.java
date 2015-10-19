@@ -103,9 +103,10 @@ public class ApplicationRESTController {
 	 * Método que permite recuperar la lista completa de Presentaciones.
 	 * 
 	 * @return Lista de presentaciones.
+	 * @throws BusinessException 
 	 */
 	@RequestMapping(value = "presentation", method = RequestMethod.GET)
-	public List<PresentationDTO> listPresentations() {
+	public List<PresentationDTO> listPresentations() throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
 		List<PresentationDTO> mPresentationDTOList = mCNQ.getPresentations();
@@ -117,9 +118,10 @@ public class ApplicationRESTController {
 	 * Método que permite recuperar la lista completa de Unidades de medida.
 	 * 
 	 * @return Lista de unidades de medida.
+	 * @throws BusinessException 
 	 */
 	@RequestMapping(value = "measure_unit", method = RequestMethod.GET)
-	public List<MeasureUnitDTO> listMeasureUnits() {
+	public List<MeasureUnitDTO> listMeasureUnits() throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
 		List<MeasureUnitDTO> mMeasureUnitDTOList = mCNQ.getMeasureUnits();
