@@ -12,10 +12,8 @@ import backend.product.measure_unit.MeasureUnitService;
 public class MeasureUnitService {
 	
 	private MeasureUnitRepository iMeasureUnitRepository;
+	private EntityValidator iEntityValidator;
 	// constantes para mensajes de excepciones:
-	private static final String cNULL_NAME_EXCEPTION_MESSAGE = "Unidad de medida no válida: nombre sin valor.";
-	private static final String cEMPTY_NAME_EXCEPTION_MESSAGE = "Unidad de medida no válida: nombre vacío.";
-	private static final String cLONG_NAME_EXCEPTION_MESSAGE = "Unidad de medida no válida: nombre con más de 30 caracteres.";
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Unidad de medida no válida: el nombre ya existe en la base de datos.";
 
 	/**
@@ -25,7 +23,8 @@ public class MeasureUnitService {
 		super();
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iMeasureUnitRepository = (MeasureUnitRepository) mAppContext.getBean(MeasureUnitRepository.class);
+		this.iMeasureUnitRepository = mAppContext.getBean(MeasureUnitRepository.class);
+		this.iEntityValidator = new EntityValidator();
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class MeasureUnitService {
 	 */
 	public MeasureUnit save(MeasureUnit pMeasureUnitToSave) throws BusinessException {
 		// valido la unidad de medida
-		this.validate(pMeasureUnitToSave);
+		this.iEntityValidator.validate(pMeasureUnitToSave);
 		
 		// si va a ser una inserción, valido que no exista
 		if (pMeasureUnitToSave.getId()==null && this.exists(pMeasureUnitToSave)) {
@@ -83,33 +82,6 @@ public class MeasureUnitService {
 		}
 
 		return mMeasureUnitSaved;
-	}
-
-	/**
-	 * Método que valida si una presentación es correcta en términos del
-	 * dominio.
-	 * 
-	 * @param pMeasureUnit
-	 *            presentación a validar
-	 * @throws BusinessException
-	 */
-	private void validate(MeasureUnit pMeasureUnit) throws BusinessException {
-		if (pMeasureUnit.getName() != null) {
-			if (pMeasureUnit.getName().length() > 0) {
-				if (pMeasureUnit.getName().length() <= 30) {
-					// nombre OK
-				} else {
-					// nombre con más caracteres que lo permitido
-					throw new BusinessException(MeasureUnitService.cLONG_NAME_EXCEPTION_MESSAGE);
-				}
-			} else {
-				// nombre vacío
-				throw new BusinessException(MeasureUnitService.cEMPTY_NAME_EXCEPTION_MESSAGE);
-			}
-		} else {
-			// nombre con valor NULL
-			throw new BusinessException(MeasureUnitService.cNULL_NAME_EXCEPTION_MESSAGE);
-		}
 	}
 
 	/**

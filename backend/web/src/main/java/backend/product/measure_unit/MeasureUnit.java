@@ -28,6 +28,8 @@ public class MeasureUnit {
 	private Long iId;
 
 	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Size(min=1, max=30, message= MeasureUnitConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = MeasureUnitConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 
 	public MeasureUnit(String pName) {
