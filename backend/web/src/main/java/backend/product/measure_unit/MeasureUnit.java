@@ -29,7 +29,7 @@ public class MeasureUnit {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "measure_unit_id_seq")
 	private Long iId;
 
-	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Column(name = "name", unique = true, nullable = false, length = 100)
 	@Size(min=1, max=30, message= MeasureUnitConsts.cNAME_SIZE_VIOLATION_MESSAGE)
 	@NotNull(message = MeasureUnitConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;

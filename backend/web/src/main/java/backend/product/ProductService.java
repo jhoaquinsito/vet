@@ -5,6 +5,8 @@ import java.util.HashSet;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
@@ -29,6 +31,7 @@ public class ProductService {
 
 	private static final String cDELETED_PRODUCT_EXCEPTION_MESSAGE = "Intentaste obtener un producto eliminado lógicamente.";
 	private static final String cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE = "Intentaste obtener un producto que no existe.";
+	private static final String cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Hubo un problema con alguna de las restricciones de la base de datos. Muy probablemente el nombre de un producto, o alguno de sus hijos, violó una restricción unique.";
 	private static final String cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE = "El producto que intentas guardar no se puede guardar: o no existe o está eliminado lógicamente.";
 	
 	/**
@@ -80,7 +83,8 @@ public class ProductService {
 		this.iEntityValidator.validate(pProductToSave);
 		
 		// guardo el producto
-		Product mProductSaved = this.iProductRepository.save(pProductToSave);
+		Product mProductSaved = this.tryToSave(pProductToSave);
+		
 		
 		return mProductSaved;
 	}
@@ -136,6 +140,28 @@ public class ProductService {
 		// almaceno el producto desactivado y sin los lotes
 		this.iProductRepository.save(mProductToDelete);
 		
+	}
+	
+	/**
+	 * Método que guarda un producto en la base de datos.
+	 * 
+	 * @param pProductToSave producto a guardar
+	 * @return producto guardado o null, si hubo un error y no se pudo guardar
+	 * 
+	 * @throws BusinessException Excepcion producida si el producto no se pudo
+	 * guardar por problemas de restricciones en las tablas de la base de datos.
+	 */
+	private Product tryToSave(Product pProductToSave) throws BusinessException {
+		Product mProductSaved = null;
+		
+		try {
+			mProductSaved = this.iProductRepository.save(pProductToSave);
+		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
+			//TODO revisar por cual de las constraints falló (si fue por la de producto, o la de alguno de sus hijos)
+			throw new BusinessException(ProductService.cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+		}
+		
+		return mProductSaved;
 	}
 
 }

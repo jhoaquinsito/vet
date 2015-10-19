@@ -30,7 +30,7 @@ public class Drug {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "drug_id_seq")
 	private Long iId;
 
-	@Column(name = "name", unique = false, nullable = false, length = 100)
+	@Column(name = "name", unique = true, nullable = false, length = 100)
 	@Size(min=1, max=30, message= DrugConsts.cNAME_SIZE_VIOLATION_MESSAGE)
 	@NotNull(message = DrugConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
