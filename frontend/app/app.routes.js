@@ -37,6 +37,19 @@ app.config(function($routeProvider) {
         action: 'product.stock'
     });
 
+    //proveedores
+    $routeProvider.when('/providers', {
+        controller: 'ProviderController',
+        templateUrl: 'app/views/provider/table-view.html',
+        action: 'provider.list'
+    });
+
+    $routeProvider.when('/providers/add', {
+        controller: 'ProviderController',
+        templateUrl: 'app/views/provider/form-view.html',
+        action: 'provider.add'
+    });
+
     //ruta no encontrada
     $routeProvider.otherwise({redirectTo: '/dashboard'});
 });
