@@ -1,4 +1,4 @@
-app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, PresentationService, ProductService, MessageService, config) {
+app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, MeasureUnitService, PresentationService, ProductService, MessageService, config) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -160,6 +160,10 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
         ManufacturerService.getList().then(function(response) {
             $scope.form.manufacturers = response.plain();
+        });
+
+        MeasureUnitService.getList().then(function(response) {
+            $scope.form.measureUnits = response.plain();
         });
 
         PresentationService.getList().then(function(response) {
