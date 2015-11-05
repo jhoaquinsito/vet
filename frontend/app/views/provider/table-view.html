@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="action-buttons">
+            <a ng-href="providers/add" class="btn btn-icon btn-info"><i class="fa fa-plus"></i>Agregar</a>
+        </div>
+        <div class="form-group form-group-sm">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" name="search" ng-model="table.search" placeholder="Ingrese una búsqueda">
+            </div>
+        </div>
+        <table class="table table-bordered table-hover table-main">
+            <tr>
+                <th class="col-xs-6">Proveedor</th>
+            </tr>
+            <tr dir-paginate="provider in filtered = (providers | filter: table.search | itemsPerPage: table.pageSize)">
+                <td class="table-cell-detail">
+                    <div class="text-important">{{provider.businessName}}</div>
+                    <div>{{provider.cuit}}</div>
+                </td>
+            </tr>
+            <tr ng-if="providers.length == 0 || filtered.length == 0">
+                <td class="table-cell-empty">No hay proveedores para mostrar</td>
+            </tr>
+        </table>
+        <div class="table-pagination">
+            <div dir-pagination-controls boundary-links="true"></div>
+        </div>
+    </div>
+</div>
