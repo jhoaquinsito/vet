@@ -1,0 +1,28 @@
+<form ng-submit="saveProviderAction(providerForm)" name="providerForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': providerForm.businessName.$dirty && providerForm.businessName.$error.required}">
+                        <label class="control-label mandatory">Razón social</label>
+                        <input type="text" class="form-control" name="businessName" ng-model="form.provider.businessName" required>
+                        <span ng-show="providerForm.businessName.$dirty && providerForm.businessName.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': providerForm.cuit.$dirty && providerForm.cuit.$error.required}">
+                        <label class="control-label mandatory">CUIT</label>
+                        <input type="text" class="form-control" name="cuit" ng-model="form.provider.cuit" required>
+                        <span ng-show="providerForm.cuit.$dirty && providerForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="providers" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>
