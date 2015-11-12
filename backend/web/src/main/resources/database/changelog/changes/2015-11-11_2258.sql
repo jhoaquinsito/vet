@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.4.4
 -- Dumped by pg_dump version 9.4.4
--- Started on 2015-11-11 22:58:36 ART
+-- Started on 2015-11-12 19:25:29 ART
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -14,290 +14,6 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
-
---
--- TOC entry 187 (class 1259 OID 17499)
--- Name: batch; Type: TABLE; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE TABLE batch (
-    id integer NOT NULL,
-    stock numeric(17,4),
-    last_update_on timestamp without time zone,
-    deleted_on timestamp without time zone,
-    last_update_user character varying,
-    product integer NOT NULL,
-    iso_due_date integer
-);
-
-
-ALTER TABLE batch OWNER TO vet;
-
---
--- TOC entry 186 (class 1259 OID 17497)
--- Name: batch_id_seq; Type: SEQUENCE; Schema: public; Owner: vet
---
-
-CREATE SEQUENCE batch_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE batch_id_seq OWNER TO vet;
-
---
--- TOC entry 2158 (class 0 OID 0)
--- Dependencies: 186
--- Name: batch_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vet
---
-
-ALTER SEQUENCE batch_id_seq OWNED BY batch.id;
-
-
---
--- TOC entry 177 (class 1259 OID 17432)
--- Name: manufacturer; Type: TABLE; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE TABLE manufacturer (
-    id integer NOT NULL,
-    name character varying(30) NOT NULL
-);
-
-
-ALTER TABLE manufacturer OWNER TO vet;
-
---
--- TOC entry 176 (class 1259 OID 17430)
--- Name: manufacturer_id_seq; Type: SEQUENCE; Schema: public; Owner: vet
---
-
-CREATE SEQUENCE manufacturer_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE manufacturer_id_seq OWNER TO vet;
-
---
--- TOC entry 2159 (class 0 OID 0)
--- Dependencies: 176
--- Name: manufacturer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vet
---
-
-ALTER SEQUENCE manufacturer_id_seq OWNED BY manufacturer.id;
-
-
---
--- TOC entry 179 (class 1259 OID 17440)
--- Name: measure_unit; Type: TABLE; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE TABLE measure_unit (
-    id integer NOT NULL,
-    name character varying(30) NOT NULL
-);
-
-
-ALTER TABLE measure_unit OWNER TO vet;
-
---
--- TOC entry 178 (class 1259 OID 17438)
--- Name: measure_unit_id_seq; Type: SEQUENCE; Schema: public; Owner: vet
---
-
-CREATE SEQUENCE measure_unit_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE measure_unit_id_seq OWNER TO vet;
-
---
--- TOC entry 2160 (class 0 OID 0)
--- Dependencies: 178
--- Name: measure_unit_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vet
---
-
-ALTER SEQUENCE measure_unit_id_seq OWNED BY measure_unit.id;
-
-
---
--- TOC entry 181 (class 1259 OID 17448)
--- Name: presentation; Type: TABLE; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE TABLE presentation (
-    id integer NOT NULL,
-    name character varying(30) NOT NULL
-);
-
-
-ALTER TABLE presentation OWNER TO vet;
-
---
--- TOC entry 180 (class 1259 OID 17446)
--- Name: presentation_id_seq; Type: SEQUENCE; Schema: public; Owner: vet
---
-
-CREATE SEQUENCE presentation_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE presentation_id_seq OWNER TO vet;
-
---
--- TOC entry 2161 (class 0 OID 0)
--- Dependencies: 180
--- Name: presentation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vet
---
-
-ALTER SEQUENCE presentation_id_seq OWNED BY presentation.id;
-
-
---
--- TOC entry 185 (class 1259 OID 17464)
--- Name: product; Type: TABLE; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE TABLE product (
-    id integer NOT NULL,
-    name character varying(100) NOT NULL,
-    description character varying,
-    minimum_stock numeric(17,4),
-    unit_price numeric(17,4),
-    last_update_on timestamp without time zone,
-    deleted_on timestamp without time zone,
-    last_update_user character varying,
-    cost numeric(17,4),
-    utility numeric(17,4),
-    category integer,
-    presentation integer,
-    measure_unit integer NOT NULL,
-    manufacturer integer,
-    active boolean DEFAULT true NOT NULL,
-    drug integer,
-    iva numeric(4,2) DEFAULT 0
-);
-
-
-ALTER TABLE product OWNER TO vet;
-
---
--- TOC entry 184 (class 1259 OID 17462)
--- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: vet
---
-
-CREATE SEQUENCE product_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE product_id_seq OWNER TO vet;
-
---
--- TOC entry 2162 (class 0 OID 0)
--- Dependencies: 184
--- Name: product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vet
---
-
-ALTER SEQUENCE product_id_seq OWNED BY product.id;
-
-
---
--- TOC entry 2004 (class 2604 OID 17502)
--- Name: id; Type: DEFAULT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY batch ALTER COLUMN id SET DEFAULT nextval('batch_id_seq'::regclass);
-
-
---
--- TOC entry 1998 (class 2604 OID 17435)
--- Name: id; Type: DEFAULT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY manufacturer ALTER COLUMN id SET DEFAULT nextval('manufacturer_id_seq'::regclass);
-
-
---
--- TOC entry 1999 (class 2604 OID 17443)
--- Name: id; Type: DEFAULT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY measure_unit ALTER COLUMN id SET DEFAULT nextval('measure_unit_id_seq'::regclass);
-
-
---
--- TOC entry 2000 (class 2604 OID 17451)
--- Name: id; Type: DEFAULT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY presentation ALTER COLUMN id SET DEFAULT nextval('presentation_id_seq'::regclass);
-
-
---
--- TOC entry 2001 (class 2604 OID 17467)
--- Name: id; Type: DEFAULT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY product ALTER COLUMN id SET DEFAULT nextval('product_id_seq'::regclass);
-
-
---
--- TOC entry 2153 (class 0 OID 17499)
--- Dependencies: 187
--- Data for Name: batch; Type: TABLE DATA; Schema: public; Owner: vet
---
-
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (1, 3.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 3, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (2, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 62, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (3, 6.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 31, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (4, 9.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 59, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (5, 180.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 6, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (6, 11.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 100, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (7, 23.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 51, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (8, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 16, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (9, 10.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 22, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (10, 13.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 88, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (11, 13.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 87, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (12, 8.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 563, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (13, 9.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 36, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (14, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 34, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (15, 11.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 75, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (16, 3.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 2, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (17, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 91, NULL);
-INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (18, 12.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 41, NULL);
-
-
---
--- TOC entry 2163 (class 0 OID 0)
--- Dependencies: 186
--- Name: batch_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
---
-
-SELECT pg_catalog.setval('batch_id_seq', 18, true);
-
 
 --
 -- TOC entry 2145 (class 0 OID 17432)
@@ -416,15 +132,6 @@ INSERT INTO manufacturer (id, name) VALUES (108, 'ZOOVET');
 
 
 --
--- TOC entry 2164 (class 0 OID 0)
--- Dependencies: 176
--- Name: manufacturer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
---
-
-SELECT pg_catalog.setval('manufacturer_id_seq', 108, true);
-
-
---
 -- TOC entry 2147 (class 0 OID 17440)
 -- Dependencies: 179
 -- Data for Name: measure_unit; Type: TABLE DATA; Schema: public; Owner: vet
@@ -434,15 +141,6 @@ INSERT INTO measure_unit (id, name) VALUES (1, 'Kilogramos');
 INSERT INTO measure_unit (id, name) VALUES (2, 'Litros');
 INSERT INTO measure_unit (id, name) VALUES (3, 'Unidades');
 INSERT INTO measure_unit (id, name) VALUES (4, 'No Especificado');
-
-
---
--- TOC entry 2165 (class 0 OID 0)
--- Dependencies: 178
--- Name: measure_unit_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
---
-
-SELECT pg_catalog.setval('measure_unit_id_seq', 4, true);
 
 
 --
@@ -463,15 +161,6 @@ INSERT INTO presentation (id, name) VALUES (9, 'POLVO');
 INSERT INTO presentation (id, name) VALUES (10, 'POMADA');
 INSERT INTO presentation (id, name) VALUES (11, 'SOLUCIÓN');
 INSERT INTO presentation (id, name) VALUES (12, 'SPRAY');
-
-
---
--- TOC entry 2166 (class 0 OID 0)
--- Dependencies: 180
--- Name: presentation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
---
-
-SELECT pg_catalog.setval('presentation_id_seq', 12, true);
 
 
 --
@@ -1236,7 +925,69 @@ INSERT INTO product (id, name, description, minimum_stock, unit_price, last_upda
 
 
 --
--- TOC entry 2167 (class 0 OID 0)
+-- TOC entry 2153 (class 0 OID 17499)
+-- Dependencies: 187
+-- Data for Name: batch; Type: TABLE DATA; Schema: public; Owner: vet
+--
+
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (1, 3.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 3, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (2, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 62, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (3, 6.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 31, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (4, 9.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 59, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (5, 180.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 6, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (6, 11.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 100, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (7, 23.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 51, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (8, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 16, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (9, 10.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 22, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (10, 13.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 88, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (11, 13.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 87, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (12, 8.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 563, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (13, 9.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 36, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (14, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 34, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (15, 11.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 75, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (16, 3.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 2, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (17, 1.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 91, NULL);
+INSERT INTO batch (id, stock, last_update_on, deleted_on, last_update_user, product, iso_due_date) VALUES (18, 12.0000, '2015-11-11 22:42:12.672882', '2015-11-11 22:42:12.672882', 'hardcode user', 41, NULL);
+
+
+--
+-- TOC entry 2158 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: batch_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
+--
+
+SELECT pg_catalog.setval('batch_id_seq', 18, true);
+
+
+--
+-- TOC entry 2159 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: manufacturer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
+--
+
+SELECT pg_catalog.setval('manufacturer_id_seq', 108, true);
+
+
+--
+-- TOC entry 2160 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: measure_unit_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
+--
+
+SELECT pg_catalog.setval('measure_unit_id_seq', 4, true);
+
+
+--
+-- TOC entry 2161 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: presentation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
+--
+
+SELECT pg_catalog.setval('presentation_id_seq', 12, true);
+
+
+--
+-- TOC entry 2162 (class 0 OID 0)
 -- Dependencies: 184
 -- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vet
 --
@@ -1244,190 +995,7 @@ INSERT INTO product (id, name, description, minimum_stock, unit_price, last_upda
 SELECT pg_catalog.setval('product_id_seq', 753, true);
 
 
---
--- TOC entry 2024 (class 2606 OID 17507)
--- Name: pk_batch; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY batch
-    ADD CONSTRAINT pk_batch PRIMARY KEY (id);
-
-
---
--- TOC entry 2006 (class 2606 OID 17437)
--- Name: pk_manufacturer; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY manufacturer
-    ADD CONSTRAINT pk_manufacturer PRIMARY KEY (id);
-
-
---
--- TOC entry 2010 (class 2606 OID 17445)
--- Name: pk_measure_unit; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY measure_unit
-    ADD CONSTRAINT pk_measure_unit PRIMARY KEY (id);
-
-
---
--- TOC entry 2014 (class 2606 OID 17453)
--- Name: pk_presentation; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY presentation
-    ADD CONSTRAINT pk_presentation PRIMARY KEY (id);
-
-
---
--- TOC entry 2022 (class 2606 OID 17472)
--- Name: pk_product; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY product
-    ADD CONSTRAINT pk_product PRIMARY KEY (id);
-
-
---
--- TOC entry 2026 (class 2606 OID 17509)
--- Name: uk_iso_due_date_product; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY batch
-    ADD CONSTRAINT uk_iso_due_date_product UNIQUE (iso_due_date, product);
-
-
---
--- TOC entry 2008 (class 2606 OID 17545)
--- Name: uk_manufacturer_name; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY manufacturer
-    ADD CONSTRAINT uk_manufacturer_name UNIQUE (name);
-
-
---
--- TOC entry 2012 (class 2606 OID 17547)
--- Name: uk_measure_unit_name; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY measure_unit
-    ADD CONSTRAINT uk_measure_unit_name UNIQUE (name);
-
-
---
--- TOC entry 2016 (class 2606 OID 17543)
--- Name: uk_presentation_name; Type: CONSTRAINT; Schema: public; Owner: vet; Tablespace: 
---
-
-ALTER TABLE ONLY presentation
-    ADD CONSTRAINT uk_presentation_name UNIQUE (name);
-
-
---
--- TOC entry 2017 (class 1259 OID 17493)
--- Name: fki_category_category; Type: INDEX; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE INDEX fki_category_category ON product USING btree (category);
-
-
---
--- TOC entry 2018 (class 1259 OID 17494)
--- Name: fki_manufacturer_manufacturer; Type: INDEX; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE INDEX fki_manufacturer_manufacturer ON product USING btree (manufacturer);
-
-
---
--- TOC entry 2019 (class 1259 OID 17495)
--- Name: fki_measure_unit_measure_unit; Type: INDEX; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE INDEX fki_measure_unit_measure_unit ON product USING btree (measure_unit);
-
-
---
--- TOC entry 2020 (class 1259 OID 17496)
--- Name: fki_presentation_presentation; Type: INDEX; Schema: public; Owner: vet; Tablespace: 
---
-
-CREATE INDEX fki_presentation_presentation ON product USING btree (presentation);
-
-
---
--- TOC entry 2034 (class 2620 OID 17532)
--- Name: auditfieldstriggerforbatch; Type: TRIGGER; Schema: public; Owner: vet
---
-
-CREATE TRIGGER auditfieldstriggerforbatch BEFORE INSERT OR UPDATE ON batch FOR EACH ROW EXECUTE PROCEDURE addauditfields();
-
-
---
--- TOC entry 2033 (class 2620 OID 17531)
--- Name: auditfieldstriggerforproduct; Type: TRIGGER; Schema: public; Owner: vet
---
-
-CREATE TRIGGER auditfieldstriggerforproduct BEFORE INSERT OR UPDATE ON product FOR EACH ROW EXECUTE PROCEDURE addauditfields();
-
-
---
--- TOC entry 2027 (class 2606 OID 17473)
--- Name: fk_category_category; Type: FK CONSTRAINT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY product
-    ADD CONSTRAINT fk_category_category FOREIGN KEY (category) REFERENCES category(id);
-
-
---
--- TOC entry 2031 (class 2606 OID 17533)
--- Name: fk_drug_drug; Type: FK CONSTRAINT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY product
-    ADD CONSTRAINT fk_drug_drug FOREIGN KEY (drug) REFERENCES drug(id);
-
-
---
--- TOC entry 2028 (class 2606 OID 17478)
--- Name: fk_manufacturer_manufacturer; Type: FK CONSTRAINT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY product
-    ADD CONSTRAINT fk_manufacturer_manufacturer FOREIGN KEY (manufacturer) REFERENCES manufacturer(id);
-
-
---
--- TOC entry 2029 (class 2606 OID 17483)
--- Name: fk_measure_unit_measure_unit; Type: FK CONSTRAINT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY product
-    ADD CONSTRAINT fk_measure_unit_measure_unit FOREIGN KEY (measure_unit) REFERENCES measure_unit(id);
-
-
---
--- TOC entry 2030 (class 2606 OID 17488)
--- Name: fk_presentation_presentation; Type: FK CONSTRAINT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY product
-    ADD CONSTRAINT fk_presentation_presentation FOREIGN KEY (presentation) REFERENCES presentation(id);
-
-
---
--- TOC entry 2032 (class 2606 OID 17510)
--- Name: fk_product_product; Type: FK CONSTRAINT; Schema: public; Owner: vet
---
-
-ALTER TABLE ONLY batch
-    ADD CONSTRAINT fk_product_product FOREIGN KEY (product) REFERENCES product(id);
-
-
--- Completed on 2015-11-11 22:58:36 ART
+-- Completed on 2015-11-12 19:25:29 ART
 
 --
 -- PostgreSQL database dump complete
