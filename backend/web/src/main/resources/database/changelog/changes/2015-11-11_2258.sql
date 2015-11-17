@@ -1,3 +1,14 @@
+--liquibase formatted sql
+--changeset lautaro:old_system_data splitStatements:false
+
+
+-- elimino los datos de las tablas product, manufacturer, presentation y batch
+DELETE FROM batch;
+DELETE FROM product;
+DELETE FROM manufacturer;
+DELETE FROM presentation;
+
+
 --
 -- PostgreSQL database dump
 --
