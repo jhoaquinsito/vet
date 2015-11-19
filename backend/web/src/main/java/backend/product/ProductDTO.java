@@ -19,6 +19,7 @@ public class ProductDTO {
 	private BigDecimal iUnitPrice;
 	private BigDecimal iCost;
 	private BigDecimal iUtility;
+	private BigDecimal iIva;
 	private CategoryDTO iCategory;
 	private ManufacturerDTO iManufacturer;
 	private MeasureUnitDTO iMeasureUnit;
@@ -80,6 +81,14 @@ public class ProductDTO {
 
 	public void setUtility(BigDecimal pUtility) {
 		this.iUtility = pUtility;
+	}
+	
+	public BigDecimal getIva() {
+		return iIva;
+	}
+
+	public void setIva(BigDecimal pIva) {
+		this.iIva = pIva;
 	}
 
 	public CategoryDTO getCategory() {

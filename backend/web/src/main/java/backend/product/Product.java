@@ -17,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -79,6 +80,10 @@ public class Product implements Persistable<Long> {
 	
 	@Column(name="utility")
 	private BigDecimal iUtility;
+	
+	@Digits(integer=2, fraction=1)
+	@Column(name="iva")
+	private BigDecimal iIva;
 	
 	@Column(name="active")
 	private Boolean iActive;
@@ -164,6 +169,14 @@ public class Product implements Persistable<Long> {
 
 	public void setUtility(BigDecimal pUtility) {
 		this.iUtility = pUtility;
+	}
+	
+	public BigDecimal getIva() {
+		return iIva;
+	}
+
+	public void setIva(BigDecimal pIva) {
+		this.iIva = pIva;
 	}
 
 	public Category getCategory() {

@@ -79,7 +79,7 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
 	public ProductDTO getProductById(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
-
+		ProductDTO productDto = mCNQ.getProduct(id);
 		return mCNQ.getProduct(id);
 	}
 
