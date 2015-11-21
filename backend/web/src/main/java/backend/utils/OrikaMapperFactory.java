@@ -14,6 +14,18 @@ import backend.product.measure_unit.MeasureUnit;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
+import backend.person.city.City;
+import backend.person.city.CityDTO;
+import backend.person.city.state.State;
+import backend.person.city.state.StateDTO;
+import backend.person.children.legal_person.LegalPerson;
+import backend.person.children.legal_person.LegalPersonDTO;
+import backend.person.children.real_person.RealPerson;
+import backend.person.children.real_person.RealPersonDTO;
+import backend.person.Person;
+import backend.person.PersonDTO;
+import backend.person.iva_category.IVACategory;
+import backend.person.iva_category.IVACategoryDTO;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -60,6 +72,24 @@ public class OrikaMapperFactory {
 
 		// ProductDTO to Product
 		mapperFactory.classMap(ProductDTO.class, Product.class).byDefault().register();
+		
+		// StateDTO to State
+		mapperFactory.classMap(StateDTO.class, State.class).byDefault().register();
+		
+		// CityDTO to City
+		mapperFactory.classMap(CityDTO.class, City.class).byDefault().register();
+		
+		// IVACategoryDTO to IVACategory
+		mapperFactory.classMap(IVACategoryDTO.class, IVACategory.class).byDefault().register();
+		
+		// PersonDTO to Person
+		mapperFactory.classMap(PersonDTO.class, Person.class).byDefault().register();
+		
+		// LegalPersonDTO to LegalPerson
+		mapperFactory.classMap(LegalPersonDTO.class, LegalPerson.class).use(PersonDTO.class, Person.class).byDefault().register();
+		
+		// RealPersonDTO to RealPerson
+		mapperFactory.classMap(RealPersonDTO.class, RealPerson.class).use(PersonDTO.class, Person.class).byDefault().register();
 
 		return mapperFactory.getMapperFacade();
 	}
