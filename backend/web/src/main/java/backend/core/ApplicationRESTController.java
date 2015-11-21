@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
+import backend.person.PersonDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.category.CategoryDTO;
@@ -197,6 +198,21 @@ public class ApplicationRESTController {
 		List<DrugDTO> mDrugDTOList = mCNQ.getDrugs();
 
 		return mDrugDTOList;
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de personas.
+	 * 
+	 * @return Lista de personas.
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "person", method = RequestMethod.GET)
+	public List<Object> listPeople() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<Object> mPeopleList = mCNQ.getPeople();
+
+		return mPeopleList;
 	}
 
 	/**

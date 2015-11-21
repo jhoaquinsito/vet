@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import backend.exception.BusinessException;
+import backend.person.PersonDTO;
+import backend.person.children.legal_person.LegalPerson;
+import backend.person.children.legal_person.LegalPersonDTO;
+import backend.person.children.legal_person.LegalPersonService;
+import backend.person.children.real_person.RealPerson;
+import backend.person.children.real_person.RealPersonDTO;
+import backend.person.children.real_person.RealPersonService;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
@@ -150,6 +157,32 @@ public class CommandAndQueries {
 		}
 		
 		return mCategoryDTOList;
+	}
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Categorías
+	 * @return lista de Categorias
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<Object> getPeople() throws BusinessException{
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		RealPersonService mRealPersonService = new RealPersonService();
+		
+		Iterable<LegalPerson> mLegalPersonList = mLegalPersonService.getAll();
+		
+		Iterable<RealPerson> mRealPersonList = mRealPersonService.getAll();
+		
+		List<Object> mPersonList = new ArrayList<Object>();
+		
+		for (LegalPerson bLegalPerson : mLegalPersonList){
+			mPersonList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
+		}
+		
+		for (RealPerson bRealPerson : mRealPersonList){
+			mPersonList.add(this.iMapper.map(bRealPerson,RealPersonDTO.class));
+		}
+		
+		return mPersonList;
 	}
 
 	/**
