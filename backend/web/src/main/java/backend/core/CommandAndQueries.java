@@ -8,9 +8,9 @@ import backend.person.PersonDTO;
 import backend.person.children.legal_person.LegalPerson;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.person.children.legal_person.LegalPersonService;
-import backend.person.children.real_person.RealPerson;
-import backend.person.children.real_person.RealPersonDTO;
-import backend.person.children.real_person.RealPersonService;
+import backend.person.children.natural_person.NaturalPerson;
+import backend.person.children.natural_person.NaturalPersonDTO;
+import backend.person.children.natural_person.NaturalPersonService;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
@@ -166,11 +166,11 @@ public class CommandAndQueries {
 	 */
 	public List<Object> getPeople() throws BusinessException{
 		LegalPersonService mLegalPersonService = new LegalPersonService();
-		RealPersonService mRealPersonService = new RealPersonService();
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
 		
 		Iterable<LegalPerson> mLegalPersonList = mLegalPersonService.getAll();
 		
-		Iterable<RealPerson> mRealPersonList = mRealPersonService.getAll();
+		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
 		
 		List<Object> mPersonList = new ArrayList<Object>();
 		
@@ -178,8 +178,8 @@ public class CommandAndQueries {
 			mPersonList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
 		}
 		
-		for (RealPerson bRealPerson : mRealPersonList){
-			mPersonList.add(this.iMapper.map(bRealPerson,RealPersonDTO.class));
+		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
+			mPersonList.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
 		}
 		
 		return mPersonList;

@@ -1,6 +1,7 @@
 package backend.person;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -38,10 +39,10 @@ public class Person  {
 	private String iEmail;	
 
 	@Column(name = "phone")
-	private Integer iPhone;
+	private BigInteger iPhone;
 
 	@Column(name = "mobile_phone")
-	private Integer iMobilePhone;
+	private BigInteger iMobilePhone;
 
 	@Column(name="renspa")
 	@Digits(integer=17, fraction=0, message= PersonConsts.cRENSPA_DIGITS_VIOLATION_MESSAGE)
@@ -49,7 +50,11 @@ public class Person  {
 
 	@Column(name="positive_balance")
 	@Digits(integer=13, fraction=4, message= PersonConsts.cPOSITIVE_BALANCE_DIGITS_VIOLATION_MESSAGE)
-	private BigDecimal iPositiveBalance;	
+	private BigDecimal iPositiveBalance;
+	
+	@Column(name="zip_code")
+	@Size(min=1, max=30, message= PersonConsts.cZIP_CODE_SIZE_VIOLATION_MESSAGE)
+	private String iZipCode;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="city")
@@ -91,19 +96,19 @@ public class Person  {
 		this.iEmail = iEmail;
 	}
 
-	public Integer getPhone() {
+	public BigInteger getPhone() {
 		return iPhone;
 	}
 
-	public void setPhone(Integer iPhone) {
+	public void setPhone(BigInteger iPhone) {
 		this.iPhone = iPhone;
 	}
 
-	public Integer getMobilePhone() {
+	public BigInteger getMobilePhone() {
 		return iMobilePhone;
 	}
 
-	public void setMobilePhone(Integer iMobilePhone) {
+	public void setMobilePhone(BigInteger iMobilePhone) {
 		this.iMobilePhone = iMobilePhone;
 	}
 
@@ -121,6 +126,14 @@ public class Person  {
 
 	public void setPositiveBalance(BigDecimal iPositiveBalance) {
 		this.iPositiveBalance = iPositiveBalance;
+	}
+	
+	public String getZipCode() {
+		return iZipCode;
+	}
+
+	public void setZipCode(String iZipCode) {
+		this.iZipCode = iZipCode;
 	}
 
 	public City getCity() {

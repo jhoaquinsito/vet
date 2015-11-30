@@ -1,32 +1,32 @@
-package backend.person.children.real_person;
+package backend.person.children.natural_person;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 
-public class RealPersonService {
+public class NaturalPersonService {
 	
-	private RealPersonRepository iRealPersonRepository;
+	private NaturalPersonRepository iNaturalPersonRepository;
 	
 	/**
 	 * Constructor.
 	 */
-	public RealPersonService() {
+	public NaturalPersonService() {
 		super();
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iRealPersonRepository = mAppContext.getBean(RealPersonRepository.class);
+		this.iNaturalPersonRepository = mAppContext.getBean(NaturalPersonRepository.class);
 	}
 	
 	/**
 	 * Método que permite obtener la lista de personas reales de forma
 	 * completa.
-	 * @return Iterable<RealPerson> Lista de personas reales.
+	 * @return Iterable<NaturalPerson> Lista de personas reales.
 	 * @throws BusinessException
 	 */
-	public Iterable<RealPerson> getAll() throws BusinessException {
-		return this.iRealPersonRepository.findAll();
+	public Iterable<NaturalPerson> getAll() throws BusinessException {
+		return this.iNaturalPersonRepository.findAll();
 	}
 
 }

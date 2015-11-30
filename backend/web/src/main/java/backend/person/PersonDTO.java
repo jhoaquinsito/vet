@@ -1,6 +1,7 @@
 package backend.person;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import backend.person.city.CityDTO;
 import backend.person.iva_category.IVACategoryDTO;
@@ -11,10 +12,11 @@ public class PersonDTO  {
 	private String iName;
 	private String iAddress;
 	private String iEmail;	
-	private Integer iPhone;
-	private Integer iMobilePhone;
+	private BigInteger iPhone;
+	private BigInteger iMobilePhone;
 	private BigDecimal iRENSPA;	
-	private BigDecimal iPositiveBalance;	
+	private BigDecimal iPositiveBalance;
+	private String iZipCode;
 	private CityDTO iCity;
 	private IVACategoryDTO iIVACategory;
 	
@@ -42,16 +44,16 @@ public class PersonDTO  {
 	public void setEmail(String pEmail) {
 		this.iEmail = pEmail;
 	}
-	public Integer getPhone() {
+	public BigInteger getPhone() {
 		return iPhone;
 	}
-	public void setPhone(Integer pPhone) {
+	public void setPhone(BigInteger pPhone) {
 		this.iPhone = pPhone;
 	}
-	public Integer getMobilePhone() {
+	public BigInteger getMobilePhone() {
 		return iMobilePhone;
 	}
-	public void setMobilePhone(Integer pMobilePhone) {
+	public void setMobilePhone(BigInteger pMobilePhone) {
 		this.iMobilePhone = pMobilePhone;
 	}
 	public BigDecimal getRENSPA() {
@@ -65,6 +67,12 @@ public class PersonDTO  {
 	}
 	public void setPositiveBalance(BigDecimal pPositiveBalance) {
 		this.iPositiveBalance = pPositiveBalance;
+	}
+	public String getZipCode() {
+		return iZipCode;
+	}
+	public void setZipCode(String pZipCode) {
+		this.iZipCode = pZipCode;
 	}
 	public CityDTO getCity() {
 		return iCity;
