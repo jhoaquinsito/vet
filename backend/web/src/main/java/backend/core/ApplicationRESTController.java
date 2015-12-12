@@ -1,5 +1,7 @@
 package backend.core;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
+import backend.person.Person;
 import backend.person.PersonDTO;
+import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.category.CategoryDTO;
@@ -200,20 +204,6 @@ public class ApplicationRESTController {
 		return mDrugDTOList;
 	}
 	
-	/**
-	 * Método que permite recuperar la lista completa de personas.
-	 * 
-	 * @return Lista de personas.
-	 * @throws BusinessException 
-	 */
-	@RequestMapping(value = "person", method = RequestMethod.GET)
-	public List<Object> listPeople() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-
-		List<Object> mPeopleList = mCNQ.getPeople();
-
-		return mPeopleList;
-	}
 
 	/**
 	 * Método API que permite crear una <code>Drug</code>
@@ -232,6 +222,55 @@ public class ApplicationRESTController {
 
 		return mId;
 	}
+	
+	
+	/**
+	 * Metodo API que permite crear una persona física.
+	 * 
+	 * @param NaturalPersonDTO
+	 *            : datos de la persona física a crear
+	 * @return Long : Identificador de la nueva persona física en la BD.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "natural_person", method = RequestMethod.POST)
+	public Long createNaturalPerson(@RequestBody NaturalPersonDTO person) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.saveNaturalPerson(person);
+
+		return mId;
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de personas que son clientes.
+	 * 
+	 * @return Lista de clientes.
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "client", method = RequestMethod.GET)
+	public List<Object> listClient() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<Object> mNaturalPeopleList = mCNQ.getNaturalPeople();
+
+		return mNaturalPeopleList;
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de personas.
+	 * 
+	 * @return Lista de personas.
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "person", method = RequestMethod.GET)
+	public List<Object> listPeople() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<Object> mPeopleList = mCNQ.getPeople();
+
+		return mPeopleList;
+	}
+	
 
 	/**
 	 * Método maneja las excepciones que se producen en el controlador.

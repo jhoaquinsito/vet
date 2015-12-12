@@ -20,8 +20,8 @@ import backend.person.city.state.State;
 import backend.person.city.state.StateDTO;
 import backend.person.children.legal_person.LegalPerson;
 import backend.person.children.legal_person.LegalPersonDTO;
-import backend.person.children.real_person.RealPerson;
-import backend.person.children.real_person.RealPersonDTO;
+import backend.person.children.natural_person.NaturalPerson;
+import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.iva_category.IVACategory;
@@ -89,7 +89,7 @@ public class OrikaMapperFactory {
 		mapperFactory.classMap(LegalPersonDTO.class, LegalPerson.class).use(PersonDTO.class, Person.class).byDefault().register();
 		
 		// RealPersonDTO to RealPerson
-		mapperFactory.classMap(RealPersonDTO.class, RealPerson.class).use(PersonDTO.class, Person.class).byDefault().register();
+		mapperFactory.classMap(NaturalPersonDTO.class, NaturalPerson.class).use(PersonDTO.class, Person.class).byDefault().register();
 
 		return mapperFactory.getMapperFacade();
 	}

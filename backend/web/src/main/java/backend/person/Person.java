@@ -56,11 +56,11 @@ public class Person  {
 	@Size(min=1, max=30, message= PersonConsts.cZIP_CODE_SIZE_VIOLATION_MESSAGE)
 	private String iZipCode;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
     @JoinColumn(name="city")
 	private City iCity;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.MERGE}) //, CascadeType.PERSIST
     @JoinColumn(name="IVA_category")
 	private IVACategory iIVACategory;
 

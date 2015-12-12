@@ -49,6 +49,7 @@ public class CommandAndQueries {
 	// MapperFacade de Orika (librería para mapping)
 	private MapperFacade iMapper; 
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
+	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
 	
 	
 	/**
@@ -160,8 +161,8 @@ public class CommandAndQueries {
 	}
 	
 	/**
-	 * Este método es una consulta que devuelve la lista completa de Categorías
-	 * @return lista de Categorias
+	 * Este método es una consulta que devuelve la lista completa de Personas
+	 * @return lista de Personas Físicas
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<Object> getPeople() throws BusinessException{
@@ -183,6 +184,25 @@ public class CommandAndQueries {
 		}
 		
 		return mPersonList;
+	}
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Personas Físicas
+	 * @return lista de Personas Físicas
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<Object> getNaturalPeople() throws BusinessException{
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
+		
+		List<Object> mNaturalPersonListRes = new ArrayList<Object>();
+		
+		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
+			mNaturalPersonListRes.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
+		}
+		
+		return mNaturalPersonListRes;
 	}
 
 	/**
@@ -321,6 +341,32 @@ public class CommandAndQueries {
 		// elimino el producto
 		mProductService.delete(pProductId);
 		
+	}
+
+	
+	/**
+	 * Este método es un comando que permite guardar un producto.
+	 * 
+	 * @param pProductDTO producto a guardar
+	 * @return identificador del producto guardado
+	 * @throws BusinessException 
+	 */
+	public Long saveNaturalPerson(NaturalPersonDTO pNaturalPersonDTO) throws BusinessException {
+		
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		// map dto to domain object
+		NaturalPerson mNaturalPerson;
+		if (pNaturalPersonDTO != null){
+			mNaturalPerson = iMapper.map(pNaturalPersonDTO, NaturalPerson.class);
+		} else {
+			throw new BusinessException(CommandAndQueries.cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE);
+		}
+		
+		
+		mNaturalPerson = mNaturalPersonService.save(mNaturalPerson);
+		
+		return mNaturalPerson.getId();
 	}
 
 }
