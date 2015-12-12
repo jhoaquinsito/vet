@@ -9,6 +9,7 @@ public class PersonDTO  {
 
 	private Long iId;
 	private String iName;
+	private String iLastName;
 	private String iAddress;
 	private String iEmail;	
 	private Integer iPhone;
@@ -29,6 +30,12 @@ public class PersonDTO  {
 	}
 	public void setName(String pName) {
 		this.iName = pName;
+	}
+	public String getLastName() {
+		return iLastName;
+	}
+	public void setLastName(String pLastName) {
+		this.iLastName = pLastName;
 	}
 	public String getAddress() {
 		return iAddress;

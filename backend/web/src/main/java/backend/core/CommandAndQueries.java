@@ -5,6 +5,7 @@ import java.util.List;
 
 import backend.exception.BusinessException;
 import backend.person.PersonDTO;
+import backend.person.PersonService;
 import backend.person.children.legal_person.LegalPerson;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.person.children.legal_person.LegalPersonService;
@@ -105,7 +106,11 @@ public class CommandAndQueries {
 		return mProductDTOList;
 	}
 	
-	// TODO comentar este método
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Presentaciones.
+	 * @return lista de Presentaciones
+	 * @throws BusinessException
+	 */
 	public List<PresentationDTO> getPresentations() throws BusinessException{
 		PresentationService mPresentationService = new PresentationService();
 		
@@ -320,6 +325,100 @@ public class CommandAndQueries {
 		
 		// elimino el producto
 		mProductService.delete(pProductId);
+		
+	}
+
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Proveedores.
+	 * Un proveedor es una persona legal que tiene asociados productos, y que además
+	 * está activo.
+	 * @return lista de Persona Legal.
+	 * @throws BusinessException
+	 */
+	public List<LegalPersonDTO> getSuppliers() throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		
+		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		
+		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
+		
+		for (LegalPerson bLegalPerson : mLegalPerson){
+			if(bLegalPerson.getProducts() != null && bLegalPerson.getProducts().size() > 0)
+			mLegalPersonDTOList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
+		}
+		
+		return mLegalPersonDTOList;
+	}
+	
+	/***
+	 * Este método es una consulta que devuelve la lista completa de Personas Legales
+	 * cuya única condición es que estén activos.
+	 * está activo.
+	 * @return lista de Persona Legal.
+	 * @throws BusinessException
+	 */
+	public List<LegalPersonDTO> getLegalPersons() throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		
+		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		
+		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
+		
+		for (LegalPerson bLegalPerson : mLegalPerson){
+			mLegalPersonDTOList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
+		}
+		
+		return mLegalPersonDTOList;
+	}
+
+	
+	/**
+	 * Este método es un comando que permite guardar un LegalPerson
+	 * @param pLegalPersonDTO : Persona legal a guardar.
+	 * @return identificador de la Persona que es una Persona Legal.
+	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 */
+	public Long saveLegalPerson(LegalPersonDTO pLegalPersonDTO) throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		
+		// map dto to domain object
+		LegalPerson mLegalPerson = iMapper.map(pLegalPersonDTO, LegalPerson.class);
+		
+		mLegalPerson = mLegalPersonService.save(mLegalPerson);
+		
+		return mLegalPerson.getId();
+	}
+
+	
+
+	/**
+	 * Este método es una consulta que obtiene una persona legal a partir de
+	 * su identificador.
+	 * @param pLegalPersonId: identificador de la persona legal.
+	 * @return persona legal encontrada
+	 * @throws BusinessException
+	 */
+	public LegalPersonDTO getLegalPerson(Long pLegalPersonId) throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		
+		LegalPerson mLegalPerson = mLegalPersonService.get(pLegalPersonId);
+		
+		LegalPersonDTO mLegalPersonDTO = this.iMapper.map(mLegalPerson, LegalPersonDTO.class);
+		
+		return mLegalPersonDTO;
+	}
+	
+	/**
+	 * Este método es un comando que elimina una Persona a partir de su identificador.
+	 * La eliminación es de tipo Lógica.
+	 * @param pPersonId identificador de la persona asociada.
+	 * @throws BusinessException errores de negocio al intentar hacer la operación
+	 */
+	public void deletePerson(Long pPersonId) throws BusinessException {
+		PersonService mPersonService = new PersonService();
+		
+		// elimino el producto
+		mPersonService.delete(pPersonId);
 		
 	}
 

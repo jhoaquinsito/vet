@@ -2,6 +2,7 @@ package backend.product;
 
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -21,8 +23,17 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.domain.Persistable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import backend.person.children.legal_person.LegalPerson;
 import backend.product.batch.Batch;
 import backend.product.category.Category;
 import backend.product.drug.Drug;
@@ -46,6 +57,7 @@ import backend.product.presentation.Presentation;
  */
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Product implements Persistable<Long> {
 
 	public Product() {
@@ -88,7 +100,7 @@ public class Product implements Persistable<Long> {
 	@Column(name="active")
 	private Boolean iActive;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
     @JoinColumn(name="category")
 	@Valid
 	private Category iCategory;
@@ -118,6 +130,9 @@ public class Product implements Persistable<Long> {
 	@Valid
     private Drug iDrug;
 
+//	@ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="iProducts")
+//	@JsonBackReference
+//	private Set<LegalPerson> iSuppliers; 
 
 	public String getName() {
 		return iName;
@@ -239,6 +254,16 @@ public class Product implements Persistable<Long> {
 		this.iActive = pActive;
 	}
 
+	
+//	@JsonBackReference
+//	public Set<LegalPerson> getSuppliers() {
+//		return iSuppliers;
+//	}
+//
+//	public void setSuppliers(Set<LegalPerson> pSuppliers) {
+//		this.iSuppliers = pSuppliers;
+//	}
+
 	@Override
 	public boolean isNew() {
 		boolean mProductoIsNew = (this.getId() == null);
@@ -251,4 +276,6 @@ public class Product implements Persistable<Long> {
 		return mProductoIsNew && mCategoryIsNew && mPresentationIsNew 
 				&& mMeasureUnitIsNew && mDrugIsNew && mManufacturerIsNew;
 	}
+
+	
 }

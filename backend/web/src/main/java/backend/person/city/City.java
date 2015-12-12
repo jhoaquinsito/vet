@@ -25,7 +25,7 @@ public class City {
 	@NotNull(message = CityConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
     @JoinColumn(name="state")
 	private State iState;
 

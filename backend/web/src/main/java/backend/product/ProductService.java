@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.person.children.legal_person.LegalPerson;
 import backend.product.batch.Batch;
 import backend.utils.EntityValidator;
 
@@ -80,6 +82,20 @@ public class ProductService {
 		} else {
 			pProductToSave.setBatches(new HashSet<Batch>());
 		}
+		
+		//TODO esto debería estar en otra capa anterior (al mapear DTO con domain)
+		// asocio el producto a sus lotes (si tiene)
+//		if (pProductToSave.getSuppliers() != null){
+//			for (LegalPerson bLegalPerson : pProductToSave.getSuppliers()){
+//				Set<Product> bLegalPersonProducts =  bLegalPerson.getProducts();
+//				if (bLegalPersonProducts == null)
+//					bLegalPersonProducts = new HashSet<Product>();
+//				bLegalPersonProducts.add(pProductToSave);
+//				bLegalPerson.setProducts(bLegalPersonProducts);
+//			}
+//		} else {
+//			pProductToSave.setSuppliers( new HashSet<LegalPerson>());
+//		}
 		
 		// marco el producto como activo
 		pProductToSave.setActive(true);

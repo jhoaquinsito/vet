@@ -28,6 +28,11 @@ public class Person  {
 	@Size(min=1, max=30, message= PersonConsts.cNAME_SIZE_VIOLATION_MESSAGE)
 	@NotNull(message = PersonConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
+	
+	@Column(name = "lastname")
+	@Size(min=1, max=30, message= PersonConsts.cNAME_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = PersonConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
+	private String iLastName;
 
 	@Column(name = "address")
 	@Size(min=1, max=100, message= PersonConsts.cADDRESS_SIZE_VIOLATION_MESSAGE)
@@ -51,14 +56,17 @@ public class Person  {
 	@Digits(integer=13, fraction=4, message= PersonConsts.cPOSITIVE_BALANCE_DIGITS_VIOLATION_MESSAGE)
 	private BigDecimal iPositiveBalance;	
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
     @JoinColumn(name="city")
 	private City iCity;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
     @JoinColumn(name="IVA_category")
 	private IVACategory iIVACategory;
 
+	@Column(name="active")
+	private Boolean iActive;
+	
 	public Long getId() {
 		return iId;
 	}
@@ -73,6 +81,14 @@ public class Person  {
 
 	public void setName(String iName) {
 		this.iName = iName;
+	}
+	
+	public String getLastName() {
+		return iLastName;
+	}
+
+	public void setLastName(String iLastName) {
+		this.iLastName = iLastName;
 	}
 
 	public String getAddress() {
@@ -137,6 +153,14 @@ public class Person  {
 
 	public void setIVACategory(IVACategory iIVACategory) {
 		this.iIVACategory = iIVACategory;
+	}
+	
+	public Boolean isActive() {
+		return iActive;
+	}
+
+	public void setActive(Boolean pActive) {
+		this.iActive = pActive;
 	}
 
 }
