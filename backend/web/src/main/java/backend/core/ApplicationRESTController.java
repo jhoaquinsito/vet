@@ -19,6 +19,7 @@ import backend.exception.ErrorDTO;
 import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.children.natural_person.NaturalPersonDTO;
+import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.category.CategoryDTO;
@@ -271,6 +272,88 @@ public class ApplicationRESTController {
 		return mPeopleList;
 	}
 	
+	/**
+	 * Metodo API que permite recuperar la lista de los distintos Legal_Person (Proveedores).
+	 * 
+	 * @return List<LegalPersonDTO>
+	 * 							: Lista de proveedores completa.
+	 * @throws BusinessException 
+	 * 							: Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "supplier", method = RequestMethod.GET)
+	public @ResponseBody List<LegalPersonDTO> listSupplier() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.getSuppliers();
+	}
+	
+	/**
+	 * Metodo API que permite recuperar la lista de los distintos Legal_Person (Proveedores).
+	 * 
+	 * @return List<LegalPersonDTO>
+	 * 							: Lista de proveedores completa.
+	 * @throws BusinessException 
+	 * 							: Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "legalperson", method = RequestMethod.GET)
+	public @ResponseBody List<LegalPersonDTO> listLegalPerson() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.getLegalPersons();
+	}
+	
+	
+	/**
+	 * Metodo API que permite crear un LegalPerson (Supplier).
+	 * 
+	 * @param LegalPersonDTO
+	 *            : datos del producto a crear
+	 * @return Long : Identificador de la nueva persona legal (Supplier) en la BD.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "legalperson", method = RequestMethod.POST)
+	public Long createLegalPerson(@RequestBody LegalPersonDTO supplier) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.saveLegalPerson(supplier);
+
+		return mId;
+	}
+	
+	/**
+	 * Metodo API que permite recuperar un LegalPerson especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return LegalPersonDTO : LegalPerson buscada.
+	 * @throws BusinessException
+	 *             el producto estaba eliminado lógicamente
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "legalperson/{id}", method = RequestMethod.GET)
+	public LegalPersonDTO getLegalPersonById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		LegalPersonDTO legalPersonDto = mCNQ.getLegalPerson(id);
+		return mCNQ.getLegalPerson(id);
+	}
+
+	/**
+	 * Metodo que permite eliminar un Persona (tanto LegalPerson como RealPerson) 
+	 * a partir de su identificador, es decir PersonId. 
+	 * Al eliminar la Person, la misma se da de baja lógicamente, usando su atributo.
+	 * 
+	 * @param id
+	 *            identificador de la Person (LegalPerson o RealPerson a eliminar)
+	 * @throws BusinessException
+	 *             errores al intentar realizar la operación
+	 */
+	@RequestMapping(value = "person/{id}", method = RequestMethod.DELETE)
+	public void deletePerson(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		mCNQ.deletePerson(id);
+	}
 
 	/**
 	 * Método maneja las excepciones que se producen en el controlador.
