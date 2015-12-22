@@ -20,7 +20,7 @@ public class NaturalPersonService {
 	private static final String cDELETED_PRODUCT_EXCEPTION_MESSAGE = null;
 	private static final String cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE = null;
 	private static final String cNATURAL_PERSON_DOESNT_EXIST_EXCEPTION_MESSAGE = "No existe la persona que se desea recuperar.";
-	private static final String cDELETED_NATURAL_PERSON_EXCEPTION_MESSAGE = null;
+	private static final String cDELETED_NATURAL_PERSON_EXCEPTION_MESSAGE = "La persona que se desea recuperar no esta activa.";
 	private static final String cCANNOT_SAVE_NATURAL_PERSON_EXCEPTION_MESSAGE = "No se pudo guardar la persona.";
 	private static final String cNATURAL_PERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Se violó alguna de las restricciones de la base de datos.";
 	private NaturalPersonRepository iNaturalPersonRepository;
@@ -105,7 +105,7 @@ public class NaturalPersonService {
 	 * @return persona física encontrada
 	 * @throws BusinessException intentó obtener una persona física eliminada lógicamente
 	 */
-	private NaturalPerson get(Long pId)throws BusinessException{
+	public NaturalPerson get(Long pId)throws BusinessException{
 		NaturalPerson mStoredNaturalPerson = this.iNaturalPersonRepository.findOne(pId);
 		
 		// si es null, es porque no existe ningua persona con dicho id
@@ -113,10 +113,10 @@ public class NaturalPersonService {
 			throw new BusinessException(NaturalPersonService.cNATURAL_PERSON_DOESNT_EXIST_EXCEPTION_MESSAGE);
 		}
 
-		// TODO:checkeo si la persona física NO está activo
-		/**if (!mStoredNaturalPerson.isActive()){
+		
+		if (!mStoredNaturalPerson.isActive()){
 			throw new BusinessException(NaturalPersonService.cDELETED_NATURAL_PERSON_EXCEPTION_MESSAGE);
-		}**/
+		}
 		
 		return mStoredNaturalPerson;
 	}

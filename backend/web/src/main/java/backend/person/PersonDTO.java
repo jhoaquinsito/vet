@@ -10,7 +10,6 @@ public class PersonDTO  {
 
 	private Long iId;
 	private String iName;
-	private String iLastName;
 	private String iAddress;
 	private String iEmail;	
 	private BigInteger iPhone;
@@ -20,6 +19,7 @@ public class PersonDTO  {
 	private String iZipCode;
 	private CityDTO iCity;
 	private IVACategoryDTO iIVACategory;
+	private Boolean iActive;
 	
 	public Long getId() {
 		return iId;
@@ -32,12 +32,6 @@ public class PersonDTO  {
 	}
 	public void setName(String pName) {
 		this.iName = pName;
-	}
-	public String getLastName() {
-		return iLastName;
-	}
-	public void setLastName(String pLastName) {
-		this.iLastName = pLastName;
 	}
 	public String getAddress() {
 		return iAddress;
@@ -92,6 +86,12 @@ public class PersonDTO  {
 	}
 	public void setIVACategory(IVACategoryDTO pIVACategory) {
 		this.iIVACategory = pIVACategory;
+	}
+	public void setActive(Boolean pActive) {
+		this.iActive = pActive;
+	}
+	public Boolean getActive() {
+		return iActive;
 	}
 
 }

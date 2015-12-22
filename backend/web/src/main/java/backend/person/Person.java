@@ -29,11 +29,6 @@ public class Person  {
 	@Size(min=1, max=30, message= PersonConsts.cNAME_SIZE_VIOLATION_MESSAGE)
 	@NotNull(message = PersonConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
-	
-	@Column(name = "lastname")
-	@Size(min=1, max=30, message= PersonConsts.cNAME_SIZE_VIOLATION_MESSAGE)
-	@NotNull(message = PersonConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
-	private String iLastName;
 
 	@Column(name = "address")
 	@Size(min=1, max=100, message= PersonConsts.cADDRESS_SIZE_VIOLATION_MESSAGE)
@@ -69,7 +64,7 @@ public class Person  {
     	@JoinColumn(name="IVA_category")
 	private IVACategory iIVACategory;
 
-	@Column(name="active")
+	@Column(name="active", nullable = true)
 	private Boolean iActive;
 	
 	public Long getId() {
@@ -86,14 +81,6 @@ public class Person  {
 
 	public void setName(String iName) {
 		this.iName = iName;
-	}
-	
-	public String getLastName() {
-		return iLastName;
-	}
-
-	public void setLastName(String iLastName) {
-		this.iLastName = iLastName;
 	}
 
 	public String getAddress() {
@@ -171,9 +158,26 @@ public class Person  {
 	public Boolean isActive() {
 		return iActive;
 	}
-
+	
+	public Boolean getActive() {
+		return iActive;
+	}
+	
 	public void setActive(Boolean pActive) {
 		this.iActive = pActive;
 	}
+	 /** 
+	  * Antes de una inserción verifica si la persona no tiene estado definido
+	  * y en tal caso le asigna true por defecto
+	  **/
+	@PrePersist
+	void preInsert() {
+	   if ( this.getActive() == null ) { this.setActive(true); }
+	}
+	
+	 @PreUpdate
+	 void onPreUpdate() {
+		 if ( this.getActive() == null ) { this.setActive(true); }
+	 }
 
 }

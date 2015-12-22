@@ -85,7 +85,6 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
 	public ProductDTO getProductById(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
-		ProductDTO productDto = mCNQ.getProduct(id);
 		return mCNQ.getProduct(id);
 	}
 
@@ -223,40 +222,7 @@ public class ApplicationRESTController {
 
 		return mId;
 	}
-	
-	
-	/**
-	 * Metodo API que permite crear una persona física.
-	 * 
-	 * @param NaturalPersonDTO
-	 *            : datos de la persona física a crear
-	 * @return Long : Identificador de la nueva persona física en la BD.
-	 * @throws BusinessException
-	 */
-	@RequestMapping(value = "natural_person", method = RequestMethod.POST)
-	public Long createNaturalPerson(@RequestBody NaturalPersonDTO person) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-
-		Long mId = mCNQ.saveNaturalPerson(person);
-
-		return mId;
-	}
-	
-	/**
-	 * Método que permite recuperar la lista completa de personas que son clientes.
-	 * 
-	 * @return Lista de clientes.
-	 * @throws BusinessException 
-	 */
-	@RequestMapping(value = "client", method = RequestMethod.GET)
-	public List<Object> listClient() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-
-		List<Object> mNaturalPeopleList = mCNQ.getNaturalPeople();
-
-		return mNaturalPeopleList;
-	}
-	
+		
 	/**
 	 * Método que permite recuperar la lista completa de personas.
 	 * 
@@ -288,7 +254,7 @@ public class ApplicationRESTController {
 	}
 	
 	/**
-	 * Metodo API que permite recuperar la lista de los distintos Legal_Person (Proveedores).
+	 * Metodo API que permite recuperar la lista de los distintos Legal_Person.
 	 * 
 	 * @return List<LegalPersonDTO>
 	 * 							: Lista de proveedores completa.
@@ -304,18 +270,18 @@ public class ApplicationRESTController {
 	
 	
 	/**
-	 * Metodo API que permite crear un LegalPerson (Supplier).
+	 * Metodo API que permite crear un LegalPerson.
 	 * 
 	 * @param LegalPersonDTO
-	 *            : datos del producto a crear
-	 * @return Long : Identificador de la nueva persona legal (Supplier) en la BD.
+	 *            : datos de la persona jurídica a crear
+	 * @return Long : Identificador de la nueva persona legal en la BD.
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "legalperson", method = RequestMethod.POST)
-	public Long createLegalPerson(@RequestBody LegalPersonDTO supplier) throws BusinessException {
+	public Long createLegalPerson(@RequestBody LegalPersonDTO pLegalPerson) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.saveLegalPerson(supplier);
+		Long mId = mCNQ.saveLegalPerson(pLegalPerson);
 
 		return mId;
 	}
@@ -334,17 +300,16 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "legalperson/{id}", method = RequestMethod.GET)
 	public LegalPersonDTO getLegalPersonById(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
-		LegalPersonDTO legalPersonDto = mCNQ.getLegalPerson(id);
 		return mCNQ.getLegalPerson(id);
 	}
 
 	/**
-	 * Metodo que permite eliminar un Persona (tanto LegalPerson como RealPerson) 
+	 * Metodo que permite eliminar un Persona (tanto LegalPerson como NaturalPerson) 
 	 * a partir de su identificador, es decir PersonId. 
 	 * Al eliminar la Person, la misma se da de baja lógicamente, usando su atributo.
 	 * 
 	 * @param id
-	 *            identificador de la Person (LegalPerson o RealPerson a eliminar)
+	 *            identificador de la Person (LegalPerson o NaturalPerson a eliminar)
 	 * @throws BusinessException
 	 *             errores al intentar realizar la operación
 	 */
@@ -355,6 +320,70 @@ public class ApplicationRESTController {
 		mCNQ.deletePerson(id);
 	}
 
+	/**
+	 * Metodo API que permite crear una persona física.
+	 * 
+	 * @param NaturalPersonDTO
+	 *            : datos de la persona física a crear
+	 * @return Long : Identificador de la nueva persona física en la BD.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "naturalperson", method = RequestMethod.POST)
+	public Long createNaturalPerson(@RequestBody NaturalPersonDTO person) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.saveNaturalPerson(person);
+
+		return mId;
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de personas que son clientes.
+	 * 
+	 * @return Lista de clientes.
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "client", method = RequestMethod.GET)
+	public @ResponseBody List<PersonDTO> listClients() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.getClients();
+	}
+	
+	/**
+	 * Metodo API que permite recuperar un LegalPerson especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return LegalPersonDTO : LegalPerson buscada.
+	 * @throws BusinessException
+	 *             el producto estaba eliminado lógicamente
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "naturalperson/{id}", method = RequestMethod.GET)
+	public NaturalPersonDTO getNaturalPersonById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		return mCNQ.getNaturalPerson(id);
+	}
+	
+	/**
+	 * Metodo API que permite recuperar una persona física especificando su documento.
+	 * 
+	 * @param national_id
+	 *            : Número de documento de la entidad buscada.
+	 * @return NaturalPersonDTO : persona física buscada.
+	 * @throws BusinessException
+	 *             la persona esta eliminada lógicamente
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	/**@RequestMapping(value = "naturalperson/{national_id}", method = RequestMethod.GET)
+	public NaturalPersonDTO getNaturalPersonByNationalId(@PathVariable Integer national_id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		return mCNQ.getNaturalPerson(national_id);
+	}**/
+	
 	/**
 	 * Método maneja las excepciones que se producen en el controlador.
 	 * 

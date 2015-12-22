@@ -190,25 +190,6 @@ public class CommandAndQueries {
 		
 		return mPersonList;
 	}
-	
-	/**
-	 * Este método es una consulta que devuelve la lista completa de Personas Físicas
-	 * @return lista de Personas Físicas
-	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
-	 */
-	public List<Object> getNaturalPeople() throws BusinessException{
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
-		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
-		
-		List<Object> mNaturalPersonListRes = new ArrayList<Object>();
-		
-		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
-			mNaturalPersonListRes.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
-		}
-		
-		return mNaturalPersonListRes;
-	}
 
 	/**
 	 * Este método es un comando que permite guardar una Categoría
@@ -347,32 +328,7 @@ public class CommandAndQueries {
 		mProductService.delete(pProductId);
 		
 	}
-
-	
-	/**
-	 * Este método es un comando que permite guardar un producto.
-	 * 
-	 * @param pProductDTO producto a guardar
-	 * @return identificador del producto guardado
-	 * @throws BusinessException 
-	 */
-	public Long saveNaturalPerson(NaturalPersonDTO pNaturalPersonDTO) throws BusinessException {
 		
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
-		// map dto to domain object
-		NaturalPerson mNaturalPerson;
-		if (pNaturalPersonDTO != null){
-			mNaturalPerson = iMapper.map(pNaturalPersonDTO, NaturalPerson.class);
-		} else {
-			throw new BusinessException(CommandAndQueries.cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE);
-		}
-		
-		
-		mNaturalPerson = mNaturalPersonService.save(mNaturalPerson);
-		
-		return mNaturalPerson.getId();
-
 	/**
 	 * Este método es una consulta que devuelve la lista completa de Proveedores.
 	 * Un proveedor es una persona legal que tiene asociados productos, y que además
@@ -388,7 +344,7 @@ public class CommandAndQueries {
 		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
 		
 		for (LegalPerson bLegalPerson : mLegalPerson){
-			if(bLegalPerson.getProducts() != null && bLegalPerson.getProducts().size() > 0)
+			if(bLegalPerson.isSupplier())
 			mLegalPersonDTOList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
 		}
 		
@@ -434,8 +390,6 @@ public class CommandAndQueries {
 		return mLegalPerson.getId();
 	}
 
-	
-
 	/**
 	 * Este método es una consulta que obtiene una persona legal a partir de
 	 * su identificador.
@@ -464,6 +418,118 @@ public class CommandAndQueries {
 		
 		// elimino el producto
 		mPersonService.delete(pPersonId);
+	}
+
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Personas Físicas
+	 * @return lista de Personas Físicas
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<Object> getNaturalPeople() throws BusinessException{
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
+		
+		List<Object> mNaturalPersonListRes = new ArrayList<Object>();
+		
+		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
+			if(bNaturalPerson.isActive())
+			mNaturalPersonListRes.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
+		}
+		
+		return mNaturalPersonListRes;
+	}
+	
+	/**
+	 * Este método es un comando que permite guardar un producto.
+	 * 
+	 * @param pProductDTO producto a guardar
+	 * @return identificador del producto guardado
+	 * @throws BusinessException 
+	 */
+	public Long saveNaturalPerson(NaturalPersonDTO pNaturalPersonDTO) throws BusinessException {
+		
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		// map dto to domain object
+		NaturalPerson mNaturalPerson;
+		if (pNaturalPersonDTO != null){
+			mNaturalPerson = iMapper.map(pNaturalPersonDTO, NaturalPerson.class);
+		} else {
+			throw new BusinessException(CommandAndQueries.cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE);
+		}
+		
+		mNaturalPerson = mNaturalPersonService.save(mNaturalPerson);
+		
+		return mNaturalPerson.getId();
+	}
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Proveedores.
+	 * Un proveedor es una persona legal que tiene asociados productos, y que además
+	 * está activo.
+	 * @return lista de Persona Legal.
+	 * @throws BusinessException
+	 */
+	public List<PersonDTO> getClients() throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		
+		Iterable<NaturalPerson> mNaturalPerson = mNaturalPersonService.getAll();
+		
+		List<PersonDTO> mClientsList = new ArrayList<PersonDTO>();
+		
+		for (LegalPerson bLegalPerson : mLegalPerson){
+			if(bLegalPerson.isClient() && bLegalPerson.isActive())
+			mClientsList.add(this.iMapper.map(bLegalPerson, LegalPersonDTO.class));
+		}
+		
+		for (NaturalPerson bNaturalPerson : mNaturalPerson){
+			if(bNaturalPerson.isActive())
+			mClientsList.add(this.iMapper.map(bNaturalPerson, NaturalPersonDTO.class));
+		}
+		
+		return mClientsList;
+	}
+	
+	/**
+	 * Este método es una consulta que obtiene una persona física a partir de su documento.
+	 * @param pNatioalId: número de documento de la persona física.
+	 * @return persona física encontrada
+	 * @throws BusinessException
+	 */
+	public NaturalPersonDTO getNaturalPerson(Integer pNationalId) throws BusinessException {
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
+		
+		NaturalPersonDTO mNaturalPersonDTO = null;
+		
+		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
+			if(bNaturalPerson.getNationalId()==pNationalId)
+			mNaturalPersonDTO = this.iMapper.map(bNaturalPerson, NaturalPersonDTO.class);
+		}
+		
+		return mNaturalPersonDTO;
+	}
+	
+	/**
+	 * Este método es una consulta que obtiene una persona física a partir de
+	 * su identificador.
+	 * @param pPersonId: identificador de la persona.
+	 * @return persona física encontrada
+	 * @throws BusinessException
+	 */
+	public NaturalPersonDTO getNaturalPerson(Long pPersonId) throws BusinessException {
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		NaturalPerson mNaturalPerson = mNaturalPersonService.get(pPersonId);
+		
+		NaturalPersonDTO mNaturalPersonDTO = this.iMapper.map(mNaturalPerson, NaturalPersonDTO.class);
+		
+		return mNaturalPersonDTO;
 	}
 
 }

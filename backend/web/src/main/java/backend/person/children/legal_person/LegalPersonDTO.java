@@ -12,6 +12,8 @@ public class LegalPersonDTO extends PersonDTO  {
 	
 	private Set<ProductDTO> iProducts;
 	
+	private Boolean iClient;
+	
 	public BigDecimal getCUIT() {
 		return iCUIT;
 	}
@@ -23,6 +25,14 @@ public class LegalPersonDTO extends PersonDTO  {
 	}
 	public void setProducts(Set<ProductDTO> pProducts) {
 		this.iProducts = pProducts;
+	}
+	
+	public Boolean getClient() {
+		return iClient;
+	}
+
+	public void setClient(Boolean pClient) {
+		this.iClient = pClient;
 	}
 	
 }
