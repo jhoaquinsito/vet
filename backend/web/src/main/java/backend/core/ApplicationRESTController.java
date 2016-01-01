@@ -1,7 +1,5 @@
 package backend.core;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,17 +14,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
-import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
-import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
+import backend.sale.SaleDTO;
 
 /**
  * Este <code>Controlador</code> es el encargado de recibir los request desde la
@@ -421,4 +418,58 @@ public class ApplicationRESTController {
 		return mResponse;
 	}
 
+	
+	/*************** SALE *******************/
+	
+	/**
+	 * Metodo API que permite crear una venta (SALE).
+	 * 
+	 * @param SaleDTO
+	 *            : datos del saleo a crear
+	 * @return Long : Identificador del nuevo saleo en la BD.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "sale", method = RequestMethod.POST)
+	public Long createSale(@RequestBody SaleDTO sale) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.createSale(sale);
+
+		return mId;
+	}
+
+	/**
+	 * Metodo API que permite recuperar la lista de las distintas 
+	 * ventas (SALE).
+	 * 
+	 * @return List<SaleDTO>
+	 * 							: Lista de ventas completa
+	 * @throws BusinessException 
+	 * 							: Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "sale", method = RequestMethod.GET)
+	public @ResponseBody List<SaleDTO> listSales() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.getSales();
+	}
+
+	/**
+	 * Metodo API que permite recuperar un Sale especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return SaleDTO : saleo buscado.
+	 * @throws BusinessException
+	 *             el saleo estaba eliminado lógicamente
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "sale/{id}", method = RequestMethod.GET)
+	public SaleDTO getSaleById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		return mCNQ.getSale(id);
+	}
+	
+	/****************************************/
 }

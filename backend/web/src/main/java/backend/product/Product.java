@@ -2,7 +2,6 @@ package backend.product;
 
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,9 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -23,23 +23,18 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.domain.Persistable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import backend.person.children.legal_person.LegalPerson;
 import backend.product.batch.Batch;
 import backend.product.category.Category;
 import backend.product.drug.Drug;
 import backend.product.manufacturer.Manufacturer;
 import backend.product.measure_unit.MeasureUnit;
 import backend.product.presentation.Presentation;
+import backend.saleline.SaleLine;
 
 /**
 * Un <code>Product</code> es una representación de un tipo de producto. Un tipo
@@ -55,6 +50,7 @@ import backend.product.presentation.Presentation;
 * <strong>Drug</strong>, una lista de lotes: <strong>Batches</strong> y también
 * si está activo o no: <strong>Active</strong>.
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames={})})
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
@@ -130,6 +126,11 @@ public class Product implements Persistable<Long> {
 	@Valid
     private Drug iDrug;
 
+	//@OneToMany(mappedBy="iSaleLines", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
+	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "iProduct", cascade=CascadeType.ALL)
+//	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
+//	@Valid
+//	private Set<SaleLine> iSaleLines;
 //	@ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="iProducts")
 //	@JsonBackReference
 //	private Set<LegalPerson> iSuppliers; 
@@ -254,7 +255,13 @@ public class Product implements Persistable<Long> {
 		this.iActive = pActive;
 	}
 
-	
+//	public Set<SaleLine> getSaleLines() {
+//		return iSaleLines;
+//	}
+//
+//	public void setSaleLines(Set<SaleLine> pSaleLines) {
+//		this.iSaleLines = pSaleLines;
+//	}
 //	@JsonBackReference
 //	public Set<LegalPerson> getSuppliers() {
 //		return iSuppliers;
@@ -277,5 +284,16 @@ public class Product implements Persistable<Long> {
 				&& mMeasureUnitIsNew && mDrugIsNew && mManufacturerIsNew;
 	}
 
+	@PrePersist
+	protected
+	 void preInsert() {
+	   if ( this.isActive() == null ) { this.setActive(true); }
+	}
+	
+	 @PreUpdate
+	protected
+	 void onPreUpdate() {
+		 if ( this.isActive() == null ) { this.setActive(true); }
+	 }
 	
 }

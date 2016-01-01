@@ -1,0 +1,23 @@
+{
+   BORRAR ESTO: El ID define que sea un update o no.
+   "id":14,
+   "cuit":20357146410,
+   "products":[
+   ],
+   "address":"C Malvinas 394",
+   "name":"Persona Legal Test 4",
+   "positiveBalance":10.10,
+   "renspa":100,
+   "city":{
+      "name":"Cdelu",
+      "id":1
+   },
+   "phone":3442,
+   "mobilePhone":3445,
+   "ivacategory":{
+      "id":1,
+      "description":"IVA 21"
+   },
+   "lastName":"Apellidazo",
+   "email":"personalegal4@gmail.com"
+}

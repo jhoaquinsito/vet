@@ -14,6 +14,10 @@ import backend.product.measure_unit.MeasureUnit;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
+import backend.sale.Sale;
+import backend.sale.SaleDTO;
+import backend.saleline.SaleLine;
+import backend.saleline.SaleLineDTO;
 import backend.person.city.City;
 import backend.person.city.CityDTO;
 import backend.person.city.state.State;
@@ -91,6 +95,12 @@ public class OrikaMapperFactory {
 		// RealPersonDTO to RealPerson
 		mapperFactory.classMap(NaturalPersonDTO.class, NaturalPerson.class).use(PersonDTO.class, Person.class).byDefault().register();
 
+		// SaleDTO to Sale
+		mapperFactory.classMap(SaleDTO.class, Sale.class).byDefault().register();
+		
+		// SaleLineDTO to SaleLine
+		mapperFactory.classMap(SaleLineDTO.class, SaleLine.class).byDefault().register();
+		
 		return mapperFactory.getMapperFacade();
 	}
 

@@ -1,0 +1,73 @@
+{
+   //BORRAR ESTO : El "Id" hace que sea un update.
+   "id": 13
+   "cuit":20357146407,
+   "products":[
+      {
+         "name":"MIOTON X 100ML",
+         "id":1,
+         "suppliers":null,
+         "description":"MIOTON X 100ML",
+         "iva":21.00,
+         "drug":null,
+         "presentation":{
+            "name":"INYECTABLE",
+            "id":5
+         },
+         "cost":92.3000,
+         "measureUnit":{
+            "name":"No Especificado",
+            "id":4
+         },
+         "utility":30.0000,
+         "batches":[
+
+         ],
+         "manufacturer":{
+            "name":"SPORT HORSE",
+            "id":90
+         },
+         "minimumStock":1.0000,
+         "category":null,
+         "unitPrice":145.2000
+      },
+      {
+         "name":"PAVILION IVERMECTINA X 250 ML",
+         "id":12,
+         "suppliers":null,
+         "description":"PAVILION IVERMECTINA X 250 ML",
+         "iva":21.00,
+         "drug":null,
+         "presentation":null,
+         "cost":30.4000,
+         "measureUnit":{
+            "name":"No Especificado",
+            "id":4
+         },
+         "utility":30.0000,
+         "batches":[
+
+         ],
+         "manufacturer":null,
+         "minimumStock":null,
+         "category":null,
+         "unitPrice":47.8000
+      }
+   ],
+   "address":"C Malvinas 394",
+   "name":"Persona Legal Test 1",
+   "positiveBalance":10.10,
+   "renspa":100,
+   "city":{
+      "name":"Cdelu",
+      "id":1
+   },
+   "phone":3442,
+   "mobilePhone":3445,
+   "ivacategory":{
+      "id":1,
+      "description":"IVA 21"
+   },
+   "lastName":"Apellidazo",
+   "email":"personalegal1@gmail.com"
+}

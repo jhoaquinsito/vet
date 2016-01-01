@@ -1,22 +1,14 @@
 package backend.person.children.legal_person;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import backend.person.Person;
 import backend.product.Product;
 
@@ -100,4 +92,15 @@ public class LegalPerson extends Person {
 		return (iClient == null);
 	}
 
+	@PrePersist
+	protected
+	void preInsert() {
+		   if ( this.getClient() == null ) { this.setClient(true); }
+	}
+	
+	@PreUpdate
+	protected
+	 void onPreUpdate() {
+			 if ( this.getClient() == null ) { this.setClient(true); }
+	 }
 }

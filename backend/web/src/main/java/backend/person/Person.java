@@ -171,11 +171,13 @@ public class Person  {
 	  * y en tal caso le asigna true por defecto
 	  **/
 	@PrePersist
-	void preInsert() {
+	protected
+	 void preInsert() {
 	   if ( this.getActive() == null ) { this.setActive(true); }
 	}
 	
 	 @PreUpdate
+	protected
 	 void onPreUpdate() {
 		 if ( this.getActive() == null ) { this.setActive(true); }
 	 }

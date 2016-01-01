@@ -30,6 +30,10 @@ import backend.product.measure_unit.MeasureUnitService;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
 import backend.product.presentation.PresentationService;
+import backend.sale.Sale;
+import backend.sale.SaleCons;
+import backend.sale.SaleDTO;
+import backend.sale.SaleService;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
 
@@ -532,4 +536,83 @@ public class CommandAndQueries {
 		return mNaturalPersonDTO;
 	}
 
+	
+	
+	/** SALE **/
+	
+	/**
+	 * Este método es un comando que permite guardar una Venta (SALE).
+	 * 
+	 * @param pSaleDTO venta a guardar
+	 * @return identificador de la venta guardada
+	 * @throws BusinessException 
+	 */
+	public Long createSale(SaleDTO pSaleDTO) throws BusinessException {
+		
+		SaleService mSaleService = new SaleService();
+		
+		// map dto to domain object
+		Sale mSale;
+		if (pSaleDTO != null){
+			mSale = iMapper.map(pSaleDTO, Sale.class);
+		} else {
+			throw new BusinessException(SaleCons.cSALE_NULL_EXCEPTION_MESSAGE);
+		}
+		
+		
+		mSale = mSaleService.save(mSale);
+		
+		return mSale.getId();
+	}
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de ventas (Sale)
+	 * @return lista de ventas (SaleDTO)
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<SaleDTO> getSales() throws BusinessException{
+		SaleService mSaleService = new SaleService();
+		
+		Iterable<Sale> mSale = mSaleService.getAll();
+		
+		List<SaleDTO> mSaleDTOList = new ArrayList<SaleDTO>();
+		
+		for (Sale bSale : mSale){
+			mSaleDTOList.add(this.iMapper.map(bSale,SaleDTO.class));
+		}
+		
+		return mSaleDTOList;
+	}
+	
+	/**
+	 * Este método es una consulta que obtiene una venta (SALE) a partir de
+	 * su identificador.
+	 * @param pSaleId identificador del saleo
+	 * @return venta encontrada
+	 * @throws BusinessException la venta estaba eliminada lógicamente
+	 */
+	public SaleDTO getSale(Long pSaleId) throws BusinessException{
+		SaleService mSaleService = new SaleService();
+		
+		Sale mSale = mSaleService.get(pSaleId);
+		
+		SaleDTO mSaleDTO = this.iMapper.map(mSale, SaleDTO.class);
+		
+		return mSaleDTO;
+	}
+	
+	/**
+	 * Este método es un comando que elimina una venta (SALE) a partir de su identificador.
+	 * Al eliminar la venta (SALE), sus los lotes asociados son eliminados físicamente.
+	 * @param pSaleId identificador de la venta (SALE) a eliminar
+	 * @throws BusinessException errores de negocio al intentar hacer la operación
+	 */
+	public void deleteSale(Long pSaleId) throws BusinessException{
+		SaleService mSaleService = new SaleService();
+		
+		// elimino el saleo
+		mSaleService.delete(pSaleId);
+		
+	}
+	/**********/
 }

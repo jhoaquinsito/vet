@@ -3,13 +3,13 @@ package backend.product;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.batch.BatchDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
+import backend.saleline.SaleLineDTO;
 
 public class ProductDTO {
 
@@ -28,6 +28,7 @@ public class ProductDTO {
 	private DrugDTO iDrug;
 	private Set<BatchDTO> iBatches;
 //	private Set<LegalPersonDTO> iSuppliers;
+	//private Set<SaleLineDTO> iSaleLines;
 
 	public Long getId() {
 		return iId;
@@ -148,5 +149,14 @@ public class ProductDTO {
 //	public void setSuppliers(Set<LegalPersonDTO> pSuppliers) {
 //		this.iSuppliers = pSuppliers;
 //	}
+	
+//	public Set<SaleLineDTO> getiSaleLines() {
+//		return iSaleLines;
+//	}
+//
+//	public void setiSaleLines(Set<SaleLineDTO> iSaleLines) {
+//		this.iSaleLines = iSaleLines;
+//	}
+	
 
 }
