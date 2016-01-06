@@ -9,6 +9,8 @@ public class SaleLineDTO {
 	private float iQuantity ;
 
 	private float iUnit_Price;
+	
+	private float iDiscount;
 
 //	private SaleDTO iSale;
 		
@@ -37,6 +39,14 @@ public class SaleLineDTO {
 //	public void setSale(SaleDTO pSale) {
 //		this.iSale = pSale;
 //	}
+
+	public float getDiscount() {
+		return iDiscount;
+	}
+
+	public void setDiscount(float pDiscount) {
+		this.iDiscount = pDiscount;
+	}
 
 	public ProductDTO getProduct() {
 		return iProduct;

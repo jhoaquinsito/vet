@@ -49,6 +49,9 @@ public class SaleLine implements java.io.Serializable{
 	
 	@Column(name="unit_price")
 	private BigDecimal iUnit_Price;
+	
+	@Column(name="discount")
+	private BigDecimal iDiscount;
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="sale_id")
@@ -82,6 +85,14 @@ public class SaleLine implements java.io.Serializable{
 
 	public void setUnit_Price(BigDecimal pUnit_Price) {
 		this.iUnit_Price = pUnit_Price;
+	}
+
+	public BigDecimal getDiscount() {
+		return iDiscount;
+	}
+
+	public void setDiscount(BigDecimal pDiscount) {
+		this.iDiscount = pDiscount;
 	}
 
 	public Sale getSale() {
