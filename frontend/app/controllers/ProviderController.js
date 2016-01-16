@@ -14,6 +14,9 @@ app.controller('ProviderController', function($scope, $location, $rootScope, $ro
             case 'provider.add':
                 $scope.addProviderAction();
                 break;
+            case 'provider.edit':
+                $scope.editProviderAction();
+                break;
         }
     };
 
@@ -27,6 +30,27 @@ app.controller('ProviderController', function($scope, $location, $rootScope, $ro
 
     $scope.addProviderAction = function() {
         $rootScope.setTitle($scope.name, 'Agregar proveedor');
+    };
+
+    $scope.editProviderAction = function() {
+        $rootScope.setTitle($scope.name, 'Editar proveedor');
+
+        $scope.refreshFormData();
+    };
+
+    $scope.removeProviderAction = function(providerId) {
+        MessageService.confirm(MessageService.text('proveedor', 'remove', 'confirm', 'male')).then(function() {
+            var request = ProviderService.remove(providerId);
+
+            request.success = function(response) {
+                MessageService.message(MessageService.text('proveedor', 'remove', 'success', 'male'), 'success');
+            };
+            request.error = function(response) {
+                MessageService.message(MessageService.text('proveedor', 'remove', 'error', 'male'), 'danger');
+            };
+
+            request.then(request.success, request.error);
+        });
     };
 
     $scope.saveProviderAction = function(form) {
@@ -43,6 +67,21 @@ app.controller('ProviderController', function($scope, $location, $rootScope, $ro
         };
         request.error = function(response) {
             MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+
+            $location.path('providers');
+        };
+
+        request.then(request.success, request.error);
+    };
+
+    $scope.refreshFormData = function() {
+        var request = ProviderService.getById($routeParams.id);
+
+        request.success = function(response) {
+            $scope.form.product = response.plain();
+        };
+        request.error = function(response) {
+            MessageService.message('El proveedor solicitado no existe', 'danger');
 
             $location.path('providers');
         };
@@ -72,6 +111,8 @@ app.controller('ProviderController', function($scope, $location, $rootScope, $ro
 
         return form.$invalid;
     };
+
+
 
     $scope.init();
 });

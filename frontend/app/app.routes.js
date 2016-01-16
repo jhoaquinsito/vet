@@ -50,6 +50,12 @@ app.config(function($routeProvider) {
         action: 'provider.add'
     });
 
+    $routeProvider.when('/providers/edit/:id', {
+        controller: 'ProviderController',
+        templateUrl: 'app/views/provider/form-view.html',
+        action: 'provider.edit'
+    });
+
     //ruta no encontrada
     $routeProvider.otherwise({redirectTo: '/dashboard'});
 });

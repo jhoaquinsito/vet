@@ -12,6 +12,10 @@ app.factory('ProviderService', function(Restangular) {
     this.save = function(provider) {
         return service.post(provider);
     };
-
+    
+    this.remove = function(providerId) {
+        return service.one(providerId).remove();
+    };
+    
     return this;
 });
