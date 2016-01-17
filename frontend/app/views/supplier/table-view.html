@@ -3,7 +3,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="action-buttons">
-            <a ng-href="providers/add" class="btn btn-icon btn-info"><i class="fa fa-plus"></i>Agregar</a>
+            <a ng-href="suppliers/add" class="btn btn-icon btn-info"><i class="fa fa-plus"></i>Agregar</a>
         </div>
         <div class="form-group form-group-sm">
             <div class="input-group input-group-sm">
@@ -15,17 +15,17 @@
             <tr>
                 <th class="col-xs-6">Proveedor</th>
             </tr>
-            <tr dir-paginate="provider in filtered = (providers | filter: table.search | itemsPerPage: table.pageSize)">
+            <tr dir-paginate="supplier in filtered = (suppliers | filter: table.search | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
-                    <div class="text-important">{{provider.businessName}}</div>
-                    <div>{{provider.cuit}}</div>
+                    <div class="text-important">{{supplier.businessName}}</div>
+                    <div>{{supplier.cuit}}</div>
                 </td>
                 <td class="table-cell-actions">
-                    <a ng-href="providers/edit/{{provider.id}}" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></a>
-                    <button ng-click="removeProviderAction(provider.id)" class="btn btn-sm btn-info" data-title="Borrar" bs-tooltip><i class="fa fa-trash"></i></button>
+                    <a ng-href="suppliers/edit/{{supplier.id}}" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></a>
+                    <button ng-click="removeSupplierAction(supplier.id)" class="btn btn-sm btn-info" data-title="Borrar" bs-tooltip><i class="fa fa-trash"></i></button>
                 </td>
             </tr>
-            <tr ng-if="providers.length == 0 || filtered.length == 0">
+            <tr ng-if="suppliers.length == 0 || filtered.length == 0">
                 <td class="table-cell-empty">No hay proveedores para mostrar</td>
             </tr>
         </table>

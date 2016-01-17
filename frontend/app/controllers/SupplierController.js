@@ -1,26 +1,26 @@
-app.controller('ProviderController', function($scope, $location, $rootScope, $route, $routeParams, ProviderService, MessageService, config) {
+app.controller('SupplierController', function($scope, $location, $rootScope, $route, $routeParams, SupplierService, MessageService, config) {
     $scope.name = 'Proveedores';
     $scope.action = $route.current.action;
     $scope.table = {};
     $scope.form = {};
 
-    $scope.providers = [];
+    $scope.suppliers = [];
 
     $scope.init = function() {
         switch ($scope.action) {
-            case 'provider.list':
-                $scope.listProvidersAction();
+            case 'supplier.list':
+                $scope.listSuppliersAction();
                 break;
-            case 'provider.add':
-                $scope.addProviderAction();
+            case 'supplier.add':
+                $scope.addSupplierAction();
                 break;
-            case 'provider.edit':
-                $scope.editProviderAction();
+            case 'supplier.edit':
+                $scope.editSupplierAction();
                 break;
         }
     };
 
-    $scope.listProvidersAction = function() {
+    $scope.listSuppliersAction = function() {
         $rootScope.setTitle($scope.name, 'Listado de proveedores');
 
         $scope.table.pageSize = config.TABLE_PAGE_SIZE;
@@ -28,19 +28,19 @@ app.controller('ProviderController', function($scope, $location, $rootScope, $ro
         $scope.refreshTableData();
     };
 
-    $scope.addProviderAction = function() {
+    $scope.addSupplierAction = function() {
         $rootScope.setTitle($scope.name, 'Agregar proveedor');
     };
 
-    $scope.editProviderAction = function() {
+    $scope.editSupplierAction = function() {
         $rootScope.setTitle($scope.name, 'Editar proveedor');
 
         $scope.refreshFormData();
     };
 
-    $scope.removeProviderAction = function(providerId) {
+    $scope.removeSupplierAction = function(supplierId) {
         MessageService.confirm(MessageService.text('proveedor', 'remove', 'confirm', 'male')).then(function() {
-            var request = ProviderService.remove(providerId);
+            var request = SupplierService.remove(supplierId);
 
             request.success = function(response) {
                 MessageService.message(MessageService.text('proveedor', 'remove', 'success', 'male'), 'success');
@@ -53,29 +53,29 @@ app.controller('ProviderController', function($scope, $location, $rootScope, $ro
         });
     };
 
-    $scope.saveProviderAction = function(form) {
+    $scope.saveSupplierAction = function(form) {
         if ($scope.formValidation(form)) {
             return null;
         }
 
-        var request = ProviderService.save($scope.form.provider);
+        var request = SupplierService.save($scope.form.supplier);
 
         request.success = function(response) {
             MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
 
-            $location.path('providers');
+            $location.path('suppliers');
         };
         request.error = function(response) {
             MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
 
-            $location.path('providers');
+            $location.path('suppliers');
         };
 
         request.then(request.success, request.error);
     };
 
     $scope.refreshFormData = function() {
-        var request = ProviderService.getById($routeParams.id);
+        var request = SupplierService.getById($routeParams.id);
 
         request.success = function(response) {
             $scope.form.product = response.plain();
@@ -83,20 +83,20 @@ app.controller('ProviderController', function($scope, $location, $rootScope, $ro
         request.error = function(response) {
             MessageService.message('El proveedor solicitado no existe', 'danger');
 
-            $location.path('providers');
+            $location.path('suppliers');
         };
 
         request.then(request.success, request.error);
     };
 
     $scope.refreshTableData = function() {
-        ProviderService.getList().then(function(response) {
-            $scope.providers = response.plain();
+        SupplierService.getList().then(function(response) {
+            $scope.suppliers = response.plain();
         });
     };
 
     $scope.resetFormData = function() {
-        $scope.form.provider = {
+        $scope.form.supplier = {
             businessName: null,
             cuit: null
         };

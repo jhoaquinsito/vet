@@ -38,22 +38,22 @@ app.config(function($routeProvider) {
     });
 
     //proveedores
-    $routeProvider.when('/providers', {
-        controller: 'ProviderController',
-        templateUrl: 'app/views/provider/table-view.html',
-        action: 'provider.list'
+    $routeProvider.when('/suppliers', {
+        controller: 'SupplierController',
+        templateUrl: 'app/views/supplier/table-view.html',
+        action: 'supplier.list'
     });
 
-    $routeProvider.when('/providers/add', {
-        controller: 'ProviderController',
-        templateUrl: 'app/views/provider/form-view.html',
-        action: 'provider.add'
+    $routeProvider.when('/suppliers/add', {
+        controller: 'SupplierController',
+        templateUrl: 'app/views/supplier/form-view.html',
+        action: 'supplier.add'
     });
 
-    $routeProvider.when('/providers/edit/:id', {
-        controller: 'ProviderController',
-        templateUrl: 'app/views/provider/form-view.html',
-        action: 'provider.edit'
+    $routeProvider.when('/suppliers/edit/:id', {
+        controller: 'SupplierController',
+        templateUrl: 'app/views/supplier/form-view.html',
+        action: 'supplier.edit'
     });
 
     //ruta no encontrada
