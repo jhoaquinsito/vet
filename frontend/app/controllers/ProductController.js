@@ -126,7 +126,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             presentation: null,
             measureUnit: null,
             drug: null,
-            provider: null,
+            supplier: null,
             cost: null,
             utility: null,
             unitPrice: null,

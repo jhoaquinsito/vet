@@ -1,4 +1,4 @@
-app.factory('ProviderService', function(Restangular) {
+app.factory('SupplierService', function(Restangular) {
     var service = Restangular.service('supplier');
 
     this.getById = function(supplierId) {
