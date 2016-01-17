@@ -24,6 +24,8 @@ import backend.product.manufacturer.ManufacturerDTO;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
 import backend.sale.SaleDTO;
+import backend.utils.PrintItemDTO;
+import backend.utils.ZebraPrintHelper;
 
 /**
  * Este <code>Controlador</code> es el encargado de recibir los request desde la
@@ -36,6 +38,7 @@ import backend.sale.SaleDTO;
 @RequestMapping("api/")
 public class ApplicationRESTController {
 
+	
 	/**
 	 * Metodo API que permite crear un Product.
 	 * 
@@ -472,4 +475,30 @@ public class ApplicationRESTController {
 	}
 	
 	/****************************************/
+	
+	
+	/*********ZEBRA PRINTER*******/
+	
+	/***
+	 * Este método permite ejecutar una impresión de testing.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "printtest", method = RequestMethod.POST)
+	public void printTest() throws BusinessException {
+		
+		ZebraPrintHelper.PrintTest();
+	}
+	
+	/***
+	 * Este método permite ejecutar una impresión de testing.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "printbarcode", method = RequestMethod.POST)
+	public void printBarCode(@RequestBody PrintItemDTO dto) throws BusinessException {
+		
+		ZebraPrintHelper.PrintCode(dto.getCode());
+	}
+	
+	
+	/********************************/
 }
