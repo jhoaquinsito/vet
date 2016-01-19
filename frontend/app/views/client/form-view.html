@@ -1,0 +1,106 @@
+<form ng-submit="saveClientAction(clientForm)" name="clientForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.businessName.$dirty && clientForm.businessName.$error.required}">
+                        <label class="control-label mandatory">Tipo</label>
+                        <input type="text" class="form-control" name="clientType" ng-model="form.client.clientType" required>
+                        <span ng-show="clientForm.clientType.$dirty && clientForm.clientType.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div ng-if="form.client.clientType == 1">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
+                            <label class="control-label mandatory">Nombre</label>
+                            <input type="text" class="form-control" name="name" ng-model="form.client.name" required>
+                            <span ng-show="clientForm.name.$dirty && clientForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.lastname.$dirty && clientForm.lastname.$error.required}">
+                            <label class="control-label mandatory">Apellido</label>
+                            <input type="text" class="form-control" name="lastname" ng-model="form.client.lastname" required>
+                            <span ng-show="clientForm.lastname.$dirty && clientForm.lastname.$error.required" class="help-block">Este campo es obligatorio</span>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="form.client.clientType == 2">
+                    <div class="col-md-8">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.razon.$dirty && clientForm.razon.$error.required}">
+                            <label class="control-label mandatory">Razón Social</label>
+                            <input type="text" class="form-control" name="razon" ng-model="form.client.razon" required>
+                            <span ng-show="clientForm.razon.$dirty && clientForm.razon.$error.required" class="help-block">Este campo es obligatorio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div ng-if="form.client.clientType == 1">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">DNI</label>
+                            <input type="text" class="form-control" name="dni" ng-model="form.client.dni">
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="form.client.clientType == 2">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">CUIT</label>
+                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Dirección</label>
+                        <input type="text" class="form-control" name="address" ng-model="form.client.address">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Código Postal</label>
+                        <input type="text" class="form-control" name="zipcode" ng-model="form.client.zipcode">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Teléfono</label>
+                        <input type="text" class="form-control" name="phone" ng-model="form.client.phone">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Celular</label>
+                        <input type="text" class="form-control" name="mobile" ng-model="form.client.mobile">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Email</label>
+                        <input type="email" class="form-control" name="email" ng-model="form.client.email">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div ng-if="form.client.clientType == 2">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">Renspa</label>
+                            <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa">
+                        </div>
+                    </div>
+                </div>          
+            </div>
+
+            <div class="panel-footer">
+                <div class="text-right">
+                    <a ng-href="clients" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                    <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+                </div>
+            </div>
+        </div>
+</form>
