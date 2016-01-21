@@ -3,13 +3,16 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.businessName.$dirty && clientForm.businessName.$error.required}">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.clientType.$dirty && clientForm.clientType.$error.required}">
                         <label class="control-label mandatory">Tipo</label>
-                        <input type="text" class="form-control" name="clientType" ng-model="form.client.clientType" required>
+                        <select class="form-control" name="clientType" ng-model="form.client.clientType" required>
+                            <option value="1" selected="selected">Persona física</option>
+                            <option value="2">Persona legal</option>
+                        </select>
                         <span ng-show="clientForm.clientType.$dirty && clientForm.clientType.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
-                <div ng-if="form.client.clientType == 1">
+                <div ng-if="form.client.clientType == 2">
                     <div class="col-md-4">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
                             <label class="control-label mandatory">Nombre</label>
@@ -90,7 +93,7 @@
                     <div ng-if="form.client.clientType == 2">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Renspa</label>
-                            <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa">
+                            <select class="form-control" name="clientType" ng-model="form.client.clientType" required></select>
                         </div>
                     </div>
                 </div>          
