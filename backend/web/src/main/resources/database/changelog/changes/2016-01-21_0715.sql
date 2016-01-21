@@ -1,26 +1,31 @@
 --liquibase formatted sql
---changeset ggorosito:sale_implementation splitStatements:false
+--changeset ggorosito:sale_saleline_drop_and_recreate splitStatements:false
 
 
--- IMPLEMENTACION DE TABLAS "Sale" & "SaleLine"
-
--- Tablas que contiene este changeset (en orden):
---- Create table de sale
---- Create table de saleline
+-- Modificaciones que contiene este changeset (en orden):
+--- Borrado y creacion nuevamente de la tabla sale.
+--- Borrado y creacion nuevamente de la tabla saleline.
+--- Con esto se evita el problema del owner.
 
 ------------------------------------------------
 ------------------------------------------------
+
+
+DROP TABLE saleline;
+
+DROP TABLE sale;
+
 
 -- Table: sale
 
--- DROP TABLE sale;
+
 
 CREATE TABLE sale
 (
   id serial NOT NULL,
-  date timestamp without time zone,
-  invoiced boolean NOT NULL DEFAULT false,
-  paied_out boolean NOT NULL DEFAULT false,
+  date timestamp without time zone DEFAULT now(),
+  invoiced boolean NOT NULL,
+  paied_out boolean NOT NULL,
   person integer,
   CONSTRAINT pk_sale PRIMARY KEY (id),
   CONSTRAINT fk_person_person FOREIGN KEY (person)
@@ -32,19 +37,17 @@ WITH (
 );
 ALTER TABLE sale
   OWNER TO vet;
-
   
--- Table: saleline
-
--- DROP TABLE saleline;
-
+  -- Table: saleline
+  
 CREATE TABLE saleline
 (
   id serial NOT NULL ,
   sale_id integer NOT NULL,
   product_id integer NOT NULL,
-  quantity double precision NOT NULL DEFAULT 0,
-  unit_price numeric(17,4) NOT NULL DEFAULT 0,
+  quantity double precision DEFAULT 0,
+  unit_price numeric(17,4) DEFAULT 0,
+  discount numeric(4,2) DEFAULT 0.0,
   CONSTRAINT saleline_pkey PRIMARY KEY (id),
   CONSTRAINT fk_saleline_product_id FOREIGN KEY (product_id)
       REFERENCES product (id) MATCH SIMPLE
@@ -58,5 +61,5 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE saleline
-  OWNER TO vet
+  OWNER TO vet;
   
