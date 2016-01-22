@@ -504,7 +504,7 @@ public class ApplicationRESTController {
 	 * Este método permite ejecutar una impresión de testing.
 	 * @throws BusinessException
 	 */
-	@RequestMapping(value = "printbarbatch", method = RequestMethod.POST)
+	@RequestMapping(value = "printbatch", method = RequestMethod.POST)
 	public void printBatch(@RequestBody BatchDTO dto) throws BusinessException {
 		
 		ZebraPrintHelper.PrintBatch(dto);
