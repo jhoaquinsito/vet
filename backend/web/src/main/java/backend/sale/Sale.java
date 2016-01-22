@@ -127,7 +127,7 @@ public class Sale implements Persistable<Long>{
 
 
 	public Set<Product> getProducts(){
-		Set<Product> bProducts = new HashSet<>(); 
+		Set<Product> bProducts = new HashSet<Product>(); 
 		for(SaleLine bSaleLine : getSaleLines())
 		{
 			bProducts.add(bSaleLine.getProduct());

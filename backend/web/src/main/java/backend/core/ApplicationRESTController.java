@@ -18,6 +18,7 @@ import backend.person.PersonDTO;
 import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
+import backend.product.batch.BatchDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
@@ -499,6 +500,15 @@ public class ApplicationRESTController {
 		ZebraPrintHelper.PrintCode(dto.getCode());
 	}
 	
+	/***
+	 * Este método permite ejecutar una impresión de testing.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "printbarbatch", method = RequestMethod.POST)
+	public void printBatch(@RequestBody BatchDTO dto) throws BusinessException {
+		
+		ZebraPrintHelper.PrintBatch(dto);
+	}
 	
 	/********************************/
 }
