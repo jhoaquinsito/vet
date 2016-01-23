@@ -18,15 +18,15 @@
             </tr>
             <tr dir-paginate="client in filtered = (clients | filter: table.search | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
-                    <div class="text-important">{{client.name}}</div>
+                    <div class="text-important">{{client.cuit ? client.name : client.name + ' ' +client.lastName}}</div>
                     <div>{{client.cuit ? client.cuit : ''}}</div>
                 </td>
-                
+
                 <td class="table-cell-detail">
-                    <div>{{client.direccion ? client.direccion : ''}}</div>
+                    <div>{{client.address ? client.address : ''}}</div>
                 </td>
                 <td class="table-cell-detail">
-                    <div>{{client.celular ? client.celular : ''}}</div>
+                    <div>{{client.mobilePhone ? client.mobilePhone : ''}}</div>
                 </td>
                 <td class="table-cell-actions">
                     <a ng-href="clients/edit/{{client.id}}" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></a>

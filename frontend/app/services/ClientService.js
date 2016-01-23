@@ -1,30 +1,33 @@
 app.factory('ClientService', function(Restangular) {
-    var service = Restangular.service('client');
+    var serviceClient = Restangular.service('client');
+    var serviceLegalPerson = Restangular.service('legalperson');
+    var serviceNaturalPerson = Restangular.service('naturalperson');
 
     this.getById = function(clientId) {
-        return service.one(clientId).get();
+        var Client = serviceNaturalPerson.one(clientId).get();
+        if (typeof  Client.cuit === 'undefined')
+            Client.clientType = "1";
+        else
+            Client.clientType = "2";
+
+        return Client;
+        //return serviceClient.one(clientId).get();
     };
 
     this.getList = function() {
-//        var client = new Object();
-//        client.id = 1;
-//        client.name = "Ema";
-//        client.cuit = "123456";
-//        client.direccion = "Alvares 124";
-//        client.celular = "15487963";
-//        var clientes = new Array();
-//        clientes[0] = client;
-//        return clients;
-        return service.getList();
+        return serviceClient.getList();
     };
 
     this.save = function(client) {
-        return service.post(client);
+        if (client.cuit !== null)
+            return serviceLegalPerson.post(client);
+        else
+            return serviceNaturalPerson.post(client);
     };
-    
+
     this.remove = function(clientId) {
         return service.one(clientId).remove();
     };
-    
+
     return this;
 });

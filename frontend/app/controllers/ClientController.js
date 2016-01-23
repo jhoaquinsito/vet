@@ -38,7 +38,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
         $rootScope.setTitle($scope.name, 'Editar cliente');
 
         $scope.refreshFormData();
-        $scope.refreshFormDropdownsData();
+        //$scope.refreshFormDropdownsData();
     };
 
     $scope.removeClientAction = function(clientId) {
@@ -93,15 +93,15 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
     };
 
     $scope.refreshFormData = function() {
-        var request = ProductService.getById($routeParams.id);
+        var request = ClientService.getById($routeParams.id);
 
         request.success = function(response) {
-            $scope.form.product = response.plain();
+            $scope.form.client = response.plain();
         };
         request.error = function(response) {
-            MessageService.message('El producto solicitado no existe', 'danger');
+            MessageService.message('El cliente solicitado no existe', 'danger');
 
-            $location.path('products');
+            $location.path('clients');
         };
 
         request.then(request.success, request.error);
