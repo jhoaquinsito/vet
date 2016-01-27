@@ -1,4 +1,4 @@
-app.controller('ClientController', function($scope, $location, $rootScope, $route, $routeParams, ClientService, MessageService, config) {
+app.controller('ClientController', function($scope, $location, $rootScope, $route, $routeParams, ClientService, IvaCategoryService, MessageService, config) {
     $scope.name = 'Clientes';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -14,6 +14,9 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             case 'client.add':
                 $scope.addClientAction();
                 break;
+            case 'client.detail':
+                $scope.clientDetailAction();
+                break;
             case 'client.edit':
                 $scope.editClientAction();
                 break;
@@ -28,17 +31,23 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
         $scope.refreshTableData();
     };
 
+    $scope.clientDetailAction = function() {
+        $rootScope.setTitle($scope.name, 'Detalle de cliente');
+
+        $scope.refreshFormData();
+    };
+
     $scope.addClientAction = function() {
         $rootScope.setTitle($scope.name, 'Agregar cliente');
-
-        //$scope.refreshFormDropdownsData();
+        $scope.resetFormData();
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.editClientAction = function() {
         $rootScope.setTitle($scope.name, 'Editar cliente');
 
         $scope.refreshFormData();
-        //$scope.refreshFormDropdownsData();
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.removeClientAction = function(clientId) {
@@ -86,9 +95,16 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
     $scope.resetFormData = function() {
         $scope.form.client = {
             name: null,
+            clientType: 'NATURAL_PERSON',
+            lastName: null,
             cuit: null,
-            direccion: null,
-            celular: null
+            address: null,
+            zipCode: null,
+            ivaCategory: null,
+            phone: null,
+            mobilePhone: null,
+            email: null,
+            renspa: null
         };
     };
 
@@ -97,6 +113,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
         request.success = function(response) {
             $scope.form.client = response.plain();
+            $scope.form.client.clientType = (response.cuit == null ? 'NATURAL_PERSON' : 'LEGAL_PERSON');
         };
         request.error = function(response) {
             MessageService.message('El cliente solicitado no existe', 'danger');
@@ -105,6 +122,12 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
         };
 
         request.then(request.success, request.error);
+    };
+
+    $scope.refreshFormDropdownsData = function() {
+        IvaCategoryService.getList().then(function(response) {
+            $scope.form.ivaCategories = response.plain();
+        });
     };
 
     $scope.formValidation = function(form) {

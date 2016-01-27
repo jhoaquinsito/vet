@@ -4,11 +4,12 @@ app.factory('ClientService', function(Restangular) {
     var serviceNaturalPerson = Restangular.service('naturalperson');
 
     this.getById = function(clientId) {
-        var Client = serviceNaturalPerson.one(clientId).get();
-        if (typeof  Client.cuit === 'undefined')
-            Client.clientType = "1";
-        else
-            Client.clientType = "2";
+//        var Client = serviceNaturalPerson.one(clientId).get();
+        var Client = serviceLegalPerson.one(clientId).get();
+//        if (typeof  Client.cuit === 'undefined')
+//            Client.clientType = "1";
+//        else
+//            Client.clientType = "2";
 
         return Client;
         //return serviceClient.one(clientId).get();
@@ -19,10 +20,13 @@ app.factory('ClientService', function(Restangular) {
     };
 
     this.save = function(client) {
-        if (client.cuit !== null)
+        if (client.cuit != null)
+        {
             return serviceLegalPerson.post(client);
-        else
+        } else
+        {
             return serviceNaturalPerson.post(client);
+        }
     };
 
     this.remove = function(clientId) {
