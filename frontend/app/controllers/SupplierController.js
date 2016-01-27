@@ -78,7 +78,7 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
         var request = SupplierService.getById($routeParams.id);
 
         request.success = function(response) {
-            $scope.form.product = response.plain();
+            $scope.form.supplier = response.plain();
         };
         request.error = function(response) {
             MessageService.message('El proveedor solicitado no existe', 'danger');
