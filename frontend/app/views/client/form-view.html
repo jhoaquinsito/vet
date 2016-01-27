@@ -5,7 +5,7 @@
                 <div class="col-md-4">
                     <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.clientType.$dirty && clientForm.clientType.$error.required}">
                         <label class="control-label mandatory">Tipo</label>
-                        <select class="form-control" name="clientType" ng-model="form.client.clientType" required>
+                        <select class="form-control" name="clientType" ng-disabled="form.client.disabledType" ng-model="form.client.clientType" required>
                             <option value="NATURAL_PERSON" ng-selected="{{ form.client.clientType == NATURAL_PERSON }}" >Persona física</option>
                             <option value="LEGAL_PERSON" ng-selected="{{ form.client.clientType == LEGAL_PERSON }}">Persona jurídica</option>
                         </select>
@@ -39,7 +39,7 @@
                     <div class="col-md-4">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.cuit.$dirty && clientForm.cuit.$error.required}">
                             <label class="control-label mandatory">CUIT</label>
-                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" >
+                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" required>
                             <span ng-show="clientForm.cuit.$dirty && clientForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
@@ -71,12 +71,13 @@
                         <div class="form-group form-group-sm">
                             <label class="control-label">Renspa</label>
                             <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa">
-                        </div>
+                        </div> 
                     </div>
                     <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                        <div class="form-group form-group-sm">
-                            <label class="control-label">DNI</label>
-                            <input type="text" class="form-control" name="dni" ng-model="form.client.dni">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.nationalId.$dirty && clientForm.nationalId.$error.required}">
+                            <label class="control-label mandatory">DNI</label>
+                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required>
+                            <span ng-show="clientForm.nationalId.$dirty && clientForm.nationalId.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
                 </div> 

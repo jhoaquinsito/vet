@@ -39,6 +39,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
     $scope.addClientAction = function() {
         $rootScope.setTitle($scope.name, 'Agregar cliente');
+        
         $scope.resetFormData();
         $scope.refreshFormDropdownsData();
     };
@@ -52,7 +53,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
     $scope.removeClientAction = function(clientId) {
         MessageService.confirm(MessageService.text('cliente', 'remove', 'confirm', 'male')).then(function() {
-            var request = ClienteService.remove(clientId);
+            var request = ClientService.remove(clientId);
 
             request.success = function(response) {
                 MessageService.message(MessageService.text('cliente', 'remove', 'success', 'male'), 'success');
@@ -100,10 +101,12 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             cuit: null,
             address: null,
             zipCode: null,
+            nationalId: null,
             ivaCategory: null,
             phone: null,
             mobilePhone: null,
             email: null,
+            active: true,
             renspa: null
         };
     };
@@ -114,6 +117,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
         request.success = function(response) {
             $scope.form.client = response.plain();
             $scope.form.client.clientType = (response.cuit == null ? 'NATURAL_PERSON' : 'LEGAL_PERSON');
+            $scope.form.client.disabledType = true;
         };
         request.error = function(response) {
             MessageService.message('El cliente solicitado no existe', 'danger');
