@@ -5,14 +5,14 @@
                 <div class="col-md-4">
                     <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.clientType.$dirty && clientForm.clientType.$error.required}">
                         <label class="control-label mandatory">Tipo</label>
-                        <select class="form-control" name="clientType" ng-model="form.client.clientType" required>
-                            <option value="1" selected="selected">Persona física</option>
-                            <option value="2">Persona legal</option>
+                        <select class="form-control" name="clientType" ng-disabled="form.client.disabledType" ng-model="form.client.clientType" required>
+                            <option value="NATURAL_PERSON" ng-selected="{{ form.client.clientType == NATURAL_PERSON }}" >Persona física</option>
+                            <option value="LEGAL_PERSON" ng-selected="{{ form.client.clientType == LEGAL_PERSON }}">Persona jurídica</option>
                         </select>
                         <span ng-show="clientForm.clientType.$dirty && clientForm.clientType.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
-                <div ng-if="form.client.clientType == 1">
+                <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
                     <div class="col-md-4">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
                             <label class="control-label mandatory">Nombre</label>
@@ -21,14 +21,14 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.lastname.$dirty && clientForm.lastname.$error.required}">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.lastName.$dirty && clientForm.lastName.$error.required}">
                             <label class="control-label mandatory">Apellido</label>
                             <input type="text" class="form-control" name="lastName" ng-model="form.client.lastName" required>
                             <span ng-show="clientForm.lastName.$dirty && clientForm.lastName.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
                 </div>
-                <div ng-if="form.client.clientType == 2">
+                <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
                     <div class="col-md-4">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
                             <label class="control-label mandatory">Razón Social</label>
@@ -37,9 +37,10 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group form-group-sm">
-                            <label class="control-label">CUIT</label>
-                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" >
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.cuit.$dirty && clientForm.cuit.$error.required}">
+                            <label class="control-label mandatory">CUIT</label>
+                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" required>
+                            <span ng-show="clientForm.cuit.$dirty && clientForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
                 </div>
@@ -57,6 +58,35 @@
                         <input type="text" class="form-control" name="zipCode" ng-model="form.client.zipCode">
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Categoría de Iva</label>
+                        <select class="form-control" name="ivaCategory" ng-model="form.client.ivaCategory"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">Renspa</label>
+                            <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa">
+                        </div> 
+                    </div>
+                    <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.nationalId.$dirty && clientForm.nationalId.$error.required}">
+                            <label class="control-label mandatory">DNI</label>
+                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required>
+                            <span ng-show="clientForm.nationalId.$dirty && clientForm.nationalId.$error.required" class="help-block">Este campo es obligatorio</span>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Email</label>
+                        <input type="email" class="form-control" name="email" ng-model="form.client.email">
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -68,27 +98,10 @@
                 <div class="col-md-4">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Celular</label>
-                        <input type="text" class="form-control" name="mobile" ng-model="form.client.mobilephone">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Email</label>
-                        <input type="email" class="form-control" name="email" ng-model="form.client.email">
+                        <input type="text" class="form-control" name="mobilePhone" ng-model="form.client.mobilePhone">
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div ng-if="form.client.clientType == 2">
-                        <div class="form-group form-group-sm">
-                            <label class="control-label">Renspa</label>
-                            <select class="form-control" name="renspa" ng-model="form.client.renspa" required></select>
-                        </div>
-                    </div>
-                </div>          
-            </div>
-
             <div class="panel-footer">
                 <div class="text-right">
                     <a ng-href="clients" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
@@ -96,4 +109,5 @@
                 </div>
             </div>
         </div>
+    </div>
 </form>

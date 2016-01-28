@@ -18,7 +18,7 @@
             </tr>
             <tr dir-paginate="client in filtered = (clients | filter: table.search | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
-                    <div class="text-important">{{client.cuit ? client.name : client.name + ' ' +client.lastName}}</div>
+                    <div><a ng-href="clients/detail/{{client.id}}" class="text-important"> {{client.cuit ? client.name : client.name + ' ' +client.lastName}}</a></div>
                     <div>{{client.cuit ? client.cuit : ''}}</div>
                 </td>
 
