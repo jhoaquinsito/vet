@@ -106,7 +106,6 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             phone: null,
             mobilePhone: null,
             email: null,
-            active: true,
             renspa: null
         };
     };

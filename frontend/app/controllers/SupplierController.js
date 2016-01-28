@@ -112,7 +112,5 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
         return form.$invalid;
     };
 
-
-
     $scope.init();
 });
