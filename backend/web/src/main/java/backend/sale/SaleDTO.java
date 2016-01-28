@@ -3,10 +3,14 @@ package backend.sale;
 import java.util.Date;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import backend.person.PersonDTO;
 
 import backend.saleline.SaleLineDTO;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class SaleDTO {
 
 	private Long iId;
@@ -14,8 +18,6 @@ public class SaleDTO {
 	private Date iDate;
 	  
 	private boolean iInvoiced ;
-
-
 
 	private boolean iPaied_out ;
 

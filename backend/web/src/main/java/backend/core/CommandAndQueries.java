@@ -1,9 +1,12 @@
 package backend.core;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import backend.exception.BusinessException;
+import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.PersonService;
 import backend.person.children.legal_person.LegalPerson;
@@ -12,6 +15,9 @@ import backend.person.children.legal_person.LegalPersonService;
 import backend.person.children.natural_person.NaturalPerson;
 import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.children.natural_person.NaturalPersonService;
+import backend.person.iva_category.IVACategory;
+import backend.person.iva_category.IVACategoryDTO;
+import backend.person.iva_category.IVACategoryService;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
@@ -34,6 +40,7 @@ import backend.sale.Sale;
 import backend.sale.SaleCons;
 import backend.sale.SaleDTO;
 import backend.sale.SaleService;
+import backend.saleline.SaleLine;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
 
@@ -55,6 +62,7 @@ public class CommandAndQueries {
 	private MapperFacade iMapper; 
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
 	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
+	private static final String cPERSON_NULL_EXCEPTION_MESSAGE = "La persona no tiene valores válidos.";
 	
 	
 	/**
@@ -389,6 +397,14 @@ public class CommandAndQueries {
 		// map dto to domain object
 		LegalPerson mLegalPerson = iMapper.map(pLegalPersonDTO, LegalPerson.class);
 		
+		//Si el cliente tiene ventas adeudadas
+		if(!this.clientIsInDebt(mLegalPerson)){
+			//Cancelo la deuda del cliente
+			this.cancelClientDebt(mLegalPerson);
+			//Descuento los pagos del cliente
+			mLegalPerson.discountSettlements();
+		}
+		
 		mLegalPerson = mLegalPersonService.save(mLegalPerson);
 		
 		return mLegalPerson.getId();
@@ -420,7 +436,7 @@ public class CommandAndQueries {
 	public void deletePerson(Long pPersonId) throws BusinessException {
 		PersonService mPersonService = new PersonService();
 		
-		// elimino el producto
+		// elimino la persona
 		mPersonService.delete(pPersonId);
 	}
 
@@ -463,9 +479,80 @@ public class CommandAndQueries {
 			throw new BusinessException(CommandAndQueries.cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE);
 		}
 		
+		//Si el cliente tiene ventas adeudadas
+		if(!this.clientIsInDebt(mNaturalPerson)){
+			//Cancelo la deuda del cliente
+			this.cancelClientDebt(mNaturalPerson);
+			//Descuento los pagos del cliente
+			mNaturalPerson.discountSettlements();
+		}
+		
 		mNaturalPerson = mNaturalPersonService.save(mNaturalPerson);
 		
 		return mNaturalPerson.getId();
+	}
+	
+	/**
+	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
+	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
+	 * @param pClient el cliente del cual se quiere cancelar la deuda.
+	 * @throws BusinessException 
+	 */
+	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
+		SaleService mSaleService = new SaleService();
+		ProductService mProductService = new ProductService();
+		
+		//Recupero las ventas adeudas del cliente.
+		List<Sale> mDueSales = mSaleService.getDueSalesByClientId(pClient.getId());
+		Iterator<Sale> mDueSalesIterator = mDueSales.iterator();
+				
+		//Defino una variable para guardar la deuda total del cliente
+		BigDecimal mDebt = BigDecimal.ZERO;
+				
+		// Calculo la deuda total del cliente
+		while(mDueSalesIterator.hasNext()){ //Por cada venta adeudada
+			Sale mSale = mDueSalesIterator.next();
+			Iterator<SaleLine> bSaleLinesIterator = mSale.getSaleLines().iterator();
+			while(bSaleLinesIterator.hasNext()){//Por cada línea de venta
+				SaleLine bSaleLine = bSaleLinesIterator.next();
+						
+				//Convierto la cantidad de la línea a Bigdecimal
+				BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
+						
+				//Obtengo el precio unitario actual del producto de la línea
+				BigDecimal bProductPrice = mProductService.get(bSaleLine.getProduct().getId()).getUnitPrice();
+						
+				//Sumo a la deuda la cantidad del producto por su precio unitario
+				mDebt = mDebt.add(bProductQuantity.multiply(bProductPrice));
+				
+				//Resto el descuento hecho en la saleline
+				//Obtengo el valor BigDecimal de 100
+				BigDecimal bBigDecimal100 = BigDecimal.valueOf(100);
+				//Multiplico la cantidad del producto por el precio guardado en el saleline 
+				BigDecimal bSaleLineTotal = bProductQuantity.multiply(bSaleLine.getUnit_Price());
+				//Calculo el descuento como: (cantidad*precio*descuento)/100
+				BigDecimal bDiscount = bSaleLineTotal.multiply(bSaleLine.getDiscount()).divide(bBigDecimal100); 
+				//Resto el descuento
+				mDebt = mDebt.subtract(bDiscount);
+			}
+					
+		}
+				
+		//La deuda del cliente es menor o igual que los pagos hechos?
+		return (mDebt.compareTo(pClient.totalPaid()) == 1);
+	}
+	
+	/**
+	 * Cancela la deuda de un cliente, es decir, pone todas las ventas asociadas
+	 * como pagadas.
+	 * @param pClient el cliente del cual se quiere cancelar la deuda.
+	 * @throws BusinessException 
+	 */
+	public void cancelClientDebt(Person pClient) throws BusinessException{
+		SaleService mSaleService = new SaleService();
+		
+		//Marco las ventas como pagas
+		mSaleService.payClientSales(pClient.getId());
 	}
 	
 	/**
@@ -499,27 +586,6 @@ public class CommandAndQueries {
 	}
 	
 	/**
-	 * Este método es una consulta que obtiene una persona física a partir de su documento.
-	 * @param pNatioalId: número de documento de la persona física.
-	 * @return persona física encontrada
-	 * @throws BusinessException
-	 */
-	public NaturalPersonDTO getNaturalPerson(Integer pNationalId) throws BusinessException {
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
-		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
-		
-		NaturalPersonDTO mNaturalPersonDTO = null;
-		
-		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
-			if(bNaturalPerson.getNationalId()==pNationalId)
-			mNaturalPersonDTO = this.iMapper.map(bNaturalPerson, NaturalPersonDTO.class);
-		}
-		
-		return mNaturalPersonDTO;
-	}
-	
-	/**
 	 * Este método es una consulta que obtiene una persona física a partir de
 	 * su identificador.
 	 * @param pPersonId: identificador de la persona.
@@ -535,8 +601,42 @@ public class CommandAndQueries {
 		
 		return mNaturalPersonDTO;
 	}
-
 	
+	/**
+	 * Este método es un comando que permite guardar una Categoría de IVA
+	 * @param pIVACategory : Categoría a guardar
+	 * @return identificador de la categoria guardado
+	 * @throws BusinessException : Excepción con detalles de los errores de negocio
+	 */
+	public long saveIVACategory(IVACategoryDTO pIVACategory) throws BusinessException {
+		IVACategoryService mIVACategoryService = new IVACategoryService();
+		
+		IVACategory mIVACategory = new IVACategory();
+		
+		mIVACategory = this.iMapper.map(pIVACategory,IVACategory.class);
+		
+		return this.iMapper.map(mIVACategoryService.save(mIVACategory),IVACategoryDTO.class).getId();
+		
+	}
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Categorías de IVA
+	 * @return lista de Categorias de IVA
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<IVACategoryDTO> getIVACategories() throws BusinessException{
+		IVACategoryService mIVACategoryService = new IVACategoryService();
+		
+		Iterable<IVACategory> mIVACategory = mIVACategoryService.getAll();
+		
+		List<IVACategoryDTO> mIVACategoryDTOList = new ArrayList<IVACategoryDTO>();
+		
+		for (IVACategory bIVACategory : mIVACategory){
+			mIVACategoryDTOList.add(this.iMapper.map(bIVACategory,IVACategoryDTO.class));
+		}
+		
+		return mIVACategoryDTOList;
+	}
 	
 	/** SALE **/
 	

@@ -14,6 +14,8 @@ public class SaleCons {
 	public static final String cCANNOT_SAVE_WITHOUT_SALELINE_EXCEPTION_MESSAGE
 							= "La venta no puede guardarse sin tener ningún ítem vendido asignado.";
 	public static final String cCANNOT_SAVE_WITHOUT_SALELINE_WITHOUT_PRODUCT_EXCEPTION_MESSAGE
-	= "La venta no puede guardarse sin tener ningún ítem vendido asignado que a su vez no tenga un producto asociado.";	
+	= "La venta no puede guardarse sin tener ningún ítem vendido asignado que a su vez no tenga un producto asociado.";
+	
+	public static final String cCANNOT_GET_SALES = "Error al recuperar las ventas.";
 	
 }

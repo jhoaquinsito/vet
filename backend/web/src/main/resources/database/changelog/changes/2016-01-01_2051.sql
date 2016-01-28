@@ -31,8 +31,8 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE sale
-  OWNER TO postgres;
-GRANT ALL ON TABLE sale TO postgres;
+  OWNER TO vet;
+GRANT ALL ON TABLE sale TO vet;
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE sale TO public;
   
 -- Table: saleline
@@ -59,7 +59,7 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE saleline
-  OWNER TO postgres;
-GRANT ALL ON TABLE saleline TO postgres;
+  OWNER TO vet;
+GRANT ALL ON TABLE saleline TO vet;
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE saleline TO public;
   

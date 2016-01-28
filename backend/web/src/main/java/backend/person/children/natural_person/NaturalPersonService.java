@@ -109,12 +109,12 @@ public class NaturalPersonService {
 		NaturalPerson mStoredNaturalPerson = this.iNaturalPersonRepository.findOne(pId);
 		
 		// si es null, es porque no existe ningua persona con dicho id
-		if (mStoredNaturalPerson == null) {
-			throw new BusinessException(NaturalPersonService.cNATURAL_PERSON_DOESNT_EXIST_EXCEPTION_MESSAGE);
-		}
+		//if (mStoredNaturalPerson == null) {
+			//throw new BusinessException(NaturalPersonService.cNATURAL_PERSON_DOESNT_EXIST_EXCEPTION_MESSAGE);
+		//}
 
 		
-		if (!mStoredNaturalPerson.isActive()){
+		if ((mStoredNaturalPerson != null) && (!mStoredNaturalPerson.isActive())){
 			throw new BusinessException(NaturalPersonService.cDELETED_NATURAL_PERSON_EXCEPTION_MESSAGE);
 		}
 		

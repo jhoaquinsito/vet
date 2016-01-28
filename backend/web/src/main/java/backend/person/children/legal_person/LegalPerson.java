@@ -92,7 +92,7 @@ public class LegalPerson extends Person {
 		return (iClient == null);
 	}
 
-	@PrePersist
+	/**@PrePersist
 	protected
 	void preInsert() {
 		   if ( this.getClient() == null ) { this.setClient(true); }
@@ -102,5 +102,5 @@ public class LegalPerson extends Person {
 	protected
 	 void onPreUpdate() {
 			 if ( this.getClient() == null ) { this.setClient(true); }
-	 }
+	 }*/
 }

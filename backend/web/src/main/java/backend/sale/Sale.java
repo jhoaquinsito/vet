@@ -20,6 +20,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import org.springframework.data.domain.Persistable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -38,7 +39,6 @@ import backend.saleline.SaleLine;
 */
 @Entity
 @Table(name = "sale", uniqueConstraints = {@UniqueConstraint(columnNames={})})
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Sale implements Persistable<Long>{
 
 
@@ -66,7 +66,6 @@ public class Sale implements Persistable<Long>{
 	@Column(name="paied_out")
 	private boolean iPaied_out ;
 	
-	//"person"
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name="person")
 	private Person iPerson;
@@ -127,7 +126,7 @@ public class Sale implements Persistable<Long>{
 
 
 	public Set<Product> getProducts(){
-		Set<Product> bProducts = new HashSet<>(); 
+		Set<Product> bProducts = new HashSet<Product>(); 
 		for(SaleLine bSaleLine : getSaleLines())
 		{
 			bProducts.add(bSaleLine.getProduct());
@@ -139,8 +138,6 @@ public class Sale implements Persistable<Long>{
 	public boolean isNew() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	
+	}	
 
 }

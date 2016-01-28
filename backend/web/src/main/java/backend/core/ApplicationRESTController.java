@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
 import backend.person.PersonDTO;
+import backend.person.children.natural_person.NaturalPerson;
 import backend.person.children.natural_person.NaturalPersonDTO;
+import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
 import backend.product.category.CategoryDTO;
@@ -140,9 +143,7 @@ public class ApplicationRESTController {
 
 		return mCNQ.saveCategory(pCategory);
 
-	}
-
-	
+	}	
 
 	@RequestMapping(value = "category", method = RequestMethod.GET)
 	public List<CategoryDTO> listCategorys() throws BusinessException {
@@ -151,6 +152,23 @@ public class ApplicationRESTController {
 		List<CategoryDTO> mCategoryDTOList = mCNQ.getCategorys();
 
 		return mCategoryDTOList;
+	}
+	
+	@RequestMapping(value = "ivacategory", method = RequestMethod.POST)
+	public long saveIVACategory(@RequestBody IVACategoryDTO pIVACategory) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.saveIVACategory(pIVACategory);
+
+	}	
+
+	@RequestMapping(value = "ivacategory", method = RequestMethod.GET)
+	public List<IVACategoryDTO> listCategories() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<IVACategoryDTO> mIVACategoryDTOList = mCNQ.getIVACategories();
+
+		return mIVACategoryDTOList;
 	}
 
 	@RequestMapping(value = "manufacturer", method = RequestMethod.POST)
@@ -351,13 +369,13 @@ public class ApplicationRESTController {
 	}
 	
 	/**
-	 * Metodo API que permite recuperar un LegalPerson especificando su ID
+	 * Metodo API que permite recuperar una NaturalPerson especificando su ID
 	 * 
 	 * @param id
 	 *            : Identificador de la entidad buscada.
-	 * @return LegalPersonDTO : LegalPerson buscada.
+	 * @return LegalPersonDTO : NaturalPerson buscada.
 	 * @throws BusinessException
-	 *             el producto estaba eliminado lógicamente
+	 *             la persona estaba eliminado lógicamente
 	 * @throws Exception
 	 *             : Excepcion de negocio, manejada por: handleBusinessException
 	 */
@@ -366,6 +384,7 @@ public class ApplicationRESTController {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 		return mCNQ.getNaturalPerson(id);
 	}
+	
 	
 	/**
 	 * Metodo API que permite recuperar una persona física especificando su documento.
@@ -472,6 +491,51 @@ public class ApplicationRESTController {
 	public SaleDTO getSaleById(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 		return mCNQ.getSale(id);
+	}
+	
+	/**
+	 * Metodo API que permite recuperar un cliente especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return PersonDTO : el cliente buscado.
+	 * @throws BusinessException
+	 *             no existe un cliente con ese ID
+	 */
+	@RequestMapping(value = "client/{id}", method = RequestMethod.GET)
+	public PersonDTO getClientById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		
+		PersonDTO mPerson = null;
+		
+		mPerson = mCNQ.getNaturalPerson(id);
+		
+		if(mPerson == null){
+			LegalPersonDTO mLegalPerson = mCNQ.getLegalPerson(id);
+			
+			if(mLegalPerson!= null && mLegalPerson.isClient()){
+				mPerson = mLegalPerson;
+			}else{
+				throw new BusinessException("No existe un cliente con ese identificador.");
+			}
+		}
+		
+		return mPerson;
+	}
+	
+	/**
+	 * Metodo API que permite dar de baja un cliente especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return mId : el identificador del cliente dado de baja.
+	 * @throws BusinessException
+	 *             no existe un cliente con ese ID
+	 */
+	@RequestMapping(value = "client/{id}", method = RequestMethod.DELETE)
+	public void deleteClientById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		mCNQ.deletePerson(id);
 	}
 	
 	/****************************************/

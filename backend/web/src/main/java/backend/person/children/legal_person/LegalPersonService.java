@@ -104,7 +104,7 @@ public class LegalPersonService {
 		}
 		
 		// marco el producto como activo
-		pLegalPersonToSave.setActive(true);
+		//pLegalPersonToSave.setActive(true);
 		
 		//valido la entidad
 		//this.iEntityValidator.validate(pLegalPersonToSave);
@@ -126,10 +126,10 @@ public class LegalPersonService {
 		LegalPerson mStoredLegalPerson = this.iLegalPersonRepository.findOne(pId);
 		
 		// si es null, es porque no existe ningún producto con dicho id
-		if (mStoredLegalPerson == null) {
-			throw new BusinessException(LegalPersonService.cLEGALPERSON_DOESNT_EXIST_EXCEPTION_MESSAGE);
-		}
-		if(!mStoredLegalPerson.isActive())
+		//if (mStoredLegalPerson == null) {
+			//throw new BusinessException(LegalPersonService.cLEGALPERSON_DOESNT_EXIST_EXCEPTION_MESSAGE);
+		//}
+		if((mStoredLegalPerson != null) && (!mStoredLegalPerson.isActive()))
 			throw new BusinessException(LegalPersonService.cLEGALPERSON_NOT_ACTIVE_EXCEPTION_MESSAGE);
 		return mStoredLegalPerson;
 	}
