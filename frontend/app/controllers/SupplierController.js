@@ -97,7 +97,7 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
 
     $scope.resetFormData = function() {
         $scope.form.supplier = {
-            businessName: null,
+            name: null,
             cuit: null
         };
     };
