@@ -57,6 +57,8 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
             request.success = function(response) {
                 MessageService.message(MessageService.text('cliente', 'remove', 'success', 'male'), 'success');
+            
+                $location.path('clients');
             };
             request.error = function(response) {
                 MessageService.message(MessageService.text('cliente', 'remove', 'error', 'male'), 'danger');
@@ -102,7 +104,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             address: null,
             zipCode: null,
             nationalId: null,
-            ivaCategory: null,
+            ivacategory: null,
             phone: null,
             mobilePhone: null,
             email: null,
@@ -115,7 +117,8 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
         request.success = function(response) {
             $scope.form.client = response.plain();
-            $scope.form.client.clientType = (response.cuit == null ? 'NATURAL_PERSON' : 'LEGAL_PERSON');
+            $scope.form.client.clientType = response.cuit == null ? 'NATURAL_PERSON' : 'LEGAL_PERSON';
+            $scope.form.client.ivacategoryname = response.ivacategory != null ? response.ivacategory.description : '';
             $scope.form.client.disabledType = true;
         };
         request.error = function(response) {
@@ -129,7 +132,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
     $scope.refreshFormDropdownsData = function() {
         IvaCategoryService.getList().then(function(response) {
-            $scope.form.ivaCategories = response.plain();
+            $scope.form.ivacategories = response.plain();
         });
     };
 
