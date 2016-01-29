@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
 import backend.person.PersonDTO;
+import backend.person.children.natural_person.NaturalPerson;
 import backend.person.children.natural_person.NaturalPersonDTO;
+import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
 import backend.product.batch.BatchDTO;
@@ -39,12 +42,14 @@ import backend.utils.ZebraPrintHelper;
 @RequestMapping("api/")
 public class ApplicationRESTController {
 
+	//=======================================================================================
+	
+	// PRODUCTOS
 	
 	/**
-	 * Metodo API que permite crear un Product.
+	 * Metodo API que permite crear un Producto.
 	 * 
-	 * @param ProductDTO
-	 *            : datos del producto a crear
+	 * @param ProductDTO: datos del producto a crear
 	 * @return Long : Identificador del nuevo producto en la BD.
 	 * @throws BusinessException
 	 */
@@ -104,7 +109,7 @@ public class ApplicationRESTController {
 
 		mCNQ.deleteProduct(id);
 	}
-
+	
 	/**
 	 * Método que permite recuperar la lista completa de Presentaciones.
 	 * 
@@ -141,9 +146,7 @@ public class ApplicationRESTController {
 
 		return mCNQ.saveCategory(pCategory);
 
-	}
-
-	
+	}	
 
 	@RequestMapping(value = "category", method = RequestMethod.GET)
 	public List<CategoryDTO> listCategorys() throws BusinessException {
@@ -153,7 +156,7 @@ public class ApplicationRESTController {
 
 		return mCategoryDTOList;
 	}
-
+	
 	@RequestMapping(value = "manufacturer", method = RequestMethod.POST)
 	public long saveManufacturer(@RequestBody ManufacturerDTO pManufacturer) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
@@ -161,8 +164,6 @@ public class ApplicationRESTController {
 		return mCNQ.saveManufacturer(pManufacturer);
 
 	}
-
-	
 
 	@RequestMapping(value = "manufacturer", method = RequestMethod.GET)
 	public List<ManufacturerDTO> listManufacturers() throws BusinessException {
@@ -223,7 +224,12 @@ public class ApplicationRESTController {
 
 		return mId;
 	}
-		
+	
+	// FIN PRODUCTOS
+	
+	//=======================================================================================
+	
+	// PERSONAS
 	/**
 	 * Método que permite recuperar la lista completa de personas.
 	 * 
@@ -240,18 +246,36 @@ public class ApplicationRESTController {
 	}
 	
 	/**
-	 * Metodo API que permite recuperar la lista de los distintos Legal_Person (Proveedores).
+	 * Metodo que permite eliminar un Persona (tanto LegalPerson como NaturalPerson) 
+	 * a partir de su identificador, es decir PersonId. 
+	 * Al eliminar la Person, la misma se da de baja lógicamente, usando su atributo.
 	 * 
-	 * @return List<LegalPersonDTO>
-	 * 							: Lista de proveedores completa.
-	 * @throws BusinessException 
-	 * 							: Excepcion de negocio, manejada por: handleBusinessException
+	 * @param id
+	 *            identificador de la Person (LegalPerson o NaturalPerson a eliminar)
+	 * @throws BusinessException
+	 *             errores al intentar realizar la operación
 	 */
-	@RequestMapping(value = "supplier", method = RequestMethod.GET)
-	public @ResponseBody List<LegalPersonDTO> listSupplier() throws BusinessException {
+	@RequestMapping(value = "person/{id}", method = RequestMethod.DELETE)
+	public void deletePerson(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.getSuppliers();
+		mCNQ.deletePerson(id);
+	}
+	
+	/**
+	 * Metodo API que permite crear un LegalPerson.
+	 * 
+	 * @param LegalPersonDTO: datos de la persona jurídica a crear
+	 * @return Long : Identificador de la nueva persona legal en la BD.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "legalperson", method = RequestMethod.POST)
+	public Long createLegalPerson(@RequestBody LegalPersonDTO pLegalPerson) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		Long mId = mCNQ.saveLegalPerson(pLegalPerson);
+
+		return mId;
 	}
 	
 	/**
@@ -267,24 +291,6 @@ public class ApplicationRESTController {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
 		return mCNQ.getLegalPersons();
-	}
-	
-	
-	/**
-	 * Metodo API que permite crear un LegalPerson.
-	 * 
-	 * @param LegalPersonDTO
-	 *            : datos de la persona jurídica a crear
-	 * @return Long : Identificador de la nueva persona legal en la BD.
-	 * @throws BusinessException
-	 */
-	@RequestMapping(value = "legalperson", method = RequestMethod.POST)
-	public Long createLegalPerson(@RequestBody LegalPersonDTO pLegalPerson) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-
-		Long mId = mCNQ.saveLegalPerson(pLegalPerson);
-
-		return mId;
 	}
 	
 	/**
@@ -303,24 +309,7 @@ public class ApplicationRESTController {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 		return mCNQ.getLegalPerson(id);
 	}
-
-	/**
-	 * Metodo que permite eliminar un Persona (tanto LegalPerson como NaturalPerson) 
-	 * a partir de su identificador, es decir PersonId. 
-	 * Al eliminar la Person, la misma se da de baja lógicamente, usando su atributo.
-	 * 
-	 * @param id
-	 *            identificador de la Person (LegalPerson o NaturalPerson a eliminar)
-	 * @throws BusinessException
-	 *             errores al intentar realizar la operación
-	 */
-	@RequestMapping(value = "person/{id}", method = RequestMethod.DELETE)
-	public void deletePerson(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-
-		mCNQ.deletePerson(id);
-	}
-
+	
 	/**
 	 * Metodo API que permite crear una persona física.
 	 * 
@@ -339,6 +328,46 @@ public class ApplicationRESTController {
 	}
 	
 	/**
+	 * Metodo API que permite recuperar una NaturalPerson especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return LegalPersonDTO : NaturalPerson buscada.
+	 * @throws BusinessException
+	 *             la persona estaba eliminado lógicamente
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "naturalperson/{id}", method = RequestMethod.GET)
+	public NaturalPersonDTO getNaturalPersonById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		return mCNQ.getNaturalPerson(id);
+	}
+	
+	@RequestMapping(value = "ivacategory", method = RequestMethod.POST)
+	public long saveIVACategory(@RequestBody IVACategoryDTO pIVACategory) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		return mCNQ.saveIVACategory(pIVACategory);
+
+	}	
+
+	@RequestMapping(value = "ivacategory", method = RequestMethod.GET)
+	public List<IVACategoryDTO> listCategories() throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+
+		List<IVACategoryDTO> mIVACategoryDTOList = mCNQ.getIVACategories();
+
+		return mIVACategoryDTOList;
+	}
+	
+	// FIN PERSONAS
+	
+	//=======================================================================================
+	
+	// CLIENTES
+	
+	/**
 	 * Método que permite recuperar la lista completa de personas que son clientes.
 	 * 
 	 * @return Lista de clientes.
@@ -351,79 +380,32 @@ public class ApplicationRESTController {
 		return mCNQ.getClients();
 	}
 	
+	// FIN CLIENTES
+	
+	//=======================================================================================
+	
+	// PROVEEDORES
+	
 	/**
-	 * Metodo API que permite recuperar un LegalPerson especificando su ID
+	 * Metodo API que permite recuperar la lista de los distintos Legal_Person (Proveedores).
 	 * 
-	 * @param id
-	 *            : Identificador de la entidad buscada.
-	 * @return LegalPersonDTO : LegalPerson buscada.
-	 * @throws BusinessException
-	 *             el producto estaba eliminado lógicamente
-	 * @throws Exception
-	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 * @return List<LegalPersonDTO>
+	 * 							: Lista de proveedores completa.
+	 * @throws BusinessException 
+	 * 							: Excepcion de negocio, manejada por: handleBusinessException
 	 */
-	@RequestMapping(value = "naturalperson/{id}", method = RequestMethod.GET)
-	public NaturalPersonDTO getNaturalPersonById(@PathVariable Long id) throws BusinessException {
+	@RequestMapping(value = "supplier", method = RequestMethod.GET)
+	public @ResponseBody List<LegalPersonDTO> listSupplier() throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getNaturalPerson(id);
+
+		return mCNQ.getSuppliers();
 	}
 	
-	/**
-	 * Metodo API que permite recuperar una persona física especificando su documento.
-	 * 
-	 * @param national_id
-	 *            : Número de documento de la entidad buscada.
-	 * @return NaturalPersonDTO : persona física buscada.
-	 * @throws BusinessException
-	 *             la persona esta eliminada lógicamente
-	 * @throws Exception
-	 *             : Excepcion de negocio, manejada por: handleBusinessException
-	 */
-	/**@RequestMapping(value = "naturalperson/{national_id}", method = RequestMethod.GET)
-	public NaturalPersonDTO getNaturalPersonByNationalId(@PathVariable Integer national_id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getNaturalPerson(national_id);
-	}**/
+	// FIN PROVEEDORES
 	
-	/**
-	 * Método maneja las excepciones que se producen en el controlador.
-	 * 
-	 * Solamente maneja las excepciones cuyo tipo son: BusinessException
-	 * 
-	 * Los parámetros de entrada a este metodo llegan de forma automática.
-	 * 
-	 * @param mRequest
-	 *            : Este parámetro contiene la información del request generado
-	 *            desde el cliente. Ejemplo: request.getRequestURL() devuelve la
-	 *            URL del servicio consumido. Ej.: "www.genesis.com/product/1"
-	 * @param mBusinessException
-	 *            : Este parámetro contiene la excepción que se generó durante
-	 *            la ejecución de un método en el controlador. Tiene información
-	 *            sobre la clase, método y detalles de la excepción.
-	 * @return ResponseEntity<ErrorDTO> El ResponseEntity contiene la
-	 *         información del código HTTP retornado al cliente (EJ: 404, 500,
-	 *         etc.) También contiene la información de la clase T que envuelve,
-	 *         en este caso ErrorDTO. En conclusion, el cliente recibe
-	 *         no solamente el codigo de error, sino tambien detalles gracias a
-	 *         la entidad envuelta.
-	 */
-	@ExceptionHandler(BusinessException.class)
-	public @ResponseBody ResponseEntity<ErrorDTO> handleBusinessException(HttpServletRequest mRequest,
-			BusinessException mBusinessException) {
-
-		// Creamos el objeto DTO que sera el que viaje al cliente.
-		ErrorDTO mErrorDTO = new ErrorDTO();
-		mErrorDTO.setMessage(mBusinessException.getMessage());
-		mErrorDTO.setStackTrace(mBusinessException.getStackTraceString());
-
-		// creación de la respuesta
-		ResponseEntity<ErrorDTO> mResponse = new ResponseEntity<ErrorDTO>(mErrorDTO, HttpStatus.CONFLICT);
-
-		return mResponse;
-	}
-
+	//=======================================================================================
 	
-	/*************** SALE *******************/
+	// VENTAS
 	
 	/**
 	 * Metodo API que permite crear una venta (SALE).
@@ -475,10 +457,56 @@ public class ApplicationRESTController {
 		return mCNQ.getSale(id);
 	}
 	
-	/****************************************/
+	/**
+	 * Metodo API que permite recuperar un cliente especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return PersonDTO : el cliente buscado.
+	 * @throws BusinessException
+	 *             no existe un cliente con ese ID
+	 */
+	@RequestMapping(value = "client/{id}", method = RequestMethod.GET)
+	public PersonDTO getClientById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		
+		PersonDTO mPerson = null;
+		
+		mPerson = mCNQ.getNaturalPerson(id);
+		
+		if(mPerson == null){
+			LegalPersonDTO mLegalPerson = mCNQ.getLegalPerson(id);
+			
+			if(mLegalPerson!= null && mLegalPerson.isClient()){
+				mPerson = mLegalPerson;
+			}else{
+				throw new BusinessException("No existe un cliente con ese identificador.");
+			}
+		}
+		
+		return mPerson;
+	}
 	
+	/**
+	 * Metodo API que permite dar de baja un cliente especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return mId : el identificador del cliente dado de baja.
+	 * @throws BusinessException
+	 *             no existe un cliente con ese ID
+	 */
+	@RequestMapping(value = "client/{id}", method = RequestMethod.DELETE)
+	public void deleteClientById(@PathVariable Long id) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		mCNQ.deletePerson(id);
+	}
 	
-	/*********ZEBRA PRINTER*******/
+	// FIN VENTAS
+	
+	//=======================================================================================
+	
+	// IMPRESIÓN
 	
 	/***
 	 * Este método permite ejecutar una impresión de testing.
@@ -510,5 +538,46 @@ public class ApplicationRESTController {
 		ZebraPrintHelper.PrintBatch(dto);
 	}
 	
-	/********************************/
+	// FIN IMPRESIÓN
+	
+	//=======================================================================================
+	
+	
+	/**
+	 * Método maneja las excepciones que se producen en el controlador.
+	 * 
+	 * Solamente maneja las excepciones cuyo tipo son: BusinessException
+	 * 
+	 * Los parámetros de entrada a este metodo llegan de forma automática.
+	 * 
+	 * @param mRequest
+	 *            : Este parámetro contiene la información del request generado
+	 *            desde el cliente. Ejemplo: request.getRequestURL() devuelve la
+	 *            URL del servicio consumido. Ej.: "www.genesis.com/product/1"
+	 * @param mBusinessException
+	 *            : Este parámetro contiene la excepción que se generó durante
+	 *            la ejecución de un método en el controlador. Tiene información
+	 *            sobre la clase, método y detalles de la excepción.
+	 * @return ResponseEntity<ErrorDTO> El ResponseEntity contiene la
+	 *         información del código HTTP retornado al cliente (EJ: 404, 500,
+	 *         etc.) También contiene la información de la clase T que envuelve,
+	 *         en este caso ErrorDTO. En conclusion, el cliente recibe
+	 *         no solamente el codigo de error, sino tambien detalles gracias a
+	 *         la entidad envuelta.
+	 */
+	@ExceptionHandler(BusinessException.class)
+	public @ResponseBody ResponseEntity<ErrorDTO> handleBusinessException(HttpServletRequest mRequest,
+			BusinessException mBusinessException) {
+
+		// Creamos el objeto DTO que sera el que viaje al cliente.
+		ErrorDTO mErrorDTO = new ErrorDTO();
+		mErrorDTO.setMessage(mBusinessException.getMessage());
+		mErrorDTO.setStackTrace(mBusinessException.getStackTraceString());
+
+		// creación de la respuesta
+		ResponseEntity<ErrorDTO> mResponse = new ResponseEntity<ErrorDTO>(mErrorDTO, HttpStatus.CONFLICT);
+
+		return mResponse;
+	}
+
 }

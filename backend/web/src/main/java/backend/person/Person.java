@@ -2,12 +2,24 @@ package backend.person;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import backend.person.city.City;
 import backend.person.iva_category.IVACategory;
+import backend.person.settlement.Settlement;
+import backend.product.batch.Batch;
+import backend.sale.Sale;
 
 // TODO documentar
 
@@ -39,33 +51,36 @@ public class Person  {
 	private String iEmail;	
 
 	@Column(name = "phone")
-	private BigInteger iPhone;
+	@Size(max=50, message= PersonConsts.cPHONE_SIZE_VIOLATION_MESSAGE)
+	private String iPhone;
 
 	@Column(name = "mobile_phone")
-	private BigInteger iMobilePhone;
+	@Size(max=50, message= PersonConsts.cMOBILE_PHONE_SIZE_VIOLATION_MESSAGE)
+	private String iMobilePhone;
 
 	@Column(name="renspa")
 	@Digits(integer=17, fraction=0, message= PersonConsts.cRENSPA_DIGITS_VIOLATION_MESSAGE)
 	private BigDecimal iRENSPA;	
-
-	@Column(name="positive_balance")
-	@Digits(integer=13, fraction=4, message= PersonConsts.cPOSITIVE_BALANCE_DIGITS_VIOLATION_MESSAGE)
-	private BigDecimal iPositiveBalance;
 	
 	@Column(name="zip_code")
 	@Size(min=1, max=30, message= PersonConsts.cZIP_CODE_SIZE_VIOLATION_MESSAGE)
 	private String iZipCode;
 
-	@ManyToOne(cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
-    	@JoinColumn(name="city")
+	@ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name="city")
 	private City iCity;
 
-	@ManyToOne(cascade = {CascadeType.MERGE}) //, CascadeType.PERSIST
-    	@JoinColumn(name="IVA_category")
+	@ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name="IVA_category")
 	private IVACategory iIVACategory;
 
 	@Column(name="active", nullable = true)
 	private Boolean iActive;
+	
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinColumn(name="person")
+	@Valid
+	private Set<Settlement> iSettlements;
 	
 	public Long getId() {
 		return iId;
@@ -99,19 +114,19 @@ public class Person  {
 		this.iEmail = iEmail;
 	}
 
-	public BigInteger getPhone() {
+	public String getPhone() {
 		return iPhone;
 	}
 
-	public void setPhone(BigInteger iPhone) {
+	public void setPhone(String iPhone) {
 		this.iPhone = iPhone;
 	}
 
-	public BigInteger getMobilePhone() {
+	public String getMobilePhone() {
 		return iMobilePhone;
 	}
 
-	public void setMobilePhone(BigInteger iMobilePhone) {
+	public void setMobilePhone(String iMobilePhone) {
 		this.iMobilePhone = iMobilePhone;
 	}
 
@@ -121,14 +136,6 @@ public class Person  {
 
 	public void setRENSPA(BigDecimal iRENSPA) {
 		this.iRENSPA = iRENSPA;
-	}
-
-	public BigDecimal getPositiveBalance() {
-		return iPositiveBalance;
-	}
-
-	public void setPositiveBalance(BigDecimal iPositiveBalance) {
-		this.iPositiveBalance = iPositiveBalance;
 	}
 	
 	public String getZipCode() {
@@ -166,7 +173,71 @@ public class Person  {
 	public void setActive(Boolean pActive) {
 		this.iActive = pActive;
 	}
-	 /** 
+
+	public Set<Settlement> getSettlements() {
+		return iSettlements;
+	}
+
+	public void setSettlements(Set<Settlement> pSettlements) {
+		this.iSettlements = pSettlements;
+	}
+	
+	/**
+	 * Devuleve los pagos no descontados de la persona.
+	 * @return mUndiscountedSettlements
+	 */
+	public List<Settlement> getUndiscountedSettlements() {
+		
+		List<Settlement> mUndiscountedSettlements = new ArrayList<Settlement>();
+		
+		if(this.getSettlements() != null){
+			Iterator<Settlement> mSettlements = this.getSettlements().iterator();
+			
+			while(mSettlements.hasNext()){
+				Settlement bSettlement =  mSettlements.next();
+				if(!bSettlement.isDiscounted()){
+					mUndiscountedSettlements.add(bSettlement);	
+				}
+			}
+		}
+		
+		return mUndiscountedSettlements;
+	}
+	
+	//==================== Métodos de dominio =========================
+	
+	/**
+	 * Devuelve el total de los pagos no descontados realizados por el cliente.
+	 * @return mTotal es el total de los pagos no descontados.
+	 */
+	public BigDecimal totalPaid(){
+		BigDecimal mTotal = BigDecimal.ZERO;
+		
+		Iterator<Settlement> mSettlements = this.getUndiscountedSettlements().iterator();
+		
+		while(mSettlements.hasNext()){
+			Settlement bSettlement =  mSettlements.next();
+			mTotal = mTotal.add(bSettlement.getAmount());
+		}
+		
+		return mTotal;
+	}
+	
+	/**
+	 * Marca todos los pagos del cliente como descontados.	
+	 */
+	public void discountSettlements(){
+		Iterator<Settlement> mSettlements = this.getUndiscountedSettlements().iterator();
+		
+		while(mSettlements.hasNext()){
+			Settlement bSettlement =  mSettlements.next();
+			bSettlement.setDiscounted(true);;
+		}
+	}
+
+	//=========================== Fin Métodos de dominio =====================
+	
+	/** 
 	  * Antes de una inserción verifica si la persona no tiene estado definido
 	  * y en tal caso le asigna true por defecto
 	  **/
@@ -176,7 +247,11 @@ public class Person  {
 	   if ( this.getActive() == null ) { this.setActive(true); }
 	}
 	
-	 @PreUpdate
+	/** 
+	  * Antes de una actualización verifica si la persona no tiene estado definido
+	  * y en tal caso le asigna true por defecto
+	  **/
+	@PreUpdate
 	protected
 	 void onPreUpdate() {
 		 if ( this.getActive() == null ) { this.setActive(true); }

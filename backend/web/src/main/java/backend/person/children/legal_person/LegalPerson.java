@@ -91,16 +91,4 @@ public class LegalPerson extends Person {
 	public Boolean isClientAndSupplier() {
 		return (iClient == null);
 	}
-
-	@PrePersist
-	protected
-	void preInsert() {
-		   if ( this.getClient() == null ) { this.setClient(true); }
-	}
-	
-	@PreUpdate
-	protected
-	 void onPreUpdate() {
-			 if ( this.getClient() == null ) { this.setClient(true); }
-	 }
 }

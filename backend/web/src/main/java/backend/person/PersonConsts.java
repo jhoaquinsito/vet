@@ -9,5 +9,7 @@ public class PersonConsts {
 	public static final String cRENSPA_DIGITS_VIOLATION_MESSAGE = "El numero de RENSPA de la persona debe tener 17 digitos enteros y ningún decimal.";
 	public static final String cPOSITIVE_BALANCE_DIGITS_VIOLATION_MESSAGE = "El balance positivo de la persona debe tener 13 digitos enteros y 4 decimales.";
 	public static final String cZIP_CODE_SIZE_VIOLATION_MESSAGE = "El código poastal debe tener un máximo de 8 caracteres.";
+	public static final String cPHONE_SIZE_VIOLATION_MESSAGE = "El número de teléfono debe tener un máximo de 50 caracteres";
+	public static final String cMOBILE_PHONE_SIZE_VIOLATION_MESSAGE = "El número de celular debe tener un máximo de 50 caracteres";
 	
 }

@@ -114,14 +114,11 @@ public class SaleService {
 			}
 			// TODO catchear la excepción que corresponde y no una general
 		} catch (Exception e) {
-			// TODO enviar un mensaje más amigable
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(SaleCons.cCANNOT_GET_SALES);
 		}
 		
 		//Usamos el nuevo findAll con el Sorting.
 		return mResult;
-	
-
 	}
 	
 	/**
@@ -185,5 +182,42 @@ public class SaleService {
 		}
 		
 		return mSaleSaved;
+	}
+	
+
+	/**
+	 * Devuelve las ventas correspondientes a un cliente determinado.
+	 * @param pClientId el identificador del cliente del que se quieren recuperar las ventas.
+	 * @return mClientSales las ventas del cliente.
+	 * @throws BusinessException
+	 */
+	public List<Sale> getDueSalesByClientId(Long pClientId) throws BusinessException{
+		List<Sale> mClientDueSales = new ArrayList<Sale>();
+		Iterable<Sale> mSales = this.getAll();
+		Iterator<Sale> mSalesIterator = mSales.iterator();
+			
+		while(mSalesIterator.hasNext()){
+			Sale bSale = mSalesIterator.next();
+			if((bSale.getPerson().getId() == pClientId) && (!bSale.isPaied_out())){
+				mClientDueSales.add(bSale);
+			}
+		}
+		
+		return mClientDueSales;		
+	}
+	
+	/**
+	 * Coloca todas las ventas adeudadas de un cliente como pagadas.
+	 * @param pClientId identificador del cliente del que se quieren pagar las ventas
+	 * @throws BusinessException
+	 */
+	public void payClientSales(Long pClientId) throws BusinessException{
+		Iterator<Sale> mSalesIterator = this.getDueSalesByClientId(pClientId).iterator();
+		
+		while(mSalesIterator.hasNext()){
+			Sale bSale = mSalesIterator.next();
+			bSale.setPaied_out(true);
+			this.iSaleRepository.save(bSale);
+		}
 	}
 }

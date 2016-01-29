@@ -58,5 +58,5 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE saleline
-  OWNER TO vet
+  OWNER TO vet;
   

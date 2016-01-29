@@ -1,10 +1,7 @@
 package backend.person.children.legal_person;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,14 +9,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.Product;
-import backend.product.ProductService;
 import backend.product.batch.Batch;
 
 public class LegalPersonService {
 	
-	private static final String cCANNOT_SAVE_LEGALPERSON_EXCEPTION_MESSAGE  = "No se puede guardar la persona legal";
 	private static final String cLEGALPERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "La persona legal no puede guardarse, se está violando alguna de sus reestriciones.";
-	private static final String cLEGALPERSON_DOESNT_EXIST_EXCEPTION_MESSAGE = "La persona legal no existe";
 	private static final String cLEGALPERSON_NOT_ACTIVE_EXCEPTION_MESSAGE   = "La persona legal que desea consultar no está activa.";
 	
 	private LegalPersonRepository iLegalPersonRepository;
@@ -103,12 +97,6 @@ public class LegalPersonService {
 			pLegalPersonToSave.setProducts(new HashSet<Product>());
 		}
 		
-		// marco el producto como activo
-		pLegalPersonToSave.setActive(true);
-		
-		//valido la entidad
-		//this.iEntityValidator.validate(pLegalPersonToSave);
-		
 		// guardo el producto
 		LegalPerson mLegalPersonSaved = this.tryToSave(pLegalPersonToSave);
 		
@@ -125,11 +113,7 @@ public class LegalPersonService {
 	public LegalPerson get(Long pId) throws BusinessException{
 		LegalPerson mStoredLegalPerson = this.iLegalPersonRepository.findOne(pId);
 		
-		// si es null, es porque no existe ningún producto con dicho id
-		if (mStoredLegalPerson == null) {
-			throw new BusinessException(LegalPersonService.cLEGALPERSON_DOESNT_EXIST_EXCEPTION_MESSAGE);
-		}
-		if(!mStoredLegalPerson.isActive())
+		if((mStoredLegalPerson != null) && (!mStoredLegalPerson.isActive()))
 			throw new BusinessException(LegalPersonService.cLEGALPERSON_NOT_ACTIVE_EXCEPTION_MESSAGE);
 		return mStoredLegalPerson;
 	}

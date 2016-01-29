@@ -1,25 +1,15 @@
 package backend.person.children.natural_person;
 
-import java.util.HashSet;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
-import backend.product.Product;
-import backend.product.ProductService;
-import backend.product.batch.Batch;
 import backend.utils.EntityValidator;
 
 public class NaturalPersonService {
 	
-	private static final String cCANNOT_SAVE_PRODUCT_EXCEPTION_MESSAGE = null;
-	private static final String cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = null;
-	private static final String cDELETED_PRODUCT_EXCEPTION_MESSAGE = null;
-	private static final String cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE = null;
-	private static final String cNATURAL_PERSON_DOESNT_EXIST_EXCEPTION_MESSAGE = "No existe la persona que se desea recuperar.";
 	private static final String cDELETED_NATURAL_PERSON_EXCEPTION_MESSAGE = "La persona que se desea recuperar no esta activa.";
 	private static final String cCANNOT_SAVE_NATURAL_PERSON_EXCEPTION_MESSAGE = "No se pudo guardar la persona.";
 	private static final String cNATURAL_PERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Se violó alguna de las restricciones de la base de datos.";
@@ -108,13 +98,7 @@ public class NaturalPersonService {
 	public NaturalPerson get(Long pId)throws BusinessException{
 		NaturalPerson mStoredNaturalPerson = this.iNaturalPersonRepository.findOne(pId);
 		
-		// si es null, es porque no existe ningua persona con dicho id
-		if (mStoredNaturalPerson == null) {
-			throw new BusinessException(NaturalPersonService.cNATURAL_PERSON_DOESNT_EXIST_EXCEPTION_MESSAGE);
-		}
-
-		
-		if (!mStoredNaturalPerson.isActive()){
+		if ((mStoredNaturalPerson != null) && (!mStoredNaturalPerson.isActive())){
 			throw new BusinessException(NaturalPersonService.cDELETED_NATURAL_PERSON_EXCEPTION_MESSAGE);
 		}
 		

@@ -2,24 +2,32 @@ package backend.person;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import backend.person.city.CityDTO;
 import backend.person.iva_category.IVACategoryDTO;
+import backend.person.settlement.Settlement;
+import backend.person.settlement.SettlementDTO;
+import backend.sale.SaleDTO;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class PersonDTO  {
 
 	private Long iId;
 	private String iName;
 	private String iAddress;
 	private String iEmail;	
-	private BigInteger iPhone;
-	private BigInteger iMobilePhone;
+	private String iPhone;
+	private String iMobilePhone;
 	private BigDecimal iRENSPA;	
-	private BigDecimal iPositiveBalance;
 	private String iZipCode;
 	private CityDTO iCity;
 	private IVACategoryDTO iIVACategory;
 	private Boolean iActive;
+	private Set<SettlementDTO> iSettlements;
 	
 	public Long getId() {
 		return iId;
@@ -45,16 +53,16 @@ public class PersonDTO  {
 	public void setEmail(String pEmail) {
 		this.iEmail = pEmail;
 	}
-	public BigInteger getPhone() {
+	public String getPhone() {
 		return iPhone;
 	}
-	public void setPhone(BigInteger pPhone) {
+	public void setPhone(String pPhone) {
 		this.iPhone = pPhone;
 	}
-	public BigInteger getMobilePhone() {
+	public String getMobilePhone() {
 		return iMobilePhone;
 	}
-	public void setMobilePhone(BigInteger pMobilePhone) {
+	public void setMobilePhone(String pMobilePhone) {
 		this.iMobilePhone = pMobilePhone;
 	}
 	public BigDecimal getRENSPA() {
@@ -62,12 +70,6 @@ public class PersonDTO  {
 	}
 	public void setRENSPA(BigDecimal pRENSPA) {
 		this.iRENSPA = pRENSPA;
-	}
-	public BigDecimal getPositiveBalance() {
-		return iPositiveBalance;
-	}
-	public void setPositiveBalance(BigDecimal pPositiveBalance) {
-		this.iPositiveBalance = pPositiveBalance;
 	}
 	public String getZipCode() {
 		return iZipCode;
@@ -92,6 +94,12 @@ public class PersonDTO  {
 	}
 	public Boolean getActive() {
 		return iActive;
+	}
+	public Set<SettlementDTO> getSettlements() {
+		return iSettlements;
+	}
+	public void setSettlements(Set<SettlementDTO> pSettlements) {
+		this.iSettlements = pSettlements;
 	}
 
 }

@@ -96,7 +96,7 @@ public class Product implements Persistable<Long> {
 	@Column(name="active")
 	private Boolean iActive;
 
-	@ManyToOne(cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
+	@ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="category")
 	@Valid
 	private Category iCategory;
@@ -125,15 +125,6 @@ public class Product implements Persistable<Long> {
     @JoinColumn(name="drug")
 	@Valid
     private Drug iDrug;
-
-	//@OneToMany(mappedBy="iSaleLines", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
-	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "iProduct", cascade=CascadeType.ALL)
-//	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
-//	@Valid
-//	private Set<SaleLine> iSaleLines;
-//	@ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy="iProducts")
-//	@JsonBackReference
-//	private Set<LegalPerson> iSuppliers; 
 
 	public String getName() {
 		return iName;
@@ -254,22 +245,6 @@ public class Product implements Persistable<Long> {
 	public void setActive(Boolean pActive) {
 		this.iActive = pActive;
 	}
-
-//	public Set<SaleLine> getSaleLines() {
-//		return iSaleLines;
-//	}
-//
-//	public void setSaleLines(Set<SaleLine> pSaleLines) {
-//		this.iSaleLines = pSaleLines;
-//	}
-//	@JsonBackReference
-//	public Set<LegalPerson> getSuppliers() {
-//		return iSuppliers;
-//	}
-//
-//	public void setSuppliers(Set<LegalPerson> pSuppliers) {
-//		this.iSuppliers = pSuppliers;
-//	}
 
 	@Override
 	public boolean isNew() {
