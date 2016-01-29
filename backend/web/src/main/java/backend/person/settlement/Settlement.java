@@ -1,7 +1,6 @@
 package backend.person.settlement;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -10,14 +9,6 @@ import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import backend.person.Person;
-import backend.person.city.CityConsts;
-import backend.person.city.state.State;
 
 
 
@@ -105,13 +96,5 @@ public class Settlement {
 	public void setDiscounted(boolean iDiscounted) {
 		this.iDiscounted = iDiscounted;
 	}
-
-	/**public Person getPerson() {
-		return iPerson;
-	}
-
-	public void setPerson(Person pPerson) {
-		this.iPerson = pPerson;
-	}*/
 
 }

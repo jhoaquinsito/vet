@@ -190,19 +190,21 @@ public class Person  {
 		
 		List<Settlement> mUndiscountedSettlements = new ArrayList<Settlement>();
 		
-		Iterator<Settlement> mSettlements = this.getSettlements().iterator();
-		
-		while(mSettlements.hasNext()){
-			Settlement bSettlement =  mSettlements.next();
-			if(!bSettlement.isDiscounted()){
-				mUndiscountedSettlements.add(bSettlement);	
+		if(this.getSettlements() != null){
+			Iterator<Settlement> mSettlements = this.getSettlements().iterator();
+			
+			while(mSettlements.hasNext()){
+				Settlement bSettlement =  mSettlements.next();
+				if(!bSettlement.isDiscounted()){
+					mUndiscountedSettlements.add(bSettlement);	
+				}
 			}
 		}
 		
 		return mUndiscountedSettlements;
 	}
 	
-	//=== Métodos de dominio =========================
+	//==================== Métodos de dominio =========================
 	
 	/**
 	 * Devuelve el total de los pagos no descontados realizados por el cliente.
@@ -233,7 +235,7 @@ public class Person  {
 		}
 	}
 
-	//=== Fin Métodos de dominio =====================
+	//=========================== Fin Métodos de dominio =====================
 	
 	/** 
 	  * Antes de una inserción verifica si la persona no tiene estado definido

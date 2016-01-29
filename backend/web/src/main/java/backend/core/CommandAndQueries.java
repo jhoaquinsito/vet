@@ -62,8 +62,6 @@ public class CommandAndQueries {
 	private MapperFacade iMapper; 
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
 	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
-	private static final String cPERSON_NULL_EXCEPTION_MESSAGE = "La persona no tiene valores válidos.";
-	
 	
 	/**
 	 * Constructor.
@@ -73,6 +71,10 @@ public class CommandAndQueries {
 		// obtengo un mapper facade de la factory Orika
 		this.iMapper = OrikaMapperFactory.getMapperFacade();
 	}
+	
+	//=======================================================================================
+	
+	// PRODUCTOS
 	
 	/**
 	 * Este método es un comando que permite guardar un producto.
@@ -117,6 +119,37 @@ public class CommandAndQueries {
 		}
 		
 		return mProductDTOList;
+	}
+	
+	/**
+	 * Este método es una consulta que obtiene un producto a partir de
+	 * su identificador.
+	 * @param pProductId identificador del producto
+	 * @return producto encontrado
+	 * @throws BusinessException el producto estaba eliminado lógicamente
+	 */
+	public ProductDTO getProduct(Long pProductId) throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		Product mProduct = mProductService.get(pProductId);
+		
+		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
+		
+		return mProductDTO;
+	}
+	
+	/**
+	 * Este método es un comando que elimina un producto a partir de su identificador.
+	 * Al eliminar el producto, sus los lotes asociados son eliminados físicamente.
+	 * @param pProductId identificador del producto a eliminar
+	 * @throws BusinessException errores de negocio al intentar hacer la operación
+	 */
+	public void deleteProduct(Long pProductId) throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		// elimino el producto
+		mProductService.delete(pProductId);
+		
 	}
 	
 	/**
@@ -178,32 +211,6 @@ public class CommandAndQueries {
 	}
 	
 	/**
-	 * Este método es una consulta que devuelve la lista completa de Personas
-	 * @return lista de Personas Físicas
-	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
-	 */
-	public List<Object> getPeople() throws BusinessException{
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
-		Iterable<LegalPerson> mLegalPersonList = mLegalPersonService.getAll();
-		
-		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
-		
-		List<Object> mPersonList = new ArrayList<Object>();
-		
-		for (LegalPerson bLegalPerson : mLegalPersonList){
-			mPersonList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
-		}
-		
-		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
-			mPersonList.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
-		}
-		
-		return mPersonList;
-	}
-
-	/**
 	 * Este método es un comando que permite guardar una Categoría
 	 * @param pCategory : Categoría a guardar
 	 * @return identificador de la categoria guardado
@@ -255,8 +262,6 @@ public class CommandAndQueries {
 		return this.iMapper.map(mManufacturerService.save(bManufacturer),ManufacturerDTO.class).getId();
 		
 	}
-
-
 
 	/**
 	 * Este método es un comando que permite guardar una presentación.
@@ -310,80 +315,50 @@ public class CommandAndQueries {
 		return mDrug.getId();
 	}
 	
+	// FIN PRODUCTOS
+	
+	//=======================================================================================
+	
+	// PERSONAS
+	
 	/**
-	 * Este método es una consulta que obtiene un producto a partir de
-	 * su identificador.
-	 * @param pProductId identificador del producto
-	 * @return producto encontrado
-	 * @throws BusinessException el producto estaba eliminado lógicamente
+	 * Este método es una consulta que devuelve la lista completa de Personas
+	 * @return lista de Personas Físicas
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
-	public ProductDTO getProduct(Long pProductId) throws BusinessException{
-		ProductService mProductService = new ProductService();
+	public List<Object> getPeople() throws BusinessException{
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
 		
-		Product mProduct = mProductService.get(pProductId);
+		Iterable<LegalPerson> mLegalPersonList = mLegalPersonService.getAll();
 		
-		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
+		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
 		
-		return mProductDTO;
+		List<Object> mPersonList = new ArrayList<Object>();
+		
+		for (LegalPerson bLegalPerson : mLegalPersonList){
+			mPersonList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
+		}
+		
+		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
+			mPersonList.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
+		}
+		
+		return mPersonList;
 	}
 	
 	/**
-	 * Este método es un comando que elimina un producto a partir de su identificador.
-	 * Al eliminar el producto, sus los lotes asociados son eliminados físicamente.
-	 * @param pProductId identificador del producto a eliminar
+	 * Este método es un comando que elimina una Persona a partir de su identificador.
+	 * La eliminación es de tipo Lógica.
+	 * @param pPersonId identificador de la persona asociada.
 	 * @throws BusinessException errores de negocio al intentar hacer la operación
 	 */
-	public void deleteProduct(Long pProductId) throws BusinessException{
-		ProductService mProductService = new ProductService();
+	public void deletePerson(Long pPersonId) throws BusinessException {
+		PersonService mPersonService = new PersonService();
 		
-		// elimino el producto
-		mProductService.delete(pProductId);
-		
+		// elimino la persona
+		mPersonService.delete(pPersonId);
 	}
-		
-	/**
-	 * Este método es una consulta que devuelve la lista completa de Proveedores.
-	 * Un proveedor es una persona legal que tiene asociados productos, y que además
-	 * está activo.
-	 * @return lista de Persona Legal.
-	 * @throws BusinessException
-	 */
-	public List<LegalPersonDTO> getSuppliers() throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		
-		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
-		
-		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
-		
-		for (LegalPerson bLegalPerson : mLegalPerson){
-			if(bLegalPerson.isSupplier())
-			mLegalPersonDTOList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
-		}
-		
-		return mLegalPersonDTOList;
-	}
-	
-	/***
-	 * Este método es una consulta que devuelve la lista completa de Personas Legales
-	 * cuya única condición es que estén activos.
-	 * está activo.
-	 * @return lista de Persona Legal.
-	 * @throws BusinessException
-	 */
-	public List<LegalPersonDTO> getLegalPersons() throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		
-		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
-		
-		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
-		
-		for (LegalPerson bLegalPerson : mLegalPerson){
-			mLegalPersonDTOList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
-		}
-		
-		return mLegalPersonDTOList;
-	}
-
 	
 	/**
 	 * Este método es un comando que permite guardar un LegalPerson
@@ -409,7 +384,28 @@ public class CommandAndQueries {
 		
 		return mLegalPerson.getId();
 	}
-
+	
+	/***
+	 * Este método es una consulta que devuelve la lista completa de Personas Legales
+	 * cuya única condición es que estén activos.
+	 * está activo.
+	 * @return lista de Persona Legal.
+	 * @throws BusinessException
+	 */
+	public List<LegalPersonDTO> getLegalPersons() throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		
+		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		
+		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
+		
+		for (LegalPerson bLegalPerson : mLegalPerson){
+			mLegalPersonDTOList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
+		}
+		
+		return mLegalPersonDTOList;
+	}
+	
 	/**
 	 * Este método es una consulta que obtiene una persona legal a partir de
 	 * su identificador.
@@ -425,39 +421,6 @@ public class CommandAndQueries {
 		LegalPersonDTO mLegalPersonDTO = this.iMapper.map(mLegalPerson, LegalPersonDTO.class);
 		
 		return mLegalPersonDTO;
-	}
-	
-	/**
-	 * Este método es un comando que elimina una Persona a partir de su identificador.
-	 * La eliminación es de tipo Lógica.
-	 * @param pPersonId identificador de la persona asociada.
-	 * @throws BusinessException errores de negocio al intentar hacer la operación
-	 */
-	public void deletePerson(Long pPersonId) throws BusinessException {
-		PersonService mPersonService = new PersonService();
-		
-		// elimino la persona
-		mPersonService.delete(pPersonId);
-	}
-
-	/**
-	 * Este método es una consulta que devuelve la lista completa de Personas Físicas
-	 * @return lista de Personas Físicas
-	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
-	 */
-	public List<Object> getNaturalPeople() throws BusinessException{
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
-		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
-		
-		List<Object> mNaturalPersonListRes = new ArrayList<Object>();
-		
-		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
-			if(bNaturalPerson.isActive())
-			mNaturalPersonListRes.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
-		}
-		
-		return mNaturalPersonListRes;
 	}
 	
 	/**
@@ -493,96 +456,23 @@ public class CommandAndQueries {
 	}
 	
 	/**
-	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
-	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
-	 * @param pClient el cliente del cual se quiere cancelar la deuda.
-	 * @throws BusinessException 
+	 * Este método es una consulta que devuelve la lista completa de Personas Físicas
+	 * @return lista de Personas Físicas
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
-	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
-		SaleService mSaleService = new SaleService();
-		ProductService mProductService = new ProductService();
-		
-		//Recupero las ventas adeudas del cliente.
-		List<Sale> mDueSales = mSaleService.getDueSalesByClientId(pClient.getId());
-		Iterator<Sale> mDueSalesIterator = mDueSales.iterator();
-				
-		//Defino una variable para guardar la deuda total del cliente
-		BigDecimal mDebt = BigDecimal.ZERO;
-				
-		// Calculo la deuda total del cliente
-		while(mDueSalesIterator.hasNext()){ //Por cada venta adeudada
-			Sale mSale = mDueSalesIterator.next();
-			Iterator<SaleLine> bSaleLinesIterator = mSale.getSaleLines().iterator();
-			while(bSaleLinesIterator.hasNext()){//Por cada línea de venta
-				SaleLine bSaleLine = bSaleLinesIterator.next();
-						
-				//Convierto la cantidad de la línea a Bigdecimal
-				BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
-						
-				//Obtengo el precio unitario actual del producto de la línea
-				BigDecimal bProductPrice = mProductService.get(bSaleLine.getProduct().getId()).getUnitPrice();
-						
-				//Sumo a la deuda la cantidad del producto por su precio unitario
-				mDebt = mDebt.add(bProductQuantity.multiply(bProductPrice));
-				
-				//Resto el descuento hecho en la saleline
-				//Obtengo el valor BigDecimal de 100
-				BigDecimal bBigDecimal100 = BigDecimal.valueOf(100);
-				//Multiplico la cantidad del producto por el precio guardado en el saleline 
-				BigDecimal bSaleLineTotal = bProductQuantity.multiply(bSaleLine.getUnit_Price());
-				//Calculo el descuento como: (cantidad*precio*descuento)/100
-				BigDecimal bDiscount = bSaleLineTotal.multiply(bSaleLine.getDiscount()).divide(bBigDecimal100); 
-				//Resto el descuento
-				mDebt = mDebt.subtract(bDiscount);
-			}
-					
-		}
-				
-		//La deuda del cliente es menor o igual que los pagos hechos?
-		return (mDebt.compareTo(pClient.totalPaid()) == 1);
-	}
-	
-	/**
-	 * Cancela la deuda de un cliente, es decir, pone todas las ventas asociadas
-	 * como pagadas.
-	 * @param pClient el cliente del cual se quiere cancelar la deuda.
-	 * @throws BusinessException 
-	 */
-	public void cancelClientDebt(Person pClient) throws BusinessException{
-		SaleService mSaleService = new SaleService();
-		
-		//Marco las ventas como pagas
-		mSaleService.payClientSales(pClient.getId());
-	}
-	
-	/**
-	 * Este método es una consulta que devuelve la lista completa de Proveedores.
-	 * Un proveedor es una persona legal que tiene asociados productos, y que además
-	 * está activo.
-	 * @return lista de Persona Legal.
-	 * @throws BusinessException
-	 */
-	public List<PersonDTO> getClients() throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
+	public List<Object> getNaturalPeople() throws BusinessException{
 		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
 		
-		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
 		
-		Iterable<NaturalPerson> mNaturalPerson = mNaturalPersonService.getAll();
+		List<Object> mNaturalPersonListRes = new ArrayList<Object>();
 		
-		List<PersonDTO> mClientsList = new ArrayList<PersonDTO>();
-		
-		for (LegalPerson bLegalPerson : mLegalPerson){
-			if(bLegalPerson.isClient() && bLegalPerson.isActive())
-			mClientsList.add(this.iMapper.map(bLegalPerson, LegalPersonDTO.class));
-		}
-		
-		for (NaturalPerson bNaturalPerson : mNaturalPerson){
+		for (NaturalPerson bNaturalPerson : mNaturalPersonList){
 			if(bNaturalPerson.isActive())
-			mClientsList.add(this.iMapper.map(bNaturalPerson, NaturalPersonDTO.class));
+			mNaturalPersonListRes.add(this.iMapper.map(bNaturalPerson,NaturalPersonDTO.class));
 		}
 		
-		return mClientsList;
+		return mNaturalPersonListRes;
 	}
 	
 	/**
@@ -637,8 +527,139 @@ public class CommandAndQueries {
 		
 		return mIVACategoryDTOList;
 	}
+		
+	// FIN PERSONAS
 	
-	/** SALE **/
+	//=======================================================================================
+	
+	// CLIENTES
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Proveedores.
+	 * Un proveedor es una persona legal que tiene asociados productos, y que además
+	 * está activo.
+	 * @return lista de Persona Legal.
+	 * @throws BusinessException
+	 */
+	public List<PersonDTO> getClients() throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		
+		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		
+		Iterable<NaturalPerson> mNaturalPerson = mNaturalPersonService.getAll();
+		
+		List<PersonDTO> mClientsList = new ArrayList<PersonDTO>();
+		
+		for (LegalPerson bLegalPerson : mLegalPerson){
+			if(bLegalPerson.isClient() && bLegalPerson.isActive())
+			mClientsList.add(this.iMapper.map(bLegalPerson, LegalPersonDTO.class));
+		}
+		
+		for (NaturalPerson bNaturalPerson : mNaturalPerson){
+			if(bNaturalPerson.isActive())
+			mClientsList.add(this.iMapper.map(bNaturalPerson, NaturalPersonDTO.class));
+		}
+		
+		return mClientsList;
+	}
+	
+	/**
+	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
+	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
+	 * @param pClient el cliente del cual se quiere cancelar la deuda.
+	 * @throws BusinessException 
+	 */
+	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
+		SaleService mSaleService = new SaleService();
+		ProductService mProductService = new ProductService();
+		
+		//Recupero las ventas adeudas del cliente.
+		List<Sale> mDueSales = mSaleService.getDueSalesByClientId(pClient.getId());
+		Iterator<Sale> mDueSalesIterator = mDueSales.iterator();
+				
+		//Defino una variable para guardar la deuda total del cliente
+		BigDecimal mDebt = BigDecimal.ZERO;
+				
+		// Calculo la deuda total del cliente
+		while(mDueSalesIterator.hasNext()){ //Por cada venta adeudada
+			Sale mSale = mDueSalesIterator.next();
+			Iterator<SaleLine> bSaleLinesIterator = mSale.getSaleLines().iterator();
+			while(bSaleLinesIterator.hasNext()){//Por cada línea de venta
+				SaleLine bSaleLine = bSaleLinesIterator.next();
+						
+				//Convierto la cantidad de la línea a Bigdecimal
+				BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
+						
+				//Obtengo el precio unitario actual del producto de la línea
+				BigDecimal bProductPrice = mProductService.get(bSaleLine.getProduct().getId()).getUnitPrice();
+						
+				//Sumo a la deuda la cantidad del producto por su precio unitario
+				mDebt = mDebt.add(bProductQuantity.multiply(bProductPrice));
+				
+				//Resto el descuento hecho en la saleline
+				//Obtengo el valor BigDecimal de 100
+				BigDecimal bBigDecimal100 = BigDecimal.valueOf(100);
+				//Multiplico la cantidad del producto por el precio guardado en el saleline 
+				BigDecimal bSaleLineTotal = bProductQuantity.multiply(bProductPrice);
+				//Calculo el descuento como: (cantidad*precio*descuento)/100
+				BigDecimal bDiscount = bSaleLineTotal.multiply(bSaleLine.getDiscount()).divide(bBigDecimal100); 
+				//Resto el descuento
+				mDebt = mDebt.subtract(bDiscount);
+			}
+					
+		}
+				
+		//La deuda del cliente es menor o igual que los pagos hechos?
+		return (mDebt.compareTo(pClient.totalPaid()) == 1);
+	}
+	
+	/**
+	 * Cancela la deuda de un cliente, es decir, pone todas las ventas asociadas
+	 * como pagadas.
+	 * @param pClient el cliente del cual se quiere cancelar la deuda.
+	 * @throws BusinessException 
+	 */
+	public void cancelClientDebt(Person pClient) throws BusinessException{
+		SaleService mSaleService = new SaleService();
+		
+		//Marco las ventas como pagas
+		mSaleService.payClientSales(pClient.getId());
+	}
+		
+	// FIN CLIENTES
+	
+	//=======================================================================================
+	
+	// PROVEEDORES
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Proveedores.
+	 * Un proveedor es una persona legal que tiene asociados productos, y que además
+	 * está activo.
+	 * @return lista de Persona Legal.
+	 * @throws BusinessException
+	 */
+	public List<LegalPersonDTO> getSuppliers() throws BusinessException {
+		LegalPersonService mLegalPersonService = new LegalPersonService();
+		
+		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		
+		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
+		
+		for (LegalPerson bLegalPerson : mLegalPerson){
+			if(bLegalPerson.isSupplier())
+			mLegalPersonDTOList.add(this.iMapper.map(bLegalPerson,LegalPersonDTO.class));
+		}
+		
+		return mLegalPersonDTOList;
+	}
+		
+	// FIN PROVEEDORES
+	
+	//=======================================================================================
+	
+	// VENTAS
 	
 	/**
 	 * Este método es un comando que permite guardar una Venta (SALE).
@@ -714,5 +735,9 @@ public class CommandAndQueries {
 		mSaleService.delete(pSaleId);
 		
 	}
-	/**********/
+		
+	// FIN VENTAS
+	
+	//=======================================================================================
+		
 }

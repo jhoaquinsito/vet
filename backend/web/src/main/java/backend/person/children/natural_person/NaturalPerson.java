@@ -3,9 +3,6 @@ package backend.person.children.natural_person;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import backend.person.Person;
 
 // TODO documentar

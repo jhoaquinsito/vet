@@ -14,7 +14,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.product.batch.Batch;
-import backend.saleline.SaleLine;
 import backend.utils.EntityValidator;
 
 
@@ -81,17 +80,7 @@ public class ProductService {
 		} else {
 			pProductToSave.setBatches(new HashSet<Batch>());
 		}
-		
-		// asocio el producto a sus ventas (si tiene)
-		/*if (pProductToSave.getSaleLines() != null){
-			for (SaleLine bSaleLine : pProductToSave.getSaleLines()){
-				bSaleLine.setProduct(pProductToSave);
-			}
-		} else {
-			pProductToSave.setSaleLines(new HashSet<SaleLine>());
-		}*/
-		
-		
+			
 		// marco el producto como activo
 		pProductToSave.setActive(true);
 		

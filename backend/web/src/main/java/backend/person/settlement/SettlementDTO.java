@@ -6,8 +6,6 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import backend.person.PersonDTO;
-
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class SettlementDTO {
 
@@ -17,7 +15,6 @@ public class SettlementDTO {
 	private String iConcept;
 	private String iChekNumber;
 	private boolean iDiscounted;
-	//private PersonDTO iPerson;
 
 	public Long getId() {
 		return iId;

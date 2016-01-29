@@ -1,0 +1,104 @@
+<form ng-submit="saveClientAction(clientForm)" name="clientForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Tipo</label>
+                        <p ng-if="form.client.clientType == 'NATURAL_PERSON'" class="form-control-static">Persona física</p>
+                        <p ng-if="form.client.clientType == 'LEGAL_PERSON'" class="form-control-static">Persona jurídica</p>
+                    </div>
+                </div>
+                <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">Nombre</label>
+                            <p class="form-control-static">{{form.client.name}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">Apellido</label>
+                            <p class="form-control-static">{{form.client.lastName}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">Razón Social</label>
+                            <p class="form-control-static">{{form.client.name}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">CUIT</label>
+                            <p class="form-control-static">{{form.client.cuit}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Dirección</label>
+                        <p class="form-control-static">{{form.client.address}}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Código Postal</label>
+                        <p class="form-control-static">{{form.client.zipCode}}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Categoría de IVA</label>
+                        <p class="form-control-static">{{form.client.ivaCategory}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">Renspa</label>
+                            <p class="form-control-static">{{form.client.renspa}}</p>
+                        </div>
+                    </div>
+                    <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">DNI</label>
+                            <p class="form-control-static">{{form.client.nationalId}}</p>
+                        </div>
+                    </div>
+                </div>                
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Email</label>
+                        <p class="form-control-static">{{form.client.email}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Teléfono</label>
+                        <p class="form-control-static">{{form.client.phone}}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Celular</label>
+                        <p class="form-control-static">{{form.client.mobilePhone}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="clients" class="btn btn-icon btn-danger"><i class="fa fa-arrow-left"></i>Volver</a>
+            </div>
+        </div>
+    </div>
+</form>

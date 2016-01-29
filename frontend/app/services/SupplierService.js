@@ -1,8 +1,9 @@
 app.factory('SupplierService', function(Restangular) {
     var service = Restangular.service('supplier');
+    var serviceLegalPerson = Restangular.service('legalperson');
 
     this.getById = function(supplierId) {
-        return service.one(supplierId).get();
+        return serviceLegalPerson.one(supplierId).get();
     };
 
     this.getList = function() {
@@ -10,12 +11,15 @@ app.factory('SupplierService', function(Restangular) {
     };
 
     this.save = function(supplier) {
-        return service.post(supplier);
+        supplier.client = false;
+        supplier.active = true;
+       
+        return serviceLegalPerson.post(supplier);
     };
-    
+
     this.remove = function(supplierId) {
         return service.one(supplierId).remove();
     };
-    
+
     return this;
 });

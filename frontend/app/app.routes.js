@@ -1,4 +1,29 @@
 app.config(function($routeProvider) {
+    //clientes
+    $routeProvider.when('/clients', {
+        controller: 'ClientController',
+        templateUrl: 'app/views/client/table-view.html',
+        action: 'client.list'
+    });
+
+    $routeProvider.when('/clients/add', {
+        controller: 'ClientController',
+        templateUrl: 'app/views/client/form-view.html',
+        action: 'client.add'
+    });
+
+    $routeProvider.when('/clients/edit/:id', {
+        controller: 'ClientController',
+        templateUrl: 'app/views/client/form-view.html',
+        action: 'client.edit'
+    });
+
+    $routeProvider.when('/clients/detail/:id', {
+        controller: 'ClientController',
+        templateUrl: 'app/views/client/detail-view.html',
+        action: 'client.detail'
+    });
+   
     //dashboard
     $routeProvider.when('/dashboard', {
         controller: 'DashboardController',
