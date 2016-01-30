@@ -1,5 +1,6 @@
 app.factory('SupplierService', function(Restangular) {
     var service = Restangular.service('supplier');
+    var servicePerson = Restangular.service('person');
     var serviceLegalPerson = Restangular.service('legalperson');
 
     this.getById = function(supplierId) {
@@ -18,7 +19,7 @@ app.factory('SupplierService', function(Restangular) {
     };
 
     this.remove = function(supplierId) {
-        return service.one(supplierId).remove();
+        return servicePerson.one(supplierId).remove();
     };
 
     return this;
