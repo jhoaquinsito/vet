@@ -58,7 +58,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             request.success = function(response) {
                 MessageService.message(MessageService.text('cliente', 'remove', 'success', 'male'), 'success');
 
-                $location.path('clients');
+                $scope.refreshTableData();
             };
             request.error = function(response) {
                 MessageService.message(MessageService.text('cliente', 'remove', 'error', 'male'), 'danger');
