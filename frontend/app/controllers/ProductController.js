@@ -59,6 +59,8 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
             request.success = function(response) {
                 MessageService.message(MessageService.text('producto', 'remove', 'success', 'male'), 'success');
+
+                $scope.refreshTableData();
             };
             request.error = function(response) {
                 MessageService.message(MessageService.text('producto', 'remove', 'error', 'male'), 'danger');
