@@ -2,25 +2,33 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.clientType.$dirty && clientForm.clientType.$error.required}">
                         <label class="control-label mandatory">Tipo</label>
                         <select class="form-control" name="clientType" ng-disabled="form.client.disabledType" ng-model="form.client.clientType" required>
-                            <option value="NATURAL_PERSON" ng-selected="{{ form.client.clientType == NATURAL_PERSON }}" >Persona física</option>
-                            <option value="LEGAL_PERSON" ng-selected="{{ form.client.clientType == LEGAL_PERSON }}">Persona jurídica</option>
+                            <option value="NATURAL_PERSON">Persona física</option>
+                            <option value="LEGAL_PERSON">Persona jurídica</option>
                         </select>
                         <span ng-show="clientForm.clientType.$dirty && clientForm.clientType.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Categoría de IVA</label>
+                        <select class="form-control" name="ivacategory" ng-model="form.client.ivacategory" ng-options="ivacategory.description for ivacategory in form.ivacategories track by ivacategory.id"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
                             <label class="control-label mandatory">Nombre</label>
                             <input type="text" class="form-control" name="name" ng-model="form.client.name" required>
                             <span ng-show="clientForm.name.$dirty && clientForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.lastName.$dirty && clientForm.lastName.$error.required}">
                             <label class="control-label mandatory">Apellido</label>
                             <input type="text" class="form-control" name="lastName" ng-model="form.client.lastName" required>
@@ -29,14 +37,14 @@
                     </div>
                 </div>
                 <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
-                            <label class="control-label mandatory">Razón Social</label>
+                            <label class="control-label mandatory">Razón social</label>
                             <input type="text" class="form-control" name="name" ng-model="form.client.name" required>
                             <span ng-show="clientForm.name.$dirty && clientForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.cuit.$dirty && clientForm.cuit.$error.required}">
                             <label class="control-label mandatory">CUIT</label>
                             <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" required>
@@ -46,27 +54,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Dirección</label>
-                        <input type="text" class="form-control" name="address" ng-model="form.client.address">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Código postal</label>
-                        <input type="text" class="form-control" name="zipCode" ng-model="form.client.zipCode">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Categoría de IVA</label>
-                        <select class="form-control" name="ivacategory" ng-model="form.client.ivacategory" ng-options="ivacategory.description for ivacategory in form.ivacategories track by ivacategory.id"></select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Renspa</label>
@@ -81,32 +69,46 @@
                         </div>
                     </div>
                 </div> 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Email</label>
+                        <label class="control-label">E-mail</label>
                         <input type="email" class="form-control" name="email" ng-model="form.client.email">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Dirección</label>
+                        <input type="text" class="form-control" name="address" ng-model="form.client.address">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Código postal</label>
+                        <input type="text" class="form-control" name="zipCode" ng-model="form.client.zipCode">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Teléfono</label>
                         <input type="text" class="form-control" name="phone" ng-model="form.client.phone">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Celular</label>
                         <input type="text" class="form-control" name="mobilePhone" ng-model="form.client.mobilePhone">
                     </div>
                 </div>
             </div>
-            <div class="panel-footer">
-                <div class="text-right">
-                    <a ng-href="clients" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
-                    <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
-                </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="clients" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
             </div>
         </div>
     </div>
