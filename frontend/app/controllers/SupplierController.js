@@ -45,7 +45,7 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
             request.success = function(response) {
                 MessageService.message(MessageService.text('proveedor', 'remove', 'success', 'male'), 'success');
 
-                $location.path('suppliers');
+                $scope.refreshTableData();
             };
             request.error = function(response) {
                 MessageService.message(MessageService.text('proveedor', 'remove', 'error', 'male'), 'danger');
