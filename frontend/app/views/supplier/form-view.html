@@ -12,7 +12,7 @@
                 <div class="col-md-3">
                     <div class="form-group form-group-sm" ng-class="{'has-error': supplierForm.cuit.$dirty && supplierForm.cuit.$error.required}">
                         <label class="control-label mandatory">CUIT</label>
-                        <input type="text" class="form-control" name="cuit" ng-model="form.supplier.cuit" required>
+                        <input type="text" class="form-control" name="cuit" ng-model="form.supplier.cuit" required onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         <span ng-show="supplierForm.cuit.$dirty && supplierForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
