@@ -39,7 +39,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
     $scope.addClientAction = function() {
         $rootScope.setTitle($scope.name, 'Agregar cliente');
-        
+
         $scope.resetFormData();
         $scope.refreshFormDropdownsData();
     };
@@ -57,7 +57,7 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
             request.success = function(response) {
                 MessageService.message(MessageService.text('cliente', 'remove', 'success', 'male'), 'success');
-            
+
                 $location.path('clients');
             };
             request.error = function(response) {
@@ -148,6 +148,3 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
     $scope.init();
 });
-
-
-
