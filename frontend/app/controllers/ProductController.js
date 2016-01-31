@@ -1,4 +1,4 @@
-app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, MeasureUnitService, PresentationService, ProductService, MessageService, config) {
+app.controller('ProductController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, MeasureUnitService, PresentationService, SupplierService, ProductService, MessageService, config) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -42,9 +42,9 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
     $scope.editProductAction = function() {
         $rootScope.setTitle($scope.name, 'Editar producto');
-
-        $scope.refreshFormData();
+        
         $scope.refreshFormDropdownsData();
+        $scope.refreshFormData();
     };
 
     $scope.productDetailAction = function() {
@@ -169,6 +169,12 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         PresentationService.getList().then(function(response) {
             $scope.form.presentations = response.plain();
         });
+
+        SupplierService.getList().then(function(response) {
+            $scope.form.suppliers = response.plain();
+        });
+
+        $scope.form.ivas = ProductService.getIva();
     };
 
     $scope.addFormDropdownValue = function(attribute) {
