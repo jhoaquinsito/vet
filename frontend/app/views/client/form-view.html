@@ -5,7 +5,7 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.clientType.$dirty && clientForm.clientType.$error.required}">
                         <label class="control-label mandatory">Tipo</label>
-                        <select class="form-control" name="clientType" ng-disabled="form.client.disabledType" ng-model="form.client.clientType" required>
+                        <select class="form-control" name="clientType" ng-disabled="form.client.id != null" ng-model="form.client.clientType" required>
                             <option value="NATURAL_PERSON">Persona física</option>
                             <option value="LEGAL_PERSON">Persona jurídica</option>
                         </select>
@@ -64,7 +64,7 @@
                     <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.nationalId.$dirty && clientForm.nationalId.$error.required}">
                             <label class="control-label mandatory">DNI</label>
-                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required>
+                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                             <span ng-show="clientForm.nationalId.$dirty && clientForm.nationalId.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>

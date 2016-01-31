@@ -118,8 +118,6 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
         request.success = function(response) {
             $scope.form.client = response.plain();
             $scope.form.client.clientType = response.cuit == null ? 'NATURAL_PERSON' : 'LEGAL_PERSON';
-            $scope.form.client.ivacategoryname = response.ivacategory != null ? response.ivacategory.description : '';
-            $scope.form.client.disabledType = true;
         };
         request.error = function(response) {
             MessageService.message('El cliente solicitado no existe', 'danger');
