@@ -70,9 +70,10 @@
                     </div>
                 </div> 
                 <div class="col-md-6">
-                    <div class="form-group form-group-sm">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.email.$dirty && clientForm.email.$error.email}">
                         <label class="control-label">E-mail</label>
                         <input type="email" class="form-control" name="email" ng-model="form.client.email">
+                        <span ng-show="clientForm.email.$dirty && clientForm.email.$error.email" class="help-block">Este campo debe contener un e-mail válido</span>
                     </div>
                 </div>
             </div>

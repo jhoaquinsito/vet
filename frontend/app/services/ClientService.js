@@ -12,11 +12,10 @@ app.factory('ClientService', function(Restangular) {
     };
 
     this.save = function(client) {
-        //client.active = true;
-        if (client.cuit != null){
-            client.client = true;            
+        if (client.cuit != null) {
+            client.client = true;
             return serviceLegalPerson.post(client);
-        } else{
+        } else {
             return serviceNaturalPerson.post(client);
         }
     };
