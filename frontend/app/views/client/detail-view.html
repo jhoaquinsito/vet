@@ -2,21 +2,29 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Tipo</label>
                         <p ng-if="form.client.clientType == 'NATURAL_PERSON'" class="form-control-static">Persona física</p>
                         <p ng-if="form.client.clientType == 'LEGAL_PERSON'" class="form-control-static">Persona jurídica</p>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Categoría de IVA</label>
+                        <p class="form-control-static">{{form.client.ivacategory.description}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Nombre</label>
                             <p class="form-control-static">{{form.client.name}}</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Apellido</label>
                             <p class="form-control-static">{{form.client.lastName}}</p>
@@ -24,13 +32,13 @@
                     </div>
                 </div>
                 <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Razón Social</label>
                             <p class="form-control-static">{{form.client.name}}</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group form-group-sm">
                             <label class="control-label">CUIT</label>
                             <p class="form-control-static">{{form.client.cuit}}</p>
@@ -39,27 +47,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Dirección</label>
-                        <p class="form-control-static">{{form.client.address}}</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Código Postal</label>
-                        <p class="form-control-static">{{form.client.zipCode}}</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Categoría de IVA</label>
-                        <p class="form-control-static">{{form.client.ivacategory.description}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Renspa</label>
@@ -73,21 +61,35 @@
                         </div>
                     </div>
                 </div>                
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Email</label>
+                        <label class="control-label">E-mail</label>
                         <p class="form-control-static">{{form.client.email}}</p>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Dirección</label>
+                        <p class="form-control-static">{{form.client.address}}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Código postal</label>
+                        <p class="form-control-static">{{form.client.zipCode}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Teléfono</label>
                         <p class="form-control-static">{{form.client.phone}}</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Celular</label>
                         <p class="form-control-static">{{form.client.mobilePhone}}</p>
