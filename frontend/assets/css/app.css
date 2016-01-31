@@ -143,12 +143,6 @@ body {
     padding-top: 65px;
     padding-bottom: 15px;
 }
-#content-wrapper > .container-fluid.ng-enter-active {
-    position: fixed;
-}
-#content-wrapper > .container-fluid.ng-leave-active {
-    position: fixed;
-}
 #content-wrapper > .container-fluid > .panel {
     margin-bottom: 0;
 }
