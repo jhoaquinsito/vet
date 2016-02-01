@@ -52,6 +52,16 @@
                         <p class="form-control-static">{{form.product.supplier}}</p>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">IVA</label>
+                        <div ng-switch on="form.product.iva">
+                            <p class="form-control-static" ng-switch-when="0">Sin IVA</p>
+                            <p class="form-control-static" ng-switch-when="10.5">10.5 %</p>
+                            <p class="form-control-static" ng-switch-when="21">21 %</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
