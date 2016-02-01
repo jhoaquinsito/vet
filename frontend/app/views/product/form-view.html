@@ -12,7 +12,7 @@
                 <div class="col-md-3">
                     <div class="form-group form-group-sm" ng-class="{'has-error': productForm.measureUnit.$dirty && productForm.measureUnit.$error.required}">
                         <label class="control-label mandatory">Unidad de medida</label>
-                        <select class="form-control" name="measureUnit" ng-model="form.product.measureUnit" ng-options="measureUnit as measureUnit.name for measureUnit in form.measureUnits track by measureUnit.id"></select>
+                        <select class="form-control" name="measureUnit" ng-model="form.product.measureUnit" ng-options="measureUnit as measureUnit.name for measureUnit in form.measureUnits track by measureUnit.id" required></select>
                         <span ng-show="productForm.measureUnit.$dirty && productForm.measureUnit.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
