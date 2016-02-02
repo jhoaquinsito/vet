@@ -1,3 +1,5 @@
 /target/
 /.classpath
 *.*~
+pom.xml
+.gitignore
