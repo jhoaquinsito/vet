@@ -5,21 +5,21 @@
                 <div class="col-md-9">
                     <div class="form-group form-group-sm" ng-class="{'has-error': productForm.name.$dirty && productForm.name.$error.required}">
                         <label class="control-label mandatory">Nombre</label>
-                        <input type="text" class="form-control" name="name" ng-model="form.product.name" required>
+                        <input type="text" class="form-control" name="name" ng-model="form.product.name" onkeypress="return this.value.length < 100" required>
                         <span ng-show="productForm.name.$dirty && productForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm" ng-class="{'has-error': productForm.measureUnit.$dirty && productForm.measureUnit.$error.required}">
                         <label class="control-label mandatory">Unidad de medida</label>
-                        <select class="form-control" name="measureUnit" ng-model="form.product.measureUnit" ng-options="measureUnit as measureUnit.name for measureUnit in form.measureUnits track by measureUnit.id"></select>
+                        <select class="form-control" name="measureUnit" ng-model="form.product.measureUnit" ng-options="measureUnit as measureUnit.name for measureUnit in form.measureUnits track by measureUnit.id" required></select>
                         <span ng-show="productForm.measureUnit.$dirty && productForm.measureUnit.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Descripción</label>
-                        <textarea class="form-control" name="description" ng-model="form.product.description"></textarea>
+                        <textarea class="form-control" name="description" ng-model="form.product.description" onkeypress="return this.value.length < 250"></textarea>
                     </div>
                 </div>
             </div>
@@ -27,25 +27,25 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Categoría</label>
-                        <input type="text" class="form-control" name="category" ng-model="form.product.category" ng-change="addFormDropdownValue('category')" bs-options="category as category.name for category in form.categories" bs-typeahead>
+                        <input type="text" class="form-control" name="category" ng-model="form.product.category" onkeypress="return this.value.length < 30" ng-change="addFormDropdownValue('category')" bs-options="category as category.name for category in form.categories" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Laboratorio</label>
-                        <input type="text" class="form-control" name="manufacturer" ng-model="form.product.manufacturer" ng-change="addFormDropdownValue('manufacturer')" bs-options="manufacturer as manufacturer.name for manufacturer in form.manufacturers" bs-typeahead>
+                        <input type="text" class="form-control" name="manufacturer" ng-model="form.product.manufacturer" onkeypress="return this.value.length < 30" ng-change="addFormDropdownValue('manufacturer')" bs-options="manufacturer as manufacturer.name for manufacturer in form.manufacturers" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Droga</label>
-                        <input type="text" class="form-control" name="drug" ng-model="form.product.drug" ng-change="addFormDropdownValue('drug')" bs-options="drug as drug.name for drug in form.drugs" bs-typeahead>
+                        <input type="text" class="form-control" name="drug" ng-model="form.product.drug" onkeypress="return this.value.length < 30" ng-change="addFormDropdownValue('drug')" bs-options="drug as drug.name for drug in form.drugs" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Presentación</label>
-                        <select class="form-control" name="presentation" ng-model="form.product.presentation" ng-options="presentation as presentation.name for presentation in form.presentations track by presentation.id"></select>
+                        <select class="form-control" name="presentation" ng-model="form.product.presentation" onkeypress="return this.value.length < 30" ng-options="presentation as presentation.name for presentation in form.presentations track by presentation.id"></select>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -65,25 +65,25 @@
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Costo</label>
-                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost">
+                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Utilidad</label>
-                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility">
+                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Precio unitario</label>
-                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice">
+                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Stock mínimo</label>
-                        <input type="number" class="form-control" name="minimumStock" ng-model="form.product.minimumStock">
+                        <input type="number" class="form-control" name="minimumStock" ng-model="form.product.minimumStock" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
                 </div>
             </div>
