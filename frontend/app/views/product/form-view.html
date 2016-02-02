@@ -65,25 +65,25 @@
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Costo</label>
-                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" onkeypress="return this.value.length < 12">
+                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" min="0" onkeypress="return this.value.length < 12">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Utilidad</label>
-                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" onkeypress="return this.value.length < 12">
+                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" min="0" onkeypress="return this.value.length < 12">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Precio unitario</label>
-                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" onkeypress="return this.value.length < 12">
+                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" min="0" onkeypress="return this.value.length < 12">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Stock mínimo</label>
-                        <input type="number" class="form-control" name="minimumStock" ng-model="form.product.minimumStock" onkeypress="return this.value.length < 12">
+                        <input type="number" class="form-control" name="minimumStock" ng-model="form.product.minimumStock" min="0" onkeypress="return this.value.length < 12">
                     </div>
                 </div>
             </div>
