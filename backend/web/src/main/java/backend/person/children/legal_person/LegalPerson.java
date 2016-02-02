@@ -1,16 +1,11 @@
 package backend.person.children.legal_person;
 
 import java.math.BigDecimal;
-import java.util.Set;
-
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import backend.person.Person;
-import backend.product.Product;
 
 
 /**
@@ -31,14 +26,7 @@ public class LegalPerson extends Person {
 	@NotNull(message = LegalPersonConsts.cCUIT_NOTNULL_VIOLATION_MESSAGE)
 	@Digits(integer=11, fraction=0, message= LegalPersonConsts.cCUIT_DIGITS_VIOLATION_MESSAGE)
 	@Valid
-	private BigDecimal iCUIT;
-
-	@ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE})//, CascadeType.PERSIST
-    @JoinTable(name="supplier", joinColumns=@JoinColumn(name="legal_person_id"), inverseJoinColumns=@JoinColumn(name="product_id"))
-	@JsonManagedReference
-	@JsonIgnore
-	@Valid
-	private Set<Product> iProducts; 
+	private BigDecimal iCUIT; 
 	
 	@Column(name="client", nullable=true)
 	private Boolean iClient;
@@ -49,16 +37,6 @@ public class LegalPerson extends Person {
 
 	public void setCUIT(BigDecimal pCUIT) {
 		this.iCUIT = pCUIT;
-	}
-
-	@JsonManagedReference
-	@JsonIgnore
-	public Set<Product> getProducts() {
-		return iProducts;
-	}
-
-	public void setProducts(Set<Product> pProducts) {
-		this.iProducts = pProducts;
 	}
 	
 	public Boolean getClient() {

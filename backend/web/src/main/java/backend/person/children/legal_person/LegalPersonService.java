@@ -55,9 +55,6 @@ public class LegalPersonService {
 		LegalPerson mLegalPersonToDelete = this.iLegalPersonRepository.findOne(pId);
 	
 		mLegalPersonToDelete.setActive(false);
-		// limpio la lista de lotes asociados
-		//TODO - Puede ser que al eliminarse se necesite también eliminar la lista de los productos asociados.
-		mLegalPersonToDelete.getProducts().clear();
 		
 		// almaceno el persona legal desactivado y sin los lotes
 		this.iLegalPersonRepository.save(mLegalPersonToDelete);
@@ -73,28 +70,11 @@ public class LegalPersonService {
 	 * @throws BusinessException 
 	 */
 	public LegalPerson save(LegalPerson pLegalPersonToSave) throws BusinessException {
-		// verifico que el producto que se intenta guardar no esté eliminado
+		// verifico que la persona legal que se intenta guardar no esté eliminada
 		// o que traiga un identificador que no existe
 		LegalPerson mStoredLegalPerson;
 		if (pLegalPersonToSave.getId() != null){
 			 mStoredLegalPerson = this.iLegalPersonRepository.findOne(pLegalPersonToSave.getId());
-		}
-		
-		//TODO esto debería estar en otra capa anterior (al mapear DTO con domain)
-		// asocio el producto a sus lotes (si tiene)
-		if (pLegalPersonToSave.getProducts() != null){
-			for (Product bProduct : pLegalPersonToSave.getProducts()){
-				bProduct.setActive(true);
-				if (bProduct.getBatches() != null){
-					for (Batch bBatch : bProduct.getBatches()){
-						bBatch.setProduct(bProduct);
-					}
-				} else {
-					bProduct.setBatches(new HashSet<Batch>());
-				}
-			}
-		} else {
-			pLegalPersonToSave.setProducts(new HashSet<Product>());
 		}
 		
 		// guardo el producto

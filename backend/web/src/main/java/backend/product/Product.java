@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -26,15 +28,16 @@ import javax.validation.constraints.Size;
 import org.springframework.data.domain.Persistable;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import backend.person.children.legal_person.LegalPerson;
 import backend.product.batch.Batch;
 import backend.product.category.Category;
 import backend.product.drug.Drug;
 import backend.product.manufacturer.Manufacturer;
 import backend.product.measure_unit.MeasureUnit;
 import backend.product.presentation.Presentation;
-import backend.saleline.SaleLine;
 
 /**
 * Un <code>Product</code> es una representación de un tipo de producto. Un tipo
@@ -125,6 +128,11 @@ public class Product implements Persistable<Long> {
     @JoinColumn(name="drug")
 	@Valid
     private Drug iDrug;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="supplier", joinColumns=@JoinColumn(name="product_id"), inverseJoinColumns=@JoinColumn(name="legal_person_id"))
+	@Valid
+	private Set<LegalPerson> iSuppliers;
 
 	public String getName() {
 		return iName;
@@ -244,6 +252,14 @@ public class Product implements Persistable<Long> {
 
 	public void setActive(Boolean pActive) {
 		this.iActive = pActive;
+	}
+
+	public Set<LegalPerson> getSuppliers() {
+		return iSuppliers;
+	}
+
+	public void setSuppliers(Set<LegalPerson> pSuppliers) {
+		this.iSuppliers = pSuppliers;
 	}
 
 	@Override
