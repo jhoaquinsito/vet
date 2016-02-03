@@ -16,8 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import backend.exception.BusinessException;
 import backend.product.Product;
 
@@ -114,6 +112,15 @@ public class Batch {
 
 	public void setProduct(Product pProduct) {
 		this.iProduct = pProduct;
+	}
+	
+	/**
+	 * Este metodo devuelve el <code>Codigo de Barras</code> de un <strong> Batch </strong>
+	 * @return
+	 */
+	public String getCode(){
+		String code = String.valueOf(this.getId()+ 10000)  + String.valueOf(this.getIsoDueDate());
+		return code;
 	}
 
 }

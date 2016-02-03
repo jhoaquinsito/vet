@@ -122,6 +122,49 @@ public class CommandAndQueries {
 	}
 	
 	/**
+	 * Este método es una consulta que devuelve la lista completa de Productos
+	 * filtrados a traves de su:
+	 * @param pProductName : Fragmento de nombre de un producto
+	 * @return
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<ProductDTO> getProductsByName(String pProductName) throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		Iterable<Product> mProduct = mProductService.getProductListByName(pProductName);
+		
+		List<ProductDTO> mProductDTOList = new ArrayList<ProductDTO>();
+		
+		for (Product bProduct : mProduct){
+			mProductDTOList.add(this.iMapper.map(bProduct,ProductDTO.class));
+		}
+		
+		return mProductDTOList;
+	}
+	
+
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Productos
+	 * filtrados a traves de su:
+	 * @param pBatchCode : Fragmento de codigo de barra de un lote.
+	 * @return
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<ProductDTO> getProductsByBatchCode(String pBatchCode) throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		Iterable<Product> mProduct = mProductService.getProductListByBatchCode(pBatchCode);
+		
+		List<ProductDTO> mProductDTOList = new ArrayList<ProductDTO>();
+		
+		for (Product bProduct : mProduct){
+			mProductDTOList.add(this.iMapper.map(bProduct,ProductDTO.class));
+		}
+		
+		return mProductDTOList;
+	}
+	
+	/**
 	 * Este método es una consulta que obtiene un producto a partir de
 	 * su identificador.
 	 * @param pProductId identificador del producto
@@ -132,6 +175,23 @@ public class CommandAndQueries {
 		ProductService mProductService = new ProductService();
 		
 		Product mProduct = mProductService.get(pProductId);
+		
+		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
+		
+		return mProductDTO;
+	}
+	
+	/**
+	 * Este método es una consulta que obtiene un producto a partir de
+	 * su identificador.
+	 * @param pProductId identificador del producto
+	 * @return producto encontrado
+	 * @throws BusinessException el producto estaba eliminado lógicamente
+	 */
+	public ProductDTO getProductByBatchCode(String pProductBatchCode) throws BusinessException{
+		ProductService mProductService = new ProductService();
+		
+		Product mProduct = mProductService.getProductByBatchCode(pProductBatchCode);
 		
 		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
 		

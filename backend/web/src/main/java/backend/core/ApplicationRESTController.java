@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
 import backend.person.PersonDTO;
-import backend.person.children.natural_person.NaturalPerson;
 import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
@@ -92,6 +90,59 @@ public class ApplicationRESTController {
 	public ProductDTO getProductById(@PathVariable Long id) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 		return mCNQ.getProduct(id);
+	}
+	
+	/**
+	 * Metodo API que permite recuperar un Product especificando su ID
+	 * 
+	 * @param id
+	 *            : Identificador de la entidad buscada.
+	 * @return ProductDTO : producto buscado.
+	 * @throws BusinessException
+	 *             el producto estaba eliminado lógicamente
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "product/bybatchcode/{batchCode}", method = RequestMethod.GET)
+	public ProductDTO getProductByBatchCode(@PathVariable String batchCode) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		return mCNQ.getProductByBatchCode(batchCode);
+	}
+	
+	/**
+	 * Metodo API que permite recuperar una lista de Product 
+	 * especificando su Name
+	 * 
+	 * @param name
+	 *            : Nombre de la entidad buscada.
+	 * @return List<ProductDTO> : productos con "name" similar.
+	 * @throws BusinessException
+	 *             : Excepcion de negocio,.
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "products/byname/{name}", method = RequestMethod.GET)
+	public List<ProductDTO> getProductsByName(@PathVariable String name) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		return mCNQ.getProductsByName(name);
+	}
+	
+	/**
+	 * Metodo API que permite recuperar una lista de Product 
+	 * especificando su Batch.barcode.
+	 * 
+	 * @param batchCode
+	 *            : Codigo de barras de la entidad buscada.
+	 * @return List<ProductDTO> : productos con "barcode" similar.
+	 * @throws BusinessException
+	 *             : Excepcion de negocio,.
+	 * @throws Exception
+	 *             : Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "products/bybatchcode/{batchCode}", method = RequestMethod.GET)
+	public List<ProductDTO> getProductsByBatchCode(@PathVariable String batchCode) throws BusinessException {
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		return mCNQ.getProductsByBatchCode(batchCode);
 	}
 
 	/**

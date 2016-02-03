@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.Sort;
@@ -126,6 +128,187 @@ public class ProductService {
 		return mResult;
 	
 
+	}
+	
+	/***
+	 * Metodo que permite obtener la lista de productos por nombre.
+	 * 
+	 * @param pProductName
+	 * 						Parametro para comprar productos por similitud.
+	 * @return
+	 * @throws BusinessException
+	 * 						Excepcion de negocio.
+	 */
+	public Iterable<Product> getProductListByName(String pProductName) throws BusinessException{
+		List<Product> mResultList 	= new ArrayList<Product>();
+		List<Product> mProductList 	= new ArrayList<Product>();
+		
+		try {
+			Iterator<Product> mIterator = this.getAll().iterator();
+			
+			while (mIterator.hasNext()) {
+				Product mProduct = mIterator.next();
+				if (mProduct.isActive())
+					mProductList.add(mProduct);
+			}
+			
+			mResultList.addAll(this.filterProductByName(mProductList, pProductName));
+			
+		}catch (Exception e) {
+			
+			throw new BusinessException(e.getMessage());
+		}
+		
+		return mResultList;
+	}
+	
+	/***
+	 * Metodo que permite obtener la lista de productos por codigo de barras de un lote.
+	 * 
+	 * @param pBatchCode
+	 * 						Parametro para comprar productos por similitud.
+	 * @return
+	 * @throws BusinessException
+	 * 						Excepcion de negocio.
+	 */
+	public Iterable<Product> getProductListByBatchCode(String pBatchCode) throws BusinessException{
+		List<Product> mResultList 	= new ArrayList<Product>();
+		List<Product> mProductList 	= new ArrayList<Product>();
+
+		try {
+			Iterator<Product> mIterator = this.getAll().iterator();
+			
+			while (mIterator.hasNext()) {
+				Product mProduct = mIterator.next();
+				if (mProduct.isActive())
+					mProductList.add(mProduct);
+			}
+			
+			mResultList.addAll(this.filterProductByCode(mProductList, pBatchCode));
+			
+		}catch (Exception e) {
+			
+			throw new BusinessException(e.getMessage());
+		}
+		
+		return mResultList;
+	}
+	
+	/***
+	 * Metodo para obtener UN producto a traves del codigo de barra de un lote asociado.
+	 * 
+	 * @param pBatchCode
+	 * 					Codigo de barra de un lote asociado al producto buscado.
+	 * @return
+	 * @throws BusinessException
+	 * 					Excepcion de negocio.
+	 */
+	public Product getProductByBatchCode(String pBatchCode) throws BusinessException{
+		List<Product> mProductList 	= new ArrayList<Product>();
+
+		try {
+			Iterator<Product> mIterator = this.getAll().iterator();
+			
+			while (mIterator.hasNext()) {
+				Product mProduct = mIterator.next();
+				if (mProduct.isActive())
+					mProductList.add(mProduct);
+			}
+			
+			return this.getProductByCode(mProductList, pBatchCode);
+			
+		}catch (Exception e) {
+			
+			throw new BusinessException(e.getMessage());
+		}
+	}
+	
+	
+	/**
+	 * Metodo privado que permite filtrar un iterador de productos
+	 * usando como filtro el codigo de sus lotes (Batch), y un fragmento de codigo como entrada.
+	 * 
+	 * Si alguno de los batch.getCode() contiene a la secuencia entonces ese producto entra en la lista final.
+	 * 
+	 * @param pProductIterator
+	 * 			Iterador de productos, puede estar previamente filtrado o no.
+	 * @param pName
+	 * 			Secuencia de nombre de un producto, puede ser un fragmento o completo.
+	 * @return
+	 */
+	private List<Product> filterProductByName(List<Product> pProductIterator, String pName)  throws BusinessException{
+		List<Product> mResult = new ArrayList<Product>();
+		try {
+			for (Product mProduct : pProductIterator) {
+				
+				if(mProduct.getName().toLowerCase().contains(pName.toLowerCase())){
+					mResult.add(mProduct);
+					continue;
+				}
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
+		}
+		return mResult;
+	}
+	
+	/**
+	 * Metodo privado que permite filtrar un iterador de productos
+	 * usando como filtro el codigo de sus lotes (Batch), y un fragmento de codigo como entrada.
+	 * 
+	 * Si alguno de los batch.getCode() contiene a la secuencia entonces ese producto entra en la lista final.
+	 * 
+	 * @param pProductIterator
+	 * 			Iterador de productos, puede estar previamente filtrado o no.
+	 * @param pCode
+	 * 			Secuencia de un codigo de barras de un batch, puede ser un fragmento o completo.
+	 * @return
+	 */
+	private List<Product> filterProductByCode(List<Product> pProductIterator, String pCode)  throws BusinessException{
+		List<Product> mResult = new ArrayList<Product>();
+		try {
+			for (Product mProduct : pProductIterator) {
+				Set<Batch> mBatchSet = mProduct.getBatches(); 
+				for(Batch mBatch : mBatchSet){
+					if (mBatch.getCode().toLowerCase().contains(pCode.toLowerCase())){
+						mResult.add(mProduct);
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
+		}
+		return mResult;
+	}
+	
+	private Product getProductByCode(List<Product> pProductIterator, String pCode)  throws BusinessException{
+		Product mStoredProduct = null;
+		
+		try {
+			for (Product mProduct : pProductIterator) {
+				Set<Batch> mBatchSet = mProduct.getBatches(); 
+				for(Batch mBatch : mBatchSet){
+					if (mBatch.getCode().toLowerCase().compareTo(pCode.toLowerCase())==0){
+						mStoredProduct = mProduct;
+						break;
+					}
+				}
+			}
+			// si es null, es porque no existe ningún producto con dicho id
+			if (mStoredProduct == null) {
+				throw new BusinessException(ProductService.cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE);
+			}
+
+			// checkeo si el producto NO está activo
+			if (!mStoredProduct.isActive()){
+				throw new BusinessException(ProductService.cDELETED_PRODUCT_EXCEPTION_MESSAGE);
+			}
+			return mStoredProduct;
+			
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
+		}
 	}
 	
 	/**
