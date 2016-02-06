@@ -580,7 +580,20 @@ public class ApplicationRESTController {
 	}
 	
 	/***
-	 * Este método permite ejecutar una impresión de testing.
+	 * Este método permite ejecutar una impresión de un SALE.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "printsale/{id}", method = RequestMethod.POST)
+	public void printSale(@PathVariable Long id) throws BusinessException {
+		
+		 
+		CommandAndQueries mCNQ = new CommandAndQueries();
+		SaleDTO sale = mCNQ.getSale(id);
+		ZebraPrintHelper.PrintSale(sale);
+	}
+	
+	/***
+	 * Este método permite ejecutar una impresión de un BATCH.
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "printbatch", method = RequestMethod.POST)
