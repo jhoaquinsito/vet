@@ -1,0 +1,28 @@
+<form ng-submit="saveSaleAction(saleForm)" name="saleForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': supplierForm.name.$dirty && supplierForm.name.$error.required}">
+                        <label class="control-label mandatory">Razón social</label>
+                        <input type="text" class="form-control" name="name" ng-model="form.supplier.name" required>
+                        <span ng-show="supplierForm.name.$dirty && supplierForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': supplierForm.cuit.$dirty && supplierForm.cuit.$error.required}">
+                        <label class="control-label mandatory">CUIT</label>
+                        <input type="text" class="form-control" name="cuit" ng-model="form.supplier.cuit" required onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        <span ng-show="supplierForm.cuit.$dirty && supplierForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="suppliers" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>
