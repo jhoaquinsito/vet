@@ -4,18 +4,18 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     $scope.table = {};
     $scope.form = {};
 
-    $scope.suppliers = [];
+    $scope.sales = [];
 
     $scope.init = function() {
         switch ($scope.action) {
-            case 'supplier.add':
-                $scope.addSupplierAction();
+            case 'sale.add':
+                $scope.addSaleAction();
                 break;
         }
     };
 
-    $scope.addSupplierAction = function() {
-        $rootScope.setTitle($scope.name, 'Agregar proveedor');
+    $scope.addSaleAction = function() {
+        $rootScope.setTitle($scope.name, 'Realizar venta');
     };
 
     $scope.saveSaleAction = function(form) {
@@ -23,39 +23,39 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-        var request = SupplierService.save($scope.form.supplier);
+        var request = SaleService.save($scope.form.sale);
 
         request.success = function(response) {
             MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
 
-            $location.path('suppliers');
+            $location.path('sales');
         };
         request.error = function(response) {
             MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
 
-            $location.path('suppliers');
+            $location.path('sales');
         };
 
         request.then(request.success, request.error);
     };
 
     $scope.refreshFormData = function() {
-        var request = SupplierService.getById($routeParams.id);
+        var request = SaleService.getById($routeParams.id);
 
         request.success = function(response) {
-            $scope.form.supplier = response.plain();
+            $scope.form.sale = response.plain();
         };
         request.error = function(response) {
             MessageService.message('El proveedor solicitado no existe', 'danger');
 
-            $location.path('suppliers');
+            $location.path('sales');
         };
 
         request.then(request.success, request.error);
     };
 
     $scope.resetFormData = function() {
-        $scope.form.supplier = {
+        $scope.form.sale = {
             name: null,
             cuit: null
         };

@@ -81,17 +81,11 @@ app.config(function($routeProvider) {
         action: 'supplier.edit'
     });
 
-     //ventas
+     // ventas
     $routeProvider.when('/sales', {
         controller: 'SaleController',
-        templateUrl: 'app/views/ssale/table-view.html',
-        action: 'supplier.list'
-    });
-
-    $routeProvider.when('/suppliers/add', {
-        controller: 'SupplierController',
-        templateUrl: 'app/views/supplier/form-view.html',
-        action: 'supplier.add'
+        templateUrl: 'app/views/sale/form-view.html',
+        action: 'sale.add'
     });
 
     //ruta no encontrada
