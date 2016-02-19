@@ -26,39 +26,17 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         var request = SaleService.save($scope.form.sale);
 
         request.success = function(response) {
-            MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
+            MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'success', 'female'), 'success');
 
             $location.path('sales');
         };
         request.error = function(response) {
-            MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'error', 'female'), 'danger');
 
             $location.path('sales');
         };
 
         request.then(request.success, request.error);
-    };
-
-    $scope.refreshFormData = function() {
-        var request = SaleService.getById($routeParams.id);
-
-        request.success = function(response) {
-            $scope.form.sale = response.plain();
-        };
-        request.error = function(response) {
-            MessageService.message('El proveedor solicitado no existe', 'danger');
-
-            $location.path('sales');
-        };
-
-        request.then(request.success, request.error);
-    };
-
-    $scope.resetFormData = function() {
-        $scope.form.sale = {
-            name: null,
-            cuit: null
-        };
     };
 
     $scope.formValidation = function(form) {

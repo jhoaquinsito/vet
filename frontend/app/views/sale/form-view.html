@@ -1,7 +1,26 @@
 <form ng-submit="saveSaleAction(saleForm)" name="saleForm" novalidate>
-    <div class="row">
-        <div class="col-md-12">
-            <h1>PANTALLA DE VENTAS</h1>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">ID Comprador</label>
+                        <input type="text" class="form-control" name="buyerid" ng-model="form.sale.person.id">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Producto 1</label>
+                        <input type="text" class="form-control" name="prod1id" ng-model="form.sale.salelines[0].product.id">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="sales" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Registrar</button>
+            </div>
         </div>
     </div>
 </form>
