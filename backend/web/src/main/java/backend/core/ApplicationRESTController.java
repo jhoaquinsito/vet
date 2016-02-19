@@ -594,11 +594,20 @@ public class ApplicationRESTController {
 	
 	/***
 	 * Este método permite ejecutar una impresión de un BATCH.
+	 * Ademas lo imprime N veces.
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "printbatch/{quantity}", method = RequestMethod.POST)
+	public void printBatchs(@RequestBody BatchDTO dto,@PathVariable int quantity) throws BusinessException {
+		ZebraPrintHelper.PrintBatch(dto,quantity);
+	}
+	
+	/***
+	 * Este método permite ejecutar una impresión de un BATCH.
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "printbatch", method = RequestMethod.POST)
 	public void printBatch(@RequestBody BatchDTO dto) throws BusinessException {
-		
 		ZebraPrintHelper.PrintBatch(dto);
 	}
 	
