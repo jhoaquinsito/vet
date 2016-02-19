@@ -2,13 +2,15 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">ID Comprador</label>
-                        <input type="text" class="form-control" name="buyerid" ng-model="form.sale.person.id">
+                        <label class="control-label">Cliente</label>
+                        <input type="text" class="form-control" name="client" ng-model="form.sale.person" onkeypress="return this.value.length < 130" ng-change="addFormDropdownValue('client')" bs-options="client.id as client.name for client in form.clients" bs-typeahead>
                     </div>
                 </div>
-                <div class="col-md-3">
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Producto 1</label>
                         <input type="text" class="form-control" name="prod1id" ng-model="form.sale.salelines[0].product.id">

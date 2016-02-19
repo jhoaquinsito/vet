@@ -1,4 +1,4 @@
-app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, SaleService, MessageService, config) {
+app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, SaleService, ClientService, MessageService, config) {
     $scope.name = 'Ventas';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -16,6 +16,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.addSaleAction = function() {
         $rootScope.setTitle($scope.name, 'Realizar venta');
+
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.saveSaleAction = function(form) {
@@ -47,6 +49,12 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         });
 
         return form.$invalid;
+    };
+
+    $scope.refreshFormDropdownsData = function() {
+        ClientService.getList().then(function(response) {
+            $scope.form.clients = response.plain();
+        });
     };
 
     $scope.init();
