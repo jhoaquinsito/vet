@@ -14,7 +14,7 @@ app.factory('SupplierService', function(Restangular) {
     this.save = function(supplier) {
         supplier.client = false;
         supplier.active = true;
-       
+
         return serviceLegalPerson.post(supplier);
     };
 

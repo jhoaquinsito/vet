@@ -23,7 +23,7 @@ app.config(function($routeProvider) {
         templateUrl: 'app/views/client/detail-view.html',
         action: 'client.detail'
     });
-   
+
     //dashboard
     $routeProvider.when('/dashboard', {
         controller: 'DashboardController',
@@ -81,7 +81,7 @@ app.config(function($routeProvider) {
         action: 'supplier.edit'
     });
 
-     //ventas
+    //ventas
     $routeProvider.when('/sales', {
         controller: 'SaleController',
         templateUrl: 'app/views/ssale/table-view.html',

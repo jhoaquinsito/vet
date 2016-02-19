@@ -42,7 +42,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
     $scope.editProductAction = function() {
         $rootScope.setTitle($scope.name, 'Editar producto');
-        
+
         $scope.refreshFormDropdownsData();
         $scope.refreshFormData();
     };
