@@ -69,8 +69,12 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         });
 
         $scope.form.invoiceOptions = SaleService.getInvoiceOptions();
-
         $scope.form.sale.invoiced = $scope.form.invoiceOptions[0].value;
+
+
+        $scope.form.paiedOutOptions = SaleService.getPaiedOutOptions();
+        $scope.form.sale.paied_out = $scope.form.paiedOutOptions[0].value;
+        
     };
 
     $scope.addSaleLineAction = function() {
@@ -89,6 +93,9 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
             $scope.form.sale.saleLines.push(newSaleLine);
         });
+
+        // reset del productBatchCode que usó para buscar producto
+        $scope.form.productBatchCode = null;
     };
 
     $scope.calculateSaleTotal = function(){

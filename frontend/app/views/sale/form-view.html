@@ -69,6 +69,14 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Forma de pago</label>
+                        <select class="form-control" name="paied_out" ng-model="form.sale.paied_out" ng-options="paiedOutOption.value as paiedOutOption.label for paiedOutOption in form.paiedOutOptions" required></select>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="panel-footer">
             <div class="text-right">

@@ -2,9 +2,6 @@ app.factory('SaleService', function(Restangular) {
     var service = Restangular.service('sale');
 
     this.save = function(sale) {
-        //valores por default
-        sale.paied_out = true;
-
         return service.post(sale);
     };
 
@@ -15,6 +12,14 @@ app.factory('SaleService', function(Restangular) {
     	];
     	return invoiceOptions;
 	};
+
+    this.getPaiedOutOptions = function() {
+        var paiedOutOptions = [
+            {label: 'Contado', value: true},
+            {label: 'Cuenta corriente', value: false}
+        ];
+        return paiedOutOptions;
+    };
 
     return this;
 });
