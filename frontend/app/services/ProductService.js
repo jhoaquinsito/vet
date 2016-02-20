@@ -25,12 +25,13 @@ app.factory('ProductService', function(Restangular) {
         return Math.round((cost * (utility + 100) / 100) * 100) / 100;
     };
 
-    this.getIva = function() {
+    this.getIvaOptions = function() {
         var ivas = [
             {name: 'Sin IVA', value: 0},
             {name: '10.5 %', value: 10.5},
             {name: '21 %', value: 21}
         ];
+
         return ivas;
     };
 

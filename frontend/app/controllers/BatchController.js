@@ -1,73 +1,36 @@
-app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, CategoryService, DrugService, ManufacturerService, MeasureUnitService, PresentationService, SupplierService, ProductService, MessageService, config) {
+app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, $filter, ProductService, MessageService) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
-    $scope.table = {};
     $scope.form = {};
-
-    $scope.products = [];
 
     $scope.init = function() {
         switch ($scope.action) {
             case 'batch.add':
-                $scope.addBatchAction();
+                $scope.addBatchesAction();
                 break;
         }
     };
 
-    $scope.addBatchAction = function() {
+    $scope.addBatchesAction = function() {
         $rootScope.setTitle($scope.name, 'Actualizar stock');
 
-        $scope.resetFormData();
         $scope.refreshFormDropdownsData();
     };
 
-    $scope.saveStockAction = function(form) {
+    $scope.saveBatchesAction = function(form) {
         if ($scope.formValidation(form)) {
-            MessageService.message('Debe completar todos los datos obligatorios para poder actualizar el stock', 'danger');
             return null;
         }
 
-        if ($scope.form.stockTable == null || $scope.form.stockTable.length == 0) {
-            MessageService.message('Debe agregar algún producto para poder actualizar el stock', 'danger');
-            return null;
-        }
-
-        MessageService.message('No se pudo actualizar el stock debido a que la funcionalidad no está implementada', 'warning');
-
-        $location.path('products');
-    };
-
-    $scope.refreshTableData = function() {
-        ProductService.getList().then(function(response) {
-            $scope.products = response.plain();
-        });
-    };
-
-    $scope.resetFormData = function() {
-        $scope.form.product = {
-            name: null,
-            description: null,
-            category: null,
-            manufacturer: null,
-            presentation: null,
-            measureUnit: null,
-            drug: null,
-            supplier: null,
-            cost: null,
-            utility: null,
-            unitPrice: null,
-            minimumStock: null
-        };
-    };
-
-    $scope.refreshFormData = function() {
-        var request = ProductService.getById($routeParams.id);
+        var request = ProductService.save($scope.form.product);
 
         request.success = function(response) {
-            $scope.form.product = response.plain();
+            MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
+
+            $location.path('products');
         };
         request.error = function(response) {
-            MessageService.message('El producto solicitado no existe', 'danger');
+            MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
 
             $location.path('products');
         };
@@ -75,38 +38,31 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         request.then(request.success, request.error);
     };
 
-    $scope.refreshFormDropdownsData = function() {
-        CategoryService.getList().then(function(response) {
-            $scope.form.categories = response.plain();
-        });
+    $scope.addBatchToTableAction = function() {
+        var batch = {
+            isoDueDate: $filter('date')($scope.form.batch.isoDueDate, 'yyyyMMdd'),
+            stock: $scope.form.batch.stock
+        };
 
-        DrugService.getList().then(function(response) {
-            $scope.form.drugs = response.plain();
-        });
+        $scope.form.product.batches.push(batch);
 
-        ManufacturerService.getList().then(function(response) {
-            $scope.form.manufacturers = response.plain();
-        });
-
-        MeasureUnitService.getList().then(function(response) {
-            $scope.form.measureUnits = response.plain();
-        });
-
-        PresentationService.getList().then(function(response) {
-            $scope.form.presentations = response.plain();
-        });
-
-        SupplierService.getList().then(function(response) {
-            $scope.form.suppliers = response.plain();
-        });
-
-        $scope.form.ivas = ProductService.getIva();
+        $scope.form.batch = {};
     };
 
-    $scope.addFormDropdownValue = function(attribute) {
-        if ($scope.form.product[attribute].id == null) {
-            $scope.form.product[attribute] = {id: null, name: $scope.form.product[attribute]};
-        }
+    $scope.removeBatchToTableAction = function(batch) {
+        $scope.form.product.batches.forEach(function(item, key) {
+            if (item == batch) {
+                $scope.form.product.batches.splice(key, 1);
+            }
+        });
+    };
+
+    $scope.refreshFormDropdownsData = function() {
+        ProductService.getList().then(function(response) {
+            $scope.form.products = response.plain();
+        });
+
+        $scope.form.ivas = ProductService.getIvaOptions();
     };
 
     $scope.formValidation = function(form) {
@@ -117,55 +73,6 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         });
 
         return form.$invalid;
-    };
-
-    $scope.productsForStockTable = function() {
-        var products = [];
-
-        for (var i = 0; i < $scope.products.length; i++) {
-            var product = $scope.products[i];
-
-            if (product.inserted !== true) {
-                products.push(product);
-            }
-        }
-
-        return products;
-    };
-
-    $scope.addProductToStockTable = function(event) {
-        if (event.keyCode != 13 || !angular.isObject($scope.form.product)) {
-            return null;
-        }
-
-        if ($scope.form.stockTable == null) {
-            $scope.form.stockTable = [];
-        }
-
-        $scope.form.stockTable.push($scope.form.product);
-
-        for (var i = 0; i < $scope.products.length; i++) {
-            var product = $scope.products[i];
-
-            if (product.id == $scope.form.product.id) {
-                product.inserted = true;
-                break;
-            }
-        }
-
-        $scope.form.product = null;
-    };
-
-    $scope.removeProductFromStockTable = function(productId) {
-        for (var i = 0; i < $scope.form.stockTable.length; i++) {
-            var product = $scope.form.stockTable[i];
-
-            if (product.id == productId) {
-                product.inserted = false;
-                $scope.form.stockTable.splice(i, 1);
-                break;
-            }
-        }
     };
 
     $scope.updateUtility = function(product) {

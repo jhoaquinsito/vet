@@ -152,7 +152,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             $scope.form.suppliers = response.plain();
         });
 
-        $scope.form.ivas = ProductService.getIva();
+        $scope.form.ivas = ProductService.getIvaOptions();
     };
 
     $scope.addFormDropdownValue = function(attribute) {
