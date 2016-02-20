@@ -2,8 +2,10 @@ package backend.core;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import backend.exception.BusinessException;
 import backend.person.Person;
@@ -39,8 +41,10 @@ import backend.product.presentation.PresentationService;
 import backend.sale.Sale;
 import backend.sale.SaleCons;
 import backend.sale.SaleDTO;
+import backend.sale.SaleLiteDTO;
 import backend.sale.SaleService;
 import backend.saleline.SaleLine;
+import backend.saleline.SaleLineLiteDTO;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
 
@@ -407,6 +411,15 @@ public class CommandAndQueries {
 		return mPersonList;
 	}
 	
+	//TODO - Agregar comentario
+	public PersonDTO getPerson(Long pPersonId)throws BusinessException {
+		PersonService mPersonService = new PersonService();
+		
+		Person mPerson = mPersonService.get(pPersonId);
+		
+		return this.iMapper.map(mPerson,PersonDTO.class);
+	}
+	
 	/**
 	 * Este método es un comando que elimina una Persona a partir de su identificador.
 	 * La eliminación es de tipo Lógica.
@@ -728,14 +741,33 @@ public class CommandAndQueries {
 	 * @return identificador de la venta guardada
 	 * @throws BusinessException 
 	 */
-	public Long createSale(SaleDTO pSaleDTO) throws BusinessException {
+	public Long createSale(SaleLiteDTO pSaleDTO) throws BusinessException {
 		
 		SaleService mSaleService = new SaleService();
 		
 		// map dto to domain object
 		Sale mSale;
 		if (pSaleDTO != null){
+			
+			
 			mSale = iMapper.map(pSaleDTO, Sale.class);
+			//Buscamos el Person para agregar el mSale
+			
+			PersonDTO mPersonDTO = this.getPerson(pSaleDTO.getPerson());
+			Set<SaleLine> mSaleLineList = new HashSet<SaleLine>();
+			
+			for(SaleLineLiteDTO mSaleLineLiteDTO : pSaleDTO.getSaleLines()){
+				SaleLine mSaleLine  = iMapper.map(mSaleLineLiteDTO, SaleLine.class);
+				
+				ProductDTO mProductDTO = this.getProduct(mSaleLineLiteDTO.getProduct());
+				
+				mSaleLine.setProduct(iMapper.map(mProductDTO, Product.class));
+				
+				mSaleLineList.add(mSaleLine);
+			}
+			mSale.setPerson(iMapper.map(mPersonDTO, Person.class));
+			mSale.setSaleLines(mSaleLineList);
+			//TODO - hAY QUE AGregar, el cliente al mSale. Y agregar el producto a los mSale.SaleLine que posea.
 		} else {
 			throw new BusinessException(SaleCons.cSALE_NULL_EXCEPTION_MESSAGE);
 		}

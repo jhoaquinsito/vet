@@ -26,6 +26,7 @@ import backend.product.manufacturer.ManufacturerDTO;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
 import backend.sale.SaleDTO;
+import backend.sale.SaleLiteDTO;
 import backend.utils.PrintItemDTO;
 import backend.utils.ZebraPrintHelper;
 
@@ -467,7 +468,7 @@ public class ApplicationRESTController {
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "sale", method = RequestMethod.POST)
-	public Long createSale(@RequestBody SaleDTO sale) throws BusinessException {
+	public Long createSale(@RequestBody SaleLiteDTO sale) throws BusinessException {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 
 		Long mId = mCNQ.createSale(sale);

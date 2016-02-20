@@ -73,15 +73,7 @@ public class ProductService {
 			}
 		}
 		
-		//TODO esto debería estar en otra capa anterior (al mapear DTO con domain)
-		// asocio el producto a sus lotes (si tiene)
-		if (pProductToSave.getBatches() != null){
-			for (Batch bBatch : pProductToSave.getBatches()){
-				bBatch.setProduct(pProductToSave);
-			}
-		} else {
-			pProductToSave.setBatches(new HashSet<Batch>());
-		}
+
 			
 		// marco el producto como activo
 		pProductToSave.setActive(true);
