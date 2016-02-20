@@ -67,6 +67,10 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         ProductService.getList().then(function(response) {
             $scope.form.products = response.plain();
         });
+
+        $scope.form.invoiceOptions = SaleService.getInvoiceOptions();
+
+        $scope.form.sale.invoiced = $scope.form.invoiceOptions[0].value;
     };
 
     $scope.addSaleLineAction = function() {
@@ -85,6 +89,15 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
             $scope.form.sale.saleLines.push(newSaleLine);
         });
+    };
+
+    $scope.calculateSaleTotal = function(){
+        var sum = 0;
+        $scope.form.sale.saleLines.forEach(function(saleLine){
+            var subtotal = (saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity;
+            sum += subtotal;
+        });
+        return sum;
     };
 
     $scope.init();

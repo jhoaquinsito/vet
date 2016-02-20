@@ -3,11 +3,18 @@ app.factory('SaleService', function(Restangular) {
 
     this.save = function(sale) {
         //valores por default
-        sale.invoiced = false;
         sale.paied_out = true;
 
         return service.post(sale);
     };
+
+    this.getInvoiceOptions = function() {
+    	var invoiceOptions = [
+	        {label: 'Sin imprimir', value: false},
+	        {label: 'Controlador fiscal', value: true}
+    	];
+    	return invoiceOptions;
+	};
 
     return this;
 });
