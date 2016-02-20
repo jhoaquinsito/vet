@@ -1,27 +1,62 @@
-<form ng-submit="saveSaleAction(saleForm)" name="saleForm" novalidate>
+<form name="saleForm" novalidate>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-9">
-                    <div class="form-group form-group-sm" ng-class="{'has-error': supplierForm.name.$dirty && supplierForm.name.$error.required}">
-                        <label class="control-label mandatory">Razón social</label>
-                        <input type="text" class="form-control" name="name" ng-model="form.supplier.name" required>
-                        <span ng-show="supplierForm.name.$dirty && supplierForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Cliente</label>
+                        <input type="text" class="form-control" name="client" ng-model="form.sale.person" onkeypress="return this.value.length < 130" ng-change="addFormDropdownValue('client')" bs-options="client.id as client.name for client in form.clients" bs-typeahead>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group form-group-sm" ng-class="{'has-error': supplierForm.cuit.$dirty && supplierForm.cuit.$error.required}">
-                        <label class="control-label mandatory">CUIT</label>
-                        <input type="text" class="form-control" name="cuit" ng-model="form.supplier.cuit" required onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                        <span ng-show="supplierForm.cuit.$dirty && supplierForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Agregar producto</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()">
+                            <span class="input-group-btn">
+                                <button ng-click="searchProduct()" type="button" class="btn btn-sm btn-info" data-title="Agregar" bs-tooltip><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-hover table-main">
+                        <tr>
+                            <th class="col-xs-4">Producto</th>
+                            <th class="col-xs-2">Cantidad</th>
+                            <th class="col-xs-2">Precio</th>
+                            <th class="col-xs-2">Descuento</th>
+                            <th class="col-xs-2">Sub-total</th>
+                        </tr>
+                        <tr ng-repeat="saleLine in form.sale.saleLines">
+                            <td>{{saleLine.product.name}}</td>
+                            <td>
+                                <div class="form-group" ng-class="{'has-error': saleForm['quantity-' + saleLine.product.id].$dirty && saleForm['quantity-' + saleLine.product.id].$error.required}">
+                                    <input type="number" class="form-control" name="quantity-{{saleLine.product.id}}" ng-model="saleLine.quantity" required>
+                                </div>
+                            </td>
+                            <td>{{saleLine.unit_price}}</td>
+                            <td>
+                                <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.product.id].$dirty && saleForm['discount-' + saleLine.product.id].$error.required}">
+                                    <input type="number" class="form-control" name="discount-{{saleLine.product.id}}" ng-model="saleLine.discount" required>
+                                </div>
+                            </td>
+                            <td>{{(saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity }}</td>
+                        </tr>
+                        <tr ng-if="form.sale.saleLines.length == 0">
+                            <td colspan="5" class="table-cell-empty">Agregá productos a tu venta...</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
         <div class="panel-footer">
             <div class="text-right">
-                <a ng-href="suppliers" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
-                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+                <button type="button" ng-click="saveSaleAction(saleForm)" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Registrar</button>
             </div>
         </div>
     </div>

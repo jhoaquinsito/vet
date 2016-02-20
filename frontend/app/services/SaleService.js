@@ -3,8 +3,8 @@ app.factory('SaleService', function(Restangular) {
 
     this.save = function(sale) {
         //valores por default
-        sale.client = false;
-        sale.active = true;
+        sale.invoiced = false;
+        sale.paied_out = true;
 
         return service.post(sale);
     };

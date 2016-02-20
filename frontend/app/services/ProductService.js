@@ -1,5 +1,6 @@
-app.factory('ProductService', function(Restangular) {
+app.factory('ProductService', function($http, Restangular, config) {
     var service = Restangular.service('product');
+
 
     this.getById = function(productId) {
         return service.one(productId).get();
@@ -32,6 +33,10 @@ app.factory('ProductService', function(Restangular) {
             {name: '21 %', value: 21}
         ];
         return ivas;
+    };
+
+    this.getByBatchCode = function(productBatchCode) {
+        return $http.get(config.API_BASE_URL +'/product/bybatchcode/'+productBatchCode);
     };
 
     return this;

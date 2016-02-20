@@ -1,21 +1,31 @@
-app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, SaleService, MessageService, config) {
+app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, SaleService, ProductService, ClientService, MessageService, config) {
     $scope.name = 'Ventas';
     $scope.action = $route.current.action;
     $scope.table = {};
     $scope.form = {};
 
-    $scope.suppliers = [];
-
     $scope.init = function() {
         switch ($scope.action) {
-            case 'supplier.add':
-                $scope.addSupplierAction();
+            case 'sale.add':
+                $scope.addSaleAction();
                 break;
         }
     };
 
-    $scope.addSupplierAction = function() {
-        $rootScope.setTitle($scope.name, 'Agregar proveedor');
+    $scope.resetFormData = function() {
+        $scope.form.sale = {
+            invoiced: null, 
+            paied_out: null,
+            person: null,
+            saleLines: []
+        };
+    };
+
+    $scope.addSaleAction = function() {
+        $rootScope.setTitle($scope.name, 'Realizar venta');
+
+        $scope.resetFormData();
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.saveSaleAction = function(form) {
@@ -23,42 +33,20 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-        var request = SupplierService.save($scope.form.supplier);
+        var request = SaleService.save($scope.form.sale);
 
         request.success = function(response) {
-            MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
+            MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'success', 'female'), 'success');
 
-            $location.path('suppliers');
+            $location.path('sales');
         };
         request.error = function(response) {
-            MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'error', 'female'), 'danger');
 
-            $location.path('suppliers');
+            $location.path('sales');
         };
 
         request.then(request.success, request.error);
-    };
-
-    $scope.refreshFormData = function() {
-        var request = SupplierService.getById($routeParams.id);
-
-        request.success = function(response) {
-            $scope.form.supplier = response.plain();
-        };
-        request.error = function(response) {
-            MessageService.message('El proveedor solicitado no existe', 'danger');
-
-            $location.path('suppliers');
-        };
-
-        request.then(request.success, request.error);
-    };
-
-    $scope.resetFormData = function() {
-        $scope.form.supplier = {
-            name: null,
-            cuit: null
-        };
     };
 
     $scope.formValidation = function(form) {
@@ -69,6 +57,34 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         });
 
         return form.$invalid;
+    };
+
+    $scope.refreshFormDropdownsData = function() {
+        ClientService.getList().then(function(response) {
+            $scope.form.clients = response.plain();
+        });
+
+        ProductService.getList().then(function(response) {
+            $scope.form.products = response.plain();
+        });
+    };
+
+    $scope.addSaleLineAction = function() {
+        if (event.keyCode != 13) {
+            return null;
+        }
+
+        ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
+            var newSaleLine = {};
+            var product = response.data;
+
+            newSaleLine.product = product;
+            newSaleLine.quantity = 1;
+            newSaleLine.unit_price = product.unitPrice;
+            newSaleLine.discount = 0;
+
+            $scope.form.sale.saleLines.push(newSaleLine);
+        });
     };
 
     $scope.init();
