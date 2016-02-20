@@ -2,6 +2,7 @@ package backend.core;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,7 @@ import backend.person.children.natural_person.NaturalPersonService;
 import backend.person.iva_category.IVACategory;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.iva_category.IVACategoryService;
+import backend.person.settlement.Settlement;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
@@ -45,6 +47,7 @@ import backend.sale.SaleLiteDTO;
 import backend.sale.SaleService;
 import backend.saleline.SaleLine;
 import backend.saleline.SaleLineLiteDTO;
+import backend.utils.EntityValidator;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
 
@@ -743,17 +746,18 @@ public class CommandAndQueries {
 	 */
 	public Long createSale(SaleLiteDTO pSaleDTO) throws BusinessException {
 		
-		SaleService mSaleService = new SaleService();
-		
+		SaleService mSaleService 		 = new SaleService();
+		EntityValidator mEntityValidator = new EntityValidator();
 		// map dto to domain object
 		Sale mSale;
 		if (pSaleDTO != null){
-			
-			
+			if(pSaleDTO.getSettlement() == null)
+				throw new BusinessException(SaleCons.cSALE_SETTLEMENT_NULL_EXCEPTION_MESSAGE);
 			mSale = iMapper.map(pSaleDTO, Sale.class);
 			//Buscamos el Person para agregar el mSale
 			
 			PersonDTO mPersonDTO = this.getPerson(pSaleDTO.getPerson());
+			
 			Set<SaleLine> mSaleLineList = new HashSet<SaleLine>();
 			
 			for(SaleLineLiteDTO mSaleLineLiteDTO : pSaleDTO.getSaleLines()){
@@ -765,9 +769,19 @@ public class CommandAndQueries {
 				
 				mSaleLineList.add(mSaleLine);
 			}
-			mSale.setPerson(iMapper.map(mPersonDTO, Person.class));
+			
+			Person mPerson 			= iMapper.map(mPersonDTO, Person.class);
+			Settlement mSettlement  = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
+			if(mSettlement.getDate() == null ) mSettlement.setDate(new Date());
+			
+			//Valido Settlement
+			mEntityValidator.validate(mSettlement);
+			
+			
+			mPerson.addSettlement(mSettlement);
+			mSale.setPerson(mPerson);
 			mSale.setSaleLines(mSaleLineList);
-			//TODO - hAY QUE AGregar, el cliente al mSale. Y agregar el producto a los mSale.SaleLine que posea.
+
 		} else {
 			throw new BusinessException(SaleCons.cSALE_NULL_EXCEPTION_MESSAGE);
 		}

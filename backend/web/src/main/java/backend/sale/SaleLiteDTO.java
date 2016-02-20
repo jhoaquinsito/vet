@@ -1,15 +1,20 @@
 package backend.sale;
 
+
 import java.util.Date;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import backend.person.PersonDTO;
-
+import backend.person.settlement.SettlementDTO;
 import backend.saleline.SaleLineLiteDTO;
 
+/**
+ * 
+ * @author gonzalo
+ *
+ */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class SaleLiteDTO {
 
@@ -24,6 +29,8 @@ public class SaleLiteDTO {
 	private Long iPerson;
 
 	private Set<SaleLineLiteDTO> iSaleLines;
+	
+	private SettlementDTO iSettlement;
 	
 	public Long getId() {
 		return iId;
@@ -73,6 +80,14 @@ public class SaleLiteDTO {
 
 	public void setSaleLines(Set<SaleLineLiteDTO> pSaleLines) {
 		this.iSaleLines = pSaleLines;
+	}
+
+	public SettlementDTO getSettlement() {
+		return iSettlement;
+	}
+
+	public void setSettlement(SettlementDTO pSettlement) {
+		this.iSettlement = pSettlement;
 	}
 	
 	

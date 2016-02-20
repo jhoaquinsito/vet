@@ -234,6 +234,17 @@ public class Person  {
 			bSettlement.setDiscounted(true);;
 		}
 	}
+	
+	/**
+	 * Agrega un Settlement a la lista de Settlements del objeto.
+	 * @param settlement
+	 */
+	public void addSettlement(Settlement pSettlement){
+		
+		Set<Settlement> mSettlements = this.getSettlements();
+		mSettlements.add(pSettlement);
+		this.setSettlements(mSettlements);
+	}
 
 	//=========================== Fin Métodos de dominio =====================
 	

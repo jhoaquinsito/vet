@@ -10,7 +10,10 @@ public class SaleCons {
 	public static final String cCANNOT_SAVE_SALE_EXCEPTION_MESSAGE 
 							= "La venta que intentas guardar no se puede guardar: o no existe o está eliminada lógicamente.";
 	public static final String cSALE_NULL_EXCEPTION_MESSAGE 
-							= "El producto no tiene valores válidos";
+							= "La venta no tiene valores válidos";
+	public static final String cSALE_SETTLEMENT_NULL_EXCEPTION_MESSAGE 
+							= "La Venta que desea registrar no contiene un Pago válido";
+	
 	public static final String cCANNOT_SAVE_WITHOUT_SALELINE_EXCEPTION_MESSAGE
 							= "La venta no puede guardarse sin tener ningún ítem vendido asignado.";
 	public static final String cCANNOT_SAVE_WITHOUT_SALELINE_WITHOUT_PRODUCT_EXCEPTION_MESSAGE
