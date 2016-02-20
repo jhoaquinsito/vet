@@ -1,0 +1,90 @@
+<form name="batchForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.product.$dirty && batchForm.product.$error.required}">
+                        <label class="control-label mandatory">Producto</label>
+                        <input type="text" class="form-control" name="product" ng-model="form.product" bs-options="product as product.name for product in form.products" bs-typeahead required>
+                        <span ng-show="batchForm.product.$dirty && batchForm.product.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.cost.$dirty && batchForm.cost.$error.required}">
+                        <label class="control-label mandatory">Costo</label>
+                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" ng-change="updateUnitPrice()" required>
+                        <span ng-show="batchForm.cost.$dirty && batchForm.cost.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.utility.$dirty && batchForm.utility.$error.required}">
+                        <label class="control-label mandatory">Utilidad</label>
+                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" ng-change="updateUnitPrice()" required>
+                        <span ng-show="batchForm.utility.$dirty && batchForm.utility.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.unitPrice.$dirty && batchForm.unitPrice.$error.required}">
+                        <label class="control-label mandatory">Precio unitario</label>
+                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" ng-change="updateUtility()" required>
+                        <span ng-show="batchForm.unitPrice.$dirty && batchForm.unitPrice.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.iva.$dirty && batchForm.iva.$error.required}">
+                        <label class="control-label mandatory">IVA</label>
+                        <select class="form-control" name="iva" ng-model="form.product.iva" ng-options="iva.value as iva.name for iva in form.ivas" required></select>
+                        <span ng-show="batchForm.iva.$dirty && batchForm.iva.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Cantidad</label>
+                        <input type="number" class="form-control" name="stock" ng-model="form.batch.stock">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Fecha de vencimiento</label>
+                        <input type="text" class="form-control" ng-model="form.batch.isoDueDate" bs-datepicker>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" ng-click="addBatchToTableAction()" ng-disabled="form.product.batches == null || form.batch.stock == null" class="btn btn-sm btn-info"><i class="fa fa-plus"></i></button>
+                </div>
+                <div class="col-md-12">
+                    <label class="control-label">Lotes</label>
+                    <table class="table table-bordered table-main">
+                        <tr>
+                            <th class="col-xs-6">Fecha de vencimiento</th>
+                            <th class="col-xs-6">Cantidad</th>
+                            <th></th>
+                        </tr>
+                        <tr ng-repeat="batch in form.product.batches">
+                            <td>
+                                <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
+                                <span ng-if="batch.isoDueDate != null">{{batch.isoDueDate}}</span>
+                            </td>
+                            <td>{{batch.stock}}</td>
+                            <td class="table-cell-actions">
+                                <button ng-click="removeBatchToTableAction(batch)" class="btn btn-sm btn-info" data-title="Quitar" bs-tooltip><i class="fa fa-close"></i></button>
+                            </td>
+                        </tr>
+                        <tr ng-if="form.product.batches.length == 0 || form.product.batches == null">
+                            <td colspan="3" class="table-cell-empty">No hay lotes para mostrar</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="button" ng-click="saveBatchesAction(batchForm)" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>

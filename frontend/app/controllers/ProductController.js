@@ -20,9 +20,6 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             case 'product.detail':
                 $scope.productDetailAction();
                 break;
-            case 'product.stock':
-                $scope.stockProductAction();
-                break;
         }
     };
 
@@ -37,14 +34,15 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
     $scope.addProductAction = function() {
         $rootScope.setTitle($scope.name, 'Agregar producto');
 
+        $scope.resetFormData();
         $scope.refreshFormDropdownsData();
     };
 
     $scope.editProductAction = function() {
         $rootScope.setTitle($scope.name, 'Editar producto');
 
-        $scope.refreshFormDropdownsData();
         $scope.refreshFormData();
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.productDetailAction = function() {
@@ -70,12 +68,6 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         });
     };
 
-    $scope.stockProductAction = function() {
-        $rootScope.setTitle($scope.name, 'Actualizar stock');
-
-        $scope.refreshTableData();
-    };
-
     $scope.saveProductAction = function(form) {
         if ($scope.formValidation(form)) {
             return null;
@@ -95,22 +87,6 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         };
 
         request.then(request.success, request.error);
-    };
-
-    $scope.saveStockAction = function(form) {
-        if ($scope.formValidation(form)) {
-            MessageService.message('Debe completar todos los datos obligatorios para poder actualizar el stock', 'danger');
-            return null;
-        }
-
-        if ($scope.form.stockTable == null || $scope.form.stockTable.length == 0) {
-            MessageService.message('Debe agregar algún producto para poder actualizar el stock', 'danger');
-            return null;
-        }
-
-        MessageService.message('No se pudo actualizar el stock debido a que la funcionalidad no está implementada', 'warning');
-
-        $location.path('products');
     };
 
     $scope.refreshTableData = function() {
@@ -176,7 +152,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             $scope.form.suppliers = response.plain();
         });
 
-        $scope.form.ivas = ProductService.getIva();
+        $scope.form.ivas = ProductService.getIvaOptions();
     };
 
     $scope.addFormDropdownValue = function(attribute) {
@@ -193,63 +169,6 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         });
 
         return form.$invalid;
-    };
-
-    $scope.productsForStockTable = function() {
-        var products = [];
-
-        for (var i = 0; i < $scope.products.length; i++) {
-            var product = $scope.products[i];
-
-            if (product.inserted !== true) {
-                products.push(product);
-            }
-        }
-
-        return products;
-    };
-
-    $scope.addProductToStockTable = function(event) {
-        if (event.keyCode != 13 || !angular.isObject($scope.form.product)) {
-            return null;
-        }
-
-        if ($scope.form.stockTable == null) {
-            $scope.form.stockTable = [];
-        }
-
-        $scope.form.stockTable.push($scope.form.product);
-
-        for (var i = 0; i < $scope.products.length; i++) {
-            var product = $scope.products[i];
-
-            if (product.id == $scope.form.product.id) {
-                product.inserted = true;
-                break;
-            }
-        }
-
-        $scope.form.product = null;
-    };
-
-    $scope.removeProductFromStockTable = function(productId) {
-        for (var i = 0; i < $scope.form.stockTable.length; i++) {
-            var product = $scope.form.stockTable[i];
-
-            if (product.id == productId) {
-                product.inserted = false;
-                $scope.form.stockTable.splice(i, 1);
-                break;
-            }
-        }
-    };
-
-    $scope.updateUtility = function(product) {
-        product.utility = ProductService.calculateUtility(product.cost, product.unitPrice);
-    };
-
-    $scope.updateUnitPrice = function(product) {
-        product.unitPrice = ProductService.calculateUnitPrice(product.cost, product.utility);
     };
 
     $scope.init();
