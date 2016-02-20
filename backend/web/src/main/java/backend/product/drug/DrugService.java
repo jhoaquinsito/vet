@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.product.category.CategoryService;
 import backend.utils.EntityValidator;
 
 /**
@@ -26,7 +29,8 @@ public class DrugService {
 	private EntityValidator iEntityValidator;
 	// constantes para mensajes de excepciones:
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Droga no válida: el nombre ya existe en la base de datos.";
-
+	private static final String cDRUG_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Hubo un problema con alguna de las restricciones de la base de datos. Muy probablemente el nombre de una Droga, o alguno de sus hijas, violó una restricción unique.";
+	
 	/**
 	 * Constructor.
 	 */
@@ -66,18 +70,33 @@ public class DrugService {
 	 * @throws BusinessException
 	 */
 	public Drug save(Drug pDrugToSave) throws BusinessException {
-		// valido la droga
-		this.iEntityValidator.validate(pDrugToSave);
 		
-		// si va a ser una inserción, valido que no exista
-		if (pDrugToSave.getId()==null && this.exists(pDrugToSave)) {
-			// ya existe el nombre
-			throw new BusinessException(DrugService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+		Drug mDrugSaved = null;
+		
+		try {
+			// valido la droga
+			this.iEntityValidator.validate(pDrugToSave);
+			
+			// si va a ser una inserción, valido que no exista
+			if (pDrugToSave.getId()==null && this.exists(pDrugToSave)) {
+				// ya existe el nombre
+				throw new BusinessException(DrugService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+			}
+	
+			// guardo la droga
+			mDrugSaved = this.iDrugRepository.save(pDrugToSave);
+		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
+
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(DrugService.cDRUG_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE  + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(DrugService.cDRUG_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE ,bDataIntegrityViolationException);
+			
 		}
-
-		// guardo la droga
-		Drug mDrugSaved = this.iDrugRepository.save(pDrugToSave);
-
+		
+		
 		return mDrugSaved;
 	}
 

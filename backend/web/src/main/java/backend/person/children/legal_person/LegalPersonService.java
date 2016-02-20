@@ -8,11 +8,15 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.person.children.natural_person.NaturalPersonService;
 import backend.product.Product;
 import backend.product.batch.Batch;
+import backend.utils.EntityValidator;
 
 public class LegalPersonService {
 	
+	private EntityValidator iEntityValidator;
 	private static final String cLEGALPERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "La persona legal no puede guardarse, se está violando alguna de sus reestriciones.";
 	private static final String cLEGALPERSON_NOT_ACTIVE_EXCEPTION_MESSAGE   = "La persona legal que desea consultar no está activa.";
 	
@@ -26,6 +30,7 @@ public class LegalPersonService {
 		// obtengo el repositorio desde el contexto de la applicación
 		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 		this.iLegalPersonRepository = mAppContext.getBean(LegalPersonRepository.class);
+		this.iEntityValidator = new EntityValidator();
 	}
 	
 	/**
@@ -77,6 +82,9 @@ public class LegalPersonService {
 			 mStoredLegalPerson = this.iLegalPersonRepository.findOne(pLegalPersonToSave.getId());
 		}
 		
+		//valido la entidad
+		this.iEntityValidator.validate(pLegalPersonToSave);
+		
 		// guardo el producto
 		LegalPerson mLegalPersonSaved = this.tryToSave(pLegalPersonToSave);
 		
@@ -113,8 +121,14 @@ public class LegalPersonService {
 		try {
 			mLegalPersonSaved = this.iLegalPersonRepository.save(pLegalPersonToSave);
 		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
-			//TODO revisar por cual de las constraints falló (si fue por la de producto, o la de alguno de sus hijos)
-			throw new BusinessException(LegalPersonService.cLEGALPERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+			
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(LegalPersonService.cLEGALPERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(LegalPersonService.cLEGALPERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+			
 		} catch (Exception ex){
 			throw new BusinessException(ex.getMessage(),ex);
 		}

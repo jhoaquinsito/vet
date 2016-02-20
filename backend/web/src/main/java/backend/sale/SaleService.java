@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.product.presentation.PresentationService;
 import backend.sale.Sale;
 import backend.sale.SaleRepository;
 import backend.sale.SaleService;
@@ -177,8 +179,13 @@ public class SaleService {
 		try {
 			mSaleSaved = this.iSaleRepository.save(pSaleToSave);
 		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
-			//TODO revisar por cual de las constraints falló (si fue por la de venta, o la de alguno de sus hijos)
-			throw new BusinessException(SaleCons.cSALE_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(SaleCons.cSALE_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE  + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(SaleCons.cSALE_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE ,bDataIntegrityViolationException);
+			
 		}
 		
 		return mSaleSaved;

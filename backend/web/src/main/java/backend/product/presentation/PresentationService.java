@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.product.measure_unit.MeasureUnitService;
 import backend.utils.EntityValidator;
 
 /**
@@ -27,7 +30,8 @@ public class PresentationService {
 	
 	// constantes para mensajes de excepciones:
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Presentación no válida: el nombre ya existe en la base de datos.";
-
+	private static final String cPRESENTATION_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Hubo un problema con alguna de las restricciones de la base de datos. Muy probablemente el nombre de una Presentación, o alguno de sus hijas, violó una restricción unique.";
+	
 	/**
 	 * Constructor.
 	 */
@@ -73,18 +77,29 @@ public class PresentationService {
 	 * @throws BusinessException
 	 */
 	public Presentation save(Presentation pPresentationToSave) throws BusinessException {
-		// valido la presentación
-		this.iEntityValidator.validate(pPresentationToSave);
-		
-		// si va a ser una inserción, valido que no exista
-		if (pPresentationToSave.getId()==null && this.exists(pPresentationToSave)) {
-			// ya existe el nombre
-			throw new BusinessException(PresentationService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+		Presentation mPresentationSaved = null;
+		try {
+			// valido la presentación
+			this.iEntityValidator.validate(pPresentationToSave);
+			
+			// si va a ser una inserción, valido que no exista
+			if (pPresentationToSave.getId()==null && this.exists(pPresentationToSave)) {
+				// ya existe el nombre
+				throw new BusinessException(PresentationService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+			}
+	
+			// guardo la presentación
+			mPresentationSaved = this.iPresentationRepository.save(pPresentationToSave);
+		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
+			
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(PresentationService.cPRESENTATION_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE  + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(PresentationService.cPRESENTATION_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE ,bDataIntegrityViolationException);
+			
 		}
-
-		// guardo la presentación
-		Presentation mPresentationSaved = this.iPresentationRepository.save(pPresentationToSave);
-
 		return mPresentationSaved;
 	}
 

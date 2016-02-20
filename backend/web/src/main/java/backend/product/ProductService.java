@@ -15,6 +15,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.person.children.legal_person.LegalPersonService;
 import backend.product.batch.Batch;
 import backend.utils.EntityValidator;
 
@@ -362,8 +364,14 @@ public class ProductService {
 		try {
 			mProductSaved = this.iProductRepository.save(pProductToSave);
 		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
-			//TODO revisar por cual de las constraints falló (si fue por la de producto, o la de alguno de sus hijos)
-			throw new BusinessException(ProductService.cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(ProductService.cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(ProductService.cPRODUCT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+			
 		}
 		
 		return mProductSaved;

@@ -6,11 +6,14 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.product.manufacturer.ManufacturerService;
 import backend.utils.EntityValidator;
 
 /**
@@ -25,7 +28,8 @@ public class IVACategoryService {
 
 	// constantes para mensajes de excepciones:
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Categoría de IVA no válida: el nombre ya existe en la base de datos.";
-
+	private static final String cIVACATEGORY_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Hubo un problema con alguna de las restricciones de la base de datos. Muy probablemente el nombre de una Categoría de IVA, o alguno de sus hijas, violó una restricción unique.";
+	
 	/**
 	 * Constructor.
 	 */
@@ -47,12 +51,23 @@ public class IVACategoryService {
 	 * @throws BusinessException
 	 */
 	public IVACategory save(IVACategory pIVACategoryToSave) throws BusinessException {
-		// Valido si el producto tiene datos válidos
-		this.iEntityValidator.validate(pIVACategoryToSave);
+		IVACategory mIVACategorySaved = null;
+		try {
+			// Valido si el producto tiene datos válidos
+			this.iEntityValidator.validate(pIVACategoryToSave);
+	
+			// Guardo la categoría
+			mIVACategorySaved = this.iIVACategoryRepository.save(pIVACategoryToSave);
+		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
 
-		// Guardo la categoría
-		IVACategory mIVACategorySaved = this.iIVACategoryRepository.save(pIVACategoryToSave);
-
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(IVACategoryService.cIVACATEGORY_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE  + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(IVACategoryService.cIVACATEGORY_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE ,bDataIntegrityViolationException);
+			
+		}
 		return mIVACategorySaved;
 	}
 

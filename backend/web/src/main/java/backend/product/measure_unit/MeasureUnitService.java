@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.product.drug.DrugService;
 import backend.product.measure_unit.MeasureUnit;
 import backend.product.measure_unit.MeasureUnitRepository;
 import backend.product.measure_unit.MeasureUnitService;
@@ -21,7 +24,8 @@ public class MeasureUnitService {
 	private EntityValidator iEntityValidator;
 	// constantes para mensajes de excepciones:
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Unidad de medida no válida: el nombre ya existe en la base de datos.";
-
+	private static final String cMEASUREUNIT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Hubo un problema con alguna de las restricciones de la base de datos. Muy probablemente el nombre de una Unidad de medida, o alguno de sus hijas, violó una restricción unique.";
+	
 	/**
 	 * Constructor.
 	 */
@@ -67,18 +71,32 @@ public class MeasureUnitService {
 	 * @throws BusinessException
 	 */
 	public MeasureUnit save(MeasureUnit pMeasureUnitToSave) throws BusinessException {
-		// valido la unidad de medida
-		this.iEntityValidator.validate(pMeasureUnitToSave);
 		
-		// si va a ser una inserción, valido que no exista
-		if (pMeasureUnitToSave.getId()==null && this.exists(pMeasureUnitToSave)) {
-			// ya existe la unidad de medida
-			throw new BusinessException(MeasureUnitService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+		MeasureUnit mMeasureUnitSaved = null;
+		try{
+			// valido la unidad de medida
+			this.iEntityValidator.validate(pMeasureUnitToSave);
+			
+			// si va a ser una inserción, valido que no exista
+			if (pMeasureUnitToSave.getId()==null && this.exists(pMeasureUnitToSave)) {
+				// ya existe la unidad de medida
+				throw new BusinessException(MeasureUnitService.cEXISTING_NAME_EXCEPTION_MESSAGE);
+			}
+			
+			// guardo la unidad de medida
+			mMeasureUnitSaved = this.iMeasureUnitRepository.save(pMeasureUnitToSave);
+
+		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
+	
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(MeasureUnitService.cMEASUREUNIT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE  + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(MeasureUnitService.cMEASUREUNIT_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE ,bDataIntegrityViolationException);
+			
 		}
 		
-		// guardo la unidad de medida
-		MeasureUnit mMeasureUnitSaved = this.iMeasureUnitRepository.save(pMeasureUnitToSave);
-
 		return mMeasureUnitSaved;
 	}
 

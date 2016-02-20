@@ -6,11 +6,14 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
+import backend.person.iva_category.IVACategoryService;
 import backend.utils.EntityValidator;
 
 /**
@@ -31,7 +34,8 @@ public class CategoryService {
 
 	// constantes para mensajes de excepciones:
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Categoría no válida: el nombre ya existe en la base de datos.";
-
+	private static final String cCATEGORY_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Hubo un problema con alguna de las restricciones de la base de datos. Muy probablemente el nombre de una Categoría, o alguno de sus hijas, violó una restricción unique.";
+	
 	/**
 	 * Constructor.
 	 */
@@ -53,12 +57,23 @@ public class CategoryService {
 	 * @throws BusinessException
 	 */
 	public Category save(Category pCategoryToSave) throws BusinessException {
-		// Valido si el producto tiene datos válidos
-		this.iEntityValidator.validate(pCategoryToSave);
+		Category mCategorySaved = null;
+		try {
+			// Valido si el producto tiene datos válidos
+			this.iEntityValidator.validate(pCategoryToSave);
+	
+			// Guardo la categoria
+			mCategorySaved = this.iCategoryRepository.save(pCategoryToSave);
+		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
 
-		// Guardo la categoria
-		Category mCategorySaved = this.iCategoryRepository.save(pCategoryToSave);
-
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(CategoryService.cCATEGORY_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE  + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(CategoryService.cCATEGORY_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE ,bDataIntegrityViolationException);
+			
+		}
 		return mCategorySaved;
 	}
 

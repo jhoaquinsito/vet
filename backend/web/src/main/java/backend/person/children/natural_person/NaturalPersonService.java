@@ -1,11 +1,14 @@
 package backend.person.children.natural_person;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.postgresql.util.PSQLException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
+import backend.exception.ExceptionUtils;
 import backend.utils.EntityValidator;
 
 public class NaturalPersonService {
@@ -52,8 +55,13 @@ public class NaturalPersonService {
 		try {
 			mNaturalPersonSaved = this.iNaturalPersonRepository.save(pNaturalPersonToSave);
 		} catch (DataIntegrityViolationException bDataIntegrityViolationException){
-			//TODO revisar por cual de las constraints falló
-			throw new BusinessException(NaturalPersonService.cNATURAL_PERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
+			
+			String mCauseMessage = ExceptionUtils.getDataIntegrityViolationExceptionCause(bDataIntegrityViolationException);
+			
+			if(mCauseMessage != null && mCauseMessage.length() > 0)
+				throw new BusinessException(NaturalPersonService.cNATURAL_PERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE + "\n" +mCauseMessage,bDataIntegrityViolationException);
+			else
+				throw new BusinessException(NaturalPersonService.cNATURAL_PERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE,bDataIntegrityViolationException);
 		}
 		
 		return mNaturalPersonSaved;
