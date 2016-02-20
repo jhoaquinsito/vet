@@ -1,4 +1,11 @@
 app.config(function($routeProvider) {
+    //stock
+    $routeProvider.when('/batches/add', {
+        controller: 'BatchController',
+        templateUrl: 'app/views/batch/form-view.html',
+        action: 'batch.add'
+    });
+
     //clientes
     $routeProvider.when('/clients', {
         controller: 'ClientController',
