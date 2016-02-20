@@ -1,0 +1,18 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div bs-tabs>
+            <div data-title="Productos" name="tab-products" bs-pane>
+                <div ng-include="'app/views/batch/form-tab-view.html'"></div>
+            </div>
+            <div data-title="Listado" name="tab-products-added" bs-pane>
+                <div ng-include="'app/views/batch/table-tab-view.html'"></div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="text-right">
+            <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+            <button type="button" ng-click="saveBatchAction(batchForm)" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Guardar</button>
+        </div>
+    </div>
+</div>
