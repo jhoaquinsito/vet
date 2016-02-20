@@ -42,13 +42,13 @@
                                 </div>
                             </td>
                             <td class="table-cell-input">{{saleLine.product.measureUnit.name}}</td>
-                            <td class="table-cell-input">${{saleLine.unit_price}}</td>
+                            <td class="table-cell-input">${{saleLine.unit_price | number: 2}}</td>
                             <td class="table-cell-input">
                                 <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.product.id].$dirty && saleForm['discount-' + saleLine.product.id].$error.required}">
                                     <input type="number" class="form-control" name="discount-{{saleLine.product.id}}" ng-model="saleLine.discount" required>
                                 </div>
                             </td>
-                            <td class="table-cell-input">${{(saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity }}</td>
+                            <td class="table-cell-input">${{(saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity | number: 2}}</td>
                         </tr>
                         <tr ng-if="form.sale.saleLines.length == 0">
                             <td colspan="5" class="table-cell-empty">Agregá productos a tu venta...</td>
@@ -58,7 +58,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="text-right">Total: ${{calculateSaleTotal()}}</h3>
+                    <h3 class="text-right">Total: ${{calculateSaleTotal() | number: 2}}</h3>
                 </div>
             </div>
             <div class="row">
