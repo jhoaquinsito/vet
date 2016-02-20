@@ -17,7 +17,7 @@
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()">
                             <span class="input-group-btn">
-                                <button ng-click="searchProduct()" type="button" class="btn btn-sm btn-info" data-title="Agregar" bs-tooltip><i class="fa fa-plus"></i></button>
+                                <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal()"><i class="fa fa-search"></i></button>
                             </span>
                         </div>
                     </div>

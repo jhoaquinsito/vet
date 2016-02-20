@@ -1,4 +1,4 @@
-app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, SaleService, ProductService, ClientService, MessageService, config) {
+app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, $modal, SaleService, ProductService, ClientService, MessageService, config) {
     $scope.name = 'Ventas';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -98,6 +98,44 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             sum += subtotal;
         });
         return sum;
+    };
+
+
+    var productSearchModal = $modal({
+        title: 'Buscar producto',
+        scope: $scope,
+        templateUrl: 'app/views/sale/search-product-modal.html',
+        show: false
+    });
+
+    $scope.showProductSearchModal = function(){
+        productSearchModal.$promise.then(productSearchModal.show);
+    };
+    
+    $scope.hideProductSearchModal = function(){
+        productSearchModal.$promise.then(productSearchModal.hide);
+    };
+    
+    $scope.resetProductSearchModal = function(){
+        $scope.form.searchProductModal.product = null;
+    };
+
+    $scope.acceptProductSearchModal = function(){
+        ProductService.getById($scope.form.searchProductModal.product).then(function(response) {
+            var newSaleLine = {};
+            var product = response.plain();
+
+            newSaleLine.product = product;
+            newSaleLine.quantity = 1;
+            newSaleLine.unit_price = product.unitPrice;
+            newSaleLine.discount = 0;
+
+            $scope.form.sale.saleLines.push(newSaleLine);
+        });
+
+        $scope.hideProductSearchModal();
+
+        $scope.resetProductSearchModal();
     };
 
     $scope.init();
