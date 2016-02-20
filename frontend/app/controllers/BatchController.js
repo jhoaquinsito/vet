@@ -75,12 +75,12 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         return form.$invalid;
     };
 
-    $scope.updateUtility = function(product) {
-        product.utility = ProductService.calculateUtility(product.cost, product.unitPrice);
+    $scope.updateUtility = function() {
+        $scope.form.product.utility = ProductService.calculateUtility($scope.form.product.cost, $scope.form.product.unitPrice);
     };
 
-    $scope.updateUnitPrice = function(product) {
-        product.unitPrice = ProductService.calculateUnitPrice(product.cost, product.utility);
+    $scope.updateUnitPrice = function() {
+        $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility);
     };
 
     $scope.init();
