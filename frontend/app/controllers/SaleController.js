@@ -1,10 +1,8 @@
-app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, SaleService, ClientService, MessageService, config) {
+app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, SaleService, ProductService, ClientService, MessageService, config) {
     $scope.name = 'Ventas';
     $scope.action = $route.current.action;
     $scope.table = {};
     $scope.form = {};
-
-    $scope.sales = [];
 
     $scope.init = function() {
         switch ($scope.action) {
@@ -14,9 +12,19 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         }
     };
 
+    $scope.resetFormData = function() {
+        $scope.form.sale = {
+            invoiced: null, 
+            paied_out: null,
+            person: null,
+            saleLines: []
+        };
+    };
+
     $scope.addSaleAction = function() {
         $rootScope.setTitle($scope.name, 'Realizar venta');
 
+        $scope.resetFormData();
         $scope.refreshFormDropdownsData();
     };
 
@@ -54,6 +62,28 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     $scope.refreshFormDropdownsData = function() {
         ClientService.getList().then(function(response) {
             $scope.form.clients = response.plain();
+        });
+
+        ProductService.getList().then(function(response) {
+            $scope.form.products = response.plain();
+        });
+    };
+
+    $scope.addSaleLineAction = function() {
+        if (event.keyCode != 13) {
+            return null;
+        }
+
+        ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
+            var newSaleLine = {};
+            var product = response.data;
+
+            newSaleLine.product = product;
+            newSaleLine.quantity = 1;
+            newSaleLine.unit_price = product.unitPrice;
+            newSaleLine.discount = 0;
+
+            $scope.form.sale.saleLines.push(newSaleLine);
         });
     };
 
