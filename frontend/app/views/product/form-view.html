@@ -56,34 +56,34 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">IVA</label>
-                        <select class="form-control" name="iva" ng-model="form.product.iva" ng-options="iva.value as iva.name for iva in form.ivas"></select>
+                        <label class="control-label">Stock mínimo</label>
+                        <input type="number" class="form-control" name="minimumStock" ng-model="form.product.minimumStock" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Costo</label>
-                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
+                        <label class="control-label">Costo sin IVA</label>
+                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" min="0" ng-blur="calculateUnitPrice(form.product)" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">IVA</label>
+                        <select class="form-control" name="iva" ng-model="form.product.iva" ng-options="iva.value as iva.name for iva in form.ivas" ng-change="calculateUnitPrice(form.product)"></select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Utilidad</label>
-                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" ng-blur="updateUnitPrice(form.product)" min="0" max="1000" onkeypress="return this.value.length < 5 && event.charCode >= 46 && event.charCode <= 57">
+                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" ng-blur="calculateUnitPrice(form.product)" min="0" max="1000" onkeypress="return this.value.length < 5 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Precio unitario</label>
-                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" ng-blur="updateUtility(form.product)" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Stock mínimo</label>
-                        <input type="number" class="form-control" name="minimumStock" ng-model="form.product.minimumStock" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
+                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" ng-blur="calculateUtility(form.product)" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
                 </div>
             </div>

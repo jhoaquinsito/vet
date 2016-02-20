@@ -106,9 +106,10 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             drug: null,
             supplier: null,
             cost: null,
-            utility: null,
-            unitPrice: null,
-            minimumStock: null
+            iva: 21,
+            utility: 0,
+            unitPrice: 0,
+            minimumStock: 0
         };
     };
 
@@ -159,6 +160,14 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         if ($scope.form.product[attribute].id == null) {
             $scope.form.product[attribute] = {id: null, name: $scope.form.product[attribute]};
         }
+    };
+    
+    $scope.calculateUtility = function() {
+        $scope.form.product.utility = ProductService.calculateUtility($scope.form.product.cost, $scope.form.product.unitPrice, $scope.form.product.iva);
+    };
+
+    $scope.calculateUnitPrice = function() {
+        $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility, $scope.form.product.iva);
     };
 
     $scope.formValidation = function(form) {

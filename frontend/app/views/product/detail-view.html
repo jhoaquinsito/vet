@@ -54,20 +54,26 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">IVA</label>
-                        <div ng-switch on="form.product.iva">
-                            <p class="form-control-static" ng-switch-when="0">Sin IVA</p>
-                            <p class="form-control-static" ng-switch-when="10.5">10.5 %</p>
-                            <p class="form-control-static" ng-switch-when="21">21 %</p>
-                        </div>
+                        <label class="control-label">Stock mínimo</label>
+                        <p class="form-control-static">{{form.product.minimumStock}}</p>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Costo</label>
+                        <label class="control-label">Costo sin IVA</label>
                         <p class="form-control-static">{{form.product.cost}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">IVA</label>
+                        <div ng-switch on="form.product.iva">
+                            <p class="form-control-static" ng-switch-when="0">Sin IVA</p>
+                            <p class="form-control-static" ng-switch-when="10.5">10.5 %</p>
+                            <p class="form-control-static" ng-switch-when="21">21 %</p>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -80,12 +86,6 @@
                     <div class="form-group form-group-sm">
                         <label class="control-label">Precio unitario</label>
                         <p class="form-control-static">{{form.product.unitPrice}}</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Stock mínimo</label>
-                        <p class="form-control-static">{{form.product.minimumStock}}</p>
                     </div>
                 </div>
             </div>

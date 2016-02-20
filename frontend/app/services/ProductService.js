@@ -18,12 +18,14 @@ app.factory('ProductService', function($http, Restangular, config) {
         return service.one(productId).remove();
     };
 
-    this.calculateUtility = function(cost, unitPrice) {
-        return Math.round((unitPrice * 100 / cost - 100) * 100) / 100;
+    this.calculateUtility = function(cost, unitPrice, iva) {
+        var costWithIva = Math.round((cost * (iva + 100) / 100) * 100) / 100;
+        return Math.round((unitPrice * 100 / costWithIva - 100) * 100) / 100;
     };
 
-    this.calculateUnitPrice = function(cost, utility) {
-        return Math.round((cost * (utility + 100) / 100) * 100) / 100;
+    this.calculateUnitPrice = function(cost, utility, iva) {
+        var costWithIva = Math.round((cost * (iva + 100) / 100) * 100) / 100;
+        return Math.round((costWithIva * (utility + 100) / 100) * 100) / 100;
     };
 
     this.getIvaOptions = function() {
