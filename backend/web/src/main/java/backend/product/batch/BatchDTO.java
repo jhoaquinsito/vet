@@ -10,7 +10,7 @@ public class BatchDTO {
 	private Long iId;
 	private BigDecimal iStock;
 	private Integer iIsoDueDate;
-	private Product iProduct;
+	
 	
 	public Long getId() {
 		return iId;
@@ -30,10 +30,5 @@ public class BatchDTO {
 	public void setIsoDueDate(Integer pIsoDueDate) {
 		this.iIsoDueDate = pIsoDueDate;
 	}
-	public Product getProduct() {
-		return iProduct;
-	}
-	public void setProduct(Product pProduct) {
-		this.iProduct = pProduct;
-	}
+	
 }

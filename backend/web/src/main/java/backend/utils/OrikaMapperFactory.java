@@ -16,8 +16,10 @@ import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
 import backend.sale.Sale;
 import backend.sale.SaleDTO;
+import backend.sale.SaleLiteDTO;
 import backend.saleline.SaleLine;
 import backend.saleline.SaleLineDTO;
+import backend.saleline.SaleLineLiteDTO;
 import backend.person.city.City;
 import backend.person.city.CityDTO;
 import backend.person.city.state.State;
@@ -26,6 +28,7 @@ import backend.person.children.legal_person.LegalPerson;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.person.children.natural_person.NaturalPerson;
 import backend.person.children.natural_person.NaturalPersonDTO;
+
 import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.iva_category.IVACategory;
@@ -100,6 +103,12 @@ public class OrikaMapperFactory {
 		
 		// SaleLineDTO to SaleLine
 		mapperFactory.classMap(SaleLineDTO.class, SaleLine.class).byDefault().register();
+		
+		// SaleDTO to Sale
+		mapperFactory.classMap(SaleLiteDTO.class, Sale.class).byDefault().register();
+		
+		// SaleLineDTO to SaleLine
+		mapperFactory.classMap(SaleLineLiteDTO.class, SaleLine.class).byDefault().register();
 		
 		return mapperFactory.getMapperFacade();
 	}

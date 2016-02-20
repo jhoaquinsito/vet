@@ -120,7 +120,8 @@ public class Product implements Persistable<Long> {
 	@Valid
 	private Presentation iPresentation;
 	
-	@OneToMany(mappedBy="iProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
+	@OneToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinColumn(name="product")
 	@Valid
 	private Set<Batch> iBatches;
 

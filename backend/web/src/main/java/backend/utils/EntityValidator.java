@@ -43,7 +43,12 @@ public class EntityValidator {
 		// si existe una violacion, lanzo una excepción con el mensaje
 		// correspondiente
 		if (mViolation != null) {
-			throw new BusinessException(mViolation.getMessage());
+			String mFieldName = mViolation.getPropertyPath().toString();
+			
+			if(mFieldName != null  && mFieldName.length() > 0)
+				throw new BusinessException("Campo: [" + mFieldName + "] " + mViolation.getMessage());
+			else
+				throw new BusinessException(mViolation.getMessage());
 		}
 
 	}

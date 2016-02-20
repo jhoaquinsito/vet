@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,10 +59,11 @@ public class Batch {
 	@NotNull(message = BatchConsts.cISODUEDATE_NOTNULL_VIOLATION_MESSAGE)
 	private Integer iIsoDueDate;
 
-	@ManyToOne()
+	/*
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product", nullable = false)
 	private Product iProduct;
-
+	*/
 
 
 	public BigDecimal getStock() {
@@ -110,10 +112,11 @@ public class Batch {
 		return mDueDate;
 	}
 
+	/*
 	public void setProduct(Product pProduct) {
 		this.iProduct = pProduct;
 	}
-	
+	*/
 	/**
 	 * Este metodo devuelve el <code>Codigo de Barras</code> de un <strong> Batch </strong>
 	 * @return
