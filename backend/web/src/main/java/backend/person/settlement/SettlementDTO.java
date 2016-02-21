@@ -13,7 +13,7 @@ public class SettlementDTO {
 	private Date iDate;
 	private BigDecimal iAmount;
 	private String iConcept;
-	private String iChekNumber;
+	private String iCheckNumber;
 	private boolean iDiscounted;
 
 	public Long getId() {
@@ -48,12 +48,12 @@ public class SettlementDTO {
 		this.iConcept = iConcept;
 	}
 
-	public String getChekNumber() {
-		return iChekNumber;
+	public String getCheckNumber() {
+		return iCheckNumber;
 	}
 
-	public void setChekNumber(String iChekNumber) {
-		this.iChekNumber = iChekNumber;
+	public void setCheckNumber(String iCheckNumber) {
+		this.iCheckNumber = iCheckNumber;
 	}
 
 	public boolean isDiscounted() {

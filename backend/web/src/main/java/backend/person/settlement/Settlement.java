@@ -38,9 +38,9 @@ public class Settlement {
 	@Size(max=250, message= SettlementConsts.cCONCEPT_SIZE_VIOLATION_MESSAGE)
 	private String iConcept;
 	
-	@Column(name = "chek_number")
+	@Column(name = "check_number")
 	@Size(max=8, message= SettlementConsts.cCHEK_NUMBER_SIZE_VIOLATION_MESSAGE)
-	private String iChekNumber;
+	private String iCheckNumber;
 	
 	@Column(name = "discounted")
 	private boolean iDiscounted;
@@ -77,12 +77,12 @@ public class Settlement {
 		this.iConcept = iConcept;
 	}
 
-	public String getChekNumber() {
-		return iChekNumber;
+	public String getCheckNumber() {
+		return iCheckNumber;
 	}
 
-	public void setChekNumber(String iChekNumber) {
-		this.iChekNumber = iChekNumber;
+	public void setCheckNumber(String iCheckNumber) {
+		this.iCheckNumber = iCheckNumber;
 	}
 
 	public boolean getDiscounted() {
