@@ -1,0 +1,25 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" ng-show="title">
+                <div class="modal-title" ng-bind="title"></div>
+            </div>
+            <div class="modal-body">
+            	<div class="row">
+            		<div class="col-md-12">
+	            		<div class="form-group form-group-sm">
+	                        <div class="input-group input-group-sm">
+		                        <input type="text" class="form-control" name="product" ng-model="form.searchProductModal.product" onkeypress="return this.value.length < 100" bs-options="product.id as product.name for product in form.products" bs-typeahead>
+	                            <span class="input-group-btn">
+            						<button type="button" class="btn btn-icon btn-primary" ng-click="acceptProductSearchModal()"><i class="fa fa-plus"></i></button>
+	                            </span>
+	                        </div>
+	                    </div>
+            		</div>
+            	</div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
