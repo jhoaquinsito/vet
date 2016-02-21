@@ -158,5 +158,10 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         $scope.resetProductSearchModal();
     };
 
+    $scope.calculatePersonDebt = function(){
+        // TODO analizar si corresponde calcular el saldo actual en el frontend o backend
+        return 0;
+    };
+
     $scope.init();
 });
