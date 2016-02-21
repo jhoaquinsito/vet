@@ -756,7 +756,20 @@ public class CommandAndQueries {
 			mSale = iMapper.map(pSaleDTO, Sale.class);
 			//Buscamos el Person para agregar el mSale
 			
-			PersonDTO mPersonDTO = this.getPerson(pSaleDTO.getPerson());
+			if (pSaleDTO.getPerson() != null){
+				PersonDTO mPersonDTO = this.getPerson(pSaleDTO.getPerson());
+				Person mPerson 			= iMapper.map(mPersonDTO, Person.class);
+				Settlement mSettlement  = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
+				if(mSettlement.getDate() == null ) mSettlement.setDate(new Date());
+				
+				//Valido Settlement
+				mEntityValidator.validate(mSettlement);
+				
+				
+				mPerson.addSettlement(mSettlement);
+				mSale.setPerson(mPerson);
+					
+			}
 			
 			Set<SaleLine> mSaleLineList = new HashSet<SaleLine>();
 			
@@ -770,16 +783,7 @@ public class CommandAndQueries {
 				mSaleLineList.add(mSaleLine);
 			}
 			
-			Person mPerson 			= iMapper.map(mPersonDTO, Person.class);
-			Settlement mSettlement  = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
-			if(mSettlement.getDate() == null ) mSettlement.setDate(new Date());
 			
-			//Valido Settlement
-			mEntityValidator.validate(mSettlement);
-			
-			
-			mPerson.addSettlement(mSettlement);
-			mSale.setPerson(mPerson);
 			mSale.setSaleLines(mSaleLineList);
 
 		} else {
