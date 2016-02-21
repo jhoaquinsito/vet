@@ -2,6 +2,16 @@ app.factory('SaleService', function(Restangular) {
     var service = Restangular.service('sale');
 
     this.save = function(sale) {
+        // valores por default
+        if (sale.person == null) {
+            sale.person = 0;
+        }
+
+        // hago que solo mande los id de los productos
+        sale.saleLines.forEach(function(saleLine, index, saleLines){
+            saleLines[index].product = saleLine.product.id;
+        });
+
         return service.post(sale);
     };
 

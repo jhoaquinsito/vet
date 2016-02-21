@@ -17,7 +17,14 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             invoiced: null, 
             paied_out: null,
             person: null,
-            saleLines: []
+            saleLines: [],
+            settlement: {
+                date: null,
+                amount: null,
+                concept: null,
+                checkNumber: null,
+                discounted: null
+            }
         };
     };
 
@@ -33,10 +40,16 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
+        if ($scope.form.sale.settlement.amount == null) {
+            $scope.form.sale.settlement.amount = $scope.calculateSaleTotal();
+        }
+
         var request = SaleService.save($scope.form.sale);
 
         request.success = function(response) {
             MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'success', 'female'), 'success');
+            
+            $scope.resetFormData;
 
             $location.path('sales');
         };
