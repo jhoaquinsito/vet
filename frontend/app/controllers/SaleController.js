@@ -40,9 +40,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-        if ($scope.form.sale.settlement.amount == null) {
-            $scope.form.sale.settlement.amount = $scope.calculateSaleTotal();
-        }
+        
 
         var request = SaleService.save($scope.form.sale);
 
@@ -112,12 +110,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     };
 
     $scope.calculateSaleTotal = function(){
-        var sum = 0;
-        $scope.form.sale.saleLines.forEach(function(saleLine){
-            var subtotal = (saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity;
-            sum += subtotal;
-        });
-        return sum;
+        return SaleService.calculateSaleTotal($scope.form.sale);
     };
 
 
