@@ -21,6 +21,7 @@ import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
 import backend.product.batch.BatchDTO;
+import backend.product.batch.BatchPrintDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
@@ -595,22 +596,13 @@ public class ApplicationRESTController {
 		ZebraPrintHelper.PrintSale(sale);
 	}
 	
-	/***
-	 * Este método permite ejecutar una impresión de un BATCH.
-	 * Ademas lo imprime N veces.
-	 * @throws BusinessException
-	 */
-	@RequestMapping(value = "printbatch/{quantity}", method = RequestMethod.POST)
-	public void printBatchs(@RequestBody BatchDTO dto,@PathVariable int quantity) throws BusinessException {
-		ZebraPrintHelper.PrintBatch(dto,quantity);
-	}
 	
 	/***
 	 * Este método permite ejecutar una impresión de un BATCH.
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "printbatch", method = RequestMethod.POST)
-	public void printBatch(@RequestBody BatchDTO dto) throws BusinessException {
+	public void printBatch(@RequestBody BatchPrintDTO dto) throws BusinessException {
 		ZebraPrintHelper.PrintBatch(dto);
 	}
 	

@@ -25,6 +25,9 @@ import backend.person.settlement.Settlement;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
+import backend.product.batch.Batch;
+import backend.product.batch.BatchDTO;
+import backend.product.batch.BatchService;
 import backend.product.category.Category;
 import backend.product.category.CategoryDTO;
 import backend.product.category.CategoryService;
@@ -844,6 +847,12 @@ public class CommandAndQueries {
 		// elimino el saleo
 		mSaleService.delete(pSaleId);
 		
+	}
+
+	public Batch getBatch(Long pBatchId) throws BusinessException {
+		BatchService mBatchService = new BatchService();
+		
+		return mBatchService.get(pBatchId);
 	}
 		
 	// FIN VENTAS

@@ -15,10 +15,13 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 
+import backend.core.CommandAndQueries;
 import backend.exception.BusinessException;
 import backend.person.PersonDTO;
 import backend.product.ProductDTO;
+import backend.product.batch.Batch;
 import backend.product.batch.BatchDTO;
+import backend.product.batch.BatchPrintDTO;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.sale.SaleDTO;
 import backend.saleline.SaleLineDTO;
@@ -102,9 +105,12 @@ public class ZebraPrintHelper {
 	 * 				Cantidad de etiquetas a imprimir de ese batch.
 	 * @throws BusinessException
 	 */
-	public static void PrintBatch(BatchDTO batch, int quantity)throws BusinessException{
+	public static void PrintBatch(BatchPrintDTO pBatchDto)throws BusinessException{
 		try {
 			boolean mBatchNoHasIsoDueDate = false;
+			
+			CommandAndQueries mCNQ = new CommandAndQueries();
+			Batch batch 	 	   = mCNQ.getBatch(pBatchDto.getId());
 			
 			if(batch == null)
 				throw new BusinessException("El Batch a ser impreso no puede ser nulo.");
@@ -138,7 +144,7 @@ public class ZebraPrintHelper {
 			DocPrintJob job = printService.createPrintJob();  
 			  
 			// imprimimos  
-			for(int i=0; i<quantity; i++){
+			for(int i=0; i<pBatchDto.getQuantity(); i++){
 				job.print(doc, null);
 			 } 
 				
