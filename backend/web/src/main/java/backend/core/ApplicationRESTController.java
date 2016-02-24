@@ -94,15 +94,10 @@ public class ApplicationRESTController {
 	}
 	
 	/**
-	 * Metodo API que permite recuperar un Product especificando su ID
+	 * Metodo API que permite recuperar un Producto a través de un código de lote
 	 * 
-	 * @param id
-	 *            : Identificador de la entidad buscada.
-	 * @return ProductDTO : producto buscado.
+	 * @param batchCode el código de lote
 	 * @throws BusinessException
-	 *             el producto estaba eliminado lógicamente
-	 * @throws Exception
-	 *             : Excepcion de negocio, manejada por: handleBusinessException
 	 */
 	@RequestMapping(value = "product/bybatchcode/{batchCode}", method = RequestMethod.GET)
 	public ProductDTO getProductByBatchCode(@PathVariable String batchCode) throws BusinessException {

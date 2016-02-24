@@ -20,6 +20,7 @@ import backend.person.children.natural_person.NaturalPersonService;
 import backend.person.iva_category.IVACategory;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.iva_category.IVACategoryService;
+import backend.product.BatchCodeGenerator;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
@@ -187,15 +188,17 @@ public class CommandAndQueries {
 	
 	/**
 	 * Este método es una consulta que obtiene un producto a partir de
-	 * su identificador.
-	 * @param pProductId identificador del producto
-	 * @return producto encontrado
-	 * @throws BusinessException el producto estaba eliminado lógicamente
+	 * un código de lote.
+	 * @param pProductBatchCode un código de lote
+	 * @return mProductDTO producto asociado al código de lote
+	 * @throws BusinessException
 	 */
 	public ProductDTO getProductByBatchCode(String pProductBatchCode) throws BusinessException{
 		ProductService mProductService = new ProductService();
 		
-		Product mProduct = mProductService.getProductByBatchCode(pProductBatchCode);
+		Long mProductId = BatchCodeGenerator.getProductId(pProductBatchCode);
+		
+		Product mProduct = mProductService.get(mProductId);
 		
 		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
 		
