@@ -20,7 +20,6 @@ import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
-import backend.product.batch.BatchDTO;
 import backend.product.batch.BatchPrintDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
@@ -29,7 +28,6 @@ import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
 import backend.sale.SaleDTO;
 import backend.sale.SaleLiteDTO;
-import backend.utils.PrintItemDTO;
 import backend.utils.ZebraPrintHelper;
 
 /**
@@ -557,26 +555,6 @@ public class ApplicationRESTController {
 	//=======================================================================================
 	
 	// IMPRESIÓN
-	
-	/***
-	 * Este método permite ejecutar una impresión de testing.
-	 * @throws BusinessException
-	 */
-	@RequestMapping(value = "printtest", method = RequestMethod.POST)
-	public void printTest() throws BusinessException {
-		
-		ZebraPrintHelper.PrintTest();
-	}
-	
-	/***
-	 * Este método permite ejecutar una impresión de testing.
-	 * @throws BusinessException
-	 */
-	@RequestMapping(value = "printbarcode", method = RequestMethod.POST)
-	public void printBarCode(@RequestBody PrintItemDTO dto) throws BusinessException {
-		
-		ZebraPrintHelper.PrintCode(dto.getCode());
-	}
 	
 	/***
 	 * Este método permite ejecutar una impresión de un SALE.

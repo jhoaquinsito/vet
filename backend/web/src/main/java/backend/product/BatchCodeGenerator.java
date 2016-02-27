@@ -12,7 +12,7 @@ public abstract class BatchCodeGenerator {
 	public static final String NULLBATCHID = "00000000";
 	
 	/**
-	 * Este método devuelve el código de un loque que se usará para generar el código de
+	 * Este método devuelve el código de un lote que se usará para generar el código de
 	 * barras.
 	 * @param pProductId el identificador del producto al que pertenece el lote.
 	 * @param pBatchISODueDate la fecha de vencimiento de los productos que componen el
