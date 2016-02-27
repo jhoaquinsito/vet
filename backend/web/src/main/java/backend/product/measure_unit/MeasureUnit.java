@@ -33,6 +33,11 @@ public class MeasureUnit {
 	@Size(min=1, max=30, message= MeasureUnitConsts.cNAME_SIZE_VIOLATION_MESSAGE)
 	@NotNull(message = MeasureUnitConsts.cNAME_NOTNULL_VIOLATION_MESSAGE)
 	private String iName;
+	
+	@Column(name = "abbreviation", unique = true, nullable = false, length = 5)
+	@Size(min=1, max=5, message= MeasureUnitConsts.cABBREVIATION_SIZE_VIOLATION_MESSAGE)
+	@NotNull(message = MeasureUnitConsts.cABBREVIATION_NOTNULL_VIOLATION_MESSAGE)
+	private String iAbbreviation;
 
 	public MeasureUnit(String pName) {
 		super();
@@ -51,6 +56,14 @@ public class MeasureUnit {
 		this.iName = pName;
 	}
 
+	public String getAbbreviation() {
+		return iAbbreviation;
+	}
+
+	public void setAbbreviation(String pAbbreviation) {
+		this.iAbbreviation = pAbbreviation;
+	}
+	
 	public Long getId() {
 		return iId;
 	}

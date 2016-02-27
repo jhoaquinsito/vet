@@ -6,4 +6,3 @@
 ALTER TABLE settlement RENAME COLUMN chek_number TO check_number
 
 		
-		
