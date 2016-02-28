@@ -789,6 +789,7 @@ public class CommandAndQueries {
 				mSaleLineList.add(mSaleLine);
 			}
 			
+			mSale.setDate(new Date());
 			
 			mSale.setSaleLines(mSaleLineList);
 
