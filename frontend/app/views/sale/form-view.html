@@ -41,7 +41,7 @@
                                     <input type="number" class="form-control" name="quantity-{{saleLine.product.id}}" ng-model="saleLine.quantity" required>
                                 </div>
                             </td>
-                            <td class="table-cell-input">{{saleLine.product.measureUnit.name}}</td>
+                            <td class="table-cell-input">{{saleLine.product.measureUnit.abbreviation}}</td>
                             <td class="table-cell-input">${{saleLine.unit_price | number: 2}}</td>
                             <td class="table-cell-input">
                                 <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.product.id].$dirty && saleForm['discount-' + saleLine.product.id].$error.required}">
