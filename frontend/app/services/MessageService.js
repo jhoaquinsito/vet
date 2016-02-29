@@ -7,7 +7,8 @@ app.service('MessageService', function($alert, $modal, $q) {
     this.verbs = {
         add: {success: 'agregó', error: 'agregar'},
         edit: {success: 'editó', error: 'editar'},
-        remove: {success: 'borró', error: 'borrar', confirm: 'borrar'}
+        remove: {success: 'borró', error: 'borrar', confirm: 'borrar'},
+        print: {success: 'imprimió', error: 'imprimir', confirm: 'imprimir'}
     };
 
     this.texts = {

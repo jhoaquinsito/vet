@@ -1,4 +1,11 @@
 app.config(function($routeProvider) {
+    //código de barra
+    $routeProvider.when('/barcode/printing', {
+        controller: 'BarcodeController',
+        templateUrl: 'app/views/barcode/form-view.html',
+        action: 'barcode.printing'
+    });
+    
     //stock
     $routeProvider.when('/batches/add', {
         controller: 'BatchController',
