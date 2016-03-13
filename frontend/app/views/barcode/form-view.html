@@ -1,0 +1,59 @@
+<form name="barcodeForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': barcodeForm.product.$dirty && barcodeForm.product.$error.required}">
+                        <label class="control-label mandatory">Producto</label>
+                        <input type="text" class="form-control" name="product" ng-model="form.product" bs-options="product as product.name for product in form.products" bs-typeahead required>
+                        <span ng-show="barcodeForm.product.$dirty && barcodeForm.product.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': barcodeForm.quantity.$dirty && barcodeForm.quantity.$error.required}">
+                        <label class="control-label mandatory">Cantidad a imprimir</label>
+                        <input type="number" class="form-control" name="quantity" min="0" onkeypress="return event.charCode >= 47 && event.charCode <= 57" ng-model="form.quantity" required>
+                        <span ng-show="barcodeForm.quantity.$dirty && barcodeForm.quantity.$error.required" class="help-block">Este campo es obligatorio</span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': (barcodeForm.product.$dirty && form.product.batches == null)}">
+                        <label class="control-label mandatory">Lote</label>
+                        <table class="table table-bordered table-main">
+                            <tr>
+                                <th class="col-xs-1"></th>
+                                <th class="col-xs-4">Fecha de vencimiento</th>
+                                <th class="col-xs-3">Cantidad</th>
+                                <th class="col-xs-3">Precio unitario</th>
+                            </tr>
+                            <tr ng-repeat="batch in form.product.batches">
+                                <td class="text-center">
+                                    <input type="radio" name="isoDueDate" ng-model="form.isoDueDate" ng-value="batch.isoDueDate" required/>
+                                </td>
+                                <td>
+                                    <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
+                                    <span ng-if="batch.isoDueDate != null">{{batch.isoDueDate | date:'dd/MM/yyyy'}}</span>
+                                </td>
+                                <td>{{batch.stock}}</td>
+                                <td>${{form.product.unitPrice}}</td>
+                            </tr>
+                            <tr ng-if="form.product.batches.length == 0 || form.product.batches == null">
+                                <td colspan="4" class="table-cell-empty">No hay lotes para mostrar</td>
+                            </tr>
+                        </table>
+                        <span ng-show="barcodeForm.product.$dirty && form.product.batches == null" class="help-block">Debe seleccionar un lote</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="button" ng-click="printBarcodeAction(barcodeForm)" class="btn btn-icon btn-primary"><i class="fa fa-print"></i>Imprimir</button>
+            </div>
+        </div>
+    </div>
+</form>
