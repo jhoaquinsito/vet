@@ -2,6 +2,7 @@ package backend.product;
 
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -237,6 +238,28 @@ public class Product implements Persistable<Long> {
 
 	public Set<Batch> getBatches() {
 		return iBatches;
+	}
+	
+	/**
+	 * Este método permite recuperar el lote que este asociado a una fecha de vencimiento
+	 * determinada. Devuelve NULL si el lote no existe.
+	 * @param pISODueDate la fecha de vencimiento asociada al lote en formato ISO.
+	 * @return mBatch el lote asociada a la fecha de vencimiento
+	 */
+	public Batch getBatcheByISODueDate(Integer pISODueDate) {
+		
+		Batch mBatch = null;
+		Iterator<Batch> mBatchesIt = iBatches.iterator();
+		
+		while(mBatchesIt.hasNext()){
+			Batch bBatch = mBatchesIt.next();
+			if(bBatch.getIsoDueDate() == pISODueDate){
+				mBatch = bBatch;
+				break;
+			}
+		}
+		
+		return mBatch;
 	}
 
 	public void setBatches(Set<Batch> pBatches) {
