@@ -73,6 +73,7 @@ public class CommandAndQueries {
 	private MapperFacade iMapper; 
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
 	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
+	private static final String cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE = "La cantidad disponible del producto es insuficiente: ";
 	
 	/**
 	 * Constructor.
@@ -784,7 +785,19 @@ public class CommandAndQueries {
 				
 				ProductDTO mProductDTO = this.getProduct(mSaleLineLiteDTO.getProduct());
 				
-				mSaleLine.setProduct(iMapper.map(mProductDTO, Product.class));
+				Product mProduct = iMapper.map(mProductDTO, Product.class);
+				
+				//Descuento el stock en el lote correspondiente 
+				Batch bBatch = mProduct.getBatcheByISODueDate(mSaleLineLiteDTO.getISODueDate());
+				BigDecimal bQuantity = BigDecimal.valueOf(mSaleLineLiteDTO.getQuantity());
+				BigDecimal bNewStock = bBatch.getStock().subtract(bQuantity);
+				if(bNewStock.compareTo(BigDecimal.ZERO) >= 0){
+					bBatch.setStock(bNewStock);
+				}else{
+					throw new BusinessException(CommandAndQueries.cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE + mProduct.getName());
+				}
+				
+				mSaleLine.setProduct(mProduct);
 				
 				mSaleLineList.add(mSaleLine);
 			}
