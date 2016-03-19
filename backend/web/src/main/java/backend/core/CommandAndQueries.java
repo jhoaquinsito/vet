@@ -154,28 +154,6 @@ public class CommandAndQueries {
 		return mProductDTOList;
 	}
 	
-
-	/**
-	 * Este método es una consulta que devuelve la lista completa de Productos
-	 * filtrados a traves de su:
-	 * @param pBatchCode : Fragmento de codigo de barra de un lote.
-	 * @return
-	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
-	 */
-	public List<ProductDTO> getProductsByBatchCode(String pBatchCode) throws BusinessException{
-		ProductService mProductService = new ProductService();
-		
-		Iterable<Product> mProduct = mProductService.getProductListByBatchCode(pBatchCode);
-		
-		List<ProductDTO> mProductDTOList = new ArrayList<ProductDTO>();
-		
-		for (Product bProduct : mProduct){
-			mProductDTOList.add(this.iMapper.map(bProduct,ProductDTO.class));
-		}
-		
-		return mProductDTOList;
-	}
-	
 	/**
 	 * Este método es una consulta que obtiene un producto a partir de
 	 * su identificador.

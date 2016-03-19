@@ -123,24 +123,6 @@ public class ApplicationRESTController {
 		CommandAndQueries mCNQ = new CommandAndQueries();
 		return mCNQ.getProductsByName(name);
 	}
-	
-	/**
-	 * Metodo API que permite recuperar una lista de Product 
-	 * especificando su Batch.barcode.
-	 * 
-	 * @param batchCode
-	 *            : Codigo de barras de la entidad buscada.
-	 * @return List<ProductDTO> : productos con "barcode" similar.
-	 * @throws BusinessException
-	 *             : Excepcion de negocio,.
-	 * @throws Exception
-	 *             : Excepcion de negocio, manejada por: handleBusinessException
-	 */
-	@RequestMapping(value = "products/bybatchcode/{batchCode}", method = RequestMethod.GET)
-	public List<ProductDTO> getProductsByBatchCode(@PathVariable String batchCode) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getProductsByBatchCode(batchCode);
-	}
 
 	/**
 	 * Metodo que permite eliminar un producto a partir de su identificador. Al
