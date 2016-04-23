@@ -454,8 +454,8 @@ public class CommandAndQueries {
 		// map dto to domain object
 		LegalPerson mLegalPerson = iMapper.map(pLegalPersonDTO, LegalPerson.class);
 		
-		//Si el cliente tiene ventas adeudadas
-		if(!this.clientIsInDebt(mLegalPerson)){
+		//Si el cliente no es nuevo y tiene ventas adeudadas
+		if(mLegalPerson.getId() != null && !this.clientIsInDebt(mLegalPerson)){
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mLegalPerson);
 			//Descuento los pagos del cliente
