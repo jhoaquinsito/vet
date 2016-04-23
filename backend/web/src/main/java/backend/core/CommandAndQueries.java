@@ -524,8 +524,8 @@ public class CommandAndQueries {
 			throw new BusinessException(CommandAndQueries.cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE);
 		}
 		
-		//Si el cliente tiene ventas adeudadas
-		if(!this.clientIsInDebt(mNaturalPerson)){
+		//Si el cliente no es nuevo y tiene ventas adeudadas
+		if(pNaturalPersonDTO.getId() != null && !this.clientIsInDebt(mNaturalPerson)){
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mNaturalPerson);
 			//Descuento los pagos del cliente
