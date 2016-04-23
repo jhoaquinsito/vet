@@ -73,6 +73,13 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             return null;
         }
 
+        // asocio categorias con el mismo nombre (no case sensitive)
+        matchCategoryIfExists();
+        // asocio laboratorios con el mismo nombre (no case sensitive)
+        matchManufacturerIfExists();
+        // asocio drogas con el mismo nombre (no case sensitive)
+        matchDrugIfExists();
+
         var request = ProductService.save($scope.form.product);
 
         request.success = function(response) {
@@ -87,6 +94,45 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         };
 
         request.then(request.success, request.error);
+    };
+
+    function matchCategoryIfExists(){
+        // si la categoría no se asoció a un id, reviso si no se puede asociar a otros case insensitive
+        if ($scope.form.product.category != null && $scope.form.product.category.id == null) {
+            angular.forEach($scope.form.categories, function(category) {
+                //si los nombres son iguales en lower case entonces es la misma pero con otro case
+                if (category.name.toLowerCase() == $scope.form.product.category.name.toLowerCase()) {
+                    $scope.form.product.category.name = category.name;
+                    $scope.form.product.category.id = category.id;
+                }
+            });
+        }
+    };
+
+    function matchManufacturerIfExists(){
+        // si el laboratorio no se asoció a un id, reviso si no se puede asociar a otros case insensitive
+        if ($scope.form.product.manufacturer != null && $scope.form.product.manufacturer.id == null) {
+            angular.forEach($scope.form.manufacturers, function(manufacturer) {
+                //si los nombres son iguales en lower case entonces es la misma pero con otro case
+                if (manufacturer.name.toLowerCase() == $scope.form.product.manufacturer.name.toLowerCase()) {
+                    $scope.form.product.manufacturer.name = manufacturer.name;
+                    $scope.form.product.manufacturer.id = manufacturer.id;
+                }
+            });
+        }
+    };
+
+    function matchDrugIfExists(){
+        // si la droga no se asoció a un id, reviso si no se puede asociar a otros case insensitive
+        if ($scope.form.product.drug != null && $scope.form.product.drug.id == null) {
+            angular.forEach($scope.form.drugs, function(drug) {
+                //si los nombres son iguales en lower case entonces es la misma pero con otro case
+                if (drug.name.toLowerCase() == $scope.form.product.drug.name.toLowerCase()) {
+                    $scope.form.product.drug.name = drug.name;
+                    $scope.form.product.drug.id = drug.id;
+                }
+            });
+        }
     };
 
     $scope.refreshTableData = function() {
