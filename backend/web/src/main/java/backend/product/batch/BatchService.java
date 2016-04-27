@@ -1,7 +1,9 @@
 package backend.product.batch;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -16,8 +18,9 @@ import backend.utils.EntityValidator;
  * @author ggorosito
  *
  */
+@Service
 public class BatchService {
-	private BatchRepository iBatchRepository;
+	@Autowired private BatchRepository iBatchRepository;
 	private EntityValidator iEntityValidator;
 	
 	
@@ -31,12 +34,7 @@ public class BatchService {
 	 */
 	public BatchService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		@SuppressWarnings("resource")
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iBatchRepository = mAppContext.getBean(BatchRepository.class);
 		this.iEntityValidator = new EntityValidator();
-		
 	}
 	
 	/**

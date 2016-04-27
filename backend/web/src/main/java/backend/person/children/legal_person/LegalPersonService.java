@@ -2,9 +2,12 @@ package backend.person.children.legal_person;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -14,22 +17,20 @@ import backend.product.Product;
 import backend.product.batch.Batch;
 import backend.utils.EntityValidator;
 
+@Service
 public class LegalPersonService {
 	
 	private EntityValidator iEntityValidator;
 	private static final String cLEGALPERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "La persona legal no puede guardarse, se está violando alguna de sus reestriciones.";
 	private static final String cLEGALPERSON_NOT_ACTIVE_EXCEPTION_MESSAGE   = "La persona legal que desea consultar no está activa.";
 	
-	private LegalPersonRepository iLegalPersonRepository;
+	@Autowired private LegalPersonRepository iLegalPersonRepository;
 	
 	/**
 	 * Constructor.
 	 */
 	public LegalPersonService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iLegalPersonRepository = mAppContext.getBean(LegalPersonRepository.class);
 		this.iEntityValidator = new EntityValidator();
 	}
 	

@@ -3,11 +3,13 @@ package backend.product.drug;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -23,9 +25,10 @@ import backend.utils.EntityValidator;
  * <strong>DrugRepository</strong>.
  * 
  */
+@Service
 public class DrugService {
 
-	private DrugRepository iDrugRepository;
+	@Autowired private DrugRepository iDrugRepository;
 	private EntityValidator iEntityValidator;
 	// constantes para mensajes de excepciones:
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Droga no válida: el nombre ya existe en la base de datos.";
@@ -36,9 +39,6 @@ public class DrugService {
 	 */
 	public DrugService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iDrugRepository = mAppContext.getBean(DrugRepository.class);
 		this.iEntityValidator = new EntityValidator();
 	}
 

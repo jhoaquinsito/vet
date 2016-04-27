@@ -3,11 +3,13 @@ package backend.product.presentation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -23,9 +25,10 @@ import backend.utils.EntityValidator;
  * <strong>PresentationRepository</strong>.
  * 
  */
+@Service
 public class PresentationService {
 
-	private PresentationRepository iPresentationRepository;
+	@Autowired private PresentationRepository iPresentationRepository;
 	private EntityValidator iEntityValidator;
 	
 	// constantes para mensajes de excepciones:
@@ -37,9 +40,6 @@ public class PresentationService {
 	 */
 	public PresentationService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iPresentationRepository = mAppContext.getBean(PresentationRepository.class);
 		this.iEntityValidator = new EntityValidator();
 	}
 

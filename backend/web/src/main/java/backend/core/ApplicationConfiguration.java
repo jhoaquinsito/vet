@@ -1,6 +1,7 @@
 package backend.core;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -28,7 +29,8 @@ import javax.sql.DataSource;
  * 
  */
 @Configuration
-@EnableJpaRepositories(basePackages = {"backend"})
+@EnableJpaRepositories("backend")
+@ComponentScan(basePackages ={"backend"})
 public class ApplicationConfiguration {
 
 	// Configuración de la base de datos:

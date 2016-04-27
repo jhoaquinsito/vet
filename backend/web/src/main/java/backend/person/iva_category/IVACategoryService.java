@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -20,10 +22,10 @@ import backend.utils.EntityValidator;
  * Un <code>IVACategoryService</code> representa un conjunto de servicios
  * relacionados a <code>IVACategory</code>. *
  */
-
+@Service
 public class IVACategoryService {
 
-	private IVACategoryRepository iIVACategoryRepository;
+	@Autowired private IVACategoryRepository iIVACategoryRepository;
 	private EntityValidator iEntityValidator;
 
 	// constantes para mensajes de excepciones:
@@ -35,9 +37,6 @@ public class IVACategoryService {
 	 */
 	public IVACategoryService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iIVACategoryRepository = mAppContext.getBean(IVACategoryRepository.class);
 		this.iEntityValidator = new EntityValidator();
 	}
 
