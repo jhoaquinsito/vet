@@ -21,18 +21,25 @@
             </div>
             <div class="row">
                 <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
                             <label class="control-label mandatory">Nombre</label>
                             <input type="text" class="form-control" name="name" ng-model="form.client.name" required>
                             <span ng-show="clientForm.name.$dirty && clientForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.lastName.$dirty && clientForm.lastName.$error.required}">
                             <label class="control-label mandatory">Apellido</label>
                             <input type="text" class="form-control" name="lastName" ng-model="form.client.lastName" required>
                             <span ng-show="clientForm.lastName.$dirty && clientForm.lastName.$error.required" class="help-block">Este campo es obligatorio</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.nationalId.$dirty && clientForm.nationalId.$error.required}">
+                            <label class="control-label mandatory">DNI</label>
+                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <span ng-show="clientForm.nationalId.$dirty && clientForm.nationalId.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
                 </div>
@@ -55,18 +62,9 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
-                        <div class="form-group form-group-sm">
-                            <label class="control-label">Renspa</label>
-                            <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa">
-                        </div> 
-                    </div>
-                    <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.nationalId.$dirty && clientForm.nationalId.$error.required}">
-                            <label class="control-label mandatory">DNI</label>
-                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                            <span ng-show="clientForm.nationalId.$dirty && clientForm.nationalId.$error.required" class="help-block">Este campo es obligatorio</span>
-                        </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Renspa</label>
+                        <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa">
                     </div>
                 </div> 
                 <div class="col-md-6">
