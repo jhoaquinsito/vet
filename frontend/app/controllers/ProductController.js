@@ -248,9 +248,6 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         searchCriteriaList = searchCriteria.split(' ');
 
         var criteriaAppliesToName;
-        var criteriaAppliesToDrug;
-        var hasApplied;
-        var productHasDrugName;
         
         for (criteriaIndex = 0; criteriaIndex < searchCriteriaList.length; criteriaIndex++) { 
             // checkeo que el criterio de busqueda este dentro del nombre del producto
@@ -262,10 +259,7 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
             // checkeo que el criterio de busqueda este dentro del nombre de la droga (si existe)
             if (!!productDrugName){
-                if ((productDrugName.indexOf(searchCriteriaList[criteriaIndex]) != -1)){
-                    criteriaAppliesToDrug = true;
-                } else {
-                    criteriaAppliesToDrug = false;
+                if (!(productDrugName.indexOf(searchCriteriaList[criteriaIndex]) != -1)){
                     if (!criteriaAppliesToName){
                         return false;
                     }    
