@@ -144,5 +144,37 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
         return form.$invalid;
     };
 
+    // esta funcion devuelve true si el cliente cumple con los criterios de busqueda
+    // en caso contrario, devuelve false
+    $scope.filtroPorNombreApellidoORazon = function(client){
+
+        // checkeo que el criterio de busqueda no es undefined or null or '' or '     '
+        if (!$scope.table.search || !$scope.table.search.trim()) {
+            return true;    
+        }
+
+        // previo a comparar el criterio con el nombre (o razon social) y apellido del cliente 
+        // coloco a todos en lowerCase para que la busqueda sea case insensitive
+        var searchCriteria = $scope.table.search.toLowerCase();
+        var clientName = client.name.toLowerCase();
+        var clientLastName = null;
+        // verifico que el lastName no sea undefined or null or '' or '      '
+        if (!!client.lastName && !!client.lastName.trim()) {
+            clientLastName = client.lastName;
+        }
+
+        // checkeo que el criterio de busqueda este dentro del nombre
+        if (clientName.indexOf(searchCriteria) != -1){
+            return true;
+        }
+
+        // checkeo que el criterio de busqueda este dentro del apellido (si existe)
+        if (!!clientLastName && (clientLastName.indexOf(searchCriteria) != -1)){
+            return true;
+        }
+
+        return false;
+    }
+
     $scope.init();
 });
