@@ -226,5 +226,62 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         return form.$invalid;
     };
 
+    // filtro personalizado para productos:
+    // - true: si el producto cumple con los criterios de busqueda
+    // - false: en caso contrario
+   $scope.customProductFilter = function(product){
+        // checkeo que el criterio de busqueda no es undefined or null or '' or '     '
+        if (!$scope.table.search || !$scope.table.search.trim()) {
+            return true;    
+        }
+
+        // previo a comparar el criterio con el nombre y droga del producto 
+        // coloco a todos en lowerCase para que la busqueda sea case insensitive
+        var searchCriteria = $scope.table.search.toLowerCase();
+        var productName = product.name.toLowerCase();
+        var productDrugName = null;
+        // verifico que el DrugName no sea undefined or null or '' or '      '
+        if (!!product.drug && !!product.drug.name && !!product.drug.name.trim()) {
+            productDrugName = product.drug.name;
+        }
+
+        searchCriteriaList = searchCriteria.split(' ');
+
+        var criteriaAppliesToName;
+        var criteriaAppliesToDrug;
+        var hasApplied;
+        var productHasDrugName;
+        
+        for (criteriaIndex = 0; criteriaIndex < searchCriteriaList.length; criteriaIndex++) { 
+            // checkeo que el criterio de busqueda este dentro del nombre del producto
+            if (productName.indexOf(searchCriteriaList[criteriaIndex]) != -1){
+                criteriaAppliesToName = true;
+            } else {
+                criteriaAppliesToName = false;
+            }
+
+            // checkeo que el criterio de busqueda este dentro del nombre de la droga (si existe)
+            if (!!productDrugName){
+                if ((productDrugName.indexOf(searchCriteriaList[criteriaIndex]) != -1)){
+                    criteriaAppliesToDrug = true;
+                } else {
+                    criteriaAppliesToDrug = false;
+                    if (!criteriaAppliesToName){
+                        return false;
+                    }    
+                }
+            } else {
+                if (!criteriaAppliesToName){
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+    };
+
+
+
     $scope.init();
 });
