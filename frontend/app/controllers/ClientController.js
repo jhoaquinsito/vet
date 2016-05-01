@@ -163,17 +163,34 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             clientLastName = client.lastName;
         }
 
-        // checkeo que el criterio de busqueda este dentro del nombre
-        if (clientName.indexOf(searchCriteria) != -1){
-            return true;
+        var searchCriteriaList = searchCriteria.split(' ');
+
+        var criteriaAppliesToName;
+        
+        for (criteriaIndex = 0; criteriaIndex < searchCriteriaList.length; criteriaIndex++) { 
+            // checkeo que el criterio de busqueda este dentro del nombre
+            if (clientName.indexOf(searchCriteriaList[criteriaIndex]) != -1){
+                criteriaAppliesToName = true;
+            } else {
+                criteriaAppliesToName = false;
+            }
+
+            // checkeo que el criterio de busqueda este dentro del apellido (si existe)
+            if (!!clientLastName){
+                if (!(clientLastName.indexOf(searchCriteriaList[criteriaIndex]) != -1)){
+                    if (!criteriaAppliesToName){
+                        return false;
+                    }    
+                }
+            } else {
+                if (!criteriaAppliesToName){
+                    return false;
+                }
+            }
+
         }
 
-        // checkeo que el criterio de busqueda este dentro del apellido (si existe)
-        if (!!clientLastName && (clientLastName.indexOf(searchCriteria) != -1)){
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     $scope.init();
