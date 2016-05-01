@@ -16,10 +16,10 @@
                 <th class="col-xs-3">Celular</th>
                 <th class="col-xs-1"></th>
             </tr>
-            <tr dir-paginate="client in filtered = (clients | filter: table.search | itemsPerPage: table.pageSize)">
+            <tr dir-paginate="client in filtered = (clients | filter: filtroPorNombreApellidoORazon | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
                     <div><a ng-href="clients/detail/{{client.id}}" class="text-important"> {{client.cuit ? client.name : client.name + ' ' +client.lastName}}</a></div>
-                    <div>{{client.cuit ? client.cuit : ''}}</div>
+                    <div>{{client.cuit ? client.cuit : client.nationalId}}</div>
                 </td>
 
                 <td class="table-cell-detail">

@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import backend.exception.BusinessException;
 import backend.person.Person;
 import backend.person.PersonDTO;
@@ -68,9 +71,24 @@ import ma.glasnost.orika.MapperFacade;
  * @author tomas
  *
  */
+@Component
 public class CommandAndQueries {
 	// MapperFacade de Orika (librería para mapping)
 	private MapperFacade iMapper; 
+
+	@Autowired private CategoryService iCategoryService;
+	@Autowired private ProductService iProductService;
+	@Autowired private PresentationService iPresentationService;
+	@Autowired private ManufacturerService iManufacturerService;
+	@Autowired private MeasureUnitService iMeasureUnitService;
+	@Autowired private DrugService iDrugService;
+	@Autowired private LegalPersonService iLegalPersonService;
+	@Autowired private NaturalPersonService iNaturalPersonService;
+	@Autowired private SaleService iSaleService;
+	@Autowired private PersonService iPersonService;
+	@Autowired private IVACategoryService iIVACategoryService;
+	@Autowired private BatchService iBatchService;
+	
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
 	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
 	private static final String cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE = "La cantidad disponible del producto es insuficiente: ";
@@ -98,7 +116,6 @@ public class CommandAndQueries {
 	// TODO cambiar nombre de este método por "createProduct"
 	public Long saveProduct(ProductDTO pProductDTO) throws BusinessException {
 		
-		ProductService mProductService = new ProductService();
 		
 		// map dto to domain object
 		Product mProduct;
@@ -109,7 +126,7 @@ public class CommandAndQueries {
 		}
 		
 		
-		mProduct = mProductService.save(mProduct);
+		mProduct = this.iProductService.save(mProduct);
 		
 		return mProduct.getId();
 	}
@@ -120,9 +137,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<ProductDTO> getProducts() throws BusinessException{
-		ProductService mProductService = new ProductService();
 		
-		Iterable<Product> mProduct = mProductService.getAll();
+		Iterable<Product> mProduct = this.iProductService.getAll();
 		
 		List<ProductDTO> mProductDTOList = new ArrayList<ProductDTO>();
 		
@@ -141,9 +157,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<ProductDTO> getProductsByName(String pProductName) throws BusinessException{
-		ProductService mProductService = new ProductService();
 		
-		Iterable<Product> mProduct = mProductService.getProductListByName(pProductName);
+		Iterable<Product> mProduct = this.iProductService.getProductListByName(pProductName);
 		
 		List<ProductDTO> mProductDTOList = new ArrayList<ProductDTO>();
 		
@@ -162,9 +177,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException el producto estaba eliminado lógicamente
 	 */
 	public ProductDTO getProduct(Long pProductId) throws BusinessException{
-		ProductService mProductService = new ProductService();
 		
-		Product mProduct = mProductService.get(pProductId);
+		Product mProduct = this.iProductService.get(pProductId);
 		
 		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
 		
@@ -179,11 +193,10 @@ public class CommandAndQueries {
 	 * @throws BusinessException
 	 */
 	public ProductDTO getProductByBatchCode(String pProductBatchCode) throws BusinessException{
-		ProductService mProductService = new ProductService();
 		
 		Long mProductId = BatchCodeGenerator.getProductId(pProductBatchCode);
 		
-		Product mProduct = mProductService.get(mProductId);
+		Product mProduct = this.iProductService.get(mProductId);
 		
 		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
 		
@@ -197,10 +210,9 @@ public class CommandAndQueries {
 	 * @throws BusinessException errores de negocio al intentar hacer la operación
 	 */
 	public void deleteProduct(Long pProductId) throws BusinessException{
-		ProductService mProductService = new ProductService();
 		
 		// elimino el producto
-		mProductService.delete(pProductId);
+		this.iProductService.delete(pProductId);
 		
 	}
 	
@@ -210,9 +222,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException
 	 */
 	public List<PresentationDTO> getPresentations() throws BusinessException{
-		PresentationService mPresentationService = new PresentationService();
 		
-		Iterable<Presentation> mPresentations = mPresentationService.getAll();
+		Iterable<Presentation> mPresentations = this.iPresentationService.getAll();
 		
 		List<PresentationDTO> mPresentationDTOList = new ArrayList<PresentationDTO>();
 		
@@ -229,9 +240,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException 
 	 */
 	public List<MeasureUnitDTO> getMeasureUnits() throws BusinessException{
-		MeasureUnitService mMeasureUnitService = new MeasureUnitService();
 		
-		Iterable<MeasureUnit> mMeasureUnits = mMeasureUnitService.getAll();
+		Iterable<MeasureUnit> mMeasureUnits = this.iMeasureUnitService.getAll();
 		
 		List<MeasureUnitDTO> mMeasureUnitDTOList = new ArrayList<MeasureUnitDTO>();
 		
@@ -249,9 +259,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<CategoryDTO> getCategorys() throws BusinessException{
-		CategoryService mCategoryService = new CategoryService();
 		
-		Iterable<Category> mCategory = mCategoryService.getAll();
+		Iterable<Category> mCategory = this.iCategoryService.getAll();
 		
 		List<CategoryDTO> mCategoryDTOList = new ArrayList<CategoryDTO>();
 		
@@ -269,13 +278,12 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepción con detalles de los errores de negocio
 	 */
 	public long saveCategory(CategoryDTO pCategory) throws BusinessException {
-		CategoryService mCategoryService = new CategoryService();
 		
 		Category bCategory = new Category();
 		
 		bCategory = this.iMapper.map(pCategory,Category.class);
 		
-		return this.iMapper.map(mCategoryService.save(bCategory),CategoryDTO.class).getId();
+		return this.iMapper.map(this.iCategoryService.save(bCategory),CategoryDTO.class).getId();
 		
 	}
 
@@ -285,9 +293,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepción con detalles de los errores de negocio
 	 */
 	public List<ManufacturerDTO> getManufacturers() throws BusinessException{
-		ManufacturerService mManufacturerService = new ManufacturerService();
 		
-		Iterable<Manufacturer> mManufacturer = mManufacturerService.getAll();
+		Iterable<Manufacturer> mManufacturer = this.iManufacturerService.getAll();
 		
 		List<ManufacturerDTO> mManufacturerDTOList = new ArrayList<ManufacturerDTO>();
 		
@@ -305,13 +312,12 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepción con detalles de los errores de negocio
 	 */
 	public long saveManufacturer(ManufacturerDTO pManufacturer) throws BusinessException {
-		ManufacturerService mManufacturerService = new ManufacturerService();
 		
 		Manufacturer bManufacturer = new Manufacturer();
 		
 		bManufacturer = this.iMapper.map(pManufacturer,Manufacturer.class);
 		
-		return this.iMapper.map(mManufacturerService.save(bManufacturer),ManufacturerDTO.class).getId();
+		return this.iMapper.map(this.iManufacturerService.save(bManufacturer),ManufacturerDTO.class).getId();
 		
 	}
 
@@ -322,12 +328,11 @@ public class CommandAndQueries {
 	 * @throws BusinessException errores de negocio producidos
 	 */
 	public Long createPresentation(PresentationDTO pPresentationDTO) throws BusinessException{
-		PresentationService mPresentationService = new PresentationService();
 		
 		// map dto to domain object
 		Presentation mPresentation = iMapper.map(pPresentationDTO, Presentation.class);
 		
-		mPresentation = mPresentationService.create(mPresentation);
+		mPresentation = this.iPresentationService.create(mPresentation);
 		
 		return mPresentation.getId();
 	}
@@ -337,9 +342,8 @@ public class CommandAndQueries {
 	 * @return lista de drogas
 	 */
 	public List<DrugDTO> getDrugs(){
-		DrugService mDrugService = new DrugService();
 		
-		Iterable<Drug> mDrugs = mDrugService.getAll();
+		Iterable<Drug> mDrugs = this.iDrugService.getAll();
 		
 		List<DrugDTO> mDrugDTOList = new ArrayList<DrugDTO>();
 		
@@ -357,12 +361,11 @@ public class CommandAndQueries {
 	 * @throws BusinessException errores de negocio producidos
 	 */
 	public Long createDrug(DrugDTO pDrugDTO) throws BusinessException{
-		DrugService mDrugService = new DrugService();
 		
 		// map dto to domain object
 		Drug mDrug = iMapper.map(pDrugDTO, Drug.class);
 		
-		mDrug = mDrugService.create(mDrug);
+		mDrug = this.iDrugService.create(mDrug);
 		
 		return mDrug.getId();
 	}
@@ -379,12 +382,10 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<Object> getPeople() throws BusinessException{
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
 		
-		Iterable<LegalPerson> mLegalPersonList = mLegalPersonService.getAll();
+		Iterable<LegalPerson> mLegalPersonList = this.iLegalPersonService.getAll();
 		
-		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
+		Iterable<NaturalPerson> mNaturalPersonList = this.iNaturalPersonService.getAll();
 		
 		List<Object> mPersonList = new ArrayList<Object>();
 		
@@ -401,9 +402,9 @@ public class CommandAndQueries {
 	
 	//TODO - Agregar comentario
 	public PersonDTO getPerson(Long pPersonId)throws BusinessException {
-		PersonService mPersonService = new PersonService();
 		
-		Person mPerson = mPersonService.get(pPersonId);
+		
+		Person mPerson = this.iPersonService.get(pPersonId);
 		
 		return this.iMapper.map(mPerson,PersonDTO.class);
 	}
@@ -415,10 +416,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException errores de negocio al intentar hacer la operación
 	 */
 	public void deletePerson(Long pPersonId) throws BusinessException {
-		PersonService mPersonService = new PersonService();
-		
 		// elimino la persona
-		mPersonService.delete(pPersonId);
+		this.iPersonService.delete(pPersonId);
 	}
 	
 	/**
@@ -428,20 +427,18 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepción con detalles de los errores de negocio
 	 */
 	public Long saveLegalPerson(LegalPersonDTO pLegalPersonDTO) throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		
 		// map dto to domain object
 		LegalPerson mLegalPerson = iMapper.map(pLegalPersonDTO, LegalPerson.class);
 		
-		//Si el cliente tiene ventas adeudadas
-		if(!this.clientIsInDebt(mLegalPerson)){
+		//Si el cliente no es nuevo y tiene ventas adeudadas
+		if(mLegalPerson.getId() != null && !this.clientIsInDebt(mLegalPerson)){
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mLegalPerson);
 			//Descuento los pagos del cliente
 			mLegalPerson.discountSettlements();
 		}
 		
-		mLegalPerson = mLegalPersonService.save(mLegalPerson);
+		mLegalPerson = this.iLegalPersonService.save(mLegalPerson);
 		
 		return mLegalPerson.getId();
 	}
@@ -454,9 +451,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException
 	 */
 	public List<LegalPersonDTO> getLegalPersons() throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		
-		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		Iterable<LegalPerson> mLegalPerson = this.iLegalPersonService.getAll();
 		
 		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
 		
@@ -475,9 +470,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException
 	 */
 	public LegalPersonDTO getLegalPerson(Long pLegalPersonId) throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		
-		LegalPerson mLegalPerson = mLegalPersonService.get(pLegalPersonId);
+		LegalPerson mLegalPerson = this.iLegalPersonService.get(pLegalPersonId);
 		
 		LegalPersonDTO mLegalPersonDTO = this.iMapper.map(mLegalPerson, LegalPersonDTO.class);
 		
@@ -492,9 +485,6 @@ public class CommandAndQueries {
 	 * @throws BusinessException 
 	 */
 	public Long saveNaturalPerson(NaturalPersonDTO pNaturalPersonDTO) throws BusinessException {
-		
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
 		// map dto to domain object
 		NaturalPerson mNaturalPerson;
 		if (pNaturalPersonDTO != null){
@@ -503,15 +493,15 @@ public class CommandAndQueries {
 			throw new BusinessException(CommandAndQueries.cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE);
 		}
 		
-		//Si el cliente tiene ventas adeudadas
-		if(!this.clientIsInDebt(mNaturalPerson)){
+		//Si el cliente no es nuevo y tiene ventas adeudadas
+		if(pNaturalPersonDTO.getId() != null && !this.clientIsInDebt(mNaturalPerson)){
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mNaturalPerson);
 			//Descuento los pagos del cliente
 			mNaturalPerson.discountSettlements();
 		}
 		
-		mNaturalPerson = mNaturalPersonService.save(mNaturalPerson);
+		mNaturalPerson = this.iNaturalPersonService.save(mNaturalPerson);
 		
 		return mNaturalPerson.getId();
 	}
@@ -522,9 +512,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<Object> getNaturalPeople() throws BusinessException{
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
-		Iterable<NaturalPerson> mNaturalPersonList = mNaturalPersonService.getAll();
+		Iterable<NaturalPerson> mNaturalPersonList = this.iNaturalPersonService.getAll();
 		
 		List<Object> mNaturalPersonListRes = new ArrayList<Object>();
 		
@@ -544,9 +532,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException
 	 */
 	public NaturalPersonDTO getNaturalPerson(Long pPersonId) throws BusinessException {
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
-		
-		NaturalPerson mNaturalPerson = mNaturalPersonService.get(pPersonId);
+		NaturalPerson mNaturalPerson = this.iNaturalPersonService.get(pPersonId);
 		
 		NaturalPersonDTO mNaturalPersonDTO = this.iMapper.map(mNaturalPerson, NaturalPersonDTO.class);
 		
@@ -560,13 +546,11 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepción con detalles de los errores de negocio
 	 */
 	public long saveIVACategory(IVACategoryDTO pIVACategory) throws BusinessException {
-		IVACategoryService mIVACategoryService = new IVACategoryService();
-		
 		IVACategory mIVACategory = new IVACategory();
 		
 		mIVACategory = this.iMapper.map(pIVACategory,IVACategory.class);
 		
-		return this.iMapper.map(mIVACategoryService.save(mIVACategory),IVACategoryDTO.class).getId();
+		return this.iMapper.map(this.iIVACategoryService.save(mIVACategory),IVACategoryDTO.class).getId();
 		
 	}
 	
@@ -576,9 +560,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<IVACategoryDTO> getIVACategories() throws BusinessException{
-		IVACategoryService mIVACategoryService = new IVACategoryService();
-		
-		Iterable<IVACategory> mIVACategory = mIVACategoryService.getAll();
+		Iterable<IVACategory> mIVACategory = this.iIVACategoryService.getAll();
 		
 		List<IVACategoryDTO> mIVACategoryDTOList = new ArrayList<IVACategoryDTO>();
 		
@@ -603,12 +585,9 @@ public class CommandAndQueries {
 	 * @throws BusinessException
 	 */
 	public List<PersonDTO> getClients() throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		NaturalPersonService mNaturalPersonService = new NaturalPersonService();
+		Iterable<LegalPerson> mLegalPerson = this.iLegalPersonService.getAll();
 		
-		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
-		
-		Iterable<NaturalPerson> mNaturalPerson = mNaturalPersonService.getAll();
+		Iterable<NaturalPerson> mNaturalPerson = this.iNaturalPersonService.getAll();
 		
 		List<PersonDTO> mClientsList = new ArrayList<PersonDTO>();
 		
@@ -632,11 +611,10 @@ public class CommandAndQueries {
 	 * @throws BusinessException 
 	 */
 	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
-		SaleService mSaleService = new SaleService();
-		ProductService mProductService = new ProductService();
+		
 		
 		//Recupero las ventas adeudas del cliente.
-		List<Sale> mDueSales = mSaleService.getDueSalesByClientId(pClient.getId());
+		List<Sale> mDueSales = this.iSaleService.getDueSalesByClientId(pClient.getId());
 		Iterator<Sale> mDueSalesIterator = mDueSales.iterator();
 				
 		//Defino una variable para guardar la deuda total del cliente
@@ -653,7 +631,7 @@ public class CommandAndQueries {
 				BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
 						
 				//Obtengo el precio unitario actual del producto de la línea
-				BigDecimal bProductPrice = mProductService.get(bSaleLine.getProduct().getId()).getUnitPrice();
+				BigDecimal bProductPrice = this.iProductService.get(bSaleLine.getProduct().getId()).getUnitPrice();
 						
 				//Sumo a la deuda la cantidad del producto por su precio unitario
 				mDebt = mDebt.add(bProductQuantity.multiply(bProductPrice));
@@ -682,10 +660,8 @@ public class CommandAndQueries {
 	 * @throws BusinessException 
 	 */
 	public void cancelClientDebt(Person pClient) throws BusinessException{
-		SaleService mSaleService = new SaleService();
-		
 		//Marco las ventas como pagas
-		mSaleService.payClientSales(pClient.getId());
+		this.iSaleService.payClientSales(pClient.getId());
 	}
 		
 	// FIN CLIENTES
@@ -702,9 +678,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException
 	 */
 	public List<LegalPersonDTO> getSuppliers() throws BusinessException {
-		LegalPersonService mLegalPersonService = new LegalPersonService();
-		
-		Iterable<LegalPerson> mLegalPerson = mLegalPersonService.getAll();
+		Iterable<LegalPerson> mLegalPerson = this.iLegalPersonService.getAll();
 		
 		List<LegalPersonDTO> mLegalPersonDTOList = new ArrayList<LegalPersonDTO>();
 		
@@ -731,7 +705,6 @@ public class CommandAndQueries {
 	 */
 	public Long createSale(SaleLiteDTO pSaleDTO) throws BusinessException {
 		
-		SaleService mSaleService 		 = new SaleService();
 		EntityValidator mEntityValidator = new EntityValidator();
 		// map dto to domain object
 		Sale mSale;
@@ -789,7 +762,7 @@ public class CommandAndQueries {
 		}
 		
 		
-		mSale = mSaleService.save(mSale);
+		mSale = this.iSaleService.save(mSale);
 		
 		return mSale.getId();
 	}
@@ -800,9 +773,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
 	 */
 	public List<SaleDTO> getSales() throws BusinessException{
-		SaleService mSaleService = new SaleService();
-		
-		Iterable<Sale> mSale = mSaleService.getAll();
+		Iterable<Sale> mSale = this.iSaleService.getAll();
 		
 		List<SaleDTO> mSaleDTOList = new ArrayList<SaleDTO>();
 		
@@ -821,9 +792,7 @@ public class CommandAndQueries {
 	 * @throws BusinessException la venta estaba eliminada lógicamente
 	 */
 	public SaleDTO getSale(Long pSaleId) throws BusinessException{
-		SaleService mSaleService = new SaleService();
-		
-		Sale mSale = mSaleService.get(pSaleId);
+		Sale mSale = this.iSaleService.get(pSaleId);
 		
 		SaleDTO mSaleDTO = this.iMapper.map(mSale, SaleDTO.class);
 		
@@ -837,17 +806,13 @@ public class CommandAndQueries {
 	 * @throws BusinessException errores de negocio al intentar hacer la operación
 	 */
 	public void deleteSale(Long pSaleId) throws BusinessException{
-		SaleService mSaleService = new SaleService();
-		
 		// elimino el saleo
-		mSaleService.delete(pSaleId);
+		this.iSaleService.delete(pSaleId);
 		
 	}
 
 	public Batch getBatch(Long pBatchId) throws BusinessException {
-		BatchService mBatchService = new BatchService();
-		
-		return mBatchService.get(pBatchId);
+		return this.iBatchService.get(pBatchId);
 	}
 		
 	// FIN VENTAS

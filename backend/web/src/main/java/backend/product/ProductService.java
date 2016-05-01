@@ -7,10 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import backend.core.ApplicationConfiguration;
@@ -32,9 +34,10 @@ import backend.utils.EntityValidator;
  * @author tomas
  *
  */
+@Service
 public class ProductService {
 	
-	private ProductRepository iProductRepository;
+	@Autowired private ProductRepository iProductRepository;
 	private EntityValidator iEntityValidator;
 
 	private static final String cDELETED_PRODUCT_EXCEPTION_MESSAGE = "Intentaste obtener un producto eliminado lógicamente.";
@@ -47,12 +50,7 @@ public class ProductService {
 	 */
 	public ProductService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		@SuppressWarnings("resource")
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iProductRepository = mAppContext.getBean(ProductRepository.class);
 		this.iEntityValidator = new EntityValidator();
-		
 	}
 	
 	/**

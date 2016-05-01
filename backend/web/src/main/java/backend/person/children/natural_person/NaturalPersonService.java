@@ -2,21 +2,24 @@ package backend.person.children.natural_person;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.postgresql.util.PSQLException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
 import backend.utils.EntityValidator;
 
+@Service
 public class NaturalPersonService {
 	
 	private static final String cDELETED_NATURAL_PERSON_EXCEPTION_MESSAGE = "La persona que se desea recuperar no esta activa.";
 	private static final String cCANNOT_SAVE_NATURAL_PERSON_EXCEPTION_MESSAGE = "No se pudo guardar la persona.";
 	private static final String cNATURAL_PERSON_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE = "Se violó alguna de las restricciones de la base de datos.";
-	private NaturalPersonRepository iNaturalPersonRepository;
+	@Autowired private NaturalPersonRepository iNaturalPersonRepository;
 	private EntityValidator iEntityValidator;
 	
 	/**
@@ -24,9 +27,6 @@ public class NaturalPersonService {
 	 */
 	public NaturalPersonService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iNaturalPersonRepository = mAppContext.getBean(NaturalPersonRepository.class);
 		this.iEntityValidator = new EntityValidator();
 	}
 	

@@ -73,6 +73,13 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             return null;
         }
 
+        // asocio categorias con el mismo nombre (no case sensitive)
+        matchCategoryIfExists();
+        // asocio laboratorios con el mismo nombre (no case sensitive)
+        matchManufacturerIfExists();
+        // asocio drogas con el mismo nombre (no case sensitive)
+        matchDrugIfExists();
+
         var request = ProductService.save($scope.form.product);
 
         request.success = function(response) {
@@ -87,6 +94,45 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         };
 
         request.then(request.success, request.error);
+    };
+
+    function matchCategoryIfExists(){
+        // si la categoría no se asoció a un id, reviso si no se puede asociar a otros case insensitive
+        if ($scope.form.product.category != null && $scope.form.product.category.id == null) {
+            angular.forEach($scope.form.categories, function(category) {
+                //si los nombres son iguales en lower case entonces es la misma pero con otro case
+                if (category.name.toLowerCase() == $scope.form.product.category.name.toLowerCase()) {
+                    $scope.form.product.category.name = category.name;
+                    $scope.form.product.category.id = category.id;
+                }
+            });
+        }
+    };
+
+    function matchManufacturerIfExists(){
+        // si el laboratorio no se asoció a un id, reviso si no se puede asociar a otros case insensitive
+        if ($scope.form.product.manufacturer != null && $scope.form.product.manufacturer.id == null) {
+            angular.forEach($scope.form.manufacturers, function(manufacturer) {
+                //si los nombres son iguales en lower case entonces es la misma pero con otro case
+                if (manufacturer.name.toLowerCase() == $scope.form.product.manufacturer.name.toLowerCase()) {
+                    $scope.form.product.manufacturer.name = manufacturer.name;
+                    $scope.form.product.manufacturer.id = manufacturer.id;
+                }
+            });
+        }
+    };
+
+    function matchDrugIfExists(){
+        // si la droga no se asoció a un id, reviso si no se puede asociar a otros case insensitive
+        if ($scope.form.product.drug != null && $scope.form.product.drug.id == null) {
+            angular.forEach($scope.form.drugs, function(drug) {
+                //si los nombres son iguales en lower case entonces es la misma pero con otro case
+                if (drug.name.toLowerCase() == $scope.form.product.drug.name.toLowerCase()) {
+                    $scope.form.product.drug.name = drug.name;
+                    $scope.form.product.drug.id = drug.id;
+                }
+            });
+        }
     };
 
     $scope.refreshTableData = function() {
@@ -179,6 +225,57 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
 
         return form.$invalid;
     };
+
+    // filtro personalizado para productos:
+    // - true: si el producto cumple con los criterios de busqueda
+    // - false: en caso contrario
+   $scope.customProductFilter = function(product){
+        // checkeo que el criterio de busqueda no es undefined or null or '' or '     '
+        if (!$scope.table.search || !$scope.table.search.trim()) {
+            return true;    
+        }
+
+        // previo a comparar el criterio con el nombre y droga del producto 
+        // coloco a todos en lowerCase para que la busqueda sea case insensitive
+        var searchCriteria = $scope.table.search.toLowerCase();
+        var productName = product.name.toLowerCase();
+        var productDrugName = null;
+        // verifico que el DrugName no sea undefined or null or '' or '      '
+        if (!!product.drug && !!product.drug.name && !!product.drug.name.trim()) {
+            productDrugName = product.drug.name;
+        }
+
+        searchCriteriaList = searchCriteria.split(' ');
+
+        var criteriaAppliesToName;
+        
+        for (criteriaIndex = 0; criteriaIndex < searchCriteriaList.length; criteriaIndex++) { 
+            // checkeo que el criterio de busqueda este dentro del nombre del producto
+            if (productName.indexOf(searchCriteriaList[criteriaIndex]) != -1){
+                criteriaAppliesToName = true;
+            } else {
+                criteriaAppliesToName = false;
+            }
+
+            // checkeo que el criterio de busqueda este dentro del nombre de la droga (si existe)
+            if (!!productDrugName){
+                if (!(productDrugName.indexOf(searchCriteriaList[criteriaIndex]) != -1)){
+                    if (!criteriaAppliesToName){
+                        return false;
+                    }    
+                }
+            } else {
+                if (!criteriaAppliesToName){
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+    };
+
+
 
     $scope.init();
 });

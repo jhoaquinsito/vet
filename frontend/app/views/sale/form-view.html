@@ -5,7 +5,7 @@
                 <div class="col-md-12">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Cliente</label>
-                        <input type="text" class="form-control" name="client" ng-model="form.sale.person" onkeypress="return this.value.length < 130" ng-change="addFormDropdownValue('client')" bs-options="client.id as client.name for client in form.clients" bs-typeahead>
+                        <input type="text" class="form-control" name="client" ng-model="form.sale.person" onkeypress="return this.value.length < 130" ng-change="addFormDropdownValue('client')" bs-options="client.id as client.name for client in form.clients" bs-typeahead placeholder="Ingrese el nombre de un cliente">
                     </div>
                 </div>
             </div>
@@ -15,7 +15,7 @@
                     <div class="form-group form-group-sm">
                         <label class="control-label">Agregar producto</label>
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()">
+                            <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()" placeholder="Ingrese el código de producto">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal()"><i class="fa fa-search"></i></button>
                             </span>

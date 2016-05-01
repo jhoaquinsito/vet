@@ -3,6 +3,7 @@ package backend.core;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,6 +42,8 @@ import backend.utils.ZebraPrintHelper;
 @CrossOrigin
 @RequestMapping("api/")
 public class ApplicationRESTController {
+	
+	@Autowired CommandAndQueries iCommandAndQueries;
 
 	//=======================================================================================
 	
@@ -55,9 +58,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "product", method = RequestMethod.POST)
 	public Long createProduct(@RequestBody ProductDTO product) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.saveProduct(product);
+		Long mId = this.iCommandAndQueries.saveProduct(product);
 
 		return mId;
 	}
@@ -72,9 +74,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "product", method = RequestMethod.GET)
 	public @ResponseBody List<ProductDTO> listProducts() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.getProducts();
+		return this.iCommandAndQueries.getProducts();
 	}
 
 	/**
@@ -90,8 +91,7 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "product/{id}", method = RequestMethod.GET)
 	public ProductDTO getProductById(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getProduct(id);
+		return this.iCommandAndQueries.getProduct(id);
 	}
 	
 	/**
@@ -102,8 +102,7 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "product/bybatchcode/{batchCode}", method = RequestMethod.GET)
 	public ProductDTO getProductByBatchCode(@PathVariable String batchCode) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getProductByBatchCode(batchCode);
+		return this.iCommandAndQueries.getProductByBatchCode(batchCode);
 	}
 	
 	/**
@@ -120,8 +119,7 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "products/byname/{name}", method = RequestMethod.GET)
 	public List<ProductDTO> getProductsByName(@PathVariable String name) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getProductsByName(name);
+		return this.iCommandAndQueries.getProductsByName(name);
 	}
 
 	/**
@@ -135,9 +133,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "product/{id}", method = RequestMethod.DELETE)
 	public void deleteProduct(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		mCNQ.deleteProduct(id);
+		this.iCommandAndQueries.deleteProduct(id);
 	}
 	
 	/**
@@ -148,9 +145,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "presentation", method = RequestMethod.GET)
 	public List<PresentationDTO> listPresentations() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		List<PresentationDTO> mPresentationDTOList = mCNQ.getPresentations();
+		List<PresentationDTO> mPresentationDTOList = this.iCommandAndQueries.getPresentations();
 
 		return mPresentationDTOList;
 	}
@@ -163,43 +159,39 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "measure_unit", method = RequestMethod.GET)
 	public List<MeasureUnitDTO> listMeasureUnits() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		List<MeasureUnitDTO> mMeasureUnitDTOList = mCNQ.getMeasureUnits();
+		List<MeasureUnitDTO> mMeasureUnitDTOList = this.iCommandAndQueries.getMeasureUnits();
 
 		return mMeasureUnitDTOList;
 	}
 
 	@RequestMapping(value = "category", method = RequestMethod.POST)
 	public long saveCategory(@RequestBody CategoryDTO pCategory) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.saveCategory(pCategory);
+		return this.iCommandAndQueries.saveCategory(pCategory);
 
 	}	
 
 	@RequestMapping(value = "category", method = RequestMethod.GET)
 	public List<CategoryDTO> listCategorys() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
+		
 
-		List<CategoryDTO> mCategoryDTOList = mCNQ.getCategorys();
+		List<CategoryDTO> mCategoryDTOList = iCommandAndQueries.getCategorys();
 
 		return mCategoryDTOList;
 	}
 	
 	@RequestMapping(value = "manufacturer", method = RequestMethod.POST)
 	public long saveManufacturer(@RequestBody ManufacturerDTO pManufacturer) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.saveManufacturer(pManufacturer);
+		return this.iCommandAndQueries.saveManufacturer(pManufacturer);
 
 	}
 
 	@RequestMapping(value = "manufacturer", method = RequestMethod.GET)
 	public List<ManufacturerDTO> listManufacturers() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		List<ManufacturerDTO> mManufacturerDTOList = mCNQ.getManufacturers();
+		List<ManufacturerDTO> mManufacturerDTOList = this.iCommandAndQueries.getManufacturers();
 
 		return mManufacturerDTOList;
 	}
@@ -215,9 +207,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "presentation", method = RequestMethod.POST)
 	public Long createPresentation(@RequestBody PresentationDTO presentation) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.createPresentation(presentation);
+		Long mId = this.iCommandAndQueries.createPresentation(presentation);
 
 		return mId;
 	}
@@ -229,9 +220,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "drug", method = RequestMethod.GET)
 	public List<DrugDTO> listDrugs() {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		List<DrugDTO> mDrugDTOList = mCNQ.getDrugs();
+		List<DrugDTO> mDrugDTOList = this.iCommandAndQueries.getDrugs();
 
 		return mDrugDTOList;
 	}
@@ -248,9 +238,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "drug", method = RequestMethod.POST)
 	public Long createDrug(@RequestBody DrugDTO drug) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.createDrug(drug);
+		Long mId = this.iCommandAndQueries.createDrug(drug);
 
 		return mId;
 	}
@@ -268,9 +257,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "person", method = RequestMethod.GET)
 	public List<Object> listPeople() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		List<Object> mPeopleList = mCNQ.getPeople();
+		List<Object> mPeopleList = this.iCommandAndQueries.getPeople();
 
 		return mPeopleList;
 	}
@@ -287,9 +275,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "person/{id}", method = RequestMethod.DELETE)
 	public void deletePerson(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		mCNQ.deletePerson(id);
+		this.iCommandAndQueries.deletePerson(id);
 	}
 	
 	/**
@@ -301,9 +288,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "legalperson", method = RequestMethod.POST)
 	public Long createLegalPerson(@RequestBody LegalPersonDTO pLegalPerson) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.saveLegalPerson(pLegalPerson);
+		Long mId = this.iCommandAndQueries.saveLegalPerson(pLegalPerson);
 
 		return mId;
 	}
@@ -318,9 +304,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "legalperson", method = RequestMethod.GET)
 	public @ResponseBody List<LegalPersonDTO> listLegalPerson() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.getLegalPersons();
+		return this.iCommandAndQueries.getLegalPersons();
 	}
 	
 	/**
@@ -336,8 +321,7 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "legalperson/{id}", method = RequestMethod.GET)
 	public LegalPersonDTO getLegalPersonById(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getLegalPerson(id);
+		return this.iCommandAndQueries.getLegalPerson(id);
 	}
 	
 	/**
@@ -350,9 +334,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "naturalperson", method = RequestMethod.POST)
 	public Long createNaturalPerson(@RequestBody NaturalPersonDTO person) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.saveNaturalPerson(person);
+		Long mId = this.iCommandAndQueries.saveNaturalPerson(person);
 
 		return mId;
 	}
@@ -370,23 +353,20 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "naturalperson/{id}", method = RequestMethod.GET)
 	public NaturalPersonDTO getNaturalPersonById(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getNaturalPerson(id);
+		return this.iCommandAndQueries.getNaturalPerson(id);
 	}
 	
 	@RequestMapping(value = "ivacategory", method = RequestMethod.POST)
 	public long saveIVACategory(@RequestBody IVACategoryDTO pIVACategory) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.saveIVACategory(pIVACategory);
+		return this.iCommandAndQueries.saveIVACategory(pIVACategory);
 
 	}	
 
 	@RequestMapping(value = "ivacategory", method = RequestMethod.GET)
 	public List<IVACategoryDTO> listCategories() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		List<IVACategoryDTO> mIVACategoryDTOList = mCNQ.getIVACategories();
+		List<IVACategoryDTO> mIVACategoryDTOList = this.iCommandAndQueries.getIVACategories();
 
 		return mIVACategoryDTOList;
 	}
@@ -405,9 +385,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "client", method = RequestMethod.GET)
 	public @ResponseBody List<PersonDTO> listClients() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.getClients();
+		return this.iCommandAndQueries.getClients();
 	}
 	
 	// FIN CLIENTES
@@ -426,9 +405,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "supplier", method = RequestMethod.GET)
 	public @ResponseBody List<LegalPersonDTO> listSupplier() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.getSuppliers();
+		return this.iCommandAndQueries.getSuppliers();
 	}
 	
 	// FIN PROVEEDORES
@@ -447,9 +425,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "sale", method = RequestMethod.POST)
 	public Long createSale(@RequestBody SaleLiteDTO sale) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		Long mId = mCNQ.createSale(sale);
+		Long mId = this.iCommandAndQueries.createSale(sale);
 
 		return mId;
 	}
@@ -465,9 +442,8 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "sale", method = RequestMethod.GET)
 	public @ResponseBody List<SaleDTO> listSales() throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 
-		return mCNQ.getSales();
+		return this.iCommandAndQueries.getSales();
 	}
 
 	/**
@@ -483,8 +459,7 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "sale/{id}", method = RequestMethod.GET)
 	public SaleDTO getSaleById(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		return mCNQ.getSale(id);
+		return this.iCommandAndQueries.getSale(id);
 	}
 	
 	/**
@@ -498,14 +473,13 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "client/{id}", method = RequestMethod.GET)
 	public PersonDTO getClientById(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
 		
 		PersonDTO mPerson = null;
 		
-		mPerson = mCNQ.getNaturalPerson(id);
+		mPerson = this.iCommandAndQueries.getNaturalPerson(id);
 		
 		if(mPerson == null){
-			LegalPersonDTO mLegalPerson = mCNQ.getLegalPerson(id);
+			LegalPersonDTO mLegalPerson = this.iCommandAndQueries.getLegalPerson(id);
 			
 			if(mLegalPerson!= null && mLegalPerson.isClient()){
 				mPerson = mLegalPerson;
@@ -528,8 +502,7 @@ public class ApplicationRESTController {
 	 */
 	@RequestMapping(value = "client/{id}", method = RequestMethod.DELETE)
 	public void deleteClientById(@PathVariable Long id) throws BusinessException {
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		mCNQ.deletePerson(id);
+		this.iCommandAndQueries.deletePerson(id);
 	}
 	
 	// FIN VENTAS
@@ -546,8 +519,7 @@ public class ApplicationRESTController {
 	public void printSale(@PathVariable Long id) throws BusinessException {
 		
 		 
-		CommandAndQueries mCNQ = new CommandAndQueries();
-		SaleDTO sale = mCNQ.getSale(id);
+		SaleDTO sale = this.iCommandAndQueries.getSale(id);
 		ZebraPrintHelper.PrintSale(sale);
 	}
 	

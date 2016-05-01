@@ -18,7 +18,7 @@
                 <th class="col-xs-2">Precio</th>
                 <th class="col-xs-1"></th>
             </tr>
-            <tr dir-paginate="product in filtered = (products | filter: table.search | itemsPerPage: table.pageSize)">
+            <tr dir-paginate="product in filtered = (products | filter: customProductFilter | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
                     <div><a ng-href="products/detail/{{product.id}}" class="text-important">{{product.name}}</a><i class="fa fa-angle-right text-separator"></i><span class="text-info">{{product.category.name ? product.category.name : 'Sin categoría'}}</span></div>
                     <div>{{product.description ? product.description : 'Sin descripción'}}</div>

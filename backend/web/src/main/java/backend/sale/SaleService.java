@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -31,9 +33,10 @@ import backend.utils.EntityValidator;
 * @author ggorosito
 *
 */
+@Service
 public class SaleService {
 	
-	private SaleRepository iSaleRepository;
+	@Autowired private SaleRepository iSaleRepository;
 	private EntityValidator iEntityValidator;
 
 	
@@ -42,12 +45,7 @@ public class SaleService {
 	 */
 	public SaleService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		@SuppressWarnings("resource")
-		ApplicationContext mAppContext 	= new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iSaleRepository 			= mAppContext.getBean(SaleRepository.class);
 		this.iEntityValidator 			= new EntityValidator();
-		
 	}
 	
 	/**

@@ -4,7 +4,11 @@ app.factory('SaleService', function(Restangular) {
     this.save = function(sale) {
         // valores por default
         if (sale.settlement.amount == null) {
-            sale.settlement.amount = calculateSaleTotal();
+            sale.settlement.amount = this.calculateSaleTotal(sale);
+        }
+
+        if (sale.person == null) {
+            sale.person = 1;
         }
 
         // hago que solo mande los id de los productos

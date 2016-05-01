@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
@@ -26,10 +28,10 @@ import backend.utils.EntityValidator;
  * @author genesis
  *
  */
-
+@Service
 public class ManufacturerService {
 
-	private ManufacturerRepository iManufacturerRepository;
+	@Autowired private ManufacturerRepository iManufacturerRepository;
 	private EntityValidator iEntityValidator;
 	// constantes para mensajes de excepciones:
 	private static final String cEXISTING_NAME_EXCEPTION_MESSAGE = "Laboratorio no válido: el nombre ya existe en la base de datos.";
@@ -39,10 +41,6 @@ public class ManufacturerService {
 	 */
 	public ManufacturerService() {
 		super();
-		// obtengo el repositorio desde el contexto de la applicación
-		@SuppressWarnings("resource")
-		ApplicationContext mAppContext = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-		this.iManufacturerRepository = mAppContext.getBean(ManufacturerRepository.class);
 		this.iEntityValidator = new EntityValidator();
 	}
 

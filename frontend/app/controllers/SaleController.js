@@ -47,7 +47,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         request.success = function(response) {
             MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'success', 'female'), 'success');
             
-            $scope.resetFormData;
+            $scope.resetFormData();
 
             $location.path('sales');
         };

@@ -13,26 +13,35 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Categoría de IVA</label>
-                        <select class="form-control" name="ivacategory" ng-model="form.client.ivacategory" ng-options="ivacategory.description for ivacategory in form.ivacategories track by ivacategory.id"></select>
+                    <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.ivacategory.$dirty && clientForm.ivacategory.$error.required}" >
+                        <label class="control-label mandatory">Categoría de IVA</label>
+                        <select class="form-control" name="ivacategory" ng-model="form.client.ivacategory" ng-options="ivacategory.description for ivacategory in form.ivacategories track by ivacategory.id" required></select>
+                        <span ng-show="clientForm.ivacategory.$dirty && clientForm.ivacategory.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
                             <label class="control-label mandatory">Nombre</label>
-                            <input type="text" class="form-control" name="name" ng-model="form.client.name" required>
+                            <input type="text" class="form-control" name="name" ng-model="form.client.name" onkeypress="return this.value.length < 30" required>
                             <span ng-show="clientForm.name.$dirty && clientForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.lastName.$dirty && clientForm.lastName.$error.required}">
                             <label class="control-label mandatory">Apellido</label>
-                            <input type="text" class="form-control" name="lastName" ng-model="form.client.lastName" required>
+                            <input type="text" class="form-control" name="lastName" ng-model="form.client.lastName" onkeypress="return this.value.length < 30" required>
                             <span ng-show="clientForm.lastName.$dirty && clientForm.lastName.$error.required" class="help-block">Este campo es obligatorio</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.nationalId.$dirty && clientForm.nationalId.$error.required}">
+                            <label class="control-label mandatory">DNI</label>
+                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required onkeypress="return /^\d*[\.\d]*$/.test(this.value+String.fromCharCode(event.charCode))">
+                            <!-- La expresion regular valida que el dni comience con un nro y que sea formado por numeros y puntos -->
+                            <span ng-show="clientForm.nationalId.$dirty && clientForm.nationalId.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
                 </div>
@@ -40,14 +49,15 @@
                     <div class="col-md-6">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.name.$dirty && clientForm.name.$error.required}">
                             <label class="control-label mandatory">Razón social</label>
-                            <input type="text" class="form-control" name="name" ng-model="form.client.name" required>
+                            <input type="text" class="form-control" name="name" ng-model="form.client.name" onkeypress="return this.value.length < 30" required>
                             <span ng-show="clientForm.name.$dirty && clientForm.name.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.cuit.$dirty && clientForm.cuit.$error.required}">
                             <label class="control-label mandatory">CUIT</label>
-                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" required>
+                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit" onkeypress="return /^\d*[\-\d]*$/.test(this.value+String.fromCharCode(event.charCode))" required>
+                            <!-- La expresion regular valida que el cuit comience con un nro y que sea formado por numeros y guiones medios -->
                             <span ng-show="clientForm.cuit.$dirty && clientForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
                     </div>
@@ -55,24 +65,16 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
-                        <div class="form-group form-group-sm">
-                            <label class="control-label">Renspa</label>
-                            <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa">
-                        </div> 
-                    </div>
-                    <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                        <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.nationalId.$dirty && clientForm.nationalId.$error.required}">
-                            <label class="control-label mandatory">DNI</label>
-                            <input type="text" class="form-control" name="nationalId" ng-model="form.client.nationalId" required onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-                            <span ng-show="clientForm.nationalId.$dirty && clientForm.nationalId.$error.required" class="help-block">Este campo es obligatorio</span>
-                        </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Renspa</label>
+                        <input type="text" class="form-control" name="renspa" ng-model="form.client.renspa" onkeypress="return /^\d*[\.\-\_/\d]*$/.test(this.value+String.fromCharCode(event.charCode))">
+                        <!-- La expresion regular valida que el renspa comience con un nro y que sea formado por numeros, guiones medios, barras, guiones bajos y/o . -->
                     </div>
                 </div> 
                 <div class="col-md-6">
                     <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.email.$dirty && clientForm.email.$error.email}">
                         <label class="control-label">E-mail</label>
-                        <input type="email" class="form-control" name="email" ng-model="form.client.email">
+                        <input type="email" class="form-control" name="email" ng-model="form.client.email" onkeypress="return this.value.length < 30">
                         <span ng-show="clientForm.email.$dirty && clientForm.email.$error.email" class="help-block">Este campo debe contener un e-mail válido</span>
                     </div>
                 </div>
@@ -81,13 +83,13 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Dirección</label>
-                        <input type="text" class="form-control" name="address" ng-model="form.client.address">
+                        <input type="text" class="form-control" name="address" ng-model="form.client.address" onkeypress="return this.value.length < 100">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Código postal</label>
-                        <input type="text" class="form-control" name="zipCode" ng-model="form.client.zipCode">
+                        <input type="text" class="form-control" name="zipCode" ng-model="form.client.zipCode" onkeypress="return this.value.length < 8">
                     </div>
                 </div>
             </div>
@@ -95,13 +97,13 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Teléfono</label>
-                        <input type="text" class="form-control" name="phone" ng-model="form.client.phone">
+                        <input type="text" class="form-control" name="phone" ng-model="form.client.phone" onkeypress="return this.value.length < 50">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Celular</label>
-                        <input type="text" class="form-control" name="mobilePhone" ng-model="form.client.mobilePhone">
+                        <input type="text" class="form-control" name="mobilePhone" ng-model="form.client.mobilePhone" onkeypress="return this.value.length < 50">
                     </div>
                 </div>
             </div>
