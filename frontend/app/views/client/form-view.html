@@ -13,9 +13,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Categoría de IVA</label>
-                        <select class="form-control" name="ivacategory" ng-model="form.client.ivacategory" ng-options="ivacategory.description for ivacategory in form.ivacategories track by ivacategory.id"></select>
+                    <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.ivacategory.$dirty && clientForm.ivacategory.$error.required}" >
+                        <label class="control-label mandatory">Categoría de IVA</label>
+                        <select class="form-control" name="ivacategory" ng-model="form.client.ivacategory" ng-options="ivacategory.description for ivacategory in form.ivacategories track by ivacategory.id" required></select>
+                        <span ng-show="clientForm.ivacategory.$dirty && clientForm.ivacategory.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
             </div>
