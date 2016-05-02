@@ -1,6 +1,8 @@
 package backend.saleline;
 
 import backend.product.ProductDTO;
+import backend.product.batch.BatchDTO;
+import backend.sale.SaleDTO;
 
 public class SaleLineDTO {
 
@@ -12,9 +14,9 @@ public class SaleLineDTO {
 	
 	private float iDiscount;
 
-//	private SaleDTO iSale;
+	//private SaleDTO iSale;
 		
-	private ProductDTO iProduct;
+	private BatchDTO iBatch;
 	
 	public float getQuantity() {
 		return iQuantity;
@@ -48,12 +50,12 @@ public class SaleLineDTO {
 		this.iDiscount = pDiscount;
 	}
 
-	public ProductDTO getProduct() {
-		return iProduct;
+	public BatchDTO getBatch() {
+		return iBatch;
 	}
 
-	public void setProduct(ProductDTO pProduct) {
-		this.iProduct = pProduct;
+	public void setBatch(BatchDTO pBatch) {
+		this.iBatch = pBatch;
 	}
 
 	public Long getId() {

@@ -15,6 +15,7 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 
+import backend.core.CommandAndQueries;
 import backend.exception.BusinessException;
 import backend.person.PersonDTO;
 import backend.product.BatchCodeGenerator;
@@ -268,9 +269,10 @@ public class ZebraPrintHelper {
 				}
 				y+=20;//300
 				/* LISTADO DE PRODUCTOS */
+				CommandAndQueries CAndQ = new CommandAndQueries();
 				for(SaleLineDTO mSaleLine : pSaleLineList){
 			    	
-			    	ProductDTO 		mProduct 		= mSaleLine.getProduct();
+			    	ProductDTO 		mProduct 		= CAndQ.getProduct(mSaleLine.getBatch().getProduct());
 			    	MeasureUnitDTO 	mMeasureUnit 	= mProduct.getMeasureUnit();
 			    	
 			    	/* - Nombre del producto - */

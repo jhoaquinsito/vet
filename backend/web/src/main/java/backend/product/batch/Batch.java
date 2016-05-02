@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,9 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import backend.exception.BusinessException;
@@ -56,8 +61,11 @@ public class Batch {
 	private BigDecimal iStock;
 
 	@Column(name = "iso_due_date")
-	//@NotNull(message = BatchConsts.cISODUEDATE_NOTNULL_VIOLATION_MESSAGE)
 	private Integer iIsoDueDate;
+	
+	@ManyToOne(fetch=FetchType.LAZY)  
+    @JoinColumn(name = "product")  
+	private Product iProduct;
 
 
 	public BigDecimal getStock() {
@@ -84,6 +92,14 @@ public class Batch {
 		this.iId = pId;
 	}
 	
+	public Product getProduct() {
+		return iProduct;
+	}
+
+	public void setProduct(Product pProduct) {
+		this.iProduct = pProduct;
+	}
+
 	/**
 	 * Método que devuelve la fecha en formato Date a partir de la fecha ISO del lote.
 	 * @return fecha en formato Date

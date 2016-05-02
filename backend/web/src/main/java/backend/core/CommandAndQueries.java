@@ -653,7 +653,7 @@ public class CommandAndQueries {
 				BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
 						
 				//Obtengo el precio unitario actual del producto de la línea
-				BigDecimal bProductPrice = mProductService.get(bSaleLine.getProduct().getId()).getUnitPrice();
+				BigDecimal bProductPrice = mProductService.get(bSaleLine.getBatch().getProduct().getId()).getUnitPrice();
 						
 				//Sumo a la deuda la cantidad del producto por su precio unitario
 				mDebt = mDebt.add(bProductQuantity.multiply(bProductPrice));
@@ -731,7 +731,7 @@ public class CommandAndQueries {
 	 */
 	public Long createSale(SaleLiteDTO pSaleDTO) throws BusinessException {
 		
-		SaleService mSaleService 		 = new SaleService();
+		SaleService mSaleService = new SaleService();
 		EntityValidator mEntityValidator = new EntityValidator();
 		// map dto to domain object
 		Sale mSale;
@@ -743,8 +743,8 @@ public class CommandAndQueries {
 			
 			if (pSaleDTO.getPerson() != null){
 				PersonDTO mPersonDTO = this.getPerson(pSaleDTO.getPerson());
-				Person mPerson 			= iMapper.map(mPersonDTO, Person.class);
-				Settlement mSettlement  = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
+				Person mPerson = iMapper.map(mPersonDTO, Person.class);
+				Settlement mSettlement = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
 				if(mSettlement.getDate() == null ) mSettlement.setDate(new Date());
 				
 				//Valido Settlement
@@ -761,21 +761,20 @@ public class CommandAndQueries {
 			for(SaleLineLiteDTO mSaleLineLiteDTO : pSaleDTO.getSaleLines()){
 				SaleLine mSaleLine  = iMapper.map(mSaleLineLiteDTO, SaleLine.class);
 				
-				ProductDTO mProductDTO = this.getProduct(mSaleLineLiteDTO.getProduct());
+				BatchDTO bBatchDTO = this.getBatch(mSaleLineLiteDTO.getBatch());
 				
-				Product mProduct = iMapper.map(mProductDTO, Product.class);
+				Batch bBatch = iMapper.map(bBatchDTO, Batch.class);
 				
 				//Descuento el stock en el lote correspondiente 
-				Batch bBatch = mProduct.getBatcheByISODueDate(mSaleLineLiteDTO.getISODueDate());
 				BigDecimal bQuantity = BigDecimal.valueOf(mSaleLineLiteDTO.getQuantity());
 				BigDecimal bNewStock = bBatch.getStock().subtract(bQuantity);
 				if(bNewStock.compareTo(BigDecimal.ZERO) >= 0){
 					bBatch.setStock(bNewStock);
 				}else{
-					throw new BusinessException(CommandAndQueries.cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE + mProduct.getName());
+					throw new BusinessException(CommandAndQueries.cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE + bBatch.getProduct().getName());
 				}
 				
-				mSaleLine.setProduct(mProduct);
+				mSaleLine.setBatch(bBatch);
 				
 				mSaleLineList.add(mSaleLine);
 			}
@@ -844,10 +843,12 @@ public class CommandAndQueries {
 		
 	}
 
-	public Batch getBatch(Long pBatchId) throws BusinessException {
+	public BatchDTO getBatch(Long pBatchId) throws BusinessException {
 		BatchService mBatchService = new BatchService();
 		
-		return mBatchService.get(pBatchId);
+		Batch mBatch = mBatchService.get(pBatchId);
+		
+		return this.iMapper.map(mBatch,BatchDTO.class);
 	}
 		
 	// FIN VENTAS

@@ -1,15 +1,13 @@
 package backend.product.batch;
 
 import java.math.BigDecimal;
-import java.util.Date;
-
-import backend.product.Product;
 
 public class BatchDTO {
 
 	private Long iId;
 	private BigDecimal iStock;
 	private Integer iIsoDueDate;
+	private Long iProduct;
 	
 	
 	public Long getId() {
@@ -30,5 +28,12 @@ public class BatchDTO {
 	public void setIsoDueDate(Integer pIsoDueDate) {
 		this.iIsoDueDate = pIsoDueDate;
 	}
+	public Long getProduct() {
+		return iProduct;
+	}
+	public void setProduct(Long pProduct) {
+		this.iProduct = pProduct;
+	}
+	
 	
 }

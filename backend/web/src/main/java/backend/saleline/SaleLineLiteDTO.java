@@ -12,6 +12,8 @@ public class SaleLineLiteDTO {
 		
 	private Long iProduct;
 	
+	private Long iBatch;
+	
 	private Integer iISODueDate;
 	
 	public float getQuantity() {
@@ -46,6 +48,14 @@ public class SaleLineLiteDTO {
 	public void setProduct(Long pProduct) {
 		this.iProduct = pProduct;
 	}
+	
+	public Long getBatch() {
+		return iBatch;
+	}
+
+	public void setBatch(Long pBatch) {
+		this.iBatch = pBatch;
+	}
 
 	public Long getId() {
 		return iId;
@@ -61,8 +71,6 @@ public class SaleLineLiteDTO {
 
 	public void setISODueDate(Integer pISODueDate) {
 		this.iISODueDate = pISODueDate;
-	}
-	
-	
+	}	
 	
 }
