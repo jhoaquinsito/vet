@@ -13,7 +13,7 @@ import backend.person.Person;
 public class NaturalPerson extends Person {
 
 
-	@Column(name = "national_id", unique=true)
+	@Column(name = "national_id")
 	@NotNull(message = NaturalPersonConsts.cNATIONAL_ID_NOTNULL_VIOLATION_MESSAGE)
 	private Integer iNationalId;
 
