@@ -22,7 +22,7 @@ import backend.person.Person;
 @Table(name = "legal_person", uniqueConstraints = {@UniqueConstraint(columnNames={})})
 public class LegalPerson extends Person {
 
-	@Column(name="cuit", unique=true)
+	@Column(name="cuit")
 	@NotNull(message = LegalPersonConsts.cCUIT_NOTNULL_VIOLATION_MESSAGE)
 	@Digits(integer=11, fraction=0, message= LegalPersonConsts.cCUIT_DIGITS_VIOLATION_MESSAGE)
 	@Valid
