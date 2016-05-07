@@ -1,18 +1,41 @@
-app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, $filter, ProductService, MessageService) {
+app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, $filter, ProductService, MessageService, config) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.form = {};
+    $scope.table = {};
+    $scope.confirmation = {};
+
 
     $scope.init = function() {
         switch ($scope.action) {
             case 'batch.add':
                 $scope.addBatchesAction();
                 break;
+            case 'batch.bulk_update':
+                $scope.bulkUpdateBatchesAction();
+                break;
         }
     };
 
-    $scope.addBatchesAction = function() {
+    $scope.bulkUpdateBatchesAction = function() {
         $rootScope.setTitle($scope.name, 'Actualizar stock');
+
+        $scope.table.pageSize = config.TABLE_PAGE_SIZE;
+        $scope.resetConfirmationData();
+        //TODO $scope.refreshFormDropdownsData();
+    };
+
+    $scope.resetConfirmationData = function() {
+        if (!$scope.confirmation.updatedProducts){
+            $scope.confirmation = {
+                updatedProducts:[],
+            };
+        }
+    };
+
+
+    $scope.addBatchesAction = function() {
+        $rootScope.setTitle($scope.name, 'Cargar lotes');
 
         $scope.refreshFormDropdownsData();
     };
