@@ -1,4 +1,4 @@
-app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, $filter, ProductService, MessageService, config) {
+app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, $filter, ProductService, BatchService, MessageService, config) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.form = {};
@@ -26,13 +26,37 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     };
 
     $scope.resetConfirmationData = function() {
-        if (!$scope.confirmation.updatedProducts){
-            $scope.confirmation = {
-                updatedProducts:[],
-            };
-        }
+        $scope.confirmation = {
+            updatedProducts: BatchService.getUpdatedProducts(),
+        };
     };
 
+    $scope.confirmUpdatedProductsAction = function(form) {
+        // hacer request
+
+        console.log($scope.confirmation.updatedProducts);
+
+        // Volver a la pantalla anterior
+
+        // var request = ProductService.save($scope.form.product);
+
+        // request.success = function(response) {
+        //     MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
+
+        //     $location.path('products');
+        // };
+        // request.error = function(response) {
+        //     MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+
+        //     $location.path('products');
+        // };
+
+        // request.then(request.success, request.error);
+    };
+
+    $scope.removeUpdatedProductAction = function(id){
+        BatchService.removeUpdatedProduct(id);
+    };
 
     $scope.addBatchesAction = function() {
         $rootScope.setTitle($scope.name, 'Cargar lotes');
@@ -45,20 +69,10 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
             return null;
         }
 
-        var request = ProductService.save($scope.form.product);
+        BatchService.setUpdatedProduct($scope.form.product);
 
-        request.success = function(response) {
-            MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
+        $location.path('batches/bulk_update');
 
-            $location.path('products');
-        };
-        request.error = function(response) {
-            MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
-
-            $location.path('products');
-        };
-
-        request.then(request.success, request.error);
     };
 
     $scope.addBatchToTableAction = function() {
