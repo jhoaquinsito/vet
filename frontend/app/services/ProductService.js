@@ -42,5 +42,9 @@ app.factory('ProductService', function($http, Restangular, config) {
         return $http.get(config.API_BASE_URL +'/product/bybatchcode/'+productBatchCode);
     };
 
+    this.saveBunch = function(bunchOfProducts) {
+        return $http.post(config.API_BASE_URL +'/product/bunch', bunchOfProducts);
+    }
+
     return this;
 });

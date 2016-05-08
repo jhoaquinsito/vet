@@ -32,26 +32,32 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     };
 
     $scope.confirmUpdatedProductsAction = function(form) {
-        // hacer request
-
+        console.log('Productos a actualizar:');
         console.log($scope.confirmation.updatedProducts);
 
-        // Volver a la pantalla anterior
+        // si hay productos para actualizar
+        if ($scope.confirmation.updatedProducts.length > 0) {
+            var request = ProductService.saveBunch($scope.confirmation.updatedProducts);
 
-        // var request = ProductService.save($scope.form.product);
+            request.success = function(response) {
+                MessageService.message(MessageService.text('stock de los productos', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
 
-        // request.success = function(response) {
-        //     MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
+                $location.path('products');
+            };
 
-        //     $location.path('products');
-        // };
-        // request.error = function(response) {
-        //     MessageService.message(MessageService.text('stock del producto', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            request.error = function(response) {
+                MessageService.message(MessageService.text('stock de los Productos', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
 
-        //     $location.path('products');
-        // };
+                $location.path('products');
+            };
 
-        // request.then(request.success, request.error);
+            request.then(request.success, request.error);
+
+
+        } else { // si no hay productos para actualizar
+            $location.path('products');            
+        }
+
     };
 
     $scope.removeUpdatedProductAction = function(id){
