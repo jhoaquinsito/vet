@@ -22,7 +22,6 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
         $scope.table.pageSize = config.TABLE_PAGE_SIZE;
         $scope.resetConfirmationData();
-        //TODO $scope.refreshFormDropdownsData();
     };
 
     $scope.resetConfirmationData = function() {
@@ -32,32 +31,37 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     };
 
     $scope.confirmUpdatedProductsAction = function(form) {
-        console.log('Productos a actualizar:');
-        console.log($scope.confirmation.updatedProducts);
-
         // si hay productos para actualizar
         if ($scope.confirmation.updatedProducts.length > 0) {
             var request = ProductService.saveBunch($scope.confirmation.updatedProducts);
 
             request.success = function(response) {
                 MessageService.message(MessageService.text('stock de los productos', $routeParams.id == null ? 'add' : 'edit', 'success', 'male'), 'success');
-
+                BatchService.clearListOfUpdatedProducts();
                 $location.path('products');
             };
 
             request.error = function(response) {
                 MessageService.message(MessageService.text('stock de los Productos', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
 
-                $location.path('products');
+                $location.path('batches/bulk_update');
             };
 
             request.then(request.success, request.error);
-
-
         } else { // si no hay productos para actualizar
             $location.path('products');            
         }
 
+    };
+
+    $scope.cancelUpdatedProductsAction = function() {
+        // si hay productos para actualizar
+        if ($scope.confirmation.updatedProducts.length > 0) {
+            // borro todo lo que estaba listo para confirmar
+            BatchService.clearListOfUpdatedProducts();
+        }
+        
+        $location.path('products');
     };
 
     $scope.removeUpdatedProductAction = function(id){
