@@ -106,6 +106,21 @@ public class CommandAndQueries {
 	// PRODUCTOS
 	
 	/**
+	 * Método que almacena un conjunto de productos.
+	 * 
+	 * @param pBunchOfProductDTOs conjunto de productos
+	 * @throws BusinessException errores de negocio
+	 */
+	public void saveBunchOfProducts(List<ProductDTO> pBunchOfProductDTOs) throws BusinessException {
+		if (pBunchOfProductDTOs != null){
+			// map dto to domain object
+			List<Product> mBunchOfProducts = this.iMapper.mapAsList(pBunchOfProductDTOs, Product.class);
+			// save all
+			this.iProductService.save(mBunchOfProducts);
+		}
+	}
+	
+	/**
 	 * Este método es un comando que permite guardar un producto.
 	 * 
 	 * @param pProductDTO producto a guardar

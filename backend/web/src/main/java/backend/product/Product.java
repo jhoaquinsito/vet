@@ -241,6 +241,9 @@ public class Product implements Persistable<Long> {
 
 	public void setBatches(Set<Batch> pBatches) {
 		this.iBatches = pBatches;
+		for (Batch bBatch : pBatches) {
+			bBatch.setProduct(this);
+		}
 	}
 
 	public void setId(Long pId) {

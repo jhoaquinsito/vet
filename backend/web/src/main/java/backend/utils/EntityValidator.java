@@ -1,6 +1,7 @@
 package backend.utils;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -51,6 +52,21 @@ public class EntityValidator {
 				throw new BusinessException(mViolation.getMessage());
 		}
 
+	}
+	
+	/**
+	 * Método que valida las restricciones de un conjunto de entidades.
+	 * 
+	 * @param pEntitiesToValidate
+	 *            Entidades a validar
+	 * @throws BusinessException
+	 *             si hubo un error, devuelvo el mensaje de la
+	 *             <strong>primer</strong> violación a las restricciones.
+	 */
+	public <T> void validate(List<T> pEntitiesToValidate) throws BusinessException {
+		for (T entity : pEntitiesToValidate) {
+			this.validate(entity);
+		}
 	}
 
 	/**

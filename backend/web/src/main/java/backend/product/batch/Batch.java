@@ -56,14 +56,12 @@ public class Batch {
 	private BigDecimal iStock;
 
 	@Column(name = "iso_due_date")
-	@NotNull(message = BatchConsts.cISODUEDATE_NOTNULL_VIOLATION_MESSAGE)
 	private Integer iIsoDueDate;
 
-	/*
+	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "product", nullable = false)
+	@JoinColumn(name = "product")
 	private Product iProduct;
-	*/
 
 
 	public BigDecimal getStock() {
@@ -124,6 +122,10 @@ public class Batch {
 	public String getCode(){
 		String code = String.valueOf(this.getId()+ 10000)  + String.valueOf(this.getIsoDueDate());
 		return code;
+	}
+	
+	public void setProduct(Product pProduct){
+		this.iProduct = pProduct;
 	}
 
 }

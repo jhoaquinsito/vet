@@ -48,6 +48,16 @@ public class ApplicationRESTController {
 	//=======================================================================================
 	
 	// PRODUCTOS
+	/**
+	 * Método que permite guardar un conjunto de productos.
+	 * 
+	 * @param pBunchOfProducts conjunto de productos a guardar
+	 * @throws BusinessException errores de negocio
+	 */
+	@RequestMapping(value = "product/bunch", method = RequestMethod.POST)
+	public void saveBunchOfProducts(@RequestBody List<ProductDTO> pBunchOfProducts) throws BusinessException {
+		this.iCommandAndQueries.saveBunchOfProducts(pBunchOfProducts);
+	}
 	
 	/**
 	 * Metodo API que permite crear un Producto.

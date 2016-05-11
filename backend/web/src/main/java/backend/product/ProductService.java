@@ -56,6 +56,68 @@ public class ProductService {
 	/**
 	 * Método que permite guardar productos. Puede ser un producto nuevo (creación) o
 	 * un producto existente que esté modificado (actualización).
+	 * <strong>Productos que son actualmente inactivos van a ser ignorados.</strong> 
+	 * 
+	 * @param pProductToSave producto que se desea guardar
+	 * @return producto tal cual quedó guardado
+	 * @throws BusinessException 
+	 */
+	public void save(List<Product> pProductsToSave) throws BusinessException {
+		try {
+			// obtengo unicamente los productos actualmente activos (los inactivos los ignoro)
+			List<Product> mActiveProductsToSave = this.filterInactiveProducts(pProductsToSave);
+			// valido los productos
+			this.iEntityValidator.validate(mActiveProductsToSave);
+			// guardo los productos
+			this.iProductRepository.save(mActiveProductsToSave);
+		} catch (IllegalArgumentException exception){
+			throw new BusinessException("Las entidades a guardar eran nulas", exception);
+		}
+	}
+	
+	/**
+	 * Método que obtiene la lista de productos activos de una lista de productos que pueden ser actualmente activos o no.
+	 * 
+	 * @param pListOfProducts lista de productos
+	 * @return lista de productos activos
+	 * @throws BusinessException error cuando un producto no existe
+	 */
+	private List<Product> filterInactiveProducts(List<Product> pListOfProducts) throws BusinessException{
+		List<Product> mActiveProducts = new ArrayList<Product>();
+		
+		for (Product bProduct : pListOfProducts) {
+			if (this.isCurrentlyActive(bProduct)){
+				mActiveProducts.add(bProduct);
+			}
+		}
+		
+		return mActiveProducts;
+	}
+	
+	/**
+	 * Método que verifica si un producto está actualmente activo.
+	 * 
+	 * @param pProduct
+	 * @return verdadero si está activo y falso si no
+	 * @throws BusinessException error cuando el producto no existe
+	 */
+	private boolean isCurrentlyActive(Product pProduct) throws BusinessException {
+		Product storedProduct;
+		
+		storedProduct = this.iProductRepository.findOne(pProduct.getId());
+		
+		if (storedProduct != null){
+			return storedProduct.isActive();
+		} else {
+			throw new BusinessException(ProductService.cPRODUCT_DOESNT_EXIST_EXCEPTION_MESSAGE);
+		}
+		
+	}
+	
+	
+	/**
+	 * Método que permite guardar productos. Puede ser un producto nuevo (creación) o
+	 * un producto existente que esté modificado (actualización).
 	 * 
 	 * @param pProductToSave producto que se desea guardar
 	 * @return producto tal cual quedó guardado
@@ -307,7 +369,7 @@ public class ProductService {
 	 * Método que permite obtener un producto a partir de su identificador.
 	 * @param pId identificador del producto
 	 * @return producto encontrado
-	 * @throws BusinessException intentó obtener un producto eliminado lógicamente
+	 * @throws BusinessException intentó obtener un producto eliminado fisica o lógicamente
 	 */
 	public Product get(Long pId) throws BusinessException{
 		Product mStoredProduct = this.iProductRepository.findOne(pId);
