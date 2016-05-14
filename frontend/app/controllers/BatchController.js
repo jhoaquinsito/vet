@@ -96,7 +96,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     // funcion que se ejecuta al agregar/actualizar un lote a la lista de lotes de un producto en la pantalla Cargar lotes
     $scope.addBatchToTableAction = function() {
         var batch = {
-            isoDueDate: $filter('date')($scope.form.batch.isoDueDate, 'yyyyMMdd'),
+            isoDueDate: dateObjectToIsoDate($scope.form.batch.isoDueDate),
             stock: $scope.form.batch.stock
         };
 
@@ -106,6 +106,17 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         // limpio los campos de agregar batch
         $scope.form.batch = {};
     };
+
+    // funcion que pasa un objeto Date a un integer ISO
+    function dateObjectToIsoDate(dateObject){
+        var stringDate = $filter('date')(dateObject, 'yyyyMMdd');
+        var isoDate = null;
+        // verifico que no sea un NaN (illegal number)
+        if (!isNaN(parseInt(stringDate))){
+            isoDate = parseInt(stringDate);
+        }
+        return isoDate;
+    }
 
     // funcion que actualiza la lista de lotes en la pantalla Cargar lotes con el lote nuevo/modificado
     function updateListWithBatch(listOfBatches, batch) {
@@ -189,14 +200,12 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
         if (isoDate != null){
             var isoDateString = isoDate.toString();
-        
-            // regex para formatear la fecha
-            var pattern = /(\d{4})(\d{2})(\d{2})/;
             
-            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
-            var stringDateISO8601 = isoDateString.replace(pattern, '$1-$2-$3');
-
-            dateObject = new Date(stringDateISO8601);    
+            var year = isoDateString.substr(0,4);
+            var month = isoDateString.substr(4,2);
+            var day = isoDateString.substr(6,2);
+            
+            dateObject = new Date(year,month-1, day); 
         }
 
         return dateObject;
