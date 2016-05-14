@@ -2,6 +2,7 @@ app.factory('BatchService', function() {
     var updatedProducts = [];
 
     // funcion que devuelve la lista de productos actualizados pendientes de confirmar para actualizar stock
+    // (puede ser una lista vacía o pueden haber quedado algunos en memoria si el usuario estaba cargando y no confirmo una carga)
     this.getUpdatedProducts = function() {
         return updatedProducts;
     };

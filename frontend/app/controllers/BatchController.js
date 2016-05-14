@@ -17,6 +17,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         }
     };
 
+    // funcion que se ejecuta al abrirse la pantalla Actualizar stock en bulk
     $scope.bulkUpdateBatchesAction = function() {
         $rootScope.setTitle($scope.name, 'Actualizar stock');
 
@@ -24,12 +25,15 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $scope.resetConfirmationData();
     };
 
+    // funcion que hace un reset de los datos de la pantalla Actualizar stock
     $scope.resetConfirmationData = function() {
         $scope.confirmation = {
+            // reset de la lista de productos actualizados
             updatedProducts: BatchService.getUpdatedProducts(),
         };
     };
 
+    // funcion que se ejecuta al confirmar productos con lotes actualizados/nuevos, en la pantalla Actualizar stock
     $scope.confirmUpdatedProductsAction = function(form) {
         // si hay productos para actualizar
         if ($scope.confirmation.updatedProducts.length > 0) {
@@ -54,6 +58,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
     };
 
+    // funcion que se ejecuta al cancelar en la pantalla Actualizar stock
     $scope.cancelUpdatedProductsAction = function() {
         // si hay productos para actualizar
         if ($scope.confirmation.updatedProducts.length > 0) {
@@ -64,16 +69,19 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $location.path('products');
     };
 
+    // funcion que se ejecuta al eliminar un producto de la pantalla Actualizar stock
     $scope.removeUpdatedProductAction = function(id){
         BatchService.removeUpdatedProduct(id);
     };
 
+    // funcion que se ejecuta al abrir la pantalla Cargar lotes
     $scope.addBatchesAction = function() {
         $rootScope.setTitle($scope.name, 'Cargar lotes');
 
         $scope.refreshFormDropdownsData();
     };
 
+    // funcion que se ejecuta al guardar un producto con lotes actualizados/nuevos usando la pantalla Cargar lotes
     $scope.saveBatchesAction = function(form) {
         if ($scope.formValidation(form)) {
             return null;
@@ -85,6 +93,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
     };
 
+    // funcion que se ejecuta al agregar/actualizar un lote a la lista de lotes de un producto en la pantalla Cargar lotes
     $scope.addBatchToTableAction = function() {
         var batch = {
             isoDueDate: $filter('date')($scope.form.batch.isoDueDate, 'yyyyMMdd'),
@@ -98,6 +107,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $scope.form.batch = {};
     };
 
+    // funcion que actualiza la lista de lotes en la pantalla Cargar lotes con el lote nuevo/modificado
     function updateListWithBatch(listOfBatches, batch) {
         // busco batch por isoduedate (si no existe devuelve -1 )
         var targetBatchIndex = getBatchIndexByIsoDueDate(listOfBatches, batch.isoDueDate);
@@ -115,6 +125,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         return listOfBatches;
     };
 
+    // funcion que busca un lote por fecha de vencimiento en una lista de lotes
     function getBatchIndexByIsoDueDate(listOfBatches, batchIsoDueDate) {
         for (var i = 0; i < listOfBatches.length; i++) {
             if (listOfBatches[i].isoDueDate === batchIsoDueDate) {
@@ -124,6 +135,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         return -1;
     };
 
+    // funcion que se ejecuta al eliminar un lote de la lista de lotes de la pantalla Cargar lote
     $scope.removeBatchToTableAction = function(batch) {
         $scope.form.product.batches.forEach(function(item, key) {
             if (item == batch) {
@@ -132,6 +144,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         });
     };
 
+    // funcion que se ejecuta al quere editar un lote de la lista de lotes de la pantalla Cargar lote
     $scope.editBatchFromTableAction = function(batch) {
         // actualizo el form con los valores del batch a editar
         $scope.form.batch = {
@@ -140,6 +153,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         }
     };
 
+    // funcion que hace refresh de los datos de los dropdowns en la pantalla Cargar lote
     $scope.refreshFormDropdownsData = function() {
         ProductService.getList().then(function(response) {
             $scope.form.products = response.plain();
@@ -148,6 +162,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $scope.form.ivas = ProductService.getIvaOptions();
     };
 
+    // funcion que valida el formulario de la pantalla Cargar lote
     $scope.formValidation = function(form) {
         angular.forEach(form, function(object) {
             if (angular.isObject(object) && angular.isDefined(object.$setDirty)) {
@@ -158,10 +173,12 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         return form.$invalid;
     };
 
+    // funcion que actualiza la utilidad de un producto en base al costo y precio unitario en la pantalla de Cargar lote
     $scope.updateUtility = function() {
         $scope.form.product.utility = ProductService.calculateUtility($scope.form.product.cost, $scope.form.product.unitPrice);
     };
 
+    // funcion que actualiza el precio unitario de un producto en base al costo y la utilidad en la pantalla de Cargar lote
     $scope.updateUnitPrice = function() {
         $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility);
     };
