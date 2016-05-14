@@ -66,7 +66,7 @@
                         <tr ng-repeat="batch in form.product.batches">
                             <td>
                                 <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
-                                <span ng-if="batch.isoDueDate != null">{{batch.isoDueDate}}</span>
+                                <span ng-if="batch.isoDueDate != null">{{ isoDateToFormattedString(batch.isoDueDate) }}</span>
                             </td>
                             <td>{{batch.stock}}</td>
                             <td class="table-cell-actions">

@@ -183,7 +183,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility);
     };
 
-    // funcion que transforma un string ISO del formato yyyyMMdd a un objeto Javascript Date
+    // funcion que transforma un integer ISO del formato yyyyMMdd a un objeto Javascript Date
     function isoDateToDateObject(isoDate){
         var dateObject = null;
 
@@ -200,6 +200,23 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         }
 
         return dateObject;
+    }
+
+    // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
+    $scope.isoDateToFormattedString = function(isoDate) {
+        var formattedString = null;
+
+        if (isoDate != null){
+            var isoDateString = isoDate.toString();
+        
+            // regex para formatear la fecha
+            var pattern = /(\d{4})(\d{2})(\d{2})/;
+            
+            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
+            formattedString = isoDateString.replace(pattern, '$1/$2/$3');
+        }
+
+        return formattedString;
     }
 
     $scope.init();
