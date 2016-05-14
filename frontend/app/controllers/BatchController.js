@@ -91,9 +91,37 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
             stock: $scope.form.batch.stock
         };
 
-        $scope.form.product.batches.push(batch);
+        // actualizo la lista de batches con el batch
+        $scope.form.product.batches = updateListWithBatch($scope.form.product.batches, batch);
 
+        // limpio los campos de agregar batch
         $scope.form.batch = {};
+    };
+
+    function updateListWithBatch(listOfBatches, batch) {
+        // busco batch por isoduedate (si no existe devuelve -1 )
+        var targetBatchIndex = getBatchIndexByIsoDueDate(listOfBatches, batch.isoDueDate);
+
+        if (targetBatchIndex > -1){ // si existe
+            // actualizo el batch con los nuevos valores
+            listOfBatches[targetBatchIndex].isoDateToDateObjectueDate = batch.isoDueDate;
+            listOfBatches[targetBatchIndex].stock = batch.stock;
+        }
+        else { // si no existe
+            // agrego el nuevo batch a la lista
+            listOfBatches.push(batch);
+        }
+
+        return listOfBatches;
+    };
+
+    function getBatchIndexByIsoDueDate(listOfBatches, batchIsoDueDate) {
+        for (var i = 0; i < listOfBatches.length; i++) {
+            if (listOfBatches[i].isoDueDate === batchIsoDueDate) {
+                return i;
+            }
+        }
+        return -1;
     };
 
     $scope.removeBatchToTableAction = function(batch) {
@@ -102,6 +130,14 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
                 $scope.form.product.batches.splice(key, 1);
             }
         });
+    };
+
+    $scope.editBatchFromTableAction = function(batch) {
+        // actualizo el form con los valores del batch a editar
+        $scope.form.batch = {
+            stock: batch.stock,
+            isoDueDate: isoDateToDateObject(batch.isoDueDate)
+        }
     };
 
     $scope.refreshFormDropdownsData = function() {
@@ -129,6 +165,25 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.updateUnitPrice = function() {
         $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility);
     };
+
+    // funcion que transforma un string ISO del formato yyyyMMdd a un objeto Javascript Date
+    function isoDateToDateObject(isoDate){
+        var dateObject = null;
+
+        if (isoDate != null){
+            var isoDateString = isoDate.toString();
+        
+            // regex para formatear la fecha
+            var pattern = /(\d{4})(\d{2})(\d{2})/;
+            
+            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
+            var stringDateISO8601 = isoDateString.replace(pattern, '$1-$2-$3');
+
+            dateObject = new Date(stringDateISO8601);    
+        }
+
+        return dateObject;
+    }
 
     $scope.init();
 });

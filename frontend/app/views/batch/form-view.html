@@ -70,6 +70,7 @@
                             </td>
                             <td>{{batch.stock}}</td>
                             <td class="table-cell-actions">
+                                <button ng-click="editBatchFromTableAction(batch)" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></button>
                                 <button ng-click="removeBatchToTableAction(batch)" class="btn btn-sm btn-info" data-title="Quitar" bs-tooltip><i class="fa fa-close"></i></button>
                             </td>
                         </tr>
