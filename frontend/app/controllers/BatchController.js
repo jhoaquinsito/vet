@@ -76,7 +76,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
     // funcion que se ejecuta al abrir la pantalla Cargar lotes
     $scope.addBatchesAction = function() {
-        $rootScope.setTitle($scope.name, 'Cargar lotes');
+        $rootScope.setTitle($scope.name, 'Cargar lotes a producto');
 
         $scope.refreshFormDropdownsData();
         
