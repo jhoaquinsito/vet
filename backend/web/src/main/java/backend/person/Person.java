@@ -56,8 +56,8 @@ public class Person  {
 	private String iMobilePhone;
 
 	@Column(name="renspa")
-	@Digits(integer=17, fraction=0, message= PersonConsts.cRENSPA_DIGITS_VIOLATION_MESSAGE)
-	private BigDecimal iRENSPA;	
+	@Size(max=25, message= PersonConsts.cRENSPA_SIZE_VIOLATION_MESSAGE)
+	private String iRENSPA;	
 	
 	@Column(name="zip_code")
 	@Size(min=1, max=30, message= PersonConsts.cZIP_CODE_SIZE_VIOLATION_MESSAGE)
@@ -127,11 +127,11 @@ public class Person  {
 		this.iMobilePhone = iMobilePhone;
 	}
 
-	public BigDecimal getRENSPA() {
+	public String getRENSPA() {
 		return iRENSPA;
 	}
 
-	public void setRENSPA(BigDecimal iRENSPA) {
+	public void setRENSPA(String iRENSPA) {
 		this.iRENSPA = iRENSPA;
 	}
 	

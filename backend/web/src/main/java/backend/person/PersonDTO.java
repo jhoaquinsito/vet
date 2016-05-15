@@ -22,7 +22,7 @@ public class PersonDTO  {
 	private String iEmail;	
 	private String iPhone;
 	private String iMobilePhone;
-	private BigDecimal iRENSPA;	
+	private String iRENSPA;	
 	private String iZipCode;
 	private CityDTO iCity;
 	private IVACategoryDTO iIVACategory;
@@ -65,10 +65,10 @@ public class PersonDTO  {
 	public void setMobilePhone(String pMobilePhone) {
 		this.iMobilePhone = pMobilePhone;
 	}
-	public BigDecimal getRENSPA() {
+	public String getRENSPA() {
 		return iRENSPA;
 	}
-	public void setRENSPA(BigDecimal pRENSPA) {
+	public void setRENSPA(String pRENSPA) {
 		this.iRENSPA = pRENSPA;
 	}
 	public String getZipCode() {
