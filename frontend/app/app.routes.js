@@ -108,6 +108,13 @@ app.config(function($routeProvider) {
         action: 'sale.add'
     });
 
+	  //pagos - cuenta corriente
+    $routeProvider.when('/settlements', {
+        controller: 'SettlementController',
+        templateUrl: 'app/views/settlement/form-view.html',
+        action: 'settlement.detail'
+    });
+	
     //ruta no encontrada
     $routeProvider.otherwise({redirectTo: '/dashboard'});
 });
