@@ -425,3 +425,11 @@ textarea.form-control {
 .input-group-sm .typeahead.dropdown-menu {
     width: calc(100% - 33px);
 }
+
+
+.green-font{
+	color: rgb(231, 76, 60);
+}
+.red-font{
+	color: rgb(231, 76, 60);
+}

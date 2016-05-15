@@ -18,8 +18,10 @@
 					    <label class="control-label">{{calculateSettlementsTotal() | number: 2}}</label>    
 				    </div>
 				    <div class="row">
-					    <label class="control-label">Balance: $</label>
-					    <label class="control-label">{{form.balance | number: 2}}</label>    
+					    <label class="control-label">Balance: </label>
+					    <label class="control-label" data-ng-class="{'green-font':(form.totalDePagos - form.totalDeVentas) > 0 ,'red-font':(form.totalDePagos - form.totalDeVentas) < 0}">
+					    	${{(form.totalDePagos - form.totalDeVentas) | number: 2}}
+				    	</label>    
 				    </div>        
                 </div>
             </div>
@@ -27,7 +29,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Compras Realizadas</label>
+                        <h3 class="control-label">Compras Realizadas</h3>
                     </div>
                     <div>
                     	<table class="table table-bordered table-hover table-main">
@@ -82,18 +84,22 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Entregas Realizadas</label>
+                        <h3 class="control-label">Entregas Realizadas</h3>
                     </div>
                     <div>
                     	<table class="table table-bordered table-hover table-main">
 	                        <tr>
-	                        	<th class="col-xs-4">Fecha</th>
-	                            <th class="col-xs-8">Monto</th>
+	                        	<th class="col-xs-3">Fecha</th>
+	                            <th class="col-xs-2">Monto</th>
+	                            <th class="col-xs-5">Concepto</th>
+	                            <th class="col-xs-2">N° de Cheque</th>
 	                        </tr>
 	                        <!-- Recordar hacer la variable en el scope, y que obtenga aquellos pagos descontados que son lso que se van a visualizar. -->
 	                        <tr ng-repeat="settlement in form.person.settlements">
 	                            <td class="table-cell-input">{{settlement.date | date:'dd/MM/yyyy HH:mm'}}</td>
 	                            <td class="table-cell-input">${{settlement.amount | number: 2}}</td>
+	                            <td class="table-cell-input">{{settlement.concept }}</td>
+	                            <td class="table-cell-input">{{settlement.checkNumber }}</td>
 	                        </tr>
 	                    </table>
                     </div>
@@ -105,8 +111,38 @@
                 </div>
                 <div class="col-md-5 col-md-offset-1">
                 	<div class="form-group form-group-sm">
-                        <label class="control-label">Nueva Entrega</label>
+                        <h3 class="control-label">Nueva Entrega</h3>
                     </div>
+                    <div class="form-group form-group-sm" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
+                        <label class="control-label mandatory">Concepto</label>
+                        <span ng-show="form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required" class="help-block">Este campo es obligatorio</span>
+                        <div class="input-group col-lg-12">
+	                        <input type="text" class="form-control" name="concept" ng-model="form.newSettlement.concept" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Elija una forma de pago</label>
+                    </div>
+                    <div class="form-group form-group-sm">
+                    	 <div class="col-md-6">
+                    		<label for="paymentModeContado">Pago al contado </label>
+			      			<input id="paymentModeContado" type="radio" name="paymentMode" ng-model="form.newSettlement.paymentMode" value="contado">
+			      		</div>
+			      		<div class="col-md-6">
+			     			<label for="paymentModeCheque">Pago con cheque</label>
+			      			<input id="paymentModeCheque" type="radio" name="paymentMode" ng-model="form.newSettlement.paymentMode" value="cheque">
+			      		</div>
+                    </div>
+                    <br>
+                    <div class="form-group form-group-sm">
+                        <div ng-show="form.newSettlement.paymentMode == 'cheque'">
+	                        <label class="control-label mandatory">N° de cheque:</label>                        
+	                        <div class="input-group col-lg-12">
+		                        <input type="number" max="99999999" class="form-control" name="checkNumber" ng-model="form.newSettlement.checkNumber" >
+	                        </div>
+	                    </div>
+                    </div>
+                    <br>
                     <div class="form-group form-group-sm" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
                         <label class="control-label mandatory">Monto</label>
                         <span ng-show="form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required" class="help-block">Este campo es obligatorio</span>

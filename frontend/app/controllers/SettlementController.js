@@ -41,7 +41,6 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         requestSales.success = function(response){
     		$scope.form.sales 			= response.plain();
     		$scope.form.totalDeVentas 	= $scope.calculateAllSalesTotal();
-    		$scope.form.balance   		= $scope.form.totalDeVentas  - $scope.calculateAllSalesTotal()
     	}
         requestSales.error = function(response) {
             MessageService.message(MessageService.text('sales', 'get', 'error', 'male'), 'danger');
@@ -57,7 +56,9 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         */
         $scope.form.newSettlement 	= {
         		amount : 0,
-        		concept : "Concepto No Definido",
+        		concept : "No definido.",
+        		paymentMode : "contado",
+        		checkNumber : "",
         		discounted: false
             };
     };
@@ -152,8 +153,13 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     	//obtener para el cliente en cuesti{on, cuanto ha entregado , que seria...
     	//tener todos los Settlement y hacer su sumatoria
     	
-    	if($scope.form.person != null)
-    	return SettlementService.calculateSettlementsTotal($scope.form.person);
+    	if($scope.form.person != null){
+    		$scope.form.totalDePagos = SettlementService.calculateSettlementsTotal($scope.form.person);
+    	}else{
+    		$scope.form.totalDePagos = 0;    		
+    	}
+    	return $scope.form.totalDePagos;
+    	
     }
     
 
