@@ -18,16 +18,22 @@
             </div>
             <div class="row">
                 <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Nombre</label>
                             <p class="form-control-static">{{form.client.name}}</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group form-group-sm">
                             <label class="control-label">Apellido</label>
                             <p class="form-control-static">{{form.client.lastName}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label">DNI</label>
+                            <p class="form-control-static">{{form.client.nationalId}}</p>
                         </div>
                     </div>
                 </div>
@@ -48,17 +54,9 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div ng-if="form.client.clientType == 'LEGAL_PERSON'">
-                        <div class="form-group form-group-sm">
-                            <label class="control-label">Renspa</label>
-                            <p class="form-control-static">{{form.client.renspa}}</p>
-                        </div>
-                    </div>
-                    <div ng-if="form.client.clientType == 'NATURAL_PERSON'">
-                        <div class="form-group form-group-sm">
-                            <label class="control-label">DNI</label>
-                            <p class="form-control-static">{{form.client.nationalId}}</p>
-                        </div>
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Renspa</label>
+                        <p class="form-control-static">{{form.client.renspa}}</p>
                     </div>
                 </div>                
                 <div class="col-md-6">
