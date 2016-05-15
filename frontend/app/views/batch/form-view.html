@@ -5,7 +5,7 @@
                 <div class="col-md-12">
                     <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.product.$dirty && batchForm.product.$error.required}">
                         <label class="control-label mandatory">Producto</label>
-                        <input type="text" class="form-control" name="product" ng-model="form.product" bs-options="product as product.name for product in form.products" bs-typeahead required>
+                        <input type="text" class="form-control" name="product" ng-model="form.product" bs-options="product as product.name for product in form.products" bs-typeahead placeholder="Ingrese el nombre del producto a cargar" required>
                         <span ng-show="batchForm.product.$dirty && batchForm.product.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
@@ -40,23 +40,34 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Cantidad</label>
-                        <input type="number" class="form-control" name="stock" ng-model="form.batch.stock">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Ingresar o editar lote</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group form-group-sm">
+                                <label class="control-label">Fecha de vencimiento</label>
+                                <input type="text" class="form-control" ng-model="form.batch.isoDueDate" bs-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group form-group-sm">
+                                <label class="control-label">Cantidad</label>
+                                <input type="number" class="form-control" name="stock" ng-model="form.batch.stock">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" ng-click="addBatchToTableAction()" ng-disabled="form.product.batches == null || form.batch.stock == null" class="btn btn-sm btn-info" style="margin-top:23px;"><i class="fa fa-save"></i> Guardar lote</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group form-group-sm">
-                        <label class="control-label">Fecha de vencimiento</label>
-                        <input type="text" class="form-control" ng-model="form.batch.isoDueDate" bs-datepicker>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <button type="button" ng-click="addBatchToTableAction()" ng-disabled="form.product.batches == null || form.batch.stock == null" class="btn btn-sm btn-info"><i class="fa fa-plus"></i></button>
-                </div>
-                <div class="col-md-12">
-                    <label class="control-label">Lotes</label>
+                <div class="col-md-6 col-md-offset-1">
+                    <h4>Lotes</h4>
                     <table class="table table-bordered table-main">
                         <tr>
                             <th class="col-xs-6">Fecha de vencimiento</th>
