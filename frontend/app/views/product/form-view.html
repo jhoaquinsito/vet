@@ -45,7 +45,7 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Presentación</label>
-                        <select class="form-control" name="presentation" ng-model="form.product.presentation" onkeypress="return this.value.length < 30" ng-options="presentation as presentation.name for presentation in form.presentations track by presentation.id"></select>
+                        <input type="text" class="form-control" name="presentation" ng-model="form.product.presentation" onkeypress="return this.value.length < 30" ng-change="addFormDropdownValue('presentation')" bs-options="presentation as presentation.name for presentation in form.presentations" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
