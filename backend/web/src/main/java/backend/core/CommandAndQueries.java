@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -452,10 +453,33 @@ public class CommandAndQueries {
 		
 		//Si el cliente no es nuevo y tiene ventas adeudadas
 		if(mLegalPerson.getId() != null && !this.clientIsInDebt(mLegalPerson)){
+			
+			
+			Settlement surplusSettlement = new Settlement();
+			
+			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
+			if( mLegalPerson.totalPaid().compareTo(this.getClientDebt(mLegalPerson)) > 0 ){
+				
+				//Reestablezco la lista Settlements
+				mLegalPerson.setSettlements(mLegalPerson.getSettlementListWithSurplus(this.getClientDebt(mLegalPerson)));
+				
+				surplusSettlement = ((TreeSet<Settlement>) mLegalPerson.getSettlements()).last();
+				
+				//Removemos el último elemento.
+				mLegalPerson.getSettlements().remove(surplusSettlement);
+				
+				//Descuento los pagos del cliente
+				mLegalPerson.discountSettlements();
+				
+				//Agrego el nuevo Settlement NO descontado a la person
+				mLegalPerson.addSettlement(surplusSettlement);
+			}else{
+				//Descuento los pagos del cliente
+				mLegalPerson.discountSettlements();
+			}
+			
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mLegalPerson);
-			//Descuento los pagos del cliente
-			mLegalPerson.discountSettlements();
 		}
 		
 		mLegalPerson = this.iLegalPersonService.save(mLegalPerson);
@@ -515,10 +539,32 @@ public class CommandAndQueries {
 		
 		//Si el cliente no es nuevo y tiene ventas adeudadas
 		if(pNaturalPersonDTO.getId() != null && !this.clientIsInDebt(mNaturalPerson)){
+			
+			Settlement surplusSettlement = new Settlement();
+			
+			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
+			if( mNaturalPerson.totalPaid().compareTo(this.getClientDebt(mNaturalPerson)) > 0 ){
+				
+				//Reestablezco la lista Settlements
+				mNaturalPerson.setSettlements(mNaturalPerson.getSettlementListWithSurplus(this.getClientDebt(mNaturalPerson)));
+				
+				surplusSettlement = ((TreeSet<Settlement>) mNaturalPerson.getSettlements()).last();
+				
+				//Removemos el último elemento.
+				mNaturalPerson.getSettlements().remove(surplusSettlement);
+				
+				//Descuento los pagos del cliente
+				mNaturalPerson.discountSettlements();
+				
+				//Agrego el nuevo Settlement NO descontado a la person
+				mNaturalPerson.addSettlement(surplusSettlement);
+			}else{
+				//Descuento los pagos del cliente
+				mNaturalPerson.discountSettlements();
+			}
+			
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mNaturalPerson);
-			//Descuento los pagos del cliente
-			mNaturalPerson.discountSettlements();
 		}
 		
 		mNaturalPerson = this.iNaturalPersonService.save(mNaturalPerson);
@@ -624,13 +670,13 @@ public class CommandAndQueries {
 		return mClientsList;
 	}
 	
-	/**
-	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
-	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
-	 * @param pClient el cliente del cual se quiere cancelar la deuda.
-	 * @throws BusinessException 
+	/***
+	 * Este método permite calcular la deuda de un cliente.
+	 * @param pClient
+	 * @return
+	 * @throws BusinessException
 	 */
-	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
+	public BigDecimal getClientDebt(Person pClient) throws BusinessException{
 		
 		
 		//Recupero las ventas adeudas del cliente.
@@ -669,6 +715,23 @@ public class CommandAndQueries {
 					
 		}
 				
+		return mDebt;
+	}
+	
+	/**
+	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
+	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
+	 * @param pClient el cliente del cual se quiere cancelar la deuda.
+	 * @throws BusinessException 
+	 */
+	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
+		
+		//Defino una variable para guardar la deuda total del cliente
+		BigDecimal mDebt = BigDecimal.ZERO;
+				
+		// Calculo la deuda total del cliente
+		mDebt = getClientDebt(pClient);
+			
 		//La deuda del cliente es menor o igual que los pagos hechos?
 		return (mDebt.compareTo(pClient.totalPaid()) == 1);
 	}
@@ -772,6 +835,23 @@ public class CommandAndQueries {
 		mSale = this.iSaleService.save(mSale);
 		
 		return mSale.getId();
+	}
+	
+	/** Este método retorna las ventas asociadas a un cliente, que aún no han sido pagadas.
+	 * @param pClientId
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public List<SaleDTO> getDueSalesByClientId(Long pClientId) throws BusinessException {
+		
+		List<SaleDTO> mSaleDTOList 	= new ArrayList<SaleDTO>();
+		Iterable<Sale> mSale 		= this.iSaleService.getDueSalesByClientId(pClientId);
+		
+		for (Sale bSale : mSale){
+			mSaleDTOList.add(this.iMapper.map(bSale,SaleDTO.class));
+		}
+		
+		return mSaleDTOList;
 	}
 	
 	/**
