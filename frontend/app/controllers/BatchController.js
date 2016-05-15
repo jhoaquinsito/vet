@@ -79,6 +79,15 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $rootScope.setTitle($scope.name, 'Cargar lotes');
 
         $scope.refreshFormDropdownsData();
+        
+        // si tiene un id como parametro
+        if ($routeParams.id != null) {
+            loadFormData(parseInt($routeParams.id));
+        }
+    };
+    // funcion que carga el formulario de la pantalla Cargar Lote con los datos de un producto ya actualizado para poder volver a editarlo
+    function loadFormData(updatedProductId) {
+        $scope.form.product = BatchService.getUpdatedProductById(updatedProductId);
     };
 
     // funcion que se ejecuta al guardar un producto con lotes actualizados/nuevos usando la pantalla Cargar lotes

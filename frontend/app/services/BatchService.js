@@ -7,6 +7,20 @@ app.factory('BatchService', function() {
         return updatedProducts;
     };
 
+    // funcion que devuelve un producto actualizado de la lista de productos por id
+    this.getUpdatedProductById = function(updatedProductId) {
+        // intento obtener el indice del producto actualizado en la lista de productos actualizados
+        var updatedProductIndex = arrayGetIndexOfId(updatedProducts, updatedProductId);
+
+        var updatedProduct = null;
+
+        // si existe en la lista
+        if (updatedProductIndex > -1){
+            updatedProduct = updatedProducts[updatedProductIndex];
+        } 
+
+        return updatedProduct;        
+    }
 
     // funcion que agrega un producto a la lista de productos actualizados pendientes de confirmar para actualizar stock
     this.setUpdatedProduct = function(updatedProduct) {

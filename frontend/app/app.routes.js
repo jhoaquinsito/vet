@@ -13,6 +13,12 @@ app.config(function($routeProvider) {
         action: 'batch.add'
     });
 
+    $routeProvider.when('/batches/add/:id', {
+        controller: 'BatchController',
+        templateUrl: 'app/views/batch/form-view.html',
+        action: 'batch.add'
+    });
+
     $routeProvider.when('/batches/bulk_update', {
         controller: 'BatchController',
         templateUrl: 'app/views/batch/confirmation-view.html',
