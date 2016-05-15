@@ -275,7 +275,22 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         return true;
     };
 
+    // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
+    $scope.isoDateToFormattedString = function(isoDate) {
+        var formattedString = null;
 
+        if (isoDate != null){
+            var isoDateString = isoDate.toString();
+        
+            // regex para formatear la fecha
+            var pattern = /(\d{4})(\d{2})(\d{2})/;
+            
+            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
+            formattedString = isoDateString.replace(pattern, '$1/$2/$3');
+        }
+
+        return formattedString;
+    }    
 
     $scope.init();
 });

@@ -96,7 +96,7 @@
                     <th class="col-xs-6">Cantidad en stock</th>
                 </tr>
                 <tr ng-repeat="batch in form.product.batches">
-                    <td>{{batch.isoDueDate}}</td>
+                    <td>{{batch.isoDueDate ? isoDateToFormattedString(batch.isoDueDate) : 'Sin vencimiento'}}</td>
                     <td>{{batch.stock}}</td>
                 </tr>
                 <tr ng-if="form.product.batches.length == 0 || form.product == null">
