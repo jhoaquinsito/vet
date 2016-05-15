@@ -22,7 +22,7 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Categoría de IVA</label>
-                        <select class="form-control" name="ivacategory" ng-model="form.supplier.ivacategory" ng-options="ivacategory.description for ivacategory in form.ivacategories track by ivacategory.id"></select>
+                        <select class="form-control" name="ivacategory" ng-model="form.supplier.ivacategory" ng-options="(ivacategory.description + ' - IVA ' + ivacategory.percentage + '%') for ivacategory in form.ivacategories track by ivacategory.id"></select>
                     </div>
                 </div>
                 <div class="col-md-6">
