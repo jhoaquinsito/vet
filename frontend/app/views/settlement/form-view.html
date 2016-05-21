@@ -51,7 +51,7 @@
 		                            <td class="table-cell-input">
 		                            	<ul>
 										    <li ng-repeat="saleLine in sale.saleLines">
-										    	{{saleLine.product.name}} ({{saleLine.quantity}} {{saleLine.product.measureUnit.abbreviation}} )
+										    	{{saleLine.batch.product.name}} ({{saleLine.quantity}} {{saleLine.batch.product.measureUnit.abbreviation}} )
 										    </li>
 										</ul>
 		                            </td>
@@ -65,7 +65,7 @@
 		                            <td class="table-cell-input">
 		                            	<ul>
 										    <li ng-repeat="saleLine in sale.saleLines">
-										    	$ {{saleLine.product.unitPrice | number: 2}}
+										    	$ {{saleLine.batch.product.unitPrice | number: 2}}
 										    </li>
 										</ul>
 		                            </td>
@@ -121,7 +121,7 @@
 	                    <div class="form-group form-group-sm" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
 	                        <label class="control-label mandatory">Concepto</label>
 	                        <div class="input-group col-lg-12">
-		                        <input type="text" class="form-control" name="concept" ng-model="form.newSettlement.concept" >
+		                        <input type="text" ng-maxlength="250" class="form-control" name="concept" ng-model="form.newSettlement.concept" >
 	                        </div>
 	                    </div>
 	                    <div class="form-group form-group-sm">
@@ -142,7 +142,7 @@
 	                        <div ng-show="form.newSettlement.paymentMode == 'cheque'">
 		                        <label class="control-label mandatory">N° de cheque:</label>                        
 		                        <div class="input-group col-lg-12">
-			                        <input type="number" max="99999999" class="form-control" name="checkNumber" ng-model="form.newSettlement.checkNumber" >
+			                        <input type="text" ng-maxlength="8" class="form-control" name="checkNumber" ng-model="form.newSettlement.checkNumber" >
 		                        </div>
 		                    </div>
 	                    </div>

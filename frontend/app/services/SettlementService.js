@@ -86,7 +86,7 @@ app.factory('SettlementService', function(Restangular) {
     this.calculateSaleTotalUpdated = function(sale){
         var sum = 0;
         sale.saleLines.forEach(function(saleLine){
-            var subtotal = (saleLine.product.unitPrice - saleLine.product.unitPrice * saleLine.discount / 100) * saleLine.quantity;
+            var subtotal = (saleLine.batch.product.unitPrice - saleLine.batch.product.unitPrice * saleLine.discount / 100) * saleLine.quantity;
             sum += subtotal;
         });
         return sum;
@@ -100,7 +100,7 @@ app.factory('SettlementService', function(Restangular) {
         var sum = 0;
         sales.forEach(function(sale){
         	sale.saleLines.forEach(function(saleLine){
-                var subtotal = (saleLine.product.unitPrice - saleLine.product.unitPrice * saleLine.discount / 100) * saleLine.quantity;
+                var subtotal = (saleLine.batch.product.unitPrice - saleLine.batch.product.unitPrice * saleLine.discount / 100) * saleLine.quantity;
                 sum += subtotal;
             });
         });

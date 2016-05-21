@@ -89,7 +89,7 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         		amount : 0,
         		concept : "No definido.",
         		paymentMode : "contado",
-        		checkNumber : 0,
+        		checkNumber : "0",
         		discounted: false
             };
     };
