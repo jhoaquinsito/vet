@@ -14,7 +14,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.resetFormData = function() {
         $scope.form.sale = {
-            invoiced: null, 
+            invoiced: false, 
             paied_out: null,
             person: null,
             saleLines: [],

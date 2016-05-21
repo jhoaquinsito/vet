@@ -11,6 +11,9 @@ app.factory('SaleService', function(Restangular) {
             sale.person = 1;
         }
 
+        // funcion imprimir desactivada
+        sale.invoiced = false;
+
         // hago que solo mande los id de los productos
         sale.saleLines.forEach(function(saleLine, index, saleLines){
             saleLines[index].product = saleLine.product.id;
