@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
-import backend.product.presentation.PresentationService;
+import backend.product.Product;
 import backend.sale.Sale;
 import backend.sale.SaleRepository;
 import backend.sale.SaleService;
@@ -71,8 +71,9 @@ public class SaleService {
 		// asocio el venta a sus lotes (si tiene)
 		if (pSaleToSave.getSaleLines() != null  || pSaleToSave.getSaleLines().size() == 0){
 			for (SaleLine bSaleLine : pSaleToSave.getSaleLines()){
-				if(bSaleLine.getProduct() == null) throw new BusinessException(SaleCons.cCANNOT_SAVE_WITHOUT_SALELINE_WITHOUT_PRODUCT_EXCEPTION_MESSAGE);
-				bSaleLine.setUnit_Price(bSaleLine.getProduct().getUnitPrice());
+				Product bProduct = bSaleLine.getBatch().getProduct();
+				if(bProduct == null) throw new BusinessException(SaleCons.cCANNOT_SAVE_WITHOUT_SALELINE_WITHOUT_PRODUCT_EXCEPTION_MESSAGE);
+				bSaleLine.setUnit_Price(bProduct.getUnitPrice());
 				bSaleLine.setSale(pSaleToSave);
 			}
 		} else {

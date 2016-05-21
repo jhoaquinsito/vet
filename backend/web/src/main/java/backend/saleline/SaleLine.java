@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 
 import backend.product.Product;
+import backend.product.batch.Batch;
 import backend.sale.Sale;
 
 @Entity
@@ -53,15 +54,15 @@ public class SaleLine implements java.io.Serializable{
 	@Column(name="discount")
 	private BigDecimal iDiscount;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="sale_id")
 	@Valid
 	private Sale iSale;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="product_id")
+	@ManyToOne(cascade = {CascadeType.MERGE})
+	@JoinColumn(name="batch")
 	@Valid
-	private Product iProduct;
+	private Batch iBatch;
 
 	public Long getId() {
 		return iId;
@@ -103,12 +104,12 @@ public class SaleLine implements java.io.Serializable{
 		this.iSale = pSale;
 	}
 
-	public Product getProduct() {
-		return iProduct;
+	public Batch getBatch() {
+		return iBatch;
 	}
 
-	public void setProduct(Product pProduct) {
-		this.iProduct = pProduct;
+	public void setBatch(Batch pBatch) {
+		this.iBatch = pBatch;
 	}
 
 	public static long getSerialversionuid() {

@@ -3,6 +3,9 @@ package backend.product;
 import java.math.BigDecimal;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.batch.BatchDTO;
 import backend.product.category.CategoryDTO;
@@ -11,6 +14,7 @@ import backend.product.manufacturer.ManufacturerDTO;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProductDTO {
 
 	private Long iId;

@@ -1,15 +1,19 @@
 package backend.product.batch;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-import backend.product.Product;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import backend.product.ProductDTO;
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BatchDTO {
 
 	private Long iId;
 	private BigDecimal iStock;
 	private Integer iIsoDueDate;
+	private ProductDTO iProduct;
 	
 	
 	public Long getId() {
@@ -30,5 +34,12 @@ public class BatchDTO {
 	public void setIsoDueDate(Integer pIsoDueDate) {
 		this.iIsoDueDate = pIsoDueDate;
 	}
+	public ProductDTO getProduct() {
+		return iProduct;
+	}
+	public void setProduct(ProductDTO pProduct) {
+		this.iProduct = pProduct;
+	}
+	
 	
 }
