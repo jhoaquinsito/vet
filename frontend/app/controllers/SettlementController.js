@@ -17,22 +17,44 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
 
     $scope.settlementDetailAction = function() {
     	$scope.refreshFormData();
+    	$scope.refreshFormDropdownsData();
     };
     
+    $scope.$watch("form.person", function(newValue, oldValue){
+    	
+    	if(typeof $scope.form.person !== 'undefined' && typeof $scope.form.person.id !== 'undefined')
+		{
+    		$scope.form.personLoaded = true;
+    		var requestSales   = SettlementService.getDueSalesByClientId($scope.form.person.id);
+    		requestSales.success = function(response){
+        		$scope.form.sales 			= response.plain();
+        		$scope.form.totalDeVentas 	= $scope.calculateAllSalesTotal();
+        	}
+            requestSales.error = function(response) {
+                MessageService.message(MessageService.text('sales', 'get', 'error', 'male'), 'danger');
+            };
+            requestSales.then(requestSales.success, requestSales.error);
+		}else{
+			$scope.form.personLoaded = null;
+		}
+			
+    		
+    });
     
-    
-    $scope.refreshFormData = function() {
-    	var requestPerson  = ClientService.getById(34);
-    	var requestSales   = SettlementService.getDueSalesByClientId(34);
+    //TODO ELIMINAR ESTO.
+    $scope.selectCliente = function(atribute) {
+    	console.log(atribute);
+    	var requestPerson  = ClientService.getById($scope.form.personId);
+    	var requestSales   = SettlementService.getDueSalesByClientId($scope.form.personId);
         
     	requestPerson.success = function(response){
     		$scope.form.person = response.plain();
     		
     		//Analizamos si tiene LastName
-    		if (typeof($scope.form.person.lastname) !== 'undefined')
-    			$scope.form.person.lastname =  $scope.form.person.lastname + ", "
-    		else
-    			$scope.form.person.lastname =  ""
+    		//if (typeof($scope.form.person.lastname) !== 'undefined')
+    		//	$scope.form.person.lastname =  $scope.form.person.lastname + ", "
+    		//else
+    		//	$scope.form.person.lastname =  ""
     	}
     	requestPerson.error = function(response) {
             MessageService.message(MessageService.text('person', 'get', 'error', 'male'), 'danger');
@@ -48,8 +70,17 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         
         requestPerson.then(requestPerson.success, requestPerson.error);
         requestSales.then(requestSales.success, requestSales.error);
-        
-        
+    };
+    
+    $scope.refreshFormDropdownsData = function() {
+        ClientService.getList().then(function(response) {
+            $scope.form.clients = response.plain();
+        });
+
+    };
+    
+    $scope.refreshFormData = function() {
+    	//$scope.form.person = null;
     	/*
     	$scope.form.person 			= ClientService.getById(34);
         $scope.form.sales 			= SettlementService.getDueSalesByClientId(34);
@@ -58,7 +89,7 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         		amount : 0,
         		concept : "No definido.",
         		paymentMode : "contado",
-        		checkNumber : "",
+        		checkNumber : 0,
         		discounted: false
             };
     };
@@ -130,8 +161,7 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         
     };
     
-    //TODO - NO BORRAR!
-    //TODO - No se usa MAS
+    //TODO - Borrar porque NO SE USA.
     $scope.calculateSaldoAFavor = function(){
     	
     	//TODO - Aca hay que invocar a un método del SettlementService que permita
@@ -143,18 +173,18 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     	}else
     		return 0;
     		
-    	//return SettlementService.calculateClienteBalance($scope.form.person);
+    	
     }
     
-  //TODO - NO BORRAR!
+    //Se usa multiples veces.
     $scope.calculateSettlementsTotal = function(){
     	
     	//TODO - Aca hay que invocar a un método del SettlementService que permita
     	//obtener para el cliente en cuesti{on, cuanto ha entregado , que seria...
     	//tener todos los Settlement y hacer su sumatoria
     	
-    	if($scope.form.person != null){
-    		$scope.form.totalDePagos = SettlementService.calculateSettlementsTotal($scope.form.person);
+    	if($scope.form.person != null && $scope.form.person.id != null){
+    		$scope.form.totalDePagos = SettlementService.calculateClienteBalance($scope.form.person);
     	}else{
     		$scope.form.totalDePagos = 0;    		
     	}
