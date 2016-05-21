@@ -10,7 +10,7 @@ public class SaleLineLiteDTO {
 	
 	private float iDiscount;
 		
-	private Long iProduct;
+	//private Long iProduct;
 	
 	private Long iBatch;
 	
@@ -41,13 +41,13 @@ public class SaleLineLiteDTO {
 		this.iDiscount = pDiscount;
 	}
 
-	public Long getProduct() {
+	/*public Long getProduct() {
 		return iProduct;
 	}
 
 	public void setProduct(Long pProduct) {
 		this.iProduct = pProduct;
-	}
+	}*/
 	
 	public Long getBatch() {
 		return iBatch;

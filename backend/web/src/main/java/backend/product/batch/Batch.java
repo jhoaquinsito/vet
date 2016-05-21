@@ -63,7 +63,7 @@ public class Batch {
 	@Column(name = "iso_due_date")
 	private Integer iIsoDueDate;
 	
-	@ManyToOne(fetch=FetchType.LAZY)  
+	@ManyToOne(fetch=FetchType.EAGER)  
     @JoinColumn(name = "product")  
 	private Product iProduct;
 

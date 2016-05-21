@@ -59,7 +59,7 @@ public class SaleLine implements java.io.Serializable{
 	@Valid
 	private Sale iSale;
 	
-	@ManyToOne//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name="batch")
 	@Valid
 	private Batch iBatch;

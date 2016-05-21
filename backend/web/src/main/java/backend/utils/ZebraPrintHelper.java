@@ -120,7 +120,7 @@ public class ZebraPrintHelper {
 			if(mProperties == null)
 				throw new BusinessException(SALE_PRINT_MISSING_PROPERTIES_FILE);
 			
-			PersonDTO 		 mPerson = pSale.getPerson();
+			PersonDTO mPerson = pSale.getPerson();
 			if(mPerson == null)
 				throw new BusinessException(SALE_PRINT_MISSING_ASSOCIETED_PERSON);
 			
@@ -269,10 +269,9 @@ public class ZebraPrintHelper {
 				}
 				y+=20;//300
 				/* LISTADO DE PRODUCTOS */
-				CommandAndQueries CAndQ = new CommandAndQueries();
 				for(SaleLineDTO mSaleLine : pSaleLineList){
 			    	
-			    	ProductDTO 		mProduct 		= CAndQ.getProduct(mSaleLine.getBatch().getProduct());
+			    	ProductDTO 		mProduct 		= mSaleLine.getBatch().getProduct();
 			    	MeasureUnitDTO 	mMeasureUnit 	= mProduct.getMeasureUnit();
 			    	
 			    	/* - Nombre del producto - */
