@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "settlement", uniqueConstraints = { @UniqueConstraint(columnNames = {}) })
-public class Settlement {
+public class Settlement implements Comparable<Settlement> {
 	
 	@Id
 	@Column(name = "id", nullable = false)
@@ -97,4 +97,8 @@ public class Settlement {
 		this.iDiscounted = iDiscounted;
 	}
 
+	@Override
+	  public int compareTo(Settlement o) {
+	    return getDate().compareTo(o.getDate());
+	  }
 }

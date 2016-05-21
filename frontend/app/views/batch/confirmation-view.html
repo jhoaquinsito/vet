@@ -1,0 +1,49 @@
+<form name="confirmationForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="action-buttons">
+                <a ng-href="batches/add" class="btn btn-icon btn-info"><i class="fa fa-plus"></i>Cargar lote</a>
+            </div>
+            <table class="table table-bordered table-hover table-main">
+                <tr>
+                    <th class="col-xs-4">Producto</th>
+                    <th class="col-xs-4">Lote</th>
+                    <th class="col-xs-1">Costo</th>
+                    <th class="col-xs-2">Precio unitario</th>
+                    <th class="col-xs-1"></th>
+                </tr>
+                <tr dir-paginate="updatedProduct in filtered = ( confirmation.updatedProducts | itemsPerPage: table.pageSize)">
+                    <td class="table-cell-detail">
+                        <div>{{updatedProduct.name}}</div>
+                    </td>
+                    <td class="table-cell-detail">
+                        <div ng-repeat="batch in updatedProduct.batches">
+                            Cantidad: {{batch.stock}} | Vencimiento: {{batch.isoDueDate}} <br/>
+                        </div>
+                    </td>
+                    <td class="table-cell-detail">
+                        <div>${{updatedProduct.cost}}</div>
+                    </td>
+                    <td class="table-cell-detail">
+                        <div>${{updatedProduct.unitPrice}}</div>
+                    </td>
+                    <td class="table-cell-actions">
+                        <button ng-click="removeUpdatedProductAction(updatedProduct.id)" class="btn btn-sm btn-info" data-title="Borrar" bs-tooltip><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                <tr ng-if="confirmation.updatedProducts.length == 0 || filtered.length == 0">
+                    <td colspan="4" class="table-cell-empty">No hay lotes para mostrar. Carga uno (o más) y luego confirma todos los lotes cargados.</td>
+                </tr>
+            </table>
+            <div class="table-pagination">
+                <div dir-pagination-controls boundary-links="true"></div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-right">
+                <a ng-href="products" class="btn btn-icon btn-danger"><i class="fa fa-close"></i>Cancelar</a>
+                <button type="button" ng-click="confirmUpdatedProductsAction(confirmationForm)" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Confirmar</button>
+            </div>
+        </div>
+    </div>
+</form>

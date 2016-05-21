@@ -1,25 +1,22 @@
 package backend.person;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import backend.person.city.City;
 import backend.person.iva_category.IVACategory;
 import backend.person.settlement.Settlement;
-import backend.product.batch.Batch;
-import backend.sale.Sale;
 
 // TODO documentar
 
@@ -59,8 +56,8 @@ public class Person  {
 	private String iMobilePhone;
 
 	@Column(name="renspa")
-	@Digits(integer=17, fraction=0, message= PersonConsts.cRENSPA_DIGITS_VIOLATION_MESSAGE)
-	private BigDecimal iRENSPA;	
+	@Size(max=25, message= PersonConsts.cRENSPA_SIZE_VIOLATION_MESSAGE)
+	private String iRENSPA;	
 	
 	@Column(name="zip_code")
 	@Size(min=1, max=30, message= PersonConsts.cZIP_CODE_SIZE_VIOLATION_MESSAGE)
@@ -130,11 +127,11 @@ public class Person  {
 		this.iMobilePhone = iMobilePhone;
 	}
 
-	public BigDecimal getRENSPA() {
+	public String getRENSPA() {
 		return iRENSPA;
 	}
 
-	public void setRENSPA(BigDecimal iRENSPA) {
+	public void setRENSPA(String iRENSPA) {
 		this.iRENSPA = iRENSPA;
 	}
 	
@@ -246,6 +243,93 @@ public class Person  {
 		this.setSettlements(mSettlements);
 	}
 
+	/**
+	 * Este metodo permite devolver un Settlement que es el excedente del
+	 * total pagado por el cliente (Lista de Settlement NO descontados) y la deuda actual del cliente
+	 * transmitida como parámetro.
+	 * @param clientDebt
+	 * @return
+	 */
+	public Set<Settlement> getSettlementListWithSurplus(BigDecimal pClientDebt){
+		
+		BigDecimal clientDebtUpdated = pClientDebt;
+		
+		Set<Settlement> mSettlementsBalanced = new TreeSet<Settlement>();
+		
+		
+		//0. Calculo el monto total excedente
+		BigDecimal surplusPaid = this.totalPaid().subtract(pClientDebt);
+		
+		Settlement surplusSettlement = new Settlement();
+		surplusSettlement.setAmount(surplusPaid);
+		surplusSettlement.setDate(new Date());
+		surplusSettlement.setCheckNumber("");
+		surplusSettlement.setConcept("Pago creado por excedente.");
+		surplusSettlement.setDiscounted(false);
+		
+		//1. Obtengo la lista de Settlements NO descontados.
+		List<Settlement> mSettlements = new ArrayList<Settlement>();
+		mSettlements.addAll(this.getSettlements());
+		
+		//2. Los ordeno por fecha (ASC)
+		Collections.sort(mSettlements);
+		
+		Boolean debtIsPaid = false;
+		
+		for(Settlement mSettlement : mSettlements){
+			if(mSettlement.isDiscounted()){
+				mSettlementsBalanced.add(mSettlement);
+				continue;
+			}
+			
+			if(!debtIsPaid){
+				switch (clientDebtUpdated.compareTo(mSettlement.getAmount())) {
+					//El resto de la deuda es MENOR que el pago que tenemos para descontarle
+					case -1:  {
+						//ACCION: Le substraemos la deuda al pago, la deuda queda en 0, la marcamos como pagada, 
+						//y el resto del pago es parte del monto del Settlement de excedente
+						mSettlement.setAmount(clientDebtUpdated);
+						clientDebtUpdated = BigDecimal.ZERO;
+				    	debtIsPaid = true;
+				    	//Se agrega el settlement dejando el monto igual a lo que le falta a la deuda para ser pagada.
+				    	mSettlementsBalanced.add(mSettlement);
+				    	continue;
+					}
+							 
+					//El resto de la deuda es IGUAL que el pago que tenemos para descontarle
+				    case 0:   {
+				    	//ACCION: Le substraemos a la deuda el pago, marcamos la deuda como salda y continuamos
+				    	clientDebtUpdated =  clientDebtUpdated.subtract(mSettlement.getAmount());
+				    	debtIsPaid = true;
+				    	//Se agrega el settlement SIN modificaciones a la lista definitiva.
+				    	mSettlementsBalanced.add(mSettlement);
+				    	continue;
+					}
+		            //El resto de la deuda es MAYOR que el pago que tenemos para descontarle
+				    case 1:   {
+				    	//ACCION: Le substraemos a la deuda, el pago y continuamos
+				    	clientDebtUpdated =  clientDebtUpdated.subtract(mSettlement.getAmount());
+				    	//Se agrega el settlement SIN modificaciones a la lista definitiva.
+				    	mSettlementsBalanced.add(mSettlement);
+						continue;
+					}
+				}
+			}else{
+				continue;
+			}
+			
+			
+			
+		}
+		// Finalmente agrego a la lista, el Settlement de balance, con el excedente.
+		mSettlementsBalanced.add(surplusSettlement);
+		
+		return mSettlementsBalanced;
+		
+		
+		
+	}
+	
 	//=========================== Fin Métodos de dominio =====================
 	
 	/** 

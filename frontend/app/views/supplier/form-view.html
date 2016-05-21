@@ -18,6 +18,56 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Categoría de IVA</label>
+                        <select class="form-control" name="ivacategory" ng-model="form.supplier.ivacategory" ng-options="(ivacategory.description + ' - IVA ' + ivacategory.percentage + '%') for ivacategory in form.ivacategories track by ivacategory.id"></select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Renspa</label>
+                        <input type="text" class="form-control" name="renspa" ng-model="form.supplier.renspa" onkeypress="return /^\d*[\.\-\_/\d]*$/.test(this.value+String.fromCharCode(event.charCode))">
+                        <!-- La expresion regular valida que el renspa comience con un nro y que sea formado por numeros, guiones medios, barras, guiones bajos y/o . -->
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.email.$dirty && clientForm.email.$error.email}">
+                        <label class="control-label">E-mail</label>
+                        <input type="email" class="form-control" name="email" ng-model="form.supplier.email" onkeypress="return this.value.length < 30">
+                        <span ng-show="clientForm.email.$dirty && clientForm.email.$error.email" class="help-block">Este campo debe contener un e-mail válido</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Dirección</label>
+                        <input type="text" class="form-control" name="address" ng-model="form.supplier.address" onkeypress="return this.value.length < 100">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Código postal</label>
+                        <input type="text" class="form-control" name="zipCode" ng-model="form.supplier.zipCode" onkeypress="return this.value.length < 8">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Teléfono</label>
+                        <input type="text" class="form-control" name="phone" ng-model="form.supplier.phone" onkeypress="return this.value.length < 50">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Celular</label>
+                        <input type="text" class="form-control" name="mobilePhone" ng-model="form.supplier.mobilePhone" onkeypress="return this.value.length < 50">
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="panel-footer">
             <div class="text-right">

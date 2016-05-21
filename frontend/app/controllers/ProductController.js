@@ -79,6 +79,8 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         matchManufacturerIfExists();
         // asocio drogas con el mismo nombre (no case sensitive)
         matchDrugIfExists();
+        // asocio presentaciones con el mismo nombre (no case sensitive)
+        matchPresentationIfExists();
 
         var request = ProductService.save($scope.form.product);
 
@@ -117,6 +119,19 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
                 if (manufacturer.name.toLowerCase() == $scope.form.product.manufacturer.name.toLowerCase()) {
                     $scope.form.product.manufacturer.name = manufacturer.name;
                     $scope.form.product.manufacturer.id = manufacturer.id;
+                }
+            });
+        }
+    };
+
+    function matchPresentationIfExists(){
+        // si la presentacion no se asoció a un id, reviso si no se puede asociar a otros case insensitive
+        if ($scope.form.product.presentation != null && $scope.form.product.presentation.id == null) {
+            angular.forEach($scope.form.presentations, function(presentation) {
+                //si los nombres son iguales en lower case entonces es la misma pero con otro case
+                if (presentation.name.toLowerCase() == $scope.form.product.presentation.name.toLowerCase()) {
+                    $scope.form.product.presentation.name = presentation.name;
+                    $scope.form.product.presentation.id = presentation.id;
                 }
             });
         }
@@ -275,7 +290,22 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         return true;
     };
 
+    // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
+    $scope.isoDateToFormattedString = function(isoDate) {
+        var formattedString = null;
 
+        if (isoDate != null){
+            var isoDateString = isoDate.toString();
+        
+            // regex para formatear la fecha
+            var pattern = /(\d{4})(\d{2})(\d{2})/;
+            
+            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
+            formattedString = isoDateString.replace(pattern, '$1/$2/$3');
+        }
+
+        return formattedString;
+    }    
 
     $scope.init();
 });

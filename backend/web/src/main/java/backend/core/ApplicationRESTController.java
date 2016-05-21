@@ -462,6 +462,22 @@ public class ApplicationRESTController {
 		return this.iCommandAndQueries.getSale(id);
 	}
 	
+	
+	/**
+	 * Metodo API que permite recuperar la lista de las distintas 
+	 * ventas (SALE).
+	 * 
+	 * @return List<SaleDTO>
+	 * 							: Lista de ventas completa
+	 * @throws BusinessException 
+	 * 							: Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "duesales/{clientId}", method = RequestMethod.GET)
+	public @ResponseBody List<SaleDTO> getDueSalesByClientId(@PathVariable Long clientId) throws BusinessException {
+
+		return this.iCommandAndQueries.getDueSalesByClientId(clientId);
+	}
+	
 	/**
 	 * Metodo API que permite recuperar un cliente especificando su ID
 	 * 
