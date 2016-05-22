@@ -247,13 +247,10 @@ public class Product implements Persistable<Long> {
 	 * @return mBatch el lote asociada a la fecha de vencimiento
 	 */
 	public Batch getBatcheByISODueDate(Integer pISODueDate) {
-		
 		Batch mBatch = null;
-		Iterator<Batch> mBatchesIt = iBatches.iterator();
 		
-		while(mBatchesIt.hasNext()){
-			Batch bBatch = mBatchesIt.next();
-			if(bBatch.getIsoDueDate() == pISODueDate){
+		for (Batch bBatch : iBatches) {
+			if (bBatch.hasISODueDate(pISODueDate)){
 				mBatch = bBatch;
 				break;
 			}

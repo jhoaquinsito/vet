@@ -121,5 +121,21 @@ public class Batch {
 		
 		return mDueDate;
 	}
+	
+	/**
+	 * Método que verifica si la fecha de vencimiento del lote es igual a una fecha de vencimiento dada.
+	 * @param pISODueDate fecha de vencimiento a comparar
+	 * @return true si es igual, falso si son distintas
+	 */
+	public boolean hasISODueDate(Integer pISODueDate){
+		
+		if (pISODueDate == null){
+			return (this.getIsoDueDate() == null);
+		} else if (this.getIsoDueDate() != null && this.getIsoDueDate().compareTo(pISODueDate) == 0) { // compare integer returns 0 if equals
+			return true;
+		}
+		
+		return false;
+	}
 
 }
