@@ -49,21 +49,24 @@ app.factory('SaleService', function(Restangular) {
 
     this.updateSaleLinesWithNewSaleLine = function(listOfSaleLines, newSaleLine){
 
+        //TODO SI VIENE CON 0 ENTONCES HAY QUE BORRARLA
+
         // intento obtener el indice del batch en la lista de sale lines
         var updatedBatchIndex = arrayGetIndexOfBatchId(listOfSaleLines, newSaleLine.batchId);
 
         // si existe en la lista
         if (updatedBatchIndex > -1){
             //sumo 1 a la cantidad
-            listOfSaleLines[updatedBatchIndex].quantity = listOfSaleLines[updatedBatchIndex].quantity + newSaleLine.quantity;
+            listOfSaleLines[updatedBatchIndex].quantity = newSaleLine.quantity;
         } else { // si no existe en la lista
             //agrego el batch a la lista
             listOfSaleLines.push(newSaleLine);
         }
 
+        listOfSaleLines = filterSaleLinesWithQuantityZero(listOfSaleLines);
 
         return listOfSaleLines;
-    }
+    };
 
     function arrayGetIndexOfBatchId(array, id) {
         for (var i = 0; i < array.length; i++) {
@@ -72,6 +75,20 @@ app.factory('SaleService', function(Restangular) {
             }
         }
         return -1;
+    };
+
+    // funcion que recibe una lista de salelines y quita todas las salelines que tienen cantidad cero
+    function filterSaleLinesWithQuantityZero(listOfSaleLines){
+        var filteredList = [];
+
+        for (var i = 0; i < listOfSaleLines.length; i++) {
+            // si la cantidad es diferente de 0, entonces lo agrego a la lista filtrada
+            if (listOfSaleLines[i].quantity != 0) {
+                filteredList.push(listOfSaleLines[i]);
+            }
+        }
+
+        return filteredList;
     };
 
     // funcion que agrega los datos de las unidades a vender a los lotes de un producto

@@ -3,6 +3,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     $scope.action = $route.current.action;
     $scope.table = {};
     $scope.form = {};
+    $scope.form.searchProductModal = {};
 
     $scope.init = function() {
         switch ($scope.action) {
@@ -154,23 +155,20 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     };
 
     $scope.acceptProductSearchModal = function(){
-        // para cada batch que tiene cant a vender > 0
         $scope.form.searchProductModal.product.batches.forEach(function(batch, index, batches){
-            if (batch.unitsToSell > 0){
-                // creo una sale line
-                var newSaleLine = {};
-                newSaleLine.batchId = batch.id;
-                newSaleLine.batchISODueDate = batch.isoDueDate;
-                newSaleLine.unit_price = $scope.form.searchProductModal.product.unitPrice;
-                newSaleLine.productName = $scope.form.searchProductModal.product.name;
-                newSaleLine.productId = $scope.form.searchProductModal.product.id;
-                newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
-                newSaleLine.quantity = batch.unitsToSell;
-                newSaleLine.discount = 0;
-                
-                // agrego una sale line
-                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
-            }
+            // creo una sale line
+            var newSaleLine = {};
+            newSaleLine.batchId = batch.id;
+            newSaleLine.batchISODueDate = batch.isoDueDate;
+            newSaleLine.unit_price = $scope.form.searchProductModal.product.unitPrice;
+            newSaleLine.productName = $scope.form.searchProductModal.product.name;
+            newSaleLine.productId = $scope.form.searchProductModal.product.id;
+            newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
+            newSaleLine.quantity = batch.unitsToSell;
+            newSaleLine.discount = 0;
+            
+            // actualizo la lista de salelines con la nueva sale line
+            $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
         });
 
         $scope.hideProductSearchModal();
@@ -215,6 +213,12 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.calculateProductSubtotal = function(productSaleLines){
         return (productSaleLines[0].unit_price - productSaleLines[0].unit_price * productSaleLines[0].discount / 100) * $scope.addQuantitiesUp(productSaleLines);
+    }
+
+    $scope.initializeUnitsToSell = function(index){
+        if ($scope.form.searchProductModal.product.batches[index].unitsToSell == null){
+            $scope.form.searchProductModal.product.batches[index].unitsToSell = 0;
+        }
     }
 
     $scope.init();
