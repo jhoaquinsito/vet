@@ -11,16 +11,18 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
+                    <label class="control-label">Agregar producto</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Agregar producto</label>
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()" placeholder="Ingrese el código de producto">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal()"><i class="fa fa-search"></i></button>
-                            </span>
-                        </div>
+                        <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()" placeholder="Ingrese el código del producto">
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal(null)"><i class="fa fa-search"></i> Buscar producto</button>
                 </div>
             </div>
             <div class="row">
@@ -29,26 +31,23 @@
                         <tr>
                             <th class="col-xs-4">Producto</th>
                             <th class="col-xs-1">Cantidad</th>
-                            <th></th>
                             <th class="col-xs-2 col-xs-offset-1">Precio</th>
                             <th class="col-xs-1">Descuento (%)</th>
                             <th class="col-xs-2 col-xs-offset-1 text-right">Sub-total</th>
                         </tr>
-                        <tr ng-repeat="saleLine in form.sale.saleLines">
-                            <td class="table-cell-input">{{saleLine.product.name}}</td>
+                        <tr ng-repeat="(key, value) in form.sale.saleLines | groupBy: 'productId'">
+                            <td class="table-cell-input">{{value[0].productName}} <button type="button" class="btn btn-xs btn-danger" ng-click="removeProductSaleLinesAcion(value[0].productId)" data-title="Eliminar" bs-tooltip><i class="fa fa-remove"></i></button></td>
                             <td class="table-cell-input">
-                                <div class="form-group" ng-class="{'has-error': saleForm['quantity-' + saleLine.product.id].$dirty && saleForm['quantity-' + saleLine.product.id].$error.required}">
-                                    <input type="number" class="form-control" name="quantity-{{saleLine.product.id}}" ng-model="saleLine.quantity" required>
+                                {{addQuantitiesUp(value) + ' ' + value[0].productMeasureUnitAbbreviation}}
+                                <button type="button" class="btn btn-xs btn-info" ng-click="showProductSearchModal(value[0].productId)" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></button>
+                            </td>
+                            <td class="table-cell-input">${{value[0].unit_price | number: 2}}</td>
+                            <td class="table-cell-input">
+                                <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.productId].$dirty && saleForm['discount-' + saleLine.productId].$error.required}">
+                                    <input type="number" class="form-control text-right" name="discount-{{saleLine.productId}}" ng-model="value[0].discount" required>
                                 </div>
                             </td>
-                            <td class="table-cell-input">{{saleLine.product.measureUnit.abbreviation}}</td>
-                            <td class="table-cell-input">${{saleLine.unit_price | number: 2}}</td>
-                            <td class="table-cell-input">
-                                <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.product.id].$dirty && saleForm['discount-' + saleLine.product.id].$error.required}">
-                                    <input type="number" class="form-control" name="discount-{{saleLine.product.id}}" ng-model="saleLine.discount" required>
-                                </div>
-                            </td>
-                            <td class="table-cell-input text-right">${{(saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity | number: 2}}</td>
+                            <td class="table-cell-input text-right">${{calculateProductSubtotal(value) | number: 2}}</td>
                         </tr>
                         <tr ng-if="form.sale.saleLines.length == 0">
                             <td colspan="5" class="table-cell-empty">Agregá productos a tu venta...</td>
@@ -61,6 +60,7 @@
                     <h3 class="text-right">Total: ${{calculateSaleTotal() | number: 2}}</h3>
                 </div>
             </div>
+            <!-- Comento la impresion para esta primer versión
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group form-group-sm">
@@ -69,6 +69,7 @@
                     </div>
                 </div>
             </div>
+            -->
             <hr>
             <div class="row">
                 <div class="col-md-4 col-md-offset-1">
@@ -109,7 +110,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group form-group-sm">
-                                <label class="control-label">Nro cheque</label>
+                                <label class="control-label">N° de cheque</label>
                                 <input type="text" class="form-control" name="settlement-checknumber" ng-model="form.sale.settlement.checkNumber" >
                             </div>
                         </div>

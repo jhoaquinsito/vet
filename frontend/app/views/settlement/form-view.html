@@ -1,0 +1,171 @@
+<form name="settlementForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Cliente: </label>
+<!--                         <label class="control-label" >{{form.person.lastname | uppercase}} {{form.person.name}}</label> -->
+                        <input 	type="text" class="form-control" name="client" ng-model="form.person" onkeypress="return this.value.length < 130"  
+                        		bs-options="client as client.name for client in form.clients"
+                         		bs-typeahead 
+                         		placeholder="Ingrese el nombre de un cliente"/>
+                    </div>
+                </div>
+                <div ng-show="form.personLoaded != null" class="col-md-3 col-md-offset-3">
+               		<div class="row">
+					    <label class="control-label">Deuda: $</label>
+					    <label class="control-label">{{form.totalDeVentas | number: 2}}</label>    
+				    </div>
+				    <div class="row">
+					    <label class="control-label">Pagos: $</label>
+					    <label class="control-label">{{calculateSettlementsTotal() | number: 2}}</label>    
+				    </div>
+				    <div class="row">
+					    <label class="control-label">Balance: </label>
+					    <label class="control-label" data-ng-class="{'green-font':(form.totalDePagos - form.totalDeVentas) > 0 ,'red-font':(form.totalDePagos - form.totalDeVentas) < 0}">
+					    	${{(form.totalDePagos - form.totalDeVentas) | number: 2}}
+				    	</label>    
+				    </div>        
+                </div>
+            </div>
+            <br>
+            <div ng-show="form.personLoaded != null">
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <div class="form-group form-group-sm">
+	                        <h3 class="control-label">Compras Realizadas</h3>
+	                    </div>
+	                    <div>
+	                    	<table class="table table-bordered table-hover table-main">
+		                        <tr>
+		                        	<th class="col-xs-2">Fecha</th>
+		                            <th class="col-xs-4">Productos</th>
+		                            <th class="col-xs-1">Precio de Venta</th>
+		                            <th class="col-xs-1">Precio Actual</th>
+		                            <th class="col-xs-2">Total</th>
+		                            <th class="col-xs-2">Total Actual</th>
+		                        </tr>
+		                        <tr ng-repeat="sale in form.sales">
+		                            <td class="table-cell-input">{{sale.date | date:'dd/MM/yyyy HH:mm'}}</td>
+		                            <td class="table-cell-input">
+		                            	<ul>
+										    <li ng-repeat="saleLine in sale.saleLines">
+										    	{{saleLine.batch.product.name}} ({{saleLine.quantity}} {{saleLine.batch.product.measureUnit.abbreviation}} )
+										    </li>
+										</ul>
+		                            </td>
+		                            <td class="table-cell-input">
+		                            	<ul>
+										    <li ng-repeat="saleLine in sale.saleLines">
+										    	$ {{saleLine.unit_Price | number: 2}}
+										    </li>
+										</ul>
+		                            </td>
+		                            <td class="table-cell-input">
+		                            	<ul>
+										    <li ng-repeat="saleLine in sale.saleLines">
+										    	$ {{saleLine.batch.product.unitPrice | number: 2}}
+										    </li>
+										</ul>
+		                            </td>
+		                            <td class="table-cell-input">
+		                                 $ {{calculateSaleTotal(sale) | number: 2}}
+		                            </td>
+		                            <td class="table-cell-input">
+		                                 $ {{calculateSaleTotalUpdated(sale) | number: 2}}
+		                            </td>
+		                        </tr>
+		                    </table>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-md-12">
+	                    <h3 class="text-right">Total a pagar: $ {{form.totalDeVentas | number: 2}}</h3>
+	                </div>
+	            </div>
+	            
+	            <div class="row">
+	                <div class="col-md-6">
+	                    <div class="form-group form-group-sm">
+	                        <h3 class="control-label">Entregas Realizadas</h3>
+	                    </div>
+	                    <div>
+	                    	<table class="table table-bordered table-hover table-main">
+		                        <tr>
+		                        	<th class="col-xs-3">Fecha</th>
+		                            <th class="col-xs-2">Monto</th>
+		                            <th class="col-xs-5">Concepto</th>
+		                            <th class="col-xs-2">N° de Cheque</th>
+		                        </tr>
+		                        <!-- Recordar hacer la variable en el scope, y que obtenga aquellos pagos descontados que son lso que se van a visualizar. -->
+		                        <tr ng-repeat="settlement in form.person.settlements | filter: { discounted: false }">
+		                            <td class="table-cell-input">{{settlement.date | date:'dd/MM/yyyy HH:mm'}}</td>
+		                            <td class="table-cell-input">${{settlement.amount | number: 2}}</td>
+		                            <td class="table-cell-input">{{settlement.concept }}</td>
+		                            <td class="table-cell-input">{{settlement.checkNumber }}</td>
+		                        </tr>
+		                    </table>
+	                    </div>
+	                    <div class="row">
+			                <div class="col-md-12">
+			                    <h3 class="text-left">Total entregado: $ {{calculateSettlementsTotal() | number: 2}}</h3>
+			                </div>
+			            </div>
+	                </div>
+	                <div class="col-md-5 col-md-offset-1">
+	                	<div class="form-group form-group-sm">
+	                        <h3 class="control-label">Nueva Entrega</h3>
+	                    </div>
+	                    <div class="form-group form-group-sm" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
+	                        <label class="control-label mandatory">Concepto</label>
+	                        <div class="input-group col-lg-12">
+		                        <input type="text" ng-maxlength="250" class="form-control" name="concept" ng-model="form.newSettlement.concept" >
+	                        </div>
+	                    </div>
+	                    <div class="form-group form-group-sm">
+	                        <label class="control-label">Elija una forma de pago</label>
+	                    </div>
+	                    <div class="form-group form-group-sm">
+	                    	 <div class="col-md-6">
+	                    		<label for="paymentModeContado">Pago al contado </label>
+				      			<input id="paymentModeContado" type="radio" name="paymentMode" ng-model="form.newSettlement.paymentMode" value="contado">
+				      		</div>
+				      		<div class="col-md-6">
+				     			<label for="paymentModeCheque">Pago con cheque</label>
+				      			<input id="paymentModeCheque" type="radio" name="paymentMode" ng-model="form.newSettlement.paymentMode" value="cheque">
+				      		</div>
+	                    </div>
+	                    <br>
+	                    <div class="form-group form-group-sm">
+	                        <div ng-show="form.newSettlement.paymentMode == 'cheque'">
+		                        <label class="control-label mandatory">N° de cheque:</label>                        
+		                        <div class="input-group col-lg-12">
+			                        <input type="text" ng-maxlength="8" class="form-control" name="checkNumber" ng-model="form.newSettlement.checkNumber" >
+		                        </div>
+		                    </div>
+	                    </div>
+	                    <br>
+	                    <div class="form-group form-group-sm" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
+	                        <label class="control-label mandatory">Monto</label>
+	                        <span ng-show="form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required" class="help-block">Este campo es obligatorio</span>
+	                        <div class="input-group input-group-sm">
+		                        <input type="number" class="form-control" name="amount" ng-model="form.newSettlement.amount" required>
+		                        <span class="input-group-btn">
+	                                <button type="button" class="btn btn-sm btn-primary" ng-click="addSettlement(settlementForm)"><i class="fa fa-plus"></i></button>
+	                            </span>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+         	</div>
+         	<div ng-show="form.person == null">
+         	 	<div class="row">
+         	 		<div class="col-md-12">
+         	 	 		<h2>Por favor seleccione un cliente para visualizar su información de pagos.</h2>
+         	 	 	</div>	
+         	 	</div>
+         	</div>
+    </div>
+</form>

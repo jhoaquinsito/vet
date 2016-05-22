@@ -1,4 +1,4 @@
-app.controller('SupplierController', function($scope, $location, $rootScope, $route, $routeParams, SupplierService, MessageService, config) {
+app.controller('SupplierController', function($scope, $location, $rootScope, $route, $routeParams, SupplierService, IvaCategoryService, MessageService, config) {
     $scope.name = 'Proveedores';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -30,12 +30,16 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
 
     $scope.addSupplierAction = function() {
         $rootScope.setTitle($scope.name, 'Agregar proveedor');
+
+        $scope.resetFormData();
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.editSupplierAction = function() {
         $rootScope.setTitle($scope.name, 'Editar proveedor');
 
         $scope.refreshFormData();
+        $scope.refreshFormDropdownsData();
     };
 
     $scope.removeSupplierAction = function(supplierId) {
@@ -100,8 +104,22 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
     $scope.resetFormData = function() {
         $scope.form.supplier = {
             name: null,
-            cuit: null
+            cuit: null,
+            address: null,
+            zipCode: null,
+            nationalId: null,
+            ivacategory: null,
+            phone: null,
+            mobilePhone: null,
+            email: null,
+            renspa: null
         };
+    };
+
+    $scope.refreshFormDropdownsData = function() {
+        IvaCategoryService.getList().then(function(response) {
+            $scope.form.ivacategories = response.plain();
+        });
     };
 
     $scope.formValidation = function(form) {

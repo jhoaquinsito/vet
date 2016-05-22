@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngAnimate', 'ngCookies', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap', 'angularUtils.directives.dirPagination']);
+var app = angular.module('app', ['ngAnimate', 'ngCookies', 'ngRoute', 'ngSanitize', 'restangular', 'mgcrea.ngStrap', 'angularUtils.directives.dirPagination', 'angular.filter']);
 
 app.config(function($locationProvider, RestangularProvider, paginationTemplateProvider, $datepickerProvider, config) {
     //modo html5 para url más limpias

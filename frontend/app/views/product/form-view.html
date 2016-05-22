@@ -45,7 +45,7 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Presentación</label>
-                        <select class="form-control" name="presentation" ng-model="form.product.presentation" onkeypress="return this.value.length < 30" ng-options="presentation as presentation.name for presentation in form.presentations track by presentation.id"></select>
+                        <input type="text" class="form-control" name="presentation" ng-model="form.product.presentation" onkeypress="return this.value.length < 30" ng-change="addFormDropdownValue('presentation')" bs-options="presentation as presentation.name for presentation in form.presentations" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -85,6 +85,11 @@
                         <label class="control-label">Precio unitario</label>
                         <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" ng-blur="calculateUtility(form.product)" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Ingrese el costo sin IVA y el IVA, previo a ingresar la utilidad o precio unitario.</p>
                 </div>
             </div>
         </div>

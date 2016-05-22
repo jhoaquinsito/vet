@@ -2,6 +2,7 @@ package backend.utils;
 
 import backend.product.Product;
 import backend.product.ProductDTO;
+import backend.product.ProductForSaleDTO;
 import backend.product.batch.Batch;
 import backend.product.batch.BatchDTO;
 import backend.product.category.Category;
@@ -109,6 +110,12 @@ public class OrikaMapperFactory {
 		
 		// SaleLineDTO to SaleLine
 		mapperFactory.classMap(SaleLineLiteDTO.class, SaleLine.class).byDefault().register();
+		
+		// Product to ProductForSaleDTO
+		mapperFactory.classMap(Product.class, ProductForSaleDTO.class)
+			.field("measureUnit.abbreviation", "measureUnitAbbreviation")
+			.byDefault()
+			.register();
 		
 		return mapperFactory.getMapperFacade();
 	}

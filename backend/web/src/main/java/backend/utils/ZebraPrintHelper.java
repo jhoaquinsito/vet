@@ -15,6 +15,7 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 
+import backend.core.CommandAndQueries;
 import backend.exception.BusinessException;
 import backend.person.PersonDTO;
 import backend.product.BatchCodeGenerator;
@@ -119,7 +120,7 @@ public class ZebraPrintHelper {
 			if(mProperties == null)
 				throw new BusinessException(SALE_PRINT_MISSING_PROPERTIES_FILE);
 			
-			PersonDTO 		 mPerson = pSale.getPerson();
+			PersonDTO mPerson = pSale.getPerson();
 			if(mPerson == null)
 				throw new BusinessException(SALE_PRINT_MISSING_ASSOCIETED_PERSON);
 			
@@ -270,7 +271,7 @@ public class ZebraPrintHelper {
 				/* LISTADO DE PRODUCTOS */
 				for(SaleLineDTO mSaleLine : pSaleLineList){
 			    	
-			    	ProductDTO 		mProduct 		= mSaleLine.getProduct();
+			    	ProductDTO 		mProduct 		= mSaleLine.getBatch().getProduct();
 			    	MeasureUnitDTO 	mMeasureUnit 	= mProduct.getMeasureUnit();
 			    	
 			    	/* - Nombre del producto - */

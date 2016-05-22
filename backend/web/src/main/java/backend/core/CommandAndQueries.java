@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ import backend.person.settlement.Settlement;
 import backend.product.BatchCodeGenerator;
 import backend.product.Product;
 import backend.product.ProductDTO;
+import backend.product.ProductForSaleDTO;
 import backend.product.ProductService;
 import backend.product.batch.Batch;
 import backend.product.batch.BatchDTO;
@@ -91,6 +93,7 @@ public class CommandAndQueries {
 	
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
 	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
+	private static final String cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE = "La cantidad disponible del producto es insuficiente: ";
 	
 	/**
 	 * Constructor.
@@ -183,27 +186,6 @@ public class CommandAndQueries {
 		return mProductDTOList;
 	}
 	
-
-	/**
-	 * Este método es una consulta que devuelve la lista completa de Productos
-	 * filtrados a traves de su:
-	 * @param pBatchCode : Fragmento de codigo de barra de un lote.
-	 * @return
-	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
-	 */
-	public List<ProductDTO> getProductsByBatchCode(String pBatchCode) throws BusinessException{
-		
-		Iterable<Product> mProduct = this.iProductService.getProductListByBatchCode(pBatchCode);
-		
-		List<ProductDTO> mProductDTOList = new ArrayList<ProductDTO>();
-		
-		for (Product bProduct : mProduct){
-			mProductDTOList.add(this.iMapper.map(bProduct,ProductDTO.class));
-		}
-		
-		return mProductDTOList;
-	}
-	
 	/**
 	 * Este método es una consulta que obtiene un producto a partir de
 	 * su identificador.
@@ -222,20 +204,32 @@ public class CommandAndQueries {
 	
 	/**
 	 * Este método es una consulta que obtiene un producto a partir de
-	 * un código de lote.
-	 * @param pProductBatchCode un código de lote
-	 * @return mProductDTO producto asociado al código de lote
+	 * un código de lote seleccionado para la venta.
+	 * @param pProductBatchCode un código de lote seleccionado para la venta
+	 * @return mProductForSaleDTO producto a vender
 	 * @throws BusinessException
 	 */
-	public ProductDTO getProductByBatchCode(String pProductBatchCode) throws BusinessException{
+	public ProductForSaleDTO getProductForSaleByBatchCode(String pSelectedProductBatchCode) throws BusinessException{
 		
-		Long mProductId = BatchCodeGenerator.getProductId(pProductBatchCode);
+		Long mProductForSaleId = BatchCodeGenerator.getProductId(pSelectedProductBatchCode);
 		
-		Product mProduct = this.iProductService.get(mProductId);
+		Integer mSelectedBatchISODueDate = BatchCodeGenerator.getBatchISODueDate(pSelectedProductBatchCode);
 		
-		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
+		Product mProduct = this.iProductService.get(mProductForSaleId);
 		
-		return mProductDTO;
+		ProductForSaleDTO mProductForSaleDTO = this.iMapper.map(mProduct, ProductForSaleDTO.class);
+		
+		Batch mBatchToSale = mProduct.getBatcheByISODueDate(mSelectedBatchISODueDate);
+		
+		if (mBatchToSale != null && mBatchToSale.getId()!= null){
+			mProductForSaleDTO.setBatchId(mBatchToSale.getId());
+		} else {
+			throw new BusinessException("El lote a vender no existe en el producto.");
+		}
+		
+		mProductForSaleDTO.setBatchIsoDueDate(mSelectedBatchISODueDate);
+		
+		return mProductForSaleDTO;
 	}
 	
 	/**
@@ -467,10 +461,33 @@ public class CommandAndQueries {
 		
 		//Si el cliente no es nuevo y tiene ventas adeudadas
 		if(mLegalPerson.getId() != null && !this.clientIsInDebt(mLegalPerson)){
+			
+			
+			Settlement surplusSettlement = new Settlement();
+			
+			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
+			if( mLegalPerson.totalPaid().compareTo(this.getClientDebt(mLegalPerson)) > 0 ){
+				
+				//Reestablezco la lista Settlements
+				mLegalPerson.setSettlements(mLegalPerson.getSettlementListWithSurplus(this.getClientDebt(mLegalPerson)));
+				
+				surplusSettlement = ((TreeSet<Settlement>) mLegalPerson.getSettlements()).last();
+				
+				//Removemos el último elemento.
+				mLegalPerson.getSettlements().remove(surplusSettlement);
+				
+				//Descuento los pagos del cliente
+				mLegalPerson.discountSettlements();
+				
+				//Agrego el nuevo Settlement NO descontado a la person
+				mLegalPerson.addSettlement(surplusSettlement);
+			}else{
+				//Descuento los pagos del cliente
+				mLegalPerson.discountSettlements();
+			}
+			
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mLegalPerson);
-			//Descuento los pagos del cliente
-			mLegalPerson.discountSettlements();
 		}
 		
 		mLegalPerson = this.iLegalPersonService.save(mLegalPerson);
@@ -530,10 +547,32 @@ public class CommandAndQueries {
 		
 		//Si el cliente no es nuevo y tiene ventas adeudadas
 		if(pNaturalPersonDTO.getId() != null && !this.clientIsInDebt(mNaturalPerson)){
+			
+			Settlement surplusSettlement = new Settlement();
+			
+			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
+			if( mNaturalPerson.totalPaid().compareTo(this.getClientDebt(mNaturalPerson)) > 0 ){
+				
+				//Reestablezco la lista Settlements
+				mNaturalPerson.setSettlements(mNaturalPerson.getSettlementListWithSurplus(this.getClientDebt(mNaturalPerson)));
+				
+				surplusSettlement = ((TreeSet<Settlement>) mNaturalPerson.getSettlements()).last();
+				
+				//Removemos el último elemento.
+				mNaturalPerson.getSettlements().remove(surplusSettlement);
+				
+				//Descuento los pagos del cliente
+				mNaturalPerson.discountSettlements();
+				
+				//Agrego el nuevo Settlement NO descontado a la person
+				mNaturalPerson.addSettlement(surplusSettlement);
+			}else{
+				//Descuento los pagos del cliente
+				mNaturalPerson.discountSettlements();
+			}
+			
 			//Cancelo la deuda del cliente
 			this.cancelClientDebt(mNaturalPerson);
-			//Descuento los pagos del cliente
-			mNaturalPerson.discountSettlements();
 		}
 		
 		mNaturalPerson = this.iNaturalPersonService.save(mNaturalPerson);
@@ -639,13 +678,13 @@ public class CommandAndQueries {
 		return mClientsList;
 	}
 	
-	/**
-	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
-	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
-	 * @param pClient el cliente del cual se quiere cancelar la deuda.
-	 * @throws BusinessException 
+	/***
+	 * Este método permite calcular la deuda de un cliente.
+	 * @param pClient
+	 * @return
+	 * @throws BusinessException
 	 */
-	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
+	public BigDecimal getClientDebt(Person pClient) throws BusinessException{
 		
 		
 		//Recupero las ventas adeudas del cliente.
@@ -666,7 +705,8 @@ public class CommandAndQueries {
 				BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
 						
 				//Obtengo el precio unitario actual del producto de la línea
-				BigDecimal bProductPrice = this.iProductService.get(bSaleLine.getProduct().getId()).getUnitPrice();
+				BigDecimal bProductPrice = this.iProductService.get(bSaleLine.getBatch().getProduct().getId()).getUnitPrice();
+
 						
 				//Sumo a la deuda la cantidad del producto por su precio unitario
 				mDebt = mDebt.add(bProductQuantity.multiply(bProductPrice));
@@ -684,6 +724,23 @@ public class CommandAndQueries {
 					
 		}
 				
+		return mDebt;
+	}
+	
+	/**
+	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
+	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
+	 * @param pClient el cliente del cual se quiere cancelar la deuda.
+	 * @throws BusinessException 
+	 */
+	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
+		
+		//Defino una variable para guardar la deuda total del cliente
+		BigDecimal mDebt = BigDecimal.ZERO;
+				
+		// Calculo la deuda total del cliente
+		mDebt = getClientDebt(pClient);
+			
 		//La deuda del cliente es menor o igual que los pagos hechos?
 		return (mDebt.compareTo(pClient.totalPaid()) == 1);
 	}
@@ -751,8 +808,8 @@ public class CommandAndQueries {
 			
 			if (pSaleDTO.getPerson() != null){
 				PersonDTO mPersonDTO = this.getPerson(pSaleDTO.getPerson());
-				Person mPerson 			= iMapper.map(mPersonDTO, Person.class);
-				Settlement mSettlement  = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
+				Person mPerson = iMapper.map(mPersonDTO, Person.class);
+				Settlement mSettlement = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
 				if(mSettlement.getDate() == null ) mSettlement.setDate(new Date());
 				
 				//Valido Settlement
@@ -769,13 +826,25 @@ public class CommandAndQueries {
 			for(SaleLineLiteDTO mSaleLineLiteDTO : pSaleDTO.getSaleLines()){
 				SaleLine mSaleLine  = iMapper.map(mSaleLineLiteDTO, SaleLine.class);
 				
-				ProductDTO mProductDTO = this.getProduct(mSaleLineLiteDTO.getProduct());
+				BatchDTO bBatchDTO = this.getBatch(mSaleLineLiteDTO.getBatch());
 				
-				mSaleLine.setProduct(iMapper.map(mProductDTO, Product.class));
+				Batch bBatch = iMapper.map(bBatchDTO, Batch.class);
+				
+				//Descuento el stock en el lote correspondiente 
+				BigDecimal bQuantity = BigDecimal.valueOf(mSaleLineLiteDTO.getQuantity());
+				BigDecimal bNewStock = bBatch.getStock().subtract(bQuantity);
+				if(bNewStock.compareTo(BigDecimal.ZERO) >= 0){
+					bBatch.setStock(bNewStock);
+				}else{
+					throw new BusinessException(CommandAndQueries.cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE + bBatch.getProduct().getName());
+				}
+				
+				mSaleLine.setBatch(bBatch);
 				
 				mSaleLineList.add(mSaleLine);
 			}
 			
+			mSale.setDate(new Date());
 			
 			mSale.setSaleLines(mSaleLineList);
 
@@ -787,6 +856,23 @@ public class CommandAndQueries {
 		mSale = this.iSaleService.save(mSale);
 		
 		return mSale.getId();
+	}
+	
+	/** Este método retorna las ventas asociadas a un cliente, que aún no han sido pagadas.
+	 * @param pClientId
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public List<SaleDTO> getDueSalesByClientId(Long pClientId) throws BusinessException {
+		
+		List<SaleDTO> mSaleDTOList 	= new ArrayList<SaleDTO>();
+		Iterable<Sale> mSale 		= this.iSaleService.getDueSalesByClientId(pClientId);
+		
+		for (Sale bSale : mSale){
+			mSaleDTOList.add(this.iMapper.map(bSale,SaleDTO.class));
+		}
+		
+		return mSaleDTOList;
 	}
 	
 	/**
@@ -833,8 +919,12 @@ public class CommandAndQueries {
 		
 	}
 
-	public Batch getBatch(Long pBatchId) throws BusinessException {
-		return this.iBatchService.get(pBatchId);
+
+	public BatchDTO getBatch(Long pBatchId) throws BusinessException {
+			
+		Batch mBatch = this.iBatchService.get(pBatchId);
+		
+		return this.iMapper.map(mBatch,BatchDTO.class);
 	}
 		
 	// FIN VENTAS

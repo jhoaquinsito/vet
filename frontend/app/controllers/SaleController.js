@@ -3,6 +3,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     $scope.action = $route.current.action;
     $scope.table = {};
     $scope.form = {};
+    $scope.form.searchProductModal = {};
 
     $scope.init = function() {
         switch ($scope.action) {
@@ -14,7 +15,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.resetFormData = function() {
         $scope.form.sale = {
-            invoiced: null, 
+            invoiced: false, 
             paied_out: null,
             person: null,
             saleLines: [],
@@ -93,20 +94,26 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-        ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
-            var newSaleLine = {};
-            var product = response.data;
+        if ($scope.form.productBatchCode != null){
+            ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
+                var newSaleLine = {};
+                var productForSale = response.data;
 
-            newSaleLine.product = product;
-            newSaleLine.quantity = 1;
-            newSaleLine.unit_price = product.unitPrice;
-            newSaleLine.discount = 0;
+                newSaleLine.batchId = productForSale.batchId;
+                newSaleLine.batchISODueDate = productForSale.batchISODueDate;
+                newSaleLine.unit_price = productForSale.unitPrice;
+                newSaleLine.productName = productForSale.name;
+                newSaleLine.productId = productForSale.id;
+                newSaleLine.productMeasureUnitAbbreviation = productForSale.measureUnitAbbreviation;
+                newSaleLine.quantity = 1;
+                newSaleLine.discount = 0;
 
-            $scope.form.sale.saleLines.push(newSaleLine);
-        });
+                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
+            });
 
-        // reset del productBatchCode que usó para buscar producto
-        $scope.form.productBatchCode = null;
+            // reset del productBatchCode que usó para buscar producto
+            $scope.form.productBatchCode = null;
+        }
     };
 
     $scope.calculateSaleTotal = function(){
@@ -121,8 +128,22 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         show: false
     });
 
-    $scope.showProductSearchModal = function(){
-        productSearchModal.$promise.then(productSearchModal.show);
+    $scope.showProductSearchModal = function(selectedProductId){
+        if (selectedProductId != null){
+            // cargo el producto
+            ProductService.getById(selectedProductId).then(function(response) {
+                var product = response.plain();
+
+                // pasar los sale lines al producto
+                $scope.form.searchProductModal.product = SaleService.populateProductWithSaleLineUnitsToSell(product, $scope.form.sale.saleLines);
+                // muestro 
+                productSearchModal.$promise.then(productSearchModal.show);
+            });
+
+        } else {
+            productSearchModal.$promise.then(productSearchModal.show);
+        }
+
     };
     
     $scope.hideProductSearchModal = function(){
@@ -134,16 +155,20 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     };
 
     $scope.acceptProductSearchModal = function(){
-        ProductService.getById($scope.form.searchProductModal.product).then(function(response) {
+        $scope.form.searchProductModal.product.batches.forEach(function(batch, index, batches){
+            // creo una sale line
             var newSaleLine = {};
-            var product = response.plain();
-
-            newSaleLine.product = product;
-            newSaleLine.quantity = 1;
-            newSaleLine.unit_price = product.unitPrice;
+            newSaleLine.batchId = batch.id;
+            newSaleLine.batchISODueDate = batch.isoDueDate;
+            newSaleLine.unit_price = $scope.form.searchProductModal.product.unitPrice;
+            newSaleLine.productName = $scope.form.searchProductModal.product.name;
+            newSaleLine.productId = $scope.form.searchProductModal.product.id;
+            newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
+            newSaleLine.quantity = batch.unitsToSell;
             newSaleLine.discount = 0;
-
-            $scope.form.sale.saleLines.push(newSaleLine);
+            
+            // actualizo la lista de salelines con la nueva sale line
+            $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
         });
 
         $scope.hideProductSearchModal();
@@ -151,10 +176,54 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         $scope.resetProductSearchModal();
     };
 
+    $scope.cancelProductSearchModal = function(){
+        $scope.hideProductSearchModal();
+        $scope.resetProductSearchModal();
+    };
+
     $scope.calculatePersonDebt = function(){
         // TODO analizar si corresponde calcular el saldo actual en el frontend o backend
         return 0;
     };
+
+    // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
+    $scope.isoDateToFormattedString = function(isoDate) {
+        var formattedString = null;
+
+        if (isoDate != null){
+            var isoDateString = isoDate.toString();
+        
+            // regex para formatear la fecha
+            var pattern = /(\d{4})(\d{2})(\d{2})/;
+            
+            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
+            formattedString = isoDateString.replace(pattern, '$1/$2/$3');
+        }
+
+        return formattedString;
+    }
+
+    $scope.addQuantitiesUp = function(productSaleLines){
+        var total = 0;
+        for (var i = 0; i < productSaleLines.length; i++) {
+            total = productSaleLines[i].quantity + total;
+        }
+        return total;
+    };
+
+    $scope.calculateProductSubtotal = function(productSaleLines){
+        return (productSaleLines[0].unit_price - productSaleLines[0].unit_price * productSaleLines[0].discount / 100) * $scope.addQuantitiesUp(productSaleLines);
+    }
+
+    $scope.initializeUnitsToSell = function(index){
+        if ($scope.form.searchProductModal.product.batches[index].unitsToSell == null){
+            $scope.form.searchProductModal.product.batches[index].unitsToSell = 0;
+        }
+    }
+
+    $scope.removeProductSaleLinesAcion = function(productIdToRemove){
+        $scope.form.sale.saleLines = SaleService.filterSaleLinesWithProductId($scope.form.sale.saleLines, productIdToRemove);
+    }
 
     $scope.init();
 });

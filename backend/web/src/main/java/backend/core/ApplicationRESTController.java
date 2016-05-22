@@ -21,6 +21,7 @@ import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
+import backend.product.ProductForSaleDTO;
 import backend.product.batch.BatchPrintDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
@@ -111,8 +112,8 @@ public class ApplicationRESTController {
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "product/bybatchcode/{batchCode}", method = RequestMethod.GET)
-	public ProductDTO getProductByBatchCode(@PathVariable String batchCode) throws BusinessException {
-		return this.iCommandAndQueries.getProductByBatchCode(batchCode);
+	public ProductForSaleDTO getProductByBatchCode(@PathVariable String batchCode) throws BusinessException {
+		return this.iCommandAndQueries.getProductForSaleByBatchCode(batchCode);
 	}
 	
 	/**
@@ -130,23 +131,6 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "products/byname/{name}", method = RequestMethod.GET)
 	public List<ProductDTO> getProductsByName(@PathVariable String name) throws BusinessException {
 		return this.iCommandAndQueries.getProductsByName(name);
-	}
-	
-	/**
-	 * Metodo API que permite recuperar una lista de Product 
-	 * especificando su Batch.barcode.
-	 * 
-	 * @param batchCode
-	 *            : Codigo de barras de la entidad buscada.
-	 * @return List<ProductDTO> : productos con "barcode" similar.
-	 * @throws BusinessException
-	 *             : Excepcion de negocio,.
-	 * @throws Exception
-	 *             : Excepcion de negocio, manejada por: handleBusinessException
-	 */
-	@RequestMapping(value = "products/bybatchcode/{batchCode}", method = RequestMethod.GET)
-	public List<ProductDTO> getProductsByBatchCode(@PathVariable String batchCode) throws BusinessException {
-		return this.iCommandAndQueries.getProductsByBatchCode(batchCode);
 	}
 
 	/**
@@ -487,6 +471,22 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "sale/{id}", method = RequestMethod.GET)
 	public SaleDTO getSaleById(@PathVariable Long id) throws BusinessException {
 		return this.iCommandAndQueries.getSale(id);
+	}
+	
+	
+	/**
+	 * Metodo API que permite recuperar la lista de las distintas 
+	 * ventas (SALE).
+	 * 
+	 * @return List<SaleDTO>
+	 * 							: Lista de ventas completa
+	 * @throws BusinessException 
+	 * 							: Excepcion de negocio, manejada por: handleBusinessException
+	 */
+	@RequestMapping(value = "duesales/{clientId}", method = RequestMethod.GET)
+	public @ResponseBody List<SaleDTO> getDueSalesByClientId(@PathVariable Long clientId) throws BusinessException {
+
+		return this.iCommandAndQueries.getDueSalesByClientId(clientId);
 	}
 	
 	/**

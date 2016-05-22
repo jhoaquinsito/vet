@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,9 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import backend.exception.BusinessException;
@@ -58,9 +63,8 @@ public class Batch {
 	@Column(name = "iso_due_date")
 	private Integer iIsoDueDate;
 
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "product")
+	@ManyToOne(fetch=FetchType.EAGER)  
+    @JoinColumn(name = "product")
 	private Product iProduct;
 
 
@@ -88,6 +92,14 @@ public class Batch {
 		this.iId = pId;
 	}
 	
+	public Product getProduct() {
+		return iProduct;
+	}
+
+	public void setProduct(Product pProduct) {
+		this.iProduct = pProduct;
+	}
+
 	/**
 	 * Método que devuelve la fecha en formato Date a partir de la fecha ISO del lote.
 	 * @return fecha en formato Date
@@ -109,23 +121,21 @@ public class Batch {
 		
 		return mDueDate;
 	}
-
-	/*
-	public void setProduct(Product pProduct) {
-		this.iProduct = pProduct;
-	}
-	*/
-	/**
-	 * Este metodo devuelve el <code>Codigo de Barras</code> de un <strong> Batch </strong>
-	 * @return
-	 */
-	public String getCode(){
-		String code = String.valueOf(this.getId()+ 10000)  + String.valueOf(this.getIsoDueDate());
-		return code;
-	}
 	
-	public void setProduct(Product pProduct){
-		this.iProduct = pProduct;
+	/**
+	 * Método que verifica si la fecha de vencimiento del lote es igual a una fecha de vencimiento dada.
+	 * @param pISODueDate fecha de vencimiento a comparar
+	 * @return true si es igual, falso si son distintas
+	 */
+	public boolean hasISODueDate(Integer pISODueDate){
+		
+		if (pISODueDate == null){
+			return (this.getIsoDueDate() == null);
+		} else if (this.getIsoDueDate() != null && this.getIsoDueDate().compareTo(pISODueDate) == 0) { // compare integer returns 0 if equals
+			return true;
+		}
+		
+		return false;
 	}
 
 }

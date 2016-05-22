@@ -50,13 +50,6 @@ app.config(function($routeProvider) {
         action: 'client.detail'
     });
 
-    //dashboard
-    $routeProvider.when('/dashboard', {
-        controller: 'DashboardController',
-        templateUrl: 'app/views/dashboard/show-view.html',
-        action: 'dashboard.show'
-    });
-
     //productos
     $routeProvider.when('/products', {
         controller: 'ProductController',
@@ -114,6 +107,13 @@ app.config(function($routeProvider) {
         action: 'sale.add'
     });
 
+	  //pagos - cuenta corriente
+    $routeProvider.when('/settlements', {
+        controller: 'SettlementController',
+        templateUrl: 'app/views/settlement/form-view.html',
+        action: 'settlement.detail'
+    });
+	
     //ruta no encontrada
-    $routeProvider.otherwise({redirectTo: '/dashboard'});
+    $routeProvider.otherwise({redirectTo: '/sales'});
 });
