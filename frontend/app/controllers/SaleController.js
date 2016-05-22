@@ -221,5 +221,9 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         }
     }
 
+    $scope.removeProductSaleLinesAcion = function(productIdToRemove){
+        $scope.form.sale.saleLines = SaleService.filterSaleLinesWithProductId($scope.form.sale.saleLines, productIdToRemove);
+    }
+
     $scope.init();
 });

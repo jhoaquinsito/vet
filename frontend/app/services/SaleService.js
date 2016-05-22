@@ -119,5 +119,17 @@ app.factory('SaleService', function(Restangular) {
         return -1;
     };
 
+    this.filterSaleLinesWithProductId = function(listOfSaleLines, productIdToRemove){
+        var filteredList = [];
+
+        for (var i = 0; i < listOfSaleLines.length; i++) {
+            if (listOfSaleLines[i].productId != productIdToRemove) {
+                filteredList.push(listOfSaleLines[i]);
+            }
+        }
+
+        return filteredList;
+    };
+
     return this;
 });
