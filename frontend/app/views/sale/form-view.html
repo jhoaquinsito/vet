@@ -39,7 +39,7 @@
                             <td class="table-cell-input">${{saleLine.unit_price | number: 2}}</td>
                             <td class="table-cell-input">
                                 <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.productId].$dirty && saleForm['discount-' + saleLine.productId].$error.required}">
-                                    <input type="number" class="form-control" name="discount-{{saleLine.productId}}" ng-model="saleLine.discount" required>
+                                    <input type="number" class="form-control text-right" name="discount-{{saleLine.productId}}" ng-model="saleLine.discount" required>
                                 </div>
                             </td>
                             <td class="table-cell-input text-right">${{(saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity | number: 2}}</td>
