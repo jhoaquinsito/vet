@@ -14,8 +14,6 @@ import javax.print.PrintException;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
-
-import backend.core.CommandAndQueries;
 import backend.exception.BusinessException;
 import backend.person.PersonDTO;
 import backend.product.BatchCodeGenerator;

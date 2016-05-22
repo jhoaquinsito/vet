@@ -4,17 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
-import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
-import backend.product.drug.DrugService;
 import backend.product.measure_unit.MeasureUnit;
 import backend.product.measure_unit.MeasureUnitRepository;
 import backend.product.measure_unit.MeasureUnitService;

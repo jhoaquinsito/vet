@@ -5,16 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
-import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
-import backend.sale.SaleCons;
 import backend.utils.EntityValidator;
 
 /**

@@ -2,29 +2,18 @@ package backend.product;
 
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
-
-import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
-import backend.person.children.legal_person.LegalPersonService;
-import backend.product.batch.Batch;
 import backend.utils.EntityValidator;
 
 
-// TODO revisar si no hay que usar inyección de dependencias acá o
-// bien aplicar Singleton pattern
 /**
  * Un <code>ProductService</code> representa un conjunto de servicios relacionados a <code>Product</code>.
  * 

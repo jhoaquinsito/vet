@@ -1,20 +1,11 @@
 package backend.person.children.legal_person;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
-import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
-import backend.person.children.natural_person.NaturalPersonService;
-import backend.product.Product;
-import backend.product.batch.Batch;
 import backend.utils.EntityValidator;
 
 @Service
@@ -78,6 +69,7 @@ public class LegalPersonService {
 	public LegalPerson save(LegalPerson pLegalPersonToSave) throws BusinessException {
 		// verifico que la persona legal que se intenta guardar no esté eliminada
 		// o que traiga un identificador que no existe
+		// TODO refactor esto:
 		LegalPerson mStoredLegalPerson;
 		if (pLegalPersonToSave.getId() != null){
 			 mStoredLegalPerson = this.iLegalPersonRepository.findOne(pLegalPersonToSave.getId());

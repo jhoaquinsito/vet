@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import backend.person.PersonConsts;
 
 // TODO documentar
 @Entity

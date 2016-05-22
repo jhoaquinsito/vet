@@ -1,8 +1,6 @@
 package backend.saleline;
 
-import backend.product.ProductDTO;
 import backend.product.batch.BatchDTO;
-import backend.sale.SaleDTO;
 
 public class SaleLineDTO {
 

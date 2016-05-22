@@ -2,7 +2,6 @@ package backend.product;
 
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,9 +28,7 @@ import javax.validation.constraints.Size;
 import org.springframework.data.domain.Persistable;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import backend.person.children.legal_person.LegalPerson;
 import backend.product.batch.Batch;
 import backend.product.category.Category;

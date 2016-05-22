@@ -1,6 +1,5 @@
 package backend.product.drug;
 
-import javax.inject.Singleton;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,17 +1,11 @@
 package backend.person;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import backend.person.city.CityDTO;
 import backend.person.iva_category.IVACategoryDTO;
-import backend.person.settlement.Settlement;
 import backend.person.settlement.SettlementDTO;
-import backend.sale.SaleDTO;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class PersonDTO  {

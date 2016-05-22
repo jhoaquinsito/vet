@@ -3,16 +3,11 @@ package backend.sale;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
-import backend.core.ApplicationConfiguration;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
 import backend.product.Product;
@@ -22,8 +17,7 @@ import backend.sale.SaleService;
 import backend.saleline.SaleLine;
 import backend.utils.EntityValidator;
 
-//TODO revisar si no hay que usar inyección de dependencias acá o
-//bien aplicar Singleton pattern
+
 /**
 * Un <code>SaleService</code> representa un conjunto de servicios relacionados a <code>Sale</code>.
 * 
