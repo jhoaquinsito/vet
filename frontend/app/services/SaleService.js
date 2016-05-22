@@ -50,12 +50,12 @@ app.factory('SaleService', function(Restangular) {
     this.updateSaleLinesWithNewSaleLine = function(listOfSaleLines, newSaleLine){
 
         // intento obtener el indice del batch en la lista de sale lines
-        var updatedBatchIndex = arrayGetIndexOfId(listOfSaleLines, newSaleLine.batchId);
+        var updatedBatchIndex = arrayGetIndexOfBatchId(listOfSaleLines, newSaleLine.batchId);
 
         // si existe en la lista
         if (updatedBatchIndex > -1){
             //sumo 1 a la cantidad
-            listOfSaleLines[updatedBatchIndex].quantity = listOfSaleLines[updatedBatchIndex].quantity + 1;
+            listOfSaleLines[updatedBatchIndex].quantity = listOfSaleLines[updatedBatchIndex].quantity + newSaleLine.quantity;
         } else { // si no existe en la lista
             //agrego el batch a la lista
             listOfSaleLines.push(newSaleLine);
@@ -65,9 +65,37 @@ app.factory('SaleService', function(Restangular) {
         return listOfSaleLines;
     }
 
-    function arrayGetIndexOfId(array, id) {
+    function arrayGetIndexOfBatchId(array, id) {
         for (var i = 0; i < array.length; i++) {
             if (array[i].batchId === id) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    // funcion que agrega los datos de las unidades a vender a los lotes de un producto
+    this.populateProductWithSaleLineUnitsToSell = function(product, saleLines){
+        for (var i = 0; i < saleLines.length; i++){
+            // intento obtener el indice del batch en los batches del producto
+            var batchToPopulateIndex = arrayGetIndexOfId(product.batches, saleLines[i].batchId);
+
+            // si existe en la lista
+            if (batchToPopulateIndex > -1){
+                //sumo 1 a la cantidad
+                product.batches[batchToPopulateIndex].unitsToSell = saleLines[i].quantity;
+            } else { // si no existe en la lista
+                // TODO error
+            }
+
+        }
+
+        return product;
+    }
+
+    function arrayGetIndexOfId(array, id) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].id === id) {
                 return i;
             }
         }

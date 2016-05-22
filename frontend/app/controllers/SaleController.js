@@ -125,8 +125,22 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         show: false
     });
 
-    $scope.showProductSearchModal = function(){
-        productSearchModal.$promise.then(productSearchModal.show);
+    $scope.showProductSearchModal = function(selectedProductId){
+        if (selectedProductId != null){
+            // cargo el producto
+            ProductService.getById(selectedProductId).then(function(response) {
+                var product = response.plain();
+
+                // pasar los sale lines al producto
+                $scope.form.searchProductModal.product = SaleService.populateProductWithSaleLineUnitsToSell(product, $scope.form.sale.saleLines);
+                // muestro 
+                productSearchModal.$promise.then(productSearchModal.show);
+            });
+
+        } else {
+            productSearchModal.$promise.then(productSearchModal.show);
+        }
+
     };
     
     $scope.hideProductSearchModal = function(){
@@ -149,7 +163,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
                 newSaleLine.productName = $scope.form.searchProductModal.product.name;
                 newSaleLine.productId = $scope.form.searchProductModal.product.id;
                 newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
-                newSaleLine.quantity = 1;
+                newSaleLine.quantity = batch.unitsToSell;
                 newSaleLine.discount = 0;
                 
                 // agrego una sale line
@@ -171,6 +185,23 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         // TODO analizar si corresponde calcular el saldo actual en el frontend o backend
         return 0;
     };
+
+    // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
+    $scope.isoDateToFormattedString = function(isoDate) {
+        var formattedString = null;
+
+        if (isoDate != null){
+            var isoDateString = isoDate.toString();
+        
+            // regex para formatear la fecha
+            var pattern = /(\d{4})(\d{2})(\d{2})/;
+            
+            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
+            formattedString = isoDateString.replace(pattern, '$1/$2/$3');
+        }
+
+        return formattedString;
+    }
 
     $scope.init();
 });

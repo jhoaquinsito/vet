@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal()"><i class="fa fa-search"></i> Buscar producto</button>
+                    <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal(null)"><i class="fa fa-search"></i> Buscar producto</button>
                 </div>
             </div>
             <div class="row">
@@ -37,7 +37,10 @@
                         </tr>
                         <tr ng-repeat="saleLine in form.sale.saleLines">
                             <td class="table-cell-input">{{saleLine.productName}}</td>
-                            <td class="table-cell-input">{{saleLine.quantity + ' ' + saleLine.productMeasureUnitAbbreviation}}</td>
+                            <td class="table-cell-input">
+                                {{saleLine.quantity + ' ' + saleLine.productMeasureUnitAbbreviation}}
+                                <button ng-click="showProductSearchModal(saleLine.productId)" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></button>
+                            </td>
                             <td class="table-cell-input">${{saleLine.unit_price | number: 2}}</td>
                             <td class="table-cell-input">
                                 <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.productId].$dirty && saleForm['discount-' + saleLine.productId].$error.required}">

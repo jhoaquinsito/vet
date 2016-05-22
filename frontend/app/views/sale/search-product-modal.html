@@ -30,7 +30,7 @@
                             <tr ng-repeat="batch in form.searchProductModal.product.batches">
                                 <td class="table-cell-input">
                                     <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
-                                    <span ng-if="batch.isoDueDate != null">{{batch.isoDueDate}}</span>
+                                    <span ng-if="batch.isoDueDate != null">{{isoDateToFormattedString(batch.isoDueDate)}}</span>
                                 </td>
                                 <td class="table-cell-input">{{ batch.stock + ' ' + form.searchProductModal.product.measureUnit.abbreviation }}</td>
                                 <td class="table-cell-input">
