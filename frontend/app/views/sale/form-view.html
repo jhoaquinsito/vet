@@ -29,15 +29,13 @@
                         <tr>
                             <th class="col-xs-4">Producto</th>
                             <th class="col-xs-1">Cantidad</th>
-                            <th></th>
                             <th class="col-xs-2 col-xs-offset-1">Precio</th>
                             <th class="col-xs-1">Descuento (%)</th>
                             <th class="col-xs-2 col-xs-offset-1 text-right">Sub-total</th>
                         </tr>
                         <tr ng-repeat="saleLine in form.sale.saleLines">
                             <td class="table-cell-input">{{saleLine.productName}}</td>
-                            <td class="table-cell-input">{{saleLine.quantity}}</td>
-                            <td class="table-cell-input">{{saleLine.productMeasureUnitAbbreviation}}</td>
+                            <td class="table-cell-input">{{saleLine.quantity + ' ' + saleLine.productMeasureUnitAbbreviation}}</td>
                             <td class="table-cell-input">${{saleLine.unit_price | number: 2}}</td>
                             <td class="table-cell-input">
                                 <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.productId].$dirty && saleForm['discount-' + saleLine.productId].$error.required}">
