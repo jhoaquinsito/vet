@@ -29,6 +29,7 @@ import backend.person.settlement.Settlement;
 import backend.product.BatchCodeGenerator;
 import backend.product.Product;
 import backend.product.ProductDTO;
+import backend.product.ProductForSaleDTO;
 import backend.product.ProductService;
 import backend.product.batch.Batch;
 import backend.product.batch.BatchDTO;
@@ -188,20 +189,32 @@ public class CommandAndQueries {
 	
 	/**
 	 * Este método es una consulta que obtiene un producto a partir de
-	 * un código de lote.
-	 * @param pProductBatchCode un código de lote
-	 * @return mProductDTO producto asociado al código de lote
+	 * un código de lote seleccionado para la venta.
+	 * @param pProductBatchCode un código de lote seleccionado para la venta
+	 * @return mProductForSaleDTO producto a vender
 	 * @throws BusinessException
 	 */
-	public ProductDTO getProductByBatchCode(String pProductBatchCode) throws BusinessException{
+	public ProductForSaleDTO getProductForSaleByBatchCode(String pSelectedProductBatchCode) throws BusinessException{
 		
-		Long mProductId = BatchCodeGenerator.getProductId(pProductBatchCode);
+		Long mProductForSaleId = BatchCodeGenerator.getProductId(pSelectedProductBatchCode);
 		
-		Product mProduct = this.iProductService.get(mProductId);
+		Integer mSelectedBatchISODueDate = BatchCodeGenerator.getBatchISODueDate(pSelectedProductBatchCode);
 		
-		ProductDTO mProductDTO = this.iMapper.map(mProduct, ProductDTO.class);
+		Product mProduct = this.iProductService.get(mProductForSaleId);
 		
-		return mProductDTO;
+		ProductForSaleDTO mProductForSaleDTO = this.iMapper.map(mProduct, ProductForSaleDTO.class);
+		
+		Batch mBatchToSale = mProduct.getBatcheByISODueDate(mSelectedBatchISODueDate);
+		
+		if (mBatchToSale != null && mBatchToSale.getId()!= null){
+			mProductForSaleDTO.setBatchId(mBatchToSale.getId());
+		} else {
+			throw new BusinessException("El lote a vender no existe en el producto.");
+		}
+		
+		mProductForSaleDTO.setBatchIsoDueDate(mSelectedBatchISODueDate);
+		
+		return mProductForSaleDTO;
 	}
 	
 	/**

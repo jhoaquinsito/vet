@@ -21,6 +21,7 @@ import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
+import backend.product.ProductForSaleDTO;
 import backend.product.batch.BatchPrintDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
@@ -101,8 +102,8 @@ public class ApplicationRESTController {
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "product/bybatchcode/{batchCode}", method = RequestMethod.GET)
-	public ProductDTO getProductByBatchCode(@PathVariable String batchCode) throws BusinessException {
-		return this.iCommandAndQueries.getProductByBatchCode(batchCode);
+	public ProductForSaleDTO getProductByBatchCode(@PathVariable String batchCode) throws BusinessException {
+		return this.iCommandAndQueries.getProductForSaleByBatchCode(batchCode);
 	}
 	
 	/**
