@@ -138,20 +138,32 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     };
 
     $scope.acceptProductSearchModal = function(){
-        ProductService.getById($scope.form.searchProductModal.product).then(function(response) {
-            var newSaleLine = {};
-            var product = response.plain();
-
-            newSaleLine.product = product;
-            newSaleLine.quantity = 1;
-            newSaleLine.unit_price = product.unitPrice;
-            newSaleLine.discount = 0;
-
-            $scope.form.sale.saleLines.push(newSaleLine);
+        // para cada batch que tiene cant a vender > 0
+        $scope.form.searchProductModal.product.batches.forEach(function(batch, index, batches){
+            if (batch.unitsToSell > 0){
+                // creo una sale line
+                var newSaleLine = {};
+                newSaleLine.batchId = batch.id;
+                newSaleLine.batchISODueDate = batch.isoDueDate;
+                newSaleLine.unit_price = $scope.form.searchProductModal.product.unitPrice;
+                newSaleLine.productName = $scope.form.searchProductModal.product.name;
+                newSaleLine.productId = $scope.form.searchProductModal.product.id;
+                newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
+                newSaleLine.quantity = 1;
+                newSaleLine.discount = 0;
+                
+                // agrego una sale line
+                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
+            }
         });
 
         $scope.hideProductSearchModal();
 
+        $scope.resetProductSearchModal();
+    };
+
+    $scope.cancelProductSearchModal = function(){
+        $scope.hideProductSearchModal();
         $scope.resetProductSearchModal();
     };
 

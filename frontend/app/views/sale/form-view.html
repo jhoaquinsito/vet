@@ -11,16 +11,18 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
+                    <label class="control-label">Agregar producto</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
                     <div class="form-group form-group-sm">
-                        <label class="control-label">Agregar producto</label>
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()" placeholder="Ingrese el código del producto">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal()"><i class="fa fa-search"></i></button>
-                            </span>
-                        </div>
+                        <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()" placeholder="Ingrese el código del producto">
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal()"><i class="fa fa-search"></i> Buscar producto</button>
                 </div>
             </div>
             <div class="row">
