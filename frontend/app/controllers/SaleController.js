@@ -93,24 +93,26 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-        ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
-            var newSaleLine = {};
-            var productForSale = response.data;
+        if ($scope.form.productBatchCode != null){
+            ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
+                var newSaleLine = {};
+                var productForSale = response.data;
 
-            newSaleLine.batchId = productForSale.batchId;
-            newSaleLine.batchISODueDate = productForSale.batchISODueDate;
-            newSaleLine.unit_price = productForSale.unitPrice;
-            newSaleLine.productName = productForSale.name;
-            newSaleLine.productId = productForSale.id;
-            newSaleLine.productMeasureUnitAbbreviation = productForSale.measureUnitAbbreviation;
-            newSaleLine.quantity = 1;
-            newSaleLine.discount = 0;
+                newSaleLine.batchId = productForSale.batchId;
+                newSaleLine.batchISODueDate = productForSale.batchISODueDate;
+                newSaleLine.unit_price = productForSale.unitPrice;
+                newSaleLine.productName = productForSale.name;
+                newSaleLine.productId = productForSale.id;
+                newSaleLine.productMeasureUnitAbbreviation = productForSale.measureUnitAbbreviation;
+                newSaleLine.quantity = 1;
+                newSaleLine.discount = 0;
 
-            $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
-        });
+                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
+            });
 
-        // reset del productBatchCode que usó para buscar producto
-        $scope.form.productBatchCode = null;
+            // reset del productBatchCode que usó para buscar producto
+            $scope.form.productBatchCode = null;
+        }
     };
 
     $scope.calculateSaleTotal = function(){
@@ -201,6 +203,18 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         }
 
         return formattedString;
+    }
+
+    $scope.addQuantitiesUp = function(productSaleLines){
+        var total = 0;
+        for (var i = 0; i < productSaleLines.length; i++) {
+            total = productSaleLines[i].quantity + total;
+        }
+        return total;
+    };
+
+    $scope.calculateProductSubtotal = function(productSaleLines){
+        return (productSaleLines[0].unit_price - productSaleLines[0].unit_price * productSaleLines[0].discount / 100) * $scope.addQuantitiesUp(productSaleLines);
     }
 
     $scope.init();
