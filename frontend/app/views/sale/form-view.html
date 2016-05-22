@@ -15,7 +15,7 @@
                     <div class="form-group form-group-sm">
                         <label class="control-label">Agregar producto</label>
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()" placeholder="Ingrese el código de producto">
+                            <input type="text" class="form-control" name="product" onkeypress="return this.value.length < 100" ng-model="form.productBatchCode" ng-keyup="addSaleLineAction()" placeholder="Ingrese el código del producto">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-sm btn-info" ng-click="showProductSearchModal()"><i class="fa fa-search"></i></button>
                             </span>
@@ -35,17 +35,13 @@
                             <th class="col-xs-2 col-xs-offset-1 text-right">Sub-total</th>
                         </tr>
                         <tr ng-repeat="saleLine in form.sale.saleLines">
-                            <td class="table-cell-input">{{saleLine.product.name}}</td>
-                            <td class="table-cell-input">
-                                <div class="form-group" ng-class="{'has-error': saleForm['quantity-' + saleLine.product.id].$dirty && saleForm['quantity-' + saleLine.product.id].$error.required}">
-                                    <input type="number" class="form-control" name="quantity-{{saleLine.product.id}}" ng-model="saleLine.quantity" required>
-                                </div>
-                            </td>
-                            <td class="table-cell-input">{{saleLine.product.measureUnit.abbreviation}}</td>
+                            <td class="table-cell-input">{{saleLine.productName}}</td>
+                            <td class="table-cell-input">{{saleLine.quantity}}</td>
+                            <td class="table-cell-input">{{saleLine.productMeasureUnitAbbreviation}}</td>
                             <td class="table-cell-input">${{saleLine.unit_price | number: 2}}</td>
                             <td class="table-cell-input">
-                                <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.product.id].$dirty && saleForm['discount-' + saleLine.product.id].$error.required}">
-                                    <input type="number" class="form-control" name="discount-{{saleLine.product.id}}" ng-model="saleLine.discount" required>
+                                <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.productId].$dirty && saleForm['discount-' + saleLine.productId].$error.required}">
+                                    <input type="number" class="form-control" name="discount-{{saleLine.productId}}" ng-model="saleLine.discount" required>
                                 </div>
                             </td>
                             <td class="table-cell-input text-right">${{(saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity | number: 2}}</td>

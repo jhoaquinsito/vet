@@ -14,9 +14,9 @@ app.factory('SaleService', function(Restangular) {
         // funcion imprimir desactivada
         sale.invoiced = false;
 
-        // hago que solo mande los id de los productos
+        // hago que solo mande los id de los batches
         sale.saleLines.forEach(function(saleLine, index, saleLines){
-            saleLines[index].product = saleLine.product.id;
+            saleLines[index].batch = saleLine.batchId;
         });
 
         return service.post(sale);

@@ -95,11 +95,15 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
         ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
             var newSaleLine = {};
-            var product = response.data;
+            var productForSale = response.data;
 
-            newSaleLine.product = product;
+            newSaleLine.batchId = productForSale.batchId;
+            newSaleLine.batchISODueDate = productForSale.batchISODueDate;
+            newSaleLine.unit_price = productForSale.unitPrice;
+            newSaleLine.productName = productForSale.name;
+            newSaleLine.productId = productForSale.id;
+            newSaleLine.productMeasureUnitAbbreviation = productForSale.measureUnitAbbreviation;
             newSaleLine.quantity = 1;
-            newSaleLine.unit_price = product.unitPrice;
             newSaleLine.discount = 0;
 
             $scope.form.sale.saleLines.push(newSaleLine);
