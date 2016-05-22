@@ -106,7 +106,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             newSaleLine.quantity = 1;
             newSaleLine.discount = 0;
 
-            $scope.form.sale.saleLines.push(newSaleLine);
+            $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
         });
 
         // reset del productBatchCode que usó para buscar producto
