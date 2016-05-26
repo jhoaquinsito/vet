@@ -27,21 +27,22 @@
                                 <th class="col-xs-3">Stock</th>
                                 <th class="col-xs-3">Cant. a vender</th>
                             </tr>
-                            <tr ng-repeat="batch in form.searchProductModal.product.batches">
+                            <tr ng-repeat="batch in form.searchProductModal.product.batches | filter: hasStock">
                                 <td class="table-cell-input">
                                     <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
                                     <span ng-if="batch.isoDueDate != null">{{isoDateToFormattedString(batch.isoDueDate)}}</span>
                                 </td>
                                 <td class="table-cell-input">{{ batch.stock + ' ' + form.searchProductModal.product.measureUnit.abbreviation }}</td>
                                 <td class="table-cell-input">
-                                    <input type="number" class="form-control text-right" name="discount-{{batch.id}}" ng-model="form.searchProductModal.product.batches[$index].unitsToSell" ng-init="initializeUnitsToSell($index)">
+                                    <!-- La regex prueba que solo se ingresen dígitos. -->
+                                    <input type="number" class="form-control text-right" name="discount-{{batch.id}}" ng-model="form.searchProductModal.product.batches[$index].unitsToSell" ng-init="initializeUnitsToSell($index)" min="0" onkeypress="return /^\d*$/.test(this.value+String.fromCharCode(event.charCode))">
                                 </td>
                             </tr>
-                            <tr ng-if="form.searchProductModal.product.batches.length == 0">
-                                <td colspan="5" class="table-cell-empty">El producto que seleccionaste no tiene lotes con stock disponible.</td>
+                            <tr ng-if="(form.searchProductModal.product.batches != null) && (!hasAvailableBatches())">
+                                <td colspan="5" class="table-cell-empty">El producto que seleccionó no tiene lotes con stock disponible.</td>
                             </tr>
                             <tr ng-if="form.searchProductModal.product == null">
-                                <td colspan="5" class="table-cell-empty">Seleccioná un producto para elegir la cantidad de cada lote a vender.</td>
+                                <td colspan="5" class="table-cell-empty">Seleccione un producto para elegir la cantidad de cada lote a vender.</td>
                             </tr>
                         </table>
                     </div>

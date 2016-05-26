@@ -156,19 +156,21 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.acceptProductSearchModal = function(){
         $scope.form.searchProductModal.product.batches.forEach(function(batch, index, batches){
-            // creo una sale line
-            var newSaleLine = {};
-            newSaleLine.batchId = batch.id;
-            newSaleLine.batchISODueDate = batch.isoDueDate;
-            newSaleLine.unit_price = $scope.form.searchProductModal.product.unitPrice;
-            newSaleLine.productName = $scope.form.searchProductModal.product.name;
-            newSaleLine.productId = $scope.form.searchProductModal.product.id;
-            newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
-            newSaleLine.quantity = batch.unitsToSell;
-            newSaleLine.discount = 0;
-            
-            // actualizo la lista de salelines con la nueva sale line
-            $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
+            if (batch.unitsToSell != undefined){
+                // creo una sale line
+                var newSaleLine = {};
+                newSaleLine.batchId = batch.id;
+                newSaleLine.batchISODueDate = batch.isoDueDate;
+                newSaleLine.unit_price = $scope.form.searchProductModal.product.unitPrice;
+                newSaleLine.productName = $scope.form.searchProductModal.product.name;
+                newSaleLine.productId = $scope.form.searchProductModal.product.id;
+                newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
+                newSaleLine.quantity = batch.unitsToSell;
+                newSaleLine.discount = 0;
+                
+                // actualizo la lista de salelines con la nueva sale line
+                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
+            }
         });
 
         $scope.hideProductSearchModal();
@@ -223,6 +225,21 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.removeProductSaleLinesAcion = function(productIdToRemove){
         $scope.form.sale.saleLines = SaleService.filterSaleLinesWithProductId($scope.form.sale.saleLines, productIdToRemove);
+    }
+
+    $scope.hasStock = function(item){
+        return item.stock > 0;
+    }
+
+    $scope.hasAvailableBatches = function(){
+        for (var i= 0; i < $scope.form.searchProductModal.product.batches.length; i++){
+            // si el lote tiene más de 0 de stock, entonces el lote tiene batches disponibles
+            if ($scope.form.searchProductModal.product.batches[i].stock > 0){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     $scope.init();
