@@ -15,7 +15,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.resetFormData = function() {
         $scope.form.sale = {
-            invoiced: false, 
+            invoiced: false,
             paied_out: null,
             person: null,
             saleLines: [],
@@ -41,13 +41,13 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-        
+
 
         var request = SaleService.save($scope.form.sale);
 
         request.success = function(response) {
             MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'success', 'female'), 'success');
-            
+
             $scope.resetFormData();
 
             $location.path('sales');
@@ -73,7 +73,13 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.refreshFormDropdownsData = function() {
         ClientService.getList().then(function(response) {
-            $scope.form.clients = response.plain();
+            var clients = response.plain();
+
+            clients.forEach(function(client) {
+                client.fullName = client.name + (client.lastName ? ' ' + client.lastName : '');
+            });
+
+            $scope.form.clients = clients;
         });
 
         ProductService.getList().then(function(response) {
@@ -86,7 +92,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
         $scope.form.paiedOutOptions = SaleService.getPaiedOutOptions();
         $scope.form.sale.paied_out = $scope.form.paiedOutOptions[0].value;
-        
+
     };
 
     $scope.addSaleLineAction = function() {
@@ -94,7 +100,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-        if ($scope.form.productBatchCode != null){
+        if ($scope.form.productBatchCode != null) {
             ProductService.getByBatchCode($scope.form.productBatchCode).then(function(response) {
                 var newSaleLine = {};
                 var productForSale = response.data;
@@ -108,7 +114,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
                 newSaleLine.quantity = 1;
                 newSaleLine.discount = 0;
 
-                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
+                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines, newSaleLine);
             });
 
             // reset del productBatchCode que usó para buscar producto
@@ -116,7 +122,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         }
     };
 
-    $scope.calculateSaleTotal = function(){
+    $scope.calculateSaleTotal = function() {
         return SaleService.calculateSaleTotal($scope.form.sale);
     };
 
@@ -128,8 +134,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         show: false
     });
 
-    $scope.showProductSearchModal = function(selectedProductId){
-        if (selectedProductId != null){
+    $scope.showProductSearchModal = function(selectedProductId) {
+        if (selectedProductId != null) {
             // cargo el producto
             ProductService.getById(selectedProductId).then(function(response) {
                 var product = response.plain();
@@ -145,18 +151,18 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         }
 
     };
-    
-    $scope.hideProductSearchModal = function(){
+
+    $scope.hideProductSearchModal = function() {
         productSearchModal.$promise.then(productSearchModal.hide);
     };
-    
-    $scope.resetProductSearchModal = function(){
+
+    $scope.resetProductSearchModal = function() {
         $scope.form.searchProductModal.product = null;
     };
 
-    $scope.acceptProductSearchModal = function(){
-        $scope.form.searchProductModal.product.batches.forEach(function(batch, index, batches){
-            if (batch.unitsToSell != undefined){
+    $scope.acceptProductSearchModal = function() {
+        $scope.form.searchProductModal.product.batches.forEach(function(batch, index, batches) {
+            if (batch.unitsToSell != undefined) {
                 // creo una sale line
                 var newSaleLine = {};
                 newSaleLine.batchId = batch.id;
@@ -167,9 +173,9 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
                 newSaleLine.productMeasureUnitAbbreviation = $scope.form.searchProductModal.product.measureUnit.abbreviation;
                 newSaleLine.quantity = batch.unitsToSell;
                 newSaleLine.discount = 0;
-                
+
                 // actualizo la lista de salelines con la nueva sale line
-                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines,newSaleLine);
+                $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines, newSaleLine);
             }
         });
 
@@ -178,12 +184,12 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         $scope.resetProductSearchModal();
     };
 
-    $scope.cancelProductSearchModal = function(){
+    $scope.cancelProductSearchModal = function() {
         $scope.hideProductSearchModal();
         $scope.resetProductSearchModal();
     };
 
-    $scope.calculatePersonDebt = function(){
+    $scope.calculatePersonDebt = function() {
         // TODO analizar si corresponde calcular el saldo actual en el frontend o backend
         return 0;
     };
@@ -192,20 +198,20 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     $scope.isoDateToFormattedString = function(isoDate) {
         var formattedString = null;
 
-        if (isoDate != null){
+        if (isoDate != null) {
             var isoDateString = isoDate.toString();
-        
+
             // regex para formatear la fecha
             var pattern = /(\d{4})(\d{2})(\d{2})/;
-            
+
             // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
             formattedString = isoDateString.replace(pattern, '$1/$2/$3');
         }
 
         return formattedString;
-    }
+    };
 
-    $scope.addQuantitiesUp = function(productSaleLines){
+    $scope.addQuantitiesUp = function(productSaleLines) {
         var total = 0;
         for (var i = 0; i < productSaleLines.length; i++) {
             total = productSaleLines[i].quantity + total;
@@ -213,34 +219,34 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         return total;
     };
 
-    $scope.calculateProductSubtotal = function(productSaleLines){
+    $scope.calculateProductSubtotal = function(productSaleLines) {
         return (productSaleLines[0].unit_price - productSaleLines[0].unit_price * productSaleLines[0].discount / 100) * $scope.addQuantitiesUp(productSaleLines);
-    }
+    };
 
-    $scope.initializeUnitsToSell = function(index){
-        if ($scope.form.searchProductModal.product.batches[index].unitsToSell == null){
+    $scope.initializeUnitsToSell = function(index) {
+        if ($scope.form.searchProductModal.product.batches[index].unitsToSell == null) {
             $scope.form.searchProductModal.product.batches[index].unitsToSell = 0;
         }
-    }
+    };
 
-    $scope.removeProductSaleLinesAcion = function(productIdToRemove){
+    $scope.removeProductSaleLinesAcion = function(productIdToRemove) {
         $scope.form.sale.saleLines = SaleService.filterSaleLinesWithProductId($scope.form.sale.saleLines, productIdToRemove);
-    }
+    };
 
-    $scope.hasStock = function(item){
+    $scope.hasStock = function(item) {
         return item.stock > 0;
-    }
+    };
 
-    $scope.hasAvailableBatches = function(){
-        for (var i= 0; i < $scope.form.searchProductModal.product.batches.length; i++){
+    $scope.hasAvailableBatches = function() {
+        for (var i = 0; i < $scope.form.searchProductModal.product.batches.length; i++) {
             // si el lote tiene más de 0 de stock, entonces el lote tiene batches disponibles
-            if ($scope.form.searchProductModal.product.batches[i].stock > 0){
+            if ($scope.form.searchProductModal.product.batches[i].stock > 0) {
                 return true;
             }
         }
 
         return false;
-    }
+    };
 
     $scope.init();
 });
