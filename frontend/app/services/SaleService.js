@@ -4,7 +4,7 @@ app.factory('SaleService', function(Restangular) {
     this.save = function(sale) {
         // valores por default
         if (sale.settlement.amount == null) {
-            sale.settlement.amount = this.calculateSaleTotal(sale);
+            sale.settlement.amount = sale.paied_out ? this.calculateSaleTotal(sale) : 0;
         }
 
         if (sale.person == null) {
@@ -15,7 +15,7 @@ app.factory('SaleService', function(Restangular) {
         sale.invoiced = false;
 
         // hago que solo mande los id de los batches
-        sale.saleLines.forEach(function(saleLine, index, saleLines){
+        sale.saleLines.forEach(function(saleLine, index, saleLines) {
             saleLines[index].batch = saleLine.batchId;
         });
 
@@ -23,12 +23,12 @@ app.factory('SaleService', function(Restangular) {
     };
 
     this.getInvoiceOptions = function() {
-    	var invoiceOptions = [
-	        {label: 'Sin imprimir', value: false},
-	        {label: 'Controlador fiscal', value: true}
-    	];
-    	return invoiceOptions;
-	};
+        var invoiceOptions = [
+            {label: 'Sin imprimir', value: false},
+            {label: 'Controlador fiscal', value: true}
+        ];
+        return invoiceOptions;
+    };
 
     this.getPaiedOutOptions = function() {
         var paiedOutOptions = [
@@ -38,16 +38,16 @@ app.factory('SaleService', function(Restangular) {
         return paiedOutOptions;
     };
 
-    this.calculateSaleTotal = function(sale){
+    this.calculateSaleTotal = function(sale) {
         var sum = 0;
-        sale.saleLines.forEach(function(saleLine){
+        sale.saleLines.forEach(function(saleLine) {
             var subtotal = (saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity;
             sum += subtotal;
         });
         return sum;
     };
 
-    this.updateSaleLinesWithNewSaleLine = function(listOfSaleLines, newSaleLine){
+    this.updateSaleLinesWithNewSaleLine = function(listOfSaleLines, newSaleLine) {
 
         //TODO SI VIENE CON 0 ENTONCES HAY QUE BORRARLA
 
@@ -55,7 +55,7 @@ app.factory('SaleService', function(Restangular) {
         var updatedBatchIndex = arrayGetIndexOfBatchId(listOfSaleLines, newSaleLine.batchId);
 
         // si existe en la lista
-        if (updatedBatchIndex > -1){
+        if (updatedBatchIndex > -1) {
             //sumo 1 a la cantidad
             listOfSaleLines[updatedBatchIndex].quantity = newSaleLine.quantity;
         } else { // si no existe en la lista
@@ -75,10 +75,10 @@ app.factory('SaleService', function(Restangular) {
             }
         }
         return -1;
-    };
+    }
 
     // funcion que recibe una lista de salelines y quita todas las salelines que tienen cantidad cero
-    function filterSaleLinesWithQuantityZero(listOfSaleLines){
+    function filterSaleLinesWithQuantityZero(listOfSaleLines) {
         var filteredList = [];
 
         for (var i = 0; i < listOfSaleLines.length; i++) {
@@ -89,16 +89,16 @@ app.factory('SaleService', function(Restangular) {
         }
 
         return filteredList;
-    };
+    }
 
     // funcion que agrega los datos de las unidades a vender a los lotes de un producto
-    this.populateProductWithSaleLineUnitsToSell = function(product, saleLines){
-        for (var i = 0; i < saleLines.length; i++){
+    this.populateProductWithSaleLineUnitsToSell = function(product, saleLines) {
+        for (var i = 0; i < saleLines.length; i++) {
             // intento obtener el indice del batch en los batches del producto
             var batchToPopulateIndex = arrayGetIndexOfId(product.batches, saleLines[i].batchId);
 
             // si existe en la lista
-            if (batchToPopulateIndex > -1){
+            if (batchToPopulateIndex > -1) {
                 //sumo 1 a la cantidad
                 product.batches[batchToPopulateIndex].unitsToSell = saleLines[i].quantity;
             } else { // si no existe en la lista
@@ -108,7 +108,7 @@ app.factory('SaleService', function(Restangular) {
         }
 
         return product;
-    }
+    };
 
     function arrayGetIndexOfId(array, id) {
         for (var i = 0; i < array.length; i++) {
@@ -117,9 +117,9 @@ app.factory('SaleService', function(Restangular) {
             }
         }
         return -1;
-    };
+    }
 
-    this.filterSaleLinesWithProductId = function(listOfSaleLines, productIdToRemove){
+    this.filterSaleLinesWithProductId = function(listOfSaleLines, productIdToRemove) {
         var filteredList = [];
 
         for (var i = 0; i < listOfSaleLines.length; i++) {

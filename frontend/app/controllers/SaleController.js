@@ -41,9 +41,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
-
-
-        var request = SaleService.save($scope.form.sale);
+        var request = SaleService.save(angular.copy($scope.form.sale));
 
         request.success = function(response) {
             MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'success', 'female'), 'success');
