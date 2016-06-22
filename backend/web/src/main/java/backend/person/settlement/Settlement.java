@@ -10,11 +10,19 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.domain.Persistable;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 
 @Entity
 @Table(name = "settlement", uniqueConstraints = { @UniqueConstraint(columnNames = {}) })
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Settlement implements Comparable<Settlement> {
+//	implements  Persistable<Long>,
+//	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Column(name = "id", nullable = false)
@@ -23,7 +31,7 @@ public class Settlement implements Comparable<Settlement> {
 	// es la que usa postgresql por defecto
 	@SequenceGenerator(name = "settlement_id_seq", sequenceName = "settlement_id_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "settlement_id_seq")
-	private Long iId;
+	private Long iSettlementId;
 	
 	@Column(name = "date")
 	@NotNull(message = SettlementConsts.cDATE_NOTNULL_VIOLATION_MESSAGE)
@@ -46,11 +54,11 @@ public class Settlement implements Comparable<Settlement> {
 	private boolean iDiscounted;
 
 	public Long getId() {
-		return iId;
+		return iSettlementId;
 	}
 
 	public void setId(Long iId) {
-		this.iId = iId;
+		this.iSettlementId = iId;
 	}
 
 	public Date getDate() {
@@ -101,4 +109,10 @@ public class Settlement implements Comparable<Settlement> {
 	  public int compareTo(Settlement o) {
 	    return getDate().compareTo(o.getDate());
 	  }
+
+//	@Override
+//	public boolean isNew() {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 }
