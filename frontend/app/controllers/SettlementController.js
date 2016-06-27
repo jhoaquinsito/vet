@@ -20,20 +20,40 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     	$scope.refreshFormDropdownsData();
     };
     
+    //Método del scope para encapsular el proceso de obtención de datos de las ventas de un cliente
+    $scope.loadSales = function(clientId) {
+    	$scope.form.personLoaded = true;
+		var requestSales   = SettlementService.getDueSalesByClientId(clientId);
+		requestSales.success = function(response){
+    		$scope.form.sales 			= response.plain();
+    		$scope.form.totalDeVentas 	= $scope.calculateAllSalesTotal();
+    	}
+        requestSales.error = function(response) {
+            MessageService.message(MessageService.text('sales', 'get', 'error', 'male'), 'danger');
+        };
+        requestSales.then(requestSales.success, requestSales.error);
+    }
+    
+    //Método del scope para encapsular el proceso de obtención de datos de un cliente
+    $scope.loadCliente = function(personId) {
+    	var requestPerson  = ClientService.getById(personId);
+    	requestPerson.success = function(response){
+    		$scope.$apply(function() {
+    		$scope.form.person = response.plain();
+    		});
+	   	}
+    	requestPerson.error = function(response) {
+            MessageService.message(MessageService.text('person', 'get', 'error', 'male'), 'danger');
+        };
+    }
+    
+    //Este Watch permite analizar el dato dle modelo que alberga la persona. Cuando esta cambia, se cargan los datos de sus ventas.
     $scope.$watch("form.person", function(newValue, oldValue){
     	
     	if(typeof $scope.form.person !== 'undefined' && typeof $scope.form.person.id !== 'undefined')
 		{
-    		$scope.form.personLoaded = true;
-    		var requestSales   = SettlementService.getDueSalesByClientId($scope.form.person.id);
-    		requestSales.success = function(response){
-        		$scope.form.sales 			= response.plain();
-        		$scope.form.totalDeVentas 	= $scope.calculateAllSalesTotal();
-        	}
-            requestSales.error = function(response) {
-                MessageService.message(MessageService.text('sales', 'get', 'error', 'male'), 'danger');
-            };
-            requestSales.then(requestSales.success, requestSales.error);
+    		$scope.loadSales($scope.form.person.id);
+    		
 		}else{
 			$scope.form.personLoaded = null;
 		}
@@ -44,47 +64,15 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     //TODO ELIMINAR ESTO.
     $scope.selectCliente = function(atribute) {
     	console.log(atribute);
-    	var requestPerson  = ClientService.getById($scope.form.personId);
-    	var requestSales   = SettlementService.getDueSalesByClientId($scope.form.personId);
-        
-    	requestPerson.success = function(response){
-    		$scope.form.person = response.plain();
-    		
-    		//Analizamos si tiene LastName
-    		//if (typeof($scope.form.person.lastname) !== 'undefined')
-    		//	$scope.form.person.lastname =  $scope.form.person.lastname + ", "
-    		//else
-    		//	$scope.form.person.lastname =  ""
-    	}
-    	requestPerson.error = function(response) {
-            MessageService.message(MessageService.text('person', 'get', 'error', 'male'), 'danger');
-        };
-        
-        requestSales.success = function(response){
-    		$scope.form.sales 			= response.plain();
-    		$scope.form.totalDeVentas 	= $scope.calculateAllSalesTotal();
-    	}
-        requestSales.error = function(response) {
-            MessageService.message(MessageService.text('sales', 'get', 'error', 'male'), 'danger');
-        };
-        
-        requestPerson.then(requestPerson.success, requestPerson.error);
-        requestSales.then(requestSales.success, requestSales.error);
+    	
+    	$scope.loadSales($scope.form.personId);
+    	$scope.loadCliente($scope.form.personId);
+    	
     };
-    
-    $scope.refreshFormDropdownsData = function() {
-        ClientService.getList().then(function(response) {
-            $scope.form.clients = response.plain();
-        });
 
-    };
     
+    //Este método permite limpiar los datos del modelo asociado con el pequeño formulario para agregar un newSettlement
     $scope.refreshFormData = function() {
-    	//$scope.form.person = null;
-    	/*
-    	$scope.form.person 			= ClientService.getById(34);
-        $scope.form.sales 			= SettlementService.getDueSalesByClientId(34);
-        */
         $scope.form.newSettlement 	= {
         		amount : 0,
         		concept : "No definido.",
@@ -95,12 +83,11 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     };
     
     
+    //Este método permite refrescar los datos de los DropDown. En este caso solo refresca el del autocomplete de clientes.
     $scope.refreshFormDropdownsData = function() {
         ClientService.getList().then(function(response) {
             $scope.form.clients = response.plain();
         });
-
-        
     };
 
 
@@ -116,16 +103,21 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         var request = SettlementService.addSettlement($scope.form.person, $scope.form.newSettlement);
 
         request.success = function(response) {
+        	console.log("response" + response);
+        	
+        	//Refrescamos los datos del cliente y de sus ventas.
+        	$scope.loadSales(response);
+        	$scope.loadCliente(response);
+        	
+        	//Emitimos el mensaje de éxito
             MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'success', 'male'), 'success');
             
             $scope.refreshFormData();
-            //$scope.refreshFormDropdownsData();
-            //$location.path('settlement');
+            
         };
         request.error = function(response) {
+        	//Emitimos el mensaje de fallo.
             MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'error', 'male'), 'danger');
-
-            //$location.path('settlement');
         };
 
         request.then(request.success, request.error);

@@ -118,8 +118,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group form-group-sm">
-                                <label class="control-label">Fecha de vencimiento</label>
-                                <input type="text" class="form-control" name="settlement-date" ng-model="form.sale.settlement.date" bs-datepicker>
+                                <label class="control-label">Fecha de vencimiento del cheque</label>
+                                <input type="text" class="form-control" name="settlement-date" ng-model="form.sale.settlement.date" bs-datepicker ng-disabled="!(!!form.sale.settlement.checkNumber)">
                             </div>
                         </div>
                     </div>

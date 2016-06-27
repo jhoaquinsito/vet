@@ -29,6 +29,14 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         };
     };
 
+    $scope.$watch("form.sale.settlement.checkNumber", function(newValue, oldValue){
+    	
+    	if($scope.form.sale.settlement.checkNumber === '' )
+		{
+    		$scope.form.sale.settlement.date = '';
+		}    		
+    });
+    
     $scope.addSaleAction = function() {
         $rootScope.setTitle($scope.name, 'Realizar venta');
 
