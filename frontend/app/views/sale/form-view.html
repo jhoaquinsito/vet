@@ -44,7 +44,7 @@
                             <td class="table-cell-input">${{value[0].unit_price | number: 2}}</td>
                             <td class="table-cell-input">
                                 <div class="form-group" ng-class="{'has-error': saleForm['discount-' + saleLine.productId].$dirty && saleForm['discount-' + saleLine.productId].$error.required}">
-                                    <input type="number" class="form-control text-right" name="discount-{{saleLine.productId}}" ng-model="value[0].discount" required>
+                                    <input type="number" class="form-control text-right" name="discount-{{saleLine.productId}}" ng-model="value[0].discount" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57" max="100" required>
                                 </div>
                             </td>
                             <td class="table-cell-input text-right">${{calculateProductSubtotal(value) | number: 2}}</td>
