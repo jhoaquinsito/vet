@@ -105,6 +105,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     // funcion que se ejecuta al agregar/actualizar un lote a la lista de lotes de un producto en la pantalla Cargar lotes
     $scope.addBatchToTableAction = function() {
         var batch = {
+            id: $scope.form.batch.id,
             isoDueDate: dateObjectToIsoDate($scope.form.batch.isoDueDate),
             stock: $scope.form.batch.stock
         };
@@ -129,15 +130,33 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
     // funcion que actualiza la lista de lotes en la pantalla Cargar lotes con el lote nuevo/modificado
     function updateListWithBatch(listOfBatches, batch) {
-        // busco batch por isoduedate (si no existe devuelve -1 )
-        var targetBatchIndex = getBatchIndexByIsoDueDate(listOfBatches, batch.isoDueDate);
+        if (batch.id != null) { // si es id del batch no es null/undefined
+            // busco batch por id (si no existe devuelve -1 )
+            var targetBatchIndex = getBatchIndexByIsoDueDate(listOfBatches, batch.id); 
 
-        if (targetBatchIndex > -1){ // si existe
+            if (targetBatchIndex > -1){
+                if (listOfBatches[targetBatchIndex].isoDueDate == batch.isoDueDate){
+                    // si la fecha es igual entonces actualizo el stock y no necesito hacer mas nada
+                    listOfBatches[targetBatchIndex].stock = batch.stock;
+                    return listOfBatches;
+                } else {
+                    // si la fecha es diferente, borrar el lote de la lista
+                    listOfBatches.splice(targetBatchIndex, 1);
+                }
+            } else {
+                console.log("Error: el identificador del batch no existe en la lista de batches del producto.");
+            }        
+        } 
+
+        // busco batch por isoduedate (si no existe devuelve -1 )
+        targetBatchIndex = getBatchIndexByIsoDueDate(listOfBatches, batch.isoDueDate);
+
+        if (targetBatchIndex > -1){ // si existe ya un batch con esa isoduedate
             // actualizo el batch con los nuevos valores
-            listOfBatches[targetBatchIndex].isoDateToDateObjectueDate = batch.isoDueDate;
+            listOfBatches[targetBatchIndex].isoDueDate = batch.isoDueDate;
             listOfBatches[targetBatchIndex].stock = batch.stock;
         }
-        else { // si no existe
+        else { // si no existe un batch con esa isoduedate
             // agrego el nuevo batch a la lista
             listOfBatches.push(batch);
         }
@@ -149,6 +168,16 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     function getBatchIndexByIsoDueDate(listOfBatches, batchIsoDueDate) {
         for (var i = 0; i < listOfBatches.length; i++) {
             if (listOfBatches[i].isoDueDate === batchIsoDueDate) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    // funcion que busca un lote por id en una lista de lotes
+    function getBatchIndexByIsoDueDate(listOfBatches, batchId) {
+        for (var i = 0; i < listOfBatches.length; i++) {
+            if (listOfBatches[i].id === batchId) {
                 return i;
             }
         }
@@ -168,6 +197,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.editBatchFromTableAction = function(batch) {
         // actualizo el form con los valores del batch a editar
         $scope.form.batch = {
+            id: batch.id,
             stock: batch.stock,
             isoDueDate: isoDateToDateObject(batch.isoDueDate)
         }
