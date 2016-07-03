@@ -13,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+
+import backend.person.settlement.SettlementConsts;
 import backend.product.batch.Batch;
 import backend.sale.Sale;
 
@@ -50,6 +53,7 @@ public class SaleLine implements java.io.Serializable{
 	private BigDecimal iUnit_Price;
 	
 	@Column(name="discount")
+	@DecimalMin(value="0", message= SaleLineCons.cMIN_VALUE_VIOLATION_MESSAGE)
 	private BigDecimal iDiscount;
 
 	@ManyToOne//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

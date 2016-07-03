@@ -8,5 +8,7 @@ public class SaleLineCons {
 							= "Intentaste obtener una línea de venta que no existe.";
 	public static final String cSALELINE_TABLE_CONSTRAINT_VIOLATED_EXCEPTION_MESSAGE 
 							= "Hubo un problema con alguna de las restricciones de la base de datos.";
+	public static final String cMIN_VALUE_VIOLATION_MESSAGE
+							= "El valor debe ser mayor a 0.";
 
 }
