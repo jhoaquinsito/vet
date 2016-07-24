@@ -98,7 +98,7 @@
                             <div class="col-md-12">
                                 <div class="form-group form-group-sm">
                                     <label class="control-label">Entrega</label>
-                                    <input type="number" class="form-control" name="settlement-account-amount" ng-model="form.sale.settlement.amount" >
+                                    <input type="number" class="form-control" name="settlement-account-amount" ng-model="form.sale.settlement.amount" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                                 </div>
                             </div>
                             <div class="col-md-12">
