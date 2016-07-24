@@ -12,28 +12,28 @@
                 <div class="col-md-3">
                     <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.cost.$dirty && batchForm.cost.$error.required}">
                         <label class="control-label mandatory">Costo sin IVA</label>
-                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" ng-change="updateUnitPrice()" required>
+                        <input type="number" class="form-control" name="cost" ng-model="form.product.cost" ng-change="updateUnitPrice()" required min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                         <span ng-show="batchForm.cost.$dirty && batchForm.cost.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.iva.$dirty && batchForm.iva.$error.required}">
                         <label class="control-label mandatory">IVA</label>
-                        <select class="form-control" name="iva" ng-model="form.product.iva" ng-options="iva.value as iva.name for iva in form.ivas" required></select>
+                        <select class="form-control" name="iva" ng-model="form.product.iva" ng-options="iva.value as iva.name for iva in form.ivas" required ng-change="updateUnitPrice()"></select>
                         <span ng-show="batchForm.iva.$dirty && batchForm.iva.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.utility.$dirty && batchForm.utility.$error.required}">
                         <label class="control-label mandatory">Utilidad</label>
-                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" ng-change="updateUnitPrice()" required>
+                        <input type="number" class="form-control" name="utility" ng-model="form.product.utility" ng-change="updateUnitPrice()" required min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                         <span ng-show="batchForm.utility.$dirty && batchForm.utility.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group form-group-sm" ng-class="{'has-error': batchForm.unitPrice.$dirty && batchForm.unitPrice.$error.required}">
                         <label class="control-label mandatory">Precio unitario</label>
-                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" ng-change="updateUtility()" required>
+                        <input type="number" class="form-control" name="unitPrice" ng-model="form.product.unitPrice" ng-change="updateUtility()" required min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                         <span ng-show="batchForm.unitPrice.$dirty && batchForm.unitPrice.$error.required" class="help-block">Este campo es obligatorio</span>
                     </div>
                 </div>

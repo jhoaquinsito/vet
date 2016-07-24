@@ -225,12 +225,12 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
     // funcion que actualiza la utilidad de un producto en base al costo y precio unitario en la pantalla de Cargar lote
     $scope.updateUtility = function() {
-        $scope.form.product.utility = ProductService.calculateUtility($scope.form.product.cost, $scope.form.product.unitPrice);
+        $scope.form.product.utility = ProductService.calculateUtility($scope.form.product.cost, $scope.form.product.unitPrice, $scope.form.product.iva);
     };
 
     // funcion que actualiza el precio unitario de un producto en base al costo y la utilidad en la pantalla de Cargar lote
     $scope.updateUnitPrice = function() {
-        $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility);
+        $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility, $scope.form.product.iva);
     };
 
     // funcion que transforma un integer ISO del formato yyyyMMdd a un objeto Javascript Date
