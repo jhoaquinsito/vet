@@ -261,7 +261,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
             var pattern = /(\d{4})(\d{2})(\d{2})/;
             
             // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
-            formattedString = isoDateString.replace(pattern, '$1/$2/$3');
+            formattedString = isoDateString.replace(pattern, '$3/$2/$1');
         }
 
         return formattedString;
