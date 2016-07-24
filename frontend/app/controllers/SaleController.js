@@ -217,16 +217,14 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         return formattedString;
     };
 
-    $scope.addQuantitiesUp = function(productSaleLines) {
-        var total = 0;
-        for (var i = 0; i < productSaleLines.length; i++) {
-            total = productSaleLines[i].quantity + total;
-        }
-        return total;
+    // funcion que recibe todas las lineas de venta de un producto y calcula la suma total de la cantidad de ese producto a vender.
+    // NOTA: pueden existir varias lineas de ventas para un mismo producto porque las lineas de venta se generan por lote de producto
+    $scope.addUpQuantitiesOfAGivenProduct = function(saleLinesOfAGivenProduct) {
+        return SaleService.addUpQuantitiesOfAGivenProduct(saleLinesOfAGivenProduct);
     };
 
-    $scope.calculateProductSubtotal = function(productSaleLines) {
-        return (productSaleLines[0].unit_price - productSaleLines[0].unit_price * productSaleLines[0].discount / 100) * $scope.addQuantitiesUp(productSaleLines);
+    $scope.calculateProductSubtotal = function(saleLinesOfAGivenProduct) {
+        return SaleService.calculateProductSubtotal(saleLinesOfAGivenProduct);
     };
 
     $scope.initializeUnitsToSell = function(index) {

@@ -38,7 +38,7 @@
                         <tr ng-repeat="(key, value) in form.sale.saleLines | groupBy: 'productId'">
                             <td class="table-cell-input">{{value[0].productName}} <button type="button" class="btn btn-xs btn-danger" ng-click="removeProductSaleLinesAcion(value[0].productId)" data-title="Eliminar" bs-tooltip><i class="fa fa-remove"></i></button></td>
                             <td class="table-cell-input">
-                                {{addQuantitiesUp(value) + ' ' + value[0].productMeasureUnitAbbreviation}}
+                                {{addUpQuantitiesOfAGivenProduct(value) + ' ' + value[0].productMeasureUnitAbbreviation}}
                                 <button type="button" class="btn btn-xs btn-info" ng-click="showProductSearchModal(value[0].productId)" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></button>
                             </td>
                             <td class="table-cell-input">${{value[0].unit_price | number: 2}}</td>

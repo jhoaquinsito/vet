@@ -1,4 +1,4 @@
-app.factory('SaleService', function(Restangular) {
+app.factory('SaleService', function($filter, Restangular) {
     var service = Restangular.service('sale');
 
     this.save = function(sale) {
@@ -38,14 +38,37 @@ app.factory('SaleService', function(Restangular) {
         return paiedOutOptions;
     };
 
+    this.calculateProductSubtotal = function(saleLinesOfAGivenProduct){
+        return (saleLinesOfAGivenProduct[0].unit_price - saleLinesOfAGivenProduct[0].unit_price * saleLinesOfAGivenProduct[0].discount / 100) * this.addUpQuantitiesOfAGivenProduct(saleLinesOfAGivenProduct);
+    }
+
     this.calculateSaleTotal = function(sale) {
-        var sum = 0;
-        sale.saleLines.forEach(function(saleLine) {
-            var subtotal = (saleLine.unit_price - saleLine.unit_price * saleLine.discount / 100) * saleLine.quantity;
-            sum += subtotal;
-        });
-        return sum;
+        var totalAmount = 0;
+
+        if (sale.saleLines.length > 0){
+            var saleLinesGroupedByProduct = $filter('groupBy')(sale.saleLines, 'productId');
+            
+            for (var bKeyValue in saleLinesGroupedByProduct) {
+                if(saleLinesGroupedByProduct.hasOwnProperty(bKeyValue)) {
+                    totalAmount += this.calculateProductSubtotal(saleLinesGroupedByProduct[bKeyValue]);
+                } 
+            } 
+
+            //saleLinesGroupedByProduct.forEach(function(saleLinesOfAGivenProduct) {
+            //    totalAmount += this.calculateProductSubtotal(saleLinesOfAGivenProduct);
+            //});
+        }
+
+        return totalAmount;
     };
+
+    this.addUpQuantitiesOfAGivenProduct = function(saleLinesOfAGivenProduct) {
+        var total = 0;
+        for (var i = 0; i < saleLinesOfAGivenProduct.length; i++) {
+            total = saleLinesOfAGivenProduct[i].quantity + total;
+        }
+        return total;
+    }
 
     this.updateSaleLinesWithNewSaleLine = function(listOfSaleLines, newSaleLine) {
 
