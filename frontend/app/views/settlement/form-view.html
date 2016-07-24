@@ -151,7 +151,7 @@
 	                        <label class="control-label mandatory">Monto</label>
 	                        <span ng-show="form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required" class="help-block">Este campo es obligatorio</span>
 	                        <div class="input-group input-group-sm">
-		                        <input type="number" class="form-control" name="amount" ng-model="form.newSettlement.amount" required>
+		                        <input type="number" class="form-control" name="amount" ng-model="form.newSettlement.amount" min="0" required>
 		                        <span class="input-group-btn">
 	                                <button type="button" class="btn btn-sm btn-primary" ng-click="addSettlement(settlementForm)"><i class="fa fa-plus"></i></button>
 	                            </span>
