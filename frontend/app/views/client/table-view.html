@@ -13,12 +13,16 @@
             <tr>
                 <th class="col-xs-4">Cliente</th>
                 <th class="col-xs-4">Dirección</th>
-                <th class="col-xs-3">Celular</th>
+                <th class="col-xs-2">Celular</th>
                 <th class="col-xs-1"></th>
             </tr>
             <tr dir-paginate="client in filtered = (clients | filter: filtroPorNombreApellidoORazon | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">
-                    <div><a ng-href="clients/detail/{{client.id}}" class="text-important"> {{client.cuit ? client.name : client.name + ' ' +client.lastName}}</a></div>
+                	<div>
+                		<div class="text-icon" style="display: inline-block;" ng-if="client.nationalId"><i class="fa fa-user"></i></div>
+                    	<div class="text-icon" style="display: inline-block;" ng-if="client.cuit"><i class="fa fa-balance-scale"></i></div>
+                    	<a ng-href="clients/detail/{{client.id}}" class="text-important"> {{client.cuit ? client.name : client.name + ' ' +client.lastName}}</a>
+                   	</div>
                     <div>{{client.cuit ? client.cuit : client.nationalId}}</div>
                 </td>
 
