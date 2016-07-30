@@ -652,10 +652,9 @@ public class CommandAndQueries {
 	// CLIENTES
 	
 	/**
-	 * Este método es una consulta que devuelve la lista completa de Proveedores.
-	 * Un proveedor es una persona legal que tiene asociados productos, y que además
-	 * está activo.
-	 * @return lista de Persona Legal.
+	 * Este método es una consulta que devuelve la lista completa de clientes activos (naturales o legales).
+	 * 
+	 * @return lista de clientes.
 	 * @throws BusinessException
 	 */
 	public List<PersonDTO> getClients() throws BusinessException {
