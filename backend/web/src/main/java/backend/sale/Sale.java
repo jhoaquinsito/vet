@@ -58,7 +58,7 @@ public class Sale implements Persistable<Long>{
 	
 
 	@Column(name="paied_out")
-	private boolean iPaied_out ;
+	private boolean iPaiedOut ;
 	
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name="person")
@@ -93,12 +93,12 @@ public class Sale implements Persistable<Long>{
 		this.iInvoiced = iInvoiced;
 	}
 
-	public boolean isPaied_out() {
-		return iPaied_out;
+	public boolean isPaiedOut() {
+		return iPaiedOut;
 	}
 
-	public void setPaied_out(boolean iPaied_out) {
-		this.iPaied_out = iPaied_out;
+	public void setPaiedOut(boolean pPaiedOut) {
+		this.iPaiedOut = pPaiedOut;
 	}
 
 	public Person getPerson() {

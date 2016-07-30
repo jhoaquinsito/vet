@@ -198,7 +198,7 @@ public class SaleService {
 			
 		while(mSalesIterator.hasNext()){
 			Sale bSale = mSalesIterator.next();
-			if((bSale.getPerson().getId() == pClientId) && (!bSale.isPaied_out())){
+			if((bSale.getPerson().getId() == pClientId) && (!bSale.isPaiedOut())){
 				mClientDueSales.add(bSale);
 			}
 		}
@@ -216,7 +216,7 @@ public class SaleService {
 		
 		while(mSalesIterator.hasNext()){
 			Sale bSale = mSalesIterator.next();
-			bSale.setPaied_out(true);
+			bSale.setPaiedOut(true);
 			this.iSaleRepository.save(bSale);
 		}
 	}
