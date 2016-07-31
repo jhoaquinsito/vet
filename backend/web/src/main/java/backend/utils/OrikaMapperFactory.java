@@ -15,6 +15,8 @@ import backend.product.measure_unit.MeasureUnit;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.Presentation;
 import backend.product.presentation.PresentationDTO;
+import backend.report.person_balance.PersonBalance;
+import backend.report.person_balance.PersonBalanceDTO;
 import backend.sale.Sale;
 import backend.sale.SaleDTO;
 import backend.sale.SaleLiteDTO;
@@ -114,6 +116,12 @@ public class OrikaMapperFactory {
 		// Product to ProductForSaleDTO
 		mapperFactory.classMap(Product.class, ProductForSaleDTO.class)
 			.field("measureUnit.abbreviation", "measureUnitAbbreviation")
+			.byDefault()
+			.register();
+		
+		// PersonBalance to PersonBalanceDTO
+		mapperFactory.classMap(PersonBalance.class, PersonBalanceDTO.class)
+			.field("person.name","personName")
 			.byDefault()
 			.register();
 		

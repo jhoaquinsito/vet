@@ -28,6 +28,7 @@ import backend.product.drug.DrugDTO;
 import backend.product.manufacturer.ManufacturerDTO;
 import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
+import backend.report.person_balance.PersonBalanceDTO;
 import backend.sale.SaleDTO;
 import backend.sale.SaleLiteDTO;
 import backend.utils.ZebraPrintHelper;
@@ -45,6 +46,7 @@ import backend.utils.ZebraPrintHelper;
 public class ApplicationRESTController {
 	
 	@Autowired CommandAndQueries iCommandAndQueries;
+	@Autowired ReportQueries iReportQueries;
 
 	//=======================================================================================
 	
@@ -380,6 +382,11 @@ public class ApplicationRESTController {
 		List<IVACategoryDTO> mIVACategoryDTOList = this.iCommandAndQueries.getIVACategories();
 
 		return mIVACategoryDTOList;
+	}
+	
+	@RequestMapping(value = "report/person-balance", method = RequestMethod.GET)
+	public List<PersonBalanceDTO> getAllPersonBalances(){
+		return this.iReportQueries.getAllPersonBalances();
 	}
 	
 	// FIN PERSONAS
