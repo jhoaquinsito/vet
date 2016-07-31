@@ -120,6 +120,13 @@ app.config(function($routeProvider) {
         templateUrl: 'app/views/reports/clients-in-debt/table-view.html',
         action: 'reportClientsInDebt.list'
     });
+
+    //reportes
+    $routeProvider.when('/reports', {
+        controller: 'ReportsController',
+        templateUrl: 'app/views/reports/home-view.html',
+        action: 'reports.list'
+    });
 	
     //ruta no encontrada
     $routeProvider.otherwise({redirectTo: '/sales'});
