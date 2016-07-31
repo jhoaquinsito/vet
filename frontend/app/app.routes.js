@@ -113,6 +113,13 @@ app.config(function($routeProvider) {
         templateUrl: 'app/views/settlement/form-view.html',
         action: 'settlement.detail'
     });
+
+    //reporte - deudores
+    $routeProvider.when('/reports/clients-in-debt', {
+        controller: 'ReportClientsInDebtController',
+        templateUrl: 'app/views/reports/clients-in-debt/table-view.html',
+        action: 'reportClientsInDebt.list'
+    });
 	
     //ruta no encontrada
     $routeProvider.otherwise({redirectTo: '/sales'});
