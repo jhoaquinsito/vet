@@ -167,6 +167,33 @@ public class CommandAndQueries {
 	}
 	
 	/**
+	 * Este método es una consulta que devuelve la lista de productos
+	 * cuyos batch estén próximos a una fecha de vencimiento, especificados
+	 * por los parámetros de entrada.
+	 * Solamente devuelven aquellos productos cuyos batch entran en las condiciones.
+	 * Batches de productos que no entran, no se envian con el producto (en el caso que el producto tenga múltiples batch
+	 * y algunos estén en las condiciones y otros no)
+	 * @param pBeginDate:
+	 * 					 Fecha de inicio para empezar a contar como cota, por lo general: Fecha actual
+	 * @param pDays:
+	 * 				Cantidad de días a contar a partir de la fecha de inicio, para determinar el rango de los productos que entran.
+	 * @return
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<BatchDTO> getBatchesByDueDateAndDays(Date pBeginDate, Integer pDays) throws BusinessException{
+		
+		List<Batch> mBatch = this.iBatchService.getListByDueDate(pBeginDate, pDays);
+		
+		List<BatchDTO> mBatchDTOList = new ArrayList<BatchDTO>();
+		
+		for (Batch bBatch : mBatch){
+			mBatchDTOList.add(this.iMapper.map(bBatch,BatchDTO.class));
+		}
+		
+		return mBatchDTOList;
+	}
+	
+	/**
 	 * Este método es una consulta que devuelve la lista completa de Productos
 	 * filtrados a traves de su:
 	 * @param pProductName : Fragmento de nombre de un producto
@@ -185,6 +212,8 @@ public class CommandAndQueries {
 		
 		return mProductDTOList;
 	}
+	
+	
 	
 	/**
 	 * Este método es una consulta que obtiene un producto a partir de

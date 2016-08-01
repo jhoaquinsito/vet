@@ -3,6 +3,7 @@ package backend.product.batch;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -117,6 +118,8 @@ public class Batch {
 		return mDueDate;
 	}
 	
+	
+	
 	/**
 	 * Método que verifica si la fecha de vencimiento del lote es igual a una fecha de vencimiento dada.
 	 * @param pISODueDate fecha de vencimiento a comparar
@@ -132,5 +135,30 @@ public class Batch {
 		
 		return false;
 	}
+	
+	
 
+	/**
+	 * Este método permite determinar si un lote aún si ha expirado, o expirará,
+	 * teniendo en cuenta dos parámetros
+	 * 1. Una fecha de inicio, y 2. una cantidad de días a tener en cuenta.
+	 * @param pBeginDate
+	 * @param pDaysToCheck
+	 * @return
+	 * @throws BusinessException
+	 */
+	public boolean isGoingToExpire(Date pBeginDate, int pDaysToCheck) throws BusinessException{
+		
+		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setTime(pBeginDate);
+		mCalendar.add(Calendar.DATE, pDaysToCheck);  // number of days to add
+		
+		Date pBeginDateWithAddedDays = mCalendar.getTime();
+		
+		if(pBeginDateWithAddedDays.compareTo(this.getDueDate()) >= 0)
+			return true;
+		else
+			return false;
+	}
+	
 }

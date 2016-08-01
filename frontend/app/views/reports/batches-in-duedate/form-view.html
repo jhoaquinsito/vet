@@ -1,0 +1,62 @@
+<form ng-submit="executeReport(reportForm)" name="reportForm" novalidate>
+    <div class="panel panel-default">
+	    <div class="panel-body">
+	    	<h4>Búsqueda</h4>
+	    	<div class="row">
+	    		<div class="col-md-6">
+			    	<div class="form-group form-group-sm">
+		                <label class="control-label">Cantidad de días</label>
+		                <input type="number" class="form-control" name="search" ng-model="form.days" placeholder="30">
+			        </div>
+		        </div>
+	    		<div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label class="control-label">Fecha de vencimiento</label>
+                        <input type="text" class="form-control" ng-model="form.isoDueDate" bs-datepicker>
+                    </div>
+                </div>
+	            
+	    	</div>
+	        
+	        <h4>Lotes próximos a vencer</h4>
+	          <table class="table table-bordered table-main">
+				  <tr>
+				  	  <th class="col-xs-4">Producto</th>
+	                  <th class="col-xs-3">Fecha de vencimiento</th>
+	                  <th class="col-xs-2">Cantidad</th>
+	                  <th class="col-xs-2">Días restantes</th>
+	              </tr>
+<!-- 	              ng-repeat="batch in form.batches" -->
+	              <tr  dir-paginate="batch in filtered = (form.batches | itemsPerPage: table.pageSize)">
+	              	  <td><div>{{batch.product.name}}</div></td>
+	                  <td>
+	                      <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
+	                      <span ng-if="batch.isoDueDate != null">{{ isoDateToFormattedString(batch.isoDueDate) }}</span>
+	                  </td>
+	                  <td><div>{{batch.stock}} {{batch.product.measureUnit.abbreviation}}</div></td>
+	                  <td>
+	                      <span ng-if="batch.isoDueDate == null">∞</span>
+	                      <span ng-if="batch.isoDueDate != null && (hasExpired(isoDateToFormattedString(batch.isoDueDate)) == false)" class="green-font">
+	                      	{{ getDaysBeforeDueDate(isoDateToFormattedString(batch.isoDueDate)) }}
+	                      </span>
+<!-- 	                      <span ng-if="batch.isoDueDate != null && (getDaysBeforeDueDate(batch.isoDueDate)) > form.daysEstablished" class="red-font"> -->
+	                      <span ng-if="batch.isoDueDate != null && (hasExpired(isoDateToFormattedString(batch.isoDueDate)))" class="red-font">
+	                      	Vencido
+	                      </span>
+	                  </td>
+	              </tr>
+   	              <tr ng-if="form.batches.length == 0 || form.batches == null">
+	                  <td colspan="4" class="table-cell-empty">No hay lotes para mostrar</td>
+	              </tr>
+	          </table>
+
+
+	    </div>
+
+	    <div class="panel-footer">
+            <div class="text-right">
+                <button type="submit" class="btn btn-icon btn-primary"><i class="fa fa-play"></i>Ejecutar Reporte</button>
+            </div>
+        </div>
+	</div>
+</form>

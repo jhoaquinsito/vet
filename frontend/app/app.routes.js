@@ -128,6 +128,13 @@ app.config(function($routeProvider) {
         action: 'reports.list'
     });
 	
+  //Reportes - Vencimiento de items.
+    $routeProvider.when('/reports/batches-in-duedate', {
+        controller: 'ReportBatchDueDateController',
+        templateUrl: 'app/views/reports/batches-in-duedate/form-view.html',
+        action: 'reporteBatchDueDate.detail'
+    });
+    
     //ruta no encontrada
     $routeProvider.otherwise({redirectTo: '/sales'});
 });

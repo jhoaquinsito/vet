@@ -1,5 +1,6 @@
 package backend.core;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
@@ -22,6 +24,7 @@ import backend.person.iva_category.IVACategoryDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
 import backend.product.ProductForSaleDTO;
+import backend.product.batch.BatchDTO;
 import backend.product.batch.BatchPrintDTO;
 import backend.product.category.CategoryDTO;
 import backend.product.drug.DrugDTO;
@@ -31,6 +34,7 @@ import backend.product.presentation.PresentationDTO;
 import backend.report.person_balance.PersonBalanceDTO;
 import backend.sale.SaleDTO;
 import backend.sale.SaleLiteDTO;
+import backend.utils.DateHelper;
 import backend.utils.ZebraPrintHelper;
 
 /**
@@ -135,6 +139,39 @@ public class ApplicationRESTController {
 		return this.iCommandAndQueries.getProductsByName(name);
 	}
 
+	/**
+	 * Método API que permite recuperar una lista de Product
+	 * filtrando aquellos productos cuyos lotes cumplan
+	 * ciertas condiciones de vencimiento
+	 * @param days
+	 * @param beginDate : RequestParam, opcional, que permite especificar una fecha de inicio en formato ISO
+	 * @return
+	 * @throws BusinessException
+	 * 				: Excepcion de negocio, manejada por: handleBusinessException
+	 * 
+	 */
+	@RequestMapping(value = "products/byduedate", method = RequestMethod.GET)
+	public List<BatchDTO> getProductsByExpirationDate(@RequestParam(value = "days", required = true) Integer days, @RequestParam(value = "beginDate", required = false) Integer beginDate) throws BusinessException {
+		Date mBeginDate = new Date();
+		
+
+		if(beginDate != null)
+			mBeginDate = DateHelper.getDate(beginDate);
+		
+		return this.iCommandAndQueries.getBatchesByDueDateAndDays(mBeginDate, days);
+	}
+	
+	@RequestMapping(value = "products/toExpirate", method = RequestMethod.GET)
+	public boolean areProductsToExpirate(@RequestParam(value = "days", required = true) Integer days, @RequestParam(value = "beginDate", required = false) Integer beginDate) throws BusinessException {
+		Date mBeginDate = new Date();
+		
+
+		if(beginDate != null)
+			mBeginDate = DateHelper.getDate(beginDate);
+		
+		return (this.iCommandAndQueries.getBatchesByDueDateAndDays(mBeginDate, days)).size() > 0;
+	}
+	
 	/**
 	 * Metodo que permite eliminar un producto a partir de su identificador. Al
 	 * eliminar el producto, sus los lotes asociados son eliminados físicamente.
