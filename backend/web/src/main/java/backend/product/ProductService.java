@@ -2,8 +2,11 @@ package backend.product;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -171,6 +174,25 @@ public class ProductService {
 		return mResult;
 	
 
+	}
+	
+	public Iterable<Product> getProductsWithoutMinimumStock() throws BusinessException{
+		Iterable<Product> mAllProducts = this.getAll();
+		
+		// filtro y obtengo unicamente los productos que no tienen minimo stock
+		Iterable<Product> mProductsWithoutMinimumStock = this.filterProductsWithoutMinimumStock(mAllProducts);
+		
+		return mProductsWithoutMinimumStock;
+	}
+	
+	private Iterable<Product> filterProductsWithoutMinimumStock(Iterable<Product> pProducts){
+		Set<Product> mFilteredProducts = new HashSet<Product>();
+		for (Product pProduct : pProducts) {
+			if (!pProduct.hasMinimumStock()){
+				mFilteredProducts.add(pProduct);
+			}
+		}
+		return mFilteredProducts;
 	}
 	
 	/***

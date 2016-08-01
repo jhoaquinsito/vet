@@ -388,6 +388,11 @@ public class ApplicationRESTController {
 	public List<PersonBalanceDTO> getAllPersonBalances(){
 		return this.iReportQueries.getAllPersonBalances();
 	}
+
+	@RequestMapping(value = "report/products-without-stock", method = RequestMethod.GET)
+	public @ResponseBody List<ProductDTO> getProductsWithoutMinimumStock() throws BusinessException {
+		return this.iReportQueries.getProductsWithoutMinimumStock();
+	}
 	
 	// FIN PERSONAS
 	
