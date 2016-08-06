@@ -282,6 +282,36 @@ public class Product implements Persistable<Long> {
 	public void setSuppliers(Set<LegalPerson> pSuppliers) {
 		this.iSuppliers = pSuppliers;
 	}
+	
+	/**
+	 * Método que verifica si un producto tiene el stock minimo.
+	 * 
+	 * @return <strong>true</strong>, si la cantidad de stock actual es mayor que la cantidad de stock
+	 * minimo definida para el producto o si no tiene una cantidad de stock minima definida
+	 * <strong>false</strong>, en caso de que la cantidad de stock actual es igual o menor a la cantidad
+	 * de stock minima definida para el producto.
+	 */
+	public boolean hasMinimumStock(){
+		if (this.getMinimumStock()== null){
+			return true;
+		}
+		
+		return this.getTotalStockQuantity().compareTo(this.getMinimumStock()) > 0;
+	}
+	
+	/**
+	 * Método que calcula la cantidad total de stock del producto sumando la cantidad de stock de cada
+	 * uno de sus lotes.
+	 * 
+	 * @return cantidad total de stock; 0 (cero), si no tiene lotes asociados
+	 */
+	public BigDecimal getTotalStockQuantity(){
+		BigDecimal mStockCount = new BigDecimal(0);
+		for (Batch bBatch : this.getBatches()) {
+			mStockCount = mStockCount.add(bBatch.getStock());
+		}
+		return mStockCount;
+	}
 
 	@Override
 	public boolean isNew() {

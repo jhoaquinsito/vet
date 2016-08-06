@@ -46,5 +46,13 @@ app.factory('ProductService', function($http, Restangular, config) {
         return $http.post(config.API_BASE_URL +'/product/bunch', bunchOfProducts);
     }
 
+    this.calculateStock = function(product){
+        var sum = 0;
+        for (var i = 0; i < product.batches.length; i++) {
+            sum = sum + product.batches[i].stock;
+        } 
+        return sum;
+    }
+
     return this;
 });

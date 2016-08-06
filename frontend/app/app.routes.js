@@ -127,6 +127,13 @@ app.config(function($routeProvider) {
         templateUrl: 'app/views/reports/home-view.html',
         action: 'reports.list'
     });
+
+    //reportes - minimo stock
+    $routeProvider.when('/reports/products-out-of-stock', {
+        controller: 'ReportProductsOutOfStockController',
+        templateUrl: 'app/views/reports/products-out-of-stock/table-view.html',
+        action: 'reportProductsOutOfStock.list'
+    });
 	
   //Reportes - Vencimiento de items.
     $routeProvider.when('/reports/batches-in-duedate', {

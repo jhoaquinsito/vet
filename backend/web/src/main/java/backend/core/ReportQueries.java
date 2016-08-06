@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import backend.exception.BusinessException;
+import backend.product.Product;
+import backend.product.ProductDTO;
+import backend.product.ProductService;
 import backend.report.person_balance.PersonBalance;
 import backend.report.person_balance.PersonBalanceDTO;
 import backend.report.person_balance.PersonBalanceService;
@@ -16,6 +21,7 @@ public class ReportQueries {
 	private MapperFacade iMapper; 
 	
 	@Autowired private PersonBalanceService iPersonBalanceService;
+	@Autowired private ProductService iProductService;
 	
 	/**
 	 * Constructor.
@@ -32,5 +38,10 @@ public class ReportQueries {
 		
 		return this.iMapper.mapAsList(mPersonBalances, PersonBalanceDTO.class);
 		
+	}
+	
+	public List<ProductDTO> getProductsWithoutMinimumStock() throws BusinessException{
+		Iterable<Product> mProductsWithoutMinimumStock = this.iProductService.getProductsWithoutMinimumStock();
+		return this.iMapper.mapAsList(mProductsWithoutMinimumStock, ProductDTO.class);
 	}
 }
