@@ -904,6 +904,46 @@ public class CommandAndQueries {
 	}
 	
 	/**
+	 * Este método retorna las ventas que se encuentran bajo los parámetros especificados.
+	 * @param pBeginDate:
+	 * 						Fecha de inicio a considerar
+	 * @param pEndDate:
+	 * 						Fecha de fin a considerar
+	 * @param pSalePayingForm:
+	 * 						Forma de pago especificada, opciones: Todas, Efectivo o Cuenta Corriente
+	 * @return
+	 * 		  Devuelve una lista de SaleLiteDTO, es de tipo LITE pues no se necesitan todos los datos, 
+	 *        al mismo tiempo que como puede ser un gran listado, puede generar excepcion por gran cantidad de datos.
+	 * @throws BusinessException
+	 */
+	public List<SaleLiteDTO> getSalesForReport(Date pBeginDate,Date pEndDate, String pSalePayingForm) throws BusinessException{
+		
+		List<Sale> mSales = this.iSaleService.getReportSales(pBeginDate, pEndDate, pSalePayingForm);
+		
+		List<SaleLiteDTO> mSaleDTOList = new ArrayList<SaleLiteDTO>();
+		
+		for (Sale bSale : mSales){
+			SaleLiteDTO mSaleLiteDTO = this.iMapper.map(bSale,SaleLiteDTO.class); 
+			
+			NaturalPerson mNaturalPerson = this.iNaturalPersonService.get(mSaleLiteDTO.getPerson());
+			if(mNaturalPerson != null)
+				mSaleLiteDTO.setPersonName(mNaturalPerson.getLastName() + ", " + mNaturalPerson.getName() );
+			else{
+				LegalPerson mLegalPerson = this.iLegalPersonService.get(mSaleLiteDTO.getPerson());
+				if(mLegalPerson
+						!= null)
+					mSaleLiteDTO.setPersonName(mLegalPerson.getName() );
+			}
+				
+			
+			mSaleDTOList.add(mSaleLiteDTO);
+			//Obtenemos el nombre de la persona
+		}
+		
+		return mSaleDTOList;
+	}
+	
+	/**
 	 * Este método es una consulta que devuelve la lista completa de ventas (Sale)
 	 * @return lista de ventas (SaleDTO)
 	 * @throws BusinessException : Excepcion con detalles de los errores de negocio

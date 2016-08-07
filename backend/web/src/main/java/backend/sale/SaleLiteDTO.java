@@ -28,9 +28,15 @@ public class SaleLiteDTO {
 
 	private Long iPerson;
 
+	//Este campo es calculado al final.
+	private String iPersonName;
+	
 	private Set<SaleLineLiteDTO> iSaleLines;
 	
 	private SettlementDTO iSettlement;
+	
+	private String iPayForm;	
+	
 	
 	public Long getId() {
 		return iId;
@@ -74,6 +80,14 @@ public class SaleLiteDTO {
 		this.iPerson = pPerson;
 	}
 
+	public String getPersonName() {
+		return iPersonName;
+	}
+
+	public void setPersonName(String pPersonName) {
+		this.iPersonName = pPersonName;
+	}
+
 	public Set<SaleLineLiteDTO> getSaleLines() {
 		return iSaleLines;
 	}
@@ -90,5 +104,11 @@ public class SaleLiteDTO {
 		this.iSettlement = pSettlement;
 	}
 	
-	
+	public String getPayForm() {
+		return iPayForm;
+	}
+
+	public void setPayForm(String pPayForm) {
+		this.iPayForm = pPayForm;
+	}
 }

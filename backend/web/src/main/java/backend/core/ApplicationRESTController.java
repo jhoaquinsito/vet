@@ -1,5 +1,6 @@
 package backend.core;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -504,6 +505,42 @@ public class ApplicationRESTController {
 	public @ResponseBody List<SaleDTO> listSales() throws BusinessException {
 
 		return this.iCommandAndQueries.getSales();
+	}
+	
+	/**
+	 * Método API que permite recuperar la lista de VENTAS para el reporte de ventas.
+	 * Recupera las ventas que se encuentran comprendida en las fechas y 
+	 * bajo el parámetro del tipo de pago especificado
+	 * @param payForm :
+	 * 					Forma de pago realizado, opciones: Todas, Efectivo o Cuenta Corriente
+	 * @param beginDate:
+	 * 					Fecha de inicio a considerar
+	 * @param endDate:
+	 * 					Fecha de fin a considerar
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "sale/report", method = RequestMethod.GET)
+	public List<SaleLiteDTO> getSalesForReport
+	(@RequestParam(value = "payForm", required = true) String payForm, 
+	 @RequestParam(value = "beginDate", required = false) Integer beginDate,
+	 @RequestParam(value = "endDate", required = false) Integer endDate) throws BusinessException {
+		Date mBeginDate = new Date();
+		Date mEndDate = new Date();
+
+		if(beginDate != null)
+			mBeginDate 	= DateHelper.getDate(beginDate);
+		if(endDate != null)
+			mEndDate 	= DateHelper.getDate(endDate);
+		
+		//Como la IsoDueDate carece de la parte temporal, es necesario agregar 1 día mas, para contemplar el dia entero en la EndDate
+		Calendar c = Calendar.getInstance();
+		c.setTime(mEndDate);
+		c.add(Calendar.DATE, 1);  
+		mEndDate = (c.getTime());  
+		
+		
+		return this.iCommandAndQueries.getSalesForReport(mBeginDate, mEndDate, payForm);
 	}
 
 	/**

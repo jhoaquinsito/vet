@@ -110,8 +110,21 @@ public class OrikaMapperFactory {
 		// SaleDTO to Sale
 		mapperFactory.classMap(SaleLiteDTO.class, Sale.class).byDefault().register();
 		
+		// Sale to SaleLiteDTO
+		mapperFactory.classMap(Sale.class, SaleLiteDTO.class)
+			.field("person.id", "person")
+			.byDefault()
+			.register();
+		
 		// SaleLineDTO to SaleLine
 		mapperFactory.classMap(SaleLineLiteDTO.class, SaleLine.class).byDefault().register();
+		
+		// Sale to SaleLiteDTO
+		mapperFactory.classMap(SaleLine.class, SaleLineLiteDTO.class)
+			.field("batch.id", "batch")
+			.byDefault()
+			.register();
+				
 		
 		// Product to ProductForSaleDTO
 		mapperFactory.classMap(Product.class, ProductForSaleDTO.class)

@@ -1,6 +1,7 @@
 package backend.sale;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -220,4 +221,60 @@ public class SaleService {
 			this.iSaleRepository.save(bSale);
 		}
 	}
+	
+	/**
+	 * Este método retorna las ventas que se encuentran bajo los parámetros especificados.
+	 * @param pBeginDate:
+	 * 						Fecha de inicio a considerar
+	 * @param pEndDate:
+	 * 						Fecha de fin a considerar
+	 * @param pSalePayingForm:
+	 * 						Forma de pago especificada, opciones: Todas, Efectivo o Cuenta Corriente
+	 * @return
+	 * 		  Devuelve una lista de SaleLiteDTO, es de tipo LITE pues no se necesitan todos los datos, 
+	 *        al mismo tiempo que como puede ser un gran listado, puede generar excepcion por gran cantidad de datos.
+	 * @throws BusinessException
+	 */
+	public List<Sale> getReportSales(Date pBeginDate,Date pEndDate, String pSalePayingForm) throws BusinessException{
+		List<Sale> mReportSales = new ArrayList<Sale>();
+		Iterable<Sale> mSales = this.getAll();
+		Iterator<Sale> mSalesIterator = mSales.iterator();
+			
+		while(mSalesIterator.hasNext()){
+			Sale bSale = mSalesIterator.next();
+			
+			boolean bSaleIsBetweenDates = bSale.getDate().after(pBeginDate) && bSale.getDate().before(pEndDate);
+			
+			if(bSaleIsBetweenDates){
+				//Si el tipo de pago es "Efectivo"
+				Boolean mIsPaidInCash = bSale.isSalePaidedInCash();
+				
+				if(mIsPaidInCash)
+					bSale.setPayForm("Contado");
+				else
+					bSale.setPayForm("Cuenta Corriente");
+				
+				if(pSalePayingForm.toUpperCase().compareTo("Todas".toUpperCase()) == 0 ){
+					mReportSales.add(bSale);
+					continue;
+				}
+				
+				if(pSalePayingForm.toUpperCase().compareTo("Contado".toUpperCase()) == 0 &&
+						mIsPaidInCash){
+					mReportSales.add(bSale);
+					continue;
+				}
+				//Si el tipo es "Cuenta Corriente" 
+				if(pSalePayingForm.toUpperCase().compareTo("Cuenta Corriente".toUpperCase()) == 0 &&
+						!mIsPaidInCash){
+					mReportSales.add(bSale);
+					continue;
+				}
+			}
+		}
+		
+		return mReportSales;		
+	}
+	
+	
 }

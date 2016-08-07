@@ -1,7 +1,10 @@
 package backend.sale;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,8 +22,10 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import org.springframework.data.domain.Persistable;
 import backend.person.Person;
+import backend.person.settlement.Settlement;
 import backend.product.Product;
 import backend.saleline.SaleLine;
+import backend.utils.DateHelper;
 
 /**
 * Una <code>Sale</code> es una representación de una Venta. 
@@ -68,6 +73,7 @@ public class Sale implements Persistable<Long>{
 	@Valid
 	private Set<SaleLine> iSaleLines;
 	
+	private String iPayForm;	
 	
 	public Long getId() {
 		return iId;
@@ -119,6 +125,14 @@ public class Sale implements Persistable<Long>{
 	}
 
 
+	public String getPayForm() {
+		return iPayForm;
+	}
+
+	public void setPayForm(String pPayForm) {
+		this.iPayForm = pPayForm;
+	}
+
 	public Set<Product> getProducts(){
 		Set<Product> bProducts = new HashSet<Product>(); 
 		for(SaleLine bSaleLine : getSaleLines())
@@ -127,7 +141,73 @@ public class Sale implements Persistable<Long>{
 		}
 		return bProducts;
 	}
+	
+	/**
+	 * Método interno a Sale para saber si la venta ha sido realizada 
+	 * en EFECTIVO o bien en CUENTA CORRIENTE.
+	 * 
+	 * Se determina de la siguiente manera:
+	 * - Una venta se considera pagada en efectivo, si y solo si, 
+	 *   la venta tiene un Settlement (pago)
+	 *   cuya fecha y monto coinciden. 
+	 * - Una venta se considera pagada bajo Cuenta Corriente cuando sucede lo contrario 
+	 *   (múltiples pagos, o pago diferido en fecha)
+	 * @return
+	 */
+	public boolean isSalePaidedInCash(){
+		
+		Iterator<Settlement> bSettlementsIterator =  getPerson().getSettlements().iterator();
+		
+		while(bSettlementsIterator.hasNext()){
+			Settlement bSettlement = bSettlementsIterator.next();
+			
+			Boolean isSameDate = DateHelper.isSameDateWithoutTime(getDate(),bSettlement.getDate());
+			
+			if(isSameDate ){
+				Boolean isSameAmout = getSaleAmount().compareTo(bSettlement.getAmount()) == 0;
+				if(isSameAmout)
+				return true;
+			}
+		}
+		return false;
+	}
 
+	/***
+	 * Este método permite calcular y devolver el monto total de la venta
+	 * sin considerar los precios actualizados.
+	 * @return
+	 */
+	public BigDecimal getSaleAmount(){
+		BigDecimal mDebt = BigDecimal.ZERO;
+		
+		Iterator<SaleLine> bSaleLinesIterator = getSaleLines().iterator();
+		while(bSaleLinesIterator.hasNext()){//Por cada línea de venta
+			SaleLine bSaleLine = bSaleLinesIterator.next();
+					
+			//Convierto la cantidad de la línea a Bigdecimal
+			BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
+					
+			//Obtengo el precio unitario actual del producto de la línea
+			BigDecimal bProductPrice = bSaleLine.getUnit_Price();
+
+					
+			//Sumo a la deuda la cantidad del producto por su precio unitario
+			mDebt = mDebt.add(bProductQuantity.multiply(bProductPrice));
+			
+			//Resto el descuento hecho en la saleline
+			//Obtengo el valor BigDecimal de 100
+			BigDecimal bBigDecimal100 = BigDecimal.valueOf(100);
+			//Multiplico la cantidad del producto por el precio guardado en el saleline 
+			BigDecimal bSaleLineTotal = bProductQuantity.multiply(bProductPrice);
+			//Calculo el descuento como: (cantidad*precio*descuento)/100
+			BigDecimal bDiscount = bSaleLineTotal.multiply(bSaleLine.getDiscount()).divide(bBigDecimal100); 
+			//Resto el descuento
+			mDebt = mDebt.subtract(bDiscount);
+		}
+		
+		return mDebt;
+	}
+	
 	@Override
 	public boolean isNew() {
 		// TODO Auto-generated method stub

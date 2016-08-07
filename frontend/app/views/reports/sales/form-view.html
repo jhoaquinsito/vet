@@ -1,0 +1,83 @@
+<form ng-submit="executeReport(reportForm)" name="reportForm" novalidate>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<h4>Búsqueda</h4>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group form-group-sm">
+						<label class="control-label">Fecha de desde</label> <input
+							type="text" class="form-control" ng-model="form.beginIsoDueDate"
+							bs-datepicker required>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group form-group-sm">
+						<label class="control-label">Forma de pago</label> <select
+							class="form-control" name="paied_out" ng-model="form.paied_out"
+							ng-options="paiedOutOption.value as paiedOutOption.label for paiedOutOption in form.paiedOutOptions"
+							required></select>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group form-group-sm">
+						<label class="control-label">Fecha de hasta</label> <input
+							type="text" class="form-control" ng-model="form.endIsoDueDate"
+							bs-datepicker required>
+					</div>
+				</div>
+
+
+
+			</div>
+
+			<h4>Ventas</h4>
+			<div class="row" ng-if="form.sales.length > 0">
+                <div class="col-md-12">
+                    <h3 class="text-right">Monto Total: $ {{form.totalDeVentas | number: 2}}</h3>
+                </div>
+            </div>
+			<table class="table table-bordered table-main">
+				<tr>
+					<th class="col-xs-2">Fecha</th>
+					<th class="col-xs-4">Cliente</th>
+					<th class="col-xs-2">Forma de venta</th>
+					<th class="col-xs-2">Pagada</th>
+					<th class="col-xs-2">Monto</th>
+				</tr>
+<!-- 		    ng-repeat="sale in form.sales" -->
+				<tr dir-paginate="sale in filtered = (form.sales | itemsPerPage: table.pageSize)" >
+					<td class="table-cell-input">{{sale.date | date:'dd/MM/yyyy	HH:mm'}}</td>
+					<td class="table-cell-input">{{sale.personName }}</td>
+					<td class="table-cell-input">{{sale.payForm }}</td>
+					
+					<td class="table-cell-detail">
+	                	<div>
+	                		<div class="text-icon" style="display: inline-block;" ng-if="sale.paied_out == true" ><i class="fa fa-check-circle"></i></div>
+	                    	<div class="text-icon" style="display: inline-block;" ng-if="sale.paied_out == false"><i class="fa fa-times-circle"></i></div>
+	                   	</div>
+	                </td>
+					<td class="table-cell-input">$ {{calculateSaleTotal(sale) | number: 2}}</td>
+				</tr>
+
+				<tr ng-if="form.sales.length == 0 || form.sales == null">
+					<td colspan="4" class="table-cell-empty">No hay ventas para	mostrar</td>
+				</tr>
+			</table>
+			<div class="row" ng-if="form.sales.length > 0">
+                <div class="col-md-12">
+                    <h3 class="text-right">Monto Total: $ {{form.totalDeVentas | number: 2}}</h3>
+                </div>
+            </div>
+
+		</div>
+
+		<div class="panel-footer">
+			<div class="text-right">
+				<button type="submit" class="btn btn-icon btn-primary">
+					<i class="fa fa-play"></i>Ejecutar Reporte
+				</button>
+			</div>
+		</div>
+	</div>
+</form>

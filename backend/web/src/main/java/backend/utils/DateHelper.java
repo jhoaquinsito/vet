@@ -2,6 +2,7 @@ package backend.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import backend.exception.BusinessException;
@@ -26,4 +27,30 @@ public class DateHelper {
 			
 			return mDueDate;
 		}
+	
+	/***
+	 * Este método permite obtener una comparación de fechas sin ser tan preciso.
+	 * Con que se cumplan los valores: Año, Mes, Dia, las fechas serán consideradas iguales
+	 * @return
+	 */
+	public static Boolean isSameDateWithoutTime(Date pDateA, Date pDateB)
+	{
+		Calendar calendarA = Calendar.getInstance();
+		calendarA.setTime(pDateA);
+		int yearA 	= calendarA.get(calendarA.YEAR);
+		int monthA 	= calendarA.get(calendarA.MONTH);
+		int dayA 	= calendarA.get(calendarA.DAY_OF_MONTH);
+		int hourA   = calendarA.get(calendarA.HOUR);
+		int minuteA = calendarA.get(calendarA.MINUTE);
+		
+		Calendar calendarB = Calendar.getInstance();
+		calendarB.setTime(pDateB);
+		int yearB 	= calendarB.get(calendarB.YEAR);
+		int monthB 	= calendarB.get(calendarB.MONTH);
+		int dayB 	= calendarB.get(calendarB.DAY_OF_MONTH);
+		int hourB   = calendarB.get(calendarB.HOUR);
+		int minuteB = calendarB.get(calendarB.MINUTE);
+		
+		return (yearA == yearB) && (monthA == monthB) && (dayA == dayB) && (hourA == hourB) && (minuteA == minuteB);
+	}
 }
