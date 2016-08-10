@@ -102,6 +102,10 @@ public class Sale implements Persistable<Long>{
 	public boolean isPaiedOut() {
 		return iPaiedOut;
 	}
+	
+	public boolean getPaiedOut() {
+		return iPaiedOut;
+	}
 
 	public void setPaiedOut(boolean pPaiedOut) {
 		this.iPaiedOut = pPaiedOut;

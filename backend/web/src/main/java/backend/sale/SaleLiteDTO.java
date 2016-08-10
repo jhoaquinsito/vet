@@ -24,7 +24,7 @@ public class SaleLiteDTO {
 	  
 	private boolean iInvoiced ;
 
-	private boolean iPaied_out ;
+	private boolean iPaiedOut ;
 
 	private Long iPerson;
 
@@ -64,12 +64,12 @@ public class SaleLiteDTO {
 
 
 
-	public boolean isPaied_out() {
-		return iPaied_out;
+	public boolean getPaiedOut() {
+		return iPaiedOut;
 	}
 
-	public void setPaied_out(boolean pPaied_out) {
-		this.iPaied_out = pPaied_out;
+	public void setPaiedOut(boolean pPaiedOut) {
+		this.iPaiedOut = pPaiedOut;
 	}
 
 	public Long getPerson() {
