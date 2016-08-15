@@ -132,7 +132,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     function updateListWithBatch(listOfBatches, batch) {
         if (batch.id != null) { // si es id del batch no es null/undefined
             // busco batch por id (si no existe devuelve -1 )
-            var targetBatchIndex = getBatchIndexByIsoDueDate(listOfBatches, batch.id); 
+            var targetBatchIndex = getBatchIndexById(listOfBatches, batch.id); 
 
             if (targetBatchIndex > -1){
                 if (listOfBatches[targetBatchIndex].isoDueDate == batch.isoDueDate){
@@ -175,7 +175,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     };
 
     // funcion que busca un lote por id en una lista de lotes
-    function getBatchIndexByIsoDueDate(listOfBatches, batchId) {
+    function getBatchIndexById(listOfBatches, batchId) {
         for (var i = 0; i < listOfBatches.length; i++) {
             if (listOfBatches[i].id === batchId) {
                 return i;
@@ -200,6 +200,15 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
             id: batch.id,
             stock: batch.stock,
             isoDueDate: isoDateToDateObject(batch.isoDueDate)
+        }
+
+        // si no tiene id, es porque es nuevo, entonces lo borro de la lista para que se vuelva a agregar
+        if (batch.id == null){
+            $scope.form.product.batches.forEach(function(item, key) {
+                if (item == batch) {
+                    $scope.form.product.batches.splice(key, 1);
+                }
+            });
         }
     };
 
