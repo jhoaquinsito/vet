@@ -19,6 +19,11 @@ app.factory('SaleService', function($filter, Restangular) {
             saleLines[index].batch = saleLine.batchId;
         });
 
+        // el frontend guarda el(los) descuento(s) aplicados al(a los) producto(s) únicamente en el primer batch de cada producto,
+        // por lo que, previo a enviar la venta al backend, hay que hacer que todos los batches del producto tengan 
+        // el mismo descuento, proceso al cual le llamo "reconciliacion de descuentos por producto"
+        sale = reconcileSaleDiscountsByProduct(sale);
+
         return service.post(sale);
     };
 
@@ -152,6 +157,64 @@ app.factory('SaleService', function($filter, Restangular) {
         }
 
         return filteredList;
+    };
+
+    // funcion que reconcilia los descuentos de cada uno de los productos en la venta
+    // NOTA: el frontend guarda el(los) descuento(s) aplicados al(a los) producto(s) únicamente en el primer batch de cada producto,
+    // por lo que, previo a enviar la venta al backend, hay que hacer que todos los batches del producto tengan 
+    // el mismo descuento, proceso al cual le llamo "reconciliacion de descuentos por producto"
+    function reconcileSaleDiscountsByProduct(sale) {
+        // obtengo la lista de productos de esta venta
+        var saleProducts = getSaleProducts(sale);
+        
+        // hago la reconciliacion de descuentos para cada producto
+        for (var i = 0; i < saleProducts.length; i++) {
+            sale = reconcileProductDiscount(saleProducts[i], sale);
+        };
+
+        return sale;
+    };
+
+    // funcion que reconcilia los descuentos aplicados a un producto
+    function reconcileProductDiscount(productId, sale) {
+        var productDiscount = 0;
+
+        // recorro todas las lineas de venta
+        for (var i = 0; i < sale.saleLines.length; i++) {
+            // identifico si hay algun descuento diferente de 0 para el producto en cuestión
+            if (sale.saleLines[i].productId == productId && sale.saleLines[i].discount !=0){
+                // guardo el descuento
+                productDiscount = sale.saleLines[i].discount;
+            }
+        };
+
+        // si había un descuento diferente de 0 
+        if (productDiscount!=0){
+            // recorro todas las lineas de venta
+            for (var i = 0; i < sale.saleLines.length; i++) {
+                // identifico si la linea tiene un descuento no reconciliado
+                // (es decir, hay algun descuento diferente de 0)
+                if (sale.saleLines[i].productId == productId){
+                    // reconcilio el descuento
+                    sale.saleLines[i].discount = productDiscount;
+                }
+            };            
+        }
+
+        return sale;
+    };
+
+    // funcion que obtiene la lista de productos (sus ids) de la venta
+    function getSaleProducts(sale) {
+        var saleProducts = [];
+        for (var i = 0; i < sale.saleLines.length; i++) {
+            // si el producto todavía no está en la lista
+            if (saleProducts.indexOf(sale.saleLines[i].productId) == -1){
+                // agrego el product id a la lista
+                saleProducts.push(sale.saleLines[i].productId);
+            }
+        }
+        return saleProducts;
     };
 
     return this;
