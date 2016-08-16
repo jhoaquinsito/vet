@@ -1,4 +1,4 @@
-app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, $filter, ProductService, BatchService, MessageService, config) {
+app.controller('BatchController', function($scope, $location, $rootScope, $route, $routeParams, $filter, ProductService, BatchService, MessageService, DateUtilsService, config) {
     $scope.name = 'Productos';
     $scope.action = $route.current.action;
     $scope.form = {};
@@ -106,7 +106,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.addBatchToTableAction = function() {
         var batch = {
             id: $scope.form.batch.id,
-            isoDueDate: dateObjectToIsoDate($scope.form.batch.isoDueDate),
+            isoDueDate: DateUtilsService.dateObjectToIsoDate($scope.form.batch.isoDueDate),
             stock: $scope.form.batch.stock
         };
 
@@ -117,16 +117,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $scope.form.batch = {};
     };
 
-    // funcion que pasa un objeto Date a un integer ISO
-    function dateObjectToIsoDate(dateObject){
-        var stringDate = $filter('date')(dateObject, 'yyyyMMdd');
-        var isoDate = null;
-        // verifico que no sea un NaN (illegal number)
-        if (!isNaN(parseInt(stringDate))){
-            isoDate = parseInt(stringDate);
-        }
-        return isoDate;
-    }
+
 
     // funcion que se ejecuta al eliminar un lote de la lista de lotes de la pantalla Cargar lote
     $scope.removeBatchToTableAction = function(batch) {
@@ -139,7 +130,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $scope.form.batch = {
             id: batch.id,
             stock: batch.stock,
-            isoDueDate: isoDateToDateObject(batch.isoDueDate)
+            isoDueDate: DateUtilsService.isoDateToDateObject(batch.isoDueDate)
         };
 
         // si no tiene id, es porque es nuevo, entonces lo borro de la lista para que se vuelva a agregar
@@ -178,38 +169,9 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         $scope.form.product.unitPrice = ProductService.calculateUnitPrice($scope.form.product.cost, $scope.form.product.utility, $scope.form.product.iva);
     };
 
-    // funcion que transforma un integer ISO del formato yyyyMMdd a un objeto Javascript Date
-    function isoDateToDateObject(isoDate){
-        var dateObject = null;
-
-        if (isoDate != null){
-            var isoDateString = isoDate.toString();
-            
-            var year = isoDateString.substr(0,4);
-            var month = isoDateString.substr(4,2);
-            var day = isoDateString.substr(6,2);
-            
-            dateObject = new Date(year,month-1, day); 
-        }
-
-        return dateObject;
-    }
-
     // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
     $scope.isoDateToFormattedString = function(isoDate) {
-        var formattedString = null;
-
-        if (isoDate != null){
-            var isoDateString = isoDate.toString();
-        
-            // regex para formatear la fecha
-            var pattern = /(\d{4})(\d{2})(\d{2})/;
-            
-            // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
-            formattedString = isoDateString.replace(pattern, '$3/$2/$1');
-        }
-
-        return formattedString;
+        return DateUtilsService.isoDateToFormattedString(isoDate);
     }
 
     $scope.init();
