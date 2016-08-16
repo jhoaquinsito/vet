@@ -186,11 +186,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
     // funcion que se ejecuta al eliminar un lote de la lista de lotes de la pantalla Cargar lote
     $scope.removeBatchToTableAction = function(batch) {
-        $scope.form.product.batches.forEach(function(item, key) {
-            if (item == batch) {
-                $scope.form.product.batches.splice(key, 1);
-            }
-        });
+        $scope.form.product = BatchService.removeBatchFromProductBatches($scope.form.product, batch);
     };
 
     // funcion que se ejecuta al quere editar un lote de la lista de lotes de la pantalla Cargar lote
@@ -200,15 +196,11 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
             id: batch.id,
             stock: batch.stock,
             isoDueDate: isoDateToDateObject(batch.isoDueDate)
-        }
+        };
 
         // si no tiene id, es porque es nuevo, entonces lo borro de la lista para que se vuelva a agregar
         if (batch.id == null){
-            $scope.form.product.batches.forEach(function(item, key) {
-                if (item == batch) {
-                    $scope.form.product.batches.splice(key, 1);
-                }
-            });
+            $scope.form.product = BatchService.removeBatchFromProductBatches($scope.form.product, batch);
         }
     };
 

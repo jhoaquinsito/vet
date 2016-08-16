@@ -68,5 +68,17 @@ app.factory('BatchService', function() {
         updatedProducts = [];
     }
 
+    // funcion que elimina un lote del la lista de lotes de un producto
+    // devuelve el producto sin el lote
+    this.removeBatchFromProductBatches = function(product, batchToBeRemoved){
+        product.batches.forEach(function(item, key) {
+            if (item == batchToBeRemoved) {
+                product.batches.splice(key, 1);
+            }
+        });
+
+        return product;
+    };
+
     return this;
 });
