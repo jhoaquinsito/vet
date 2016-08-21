@@ -116,6 +116,16 @@ app.factory('BatchService', function() {
         return listOfBatches;
     };
 
+    // funcion que verifica si un producto (parametro) tiene lotes o no
+    // devuelve: true, si tiene lotes; false, si no
+    this.productHasBatches = function(product){
+        var hasBatches = true;
+        if (product.batches === undefined || product.batches.length == 0){
+            hasBatches = false;
+        }
+        return hasBatches;
+    }
+
     // funcion que busca un lote por fecha de vencimiento en una lista de lotes
     function getBatchIndexByIsoDueDate(listOfBatches, batchIsoDueDate) {
         for (var i = 0; i < listOfBatches.length; i++) {

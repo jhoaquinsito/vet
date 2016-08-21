@@ -102,6 +102,16 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
 
     };
 
+    // funcion que verifica si el boton de guardar lote a confirmar debe estar deshabilitado o no
+    // devuelve: true, si debe estar deshabilitado; false, si no.
+    $scope.isSaveButtonDisabled = function(){
+        var isBatchSaveDisabled = false;
+        if ($scope.form.product != null){
+            isBatchSaveDisabled = !BatchService.productHasBatches($scope.form.product);
+        }
+        return isBatchSaveDisabled;
+    }
+
     // funcion que se ejecuta al agregar/actualizar un lote a la lista de lotes de un producto en la pantalla Cargar lotes
     $scope.addBatchToTableAction = function() {
         var batch = {
