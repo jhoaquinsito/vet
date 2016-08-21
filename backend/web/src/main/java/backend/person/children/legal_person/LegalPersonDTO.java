@@ -1,17 +1,16 @@
 package backend.person.children.legal_person;
 
-import java.math.BigDecimal;
 import backend.person.PersonDTO;
 
 public class LegalPersonDTO extends PersonDTO  {
 	
-	private BigDecimal iCUIT;	
+	private String iCUIT;	
 	private Boolean iClient;
 	
-	public BigDecimal getCUIT() {
+	public String getCUIT() {
 		return iCUIT;
 	}
-	public void setCUIT(BigDecimal pCUIT) {
+	public void setCUIT(String pCUIT) {
 		this.iCUIT = pCUIT;
 	}
 	

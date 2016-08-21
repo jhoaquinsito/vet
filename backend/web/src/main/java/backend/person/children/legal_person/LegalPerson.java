@@ -24,18 +24,17 @@ public class LegalPerson extends Person {
 
 	@Column(name="cuit")
 	@NotNull(message = LegalPersonConsts.cCUIT_NOTNULL_VIOLATION_MESSAGE)
-	@Digits(integer=11, fraction=0, message= LegalPersonConsts.cCUIT_DIGITS_VIOLATION_MESSAGE)
 	@Valid
-	private BigDecimal iCUIT; 
+	private String iCUIT; 
 	
 	@Column(name="client", nullable=true)
 	private Boolean iClient;
 	
-	public BigDecimal getCUIT() {
+	public String getCUIT() {
 		return iCUIT;
 	}
 
-	public void setCUIT(BigDecimal pCUIT) {
+	public void setCUIT(String pCUIT) {
 		this.iCUIT = pCUIT;
 	}
 	
