@@ -76,6 +76,7 @@ body {
     width: 250px;
     overflow: hidden;
 }
+
 #sidebar .list-group-item span {
     opacity: 1;
     position: absolute;
@@ -432,4 +433,29 @@ textarea.form-control {
 }
 .red-font{
 	color: rgb(231, 76, 60);
+}
+
+/* Flyout menu para reportes. */
+#sidebar .reports .report-items{
+    position:absolute;
+    display:none;
+}
+
+#sidebar .reports:hover .report-items{
+    background-color:#2f4050;
+    display:block;
+    left:250px;
+    top:245px;
+}
+
+#sidebar.mini-sidebar .reports:hover .report-items{
+    left:60px;
+}
+
+#sidebar.mini-sidebar .report-items .list-group-item {
+    width: 250px;
+}
+
+#sidebar.mini-sidebar .report-items .list-group-item span {
+    opacity: 1;
 }

@@ -121,13 +121,6 @@ app.config(function($routeProvider) {
         action: 'reportClientsInDebt.list'
     });
 
-    //reportes
-    $routeProvider.when('/reports', {
-        controller: 'ReportsController',
-        templateUrl: 'app/views/reports/home-view.html',
-        action: 'reports.list'
-    });
-
     //reportes - minimo stock
     $routeProvider.when('/reports/products-out-of-stock', {
         controller: 'ReportProductsOutOfStockController',

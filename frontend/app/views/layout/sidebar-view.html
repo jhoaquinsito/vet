@@ -14,13 +14,23 @@
     <a ng-href="settlements" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'settlement'}" data-title="CuentaCorriente" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
         <i class="fa fa-credit-card"></i><span>Cuenta Corriente</span>
     </a>
-    <a ng-href="reports" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reports'}" data-title="Reportes" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
-        <i class="fa fa-credit-card"></i><span>Reportes</span>
-    </a>
-    <a ng-href="reports/batches-in-duedate" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reportsBatchDueDate'}" data-title="ReporteVencimiento" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
-        <i class="fa fa-list-alt"></i><span>Vencimiento de Lotes</span>
-    </a>
-    <a ng-href="reports/sales" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reporteSales'}" data-title="ReporteVentas" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
-        <i class="fa fa-list-alt"></i><span>Reportes: Ventas</span>
-    </a>
+    <div class="reports">
+        <a ng-href="#" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reports'}" data-title="Reportes" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
+            <i class="fa fa-credit-card"></i><span>Reportes</span>
+        </a>
+        <div class="report-items">
+            <a ng-href="reports/clients-in-debt" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reportClientsInDebt'}" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
+                <i class="fa fa-list-alt"></i><span>Deudores</span>
+            </a>
+            <a ng-href="reports/batches-in-duedate" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reportsBatchDueDate'}"  data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
+                <i class="fa fa-list-alt"></i><span>Vencimiento de Lotes</span>
+            </a>
+            <a ng-href="reports/sales" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reporteSales'}" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
+                <i class="fa fa-list-alt"></i><span>Ventas</span>
+            </a>
+            <a ng-href="reports/products-out-of-stock" class="list-group-item" ng-class="{'active': layout.activeSidebarOption == 'reportProductsOutOfStock'}" data-placement="right" data-bs-enabled="layout.isMiniSidebar" bs-tooltip>
+                <i class="fa fa-list-alt"></i><span>Sin stock mínimo</span>
+            </a>
+        </div>
+    </div>
 </div>
