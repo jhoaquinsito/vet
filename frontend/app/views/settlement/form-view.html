@@ -5,7 +5,6 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
                         <label class="control-label">Cliente: </label>
-<!--                         <label class="control-label" >{{form.person.lastname | uppercase}} {{form.person.name}}</label> -->
                         <input 	type="text" class="form-control" name="client" ng-model="form.person" onkeypress="return this.value.length < 130"  
                         		bs-options="client as client.name for client in form.clients"
                          		bs-typeahead 

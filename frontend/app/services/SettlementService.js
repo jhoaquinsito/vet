@@ -38,7 +38,6 @@ app.factory('SettlementService', function(Restangular) {
 	 * Este método devuelve el total de los pagos 
 	 * no descontados realizados por el cliente.
 	 */
-    //TODO - Esta funcion no se usa más ahora!
     this.calculateClienteBalance = function(person){
     	 var sum = 0;
          

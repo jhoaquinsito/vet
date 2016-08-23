@@ -1,6 +1,3 @@
-/**
- * 
- */
 app.controller('SettlementController', function($scope, $location, $rootScope, $route, $routeParams, $modal, SaleService, SettlementService, ClientService, MessageService, config) {
     $scope.name = 'Cuenta Corriente';
     $scope.action = $route.current.action;
@@ -61,15 +58,6 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     		
     });
     
-    //TODO ELIMINAR ESTO.
-    $scope.selectCliente = function(atribute) {
-    	console.log(atribute);
-    	
-    	$scope.loadSales($scope.form.personId);
-    	$scope.loadCliente($scope.form.personId);
-    	
-    };
-
     
     //Este método permite limpiar los datos del modelo asociado con el pequeño formulario para agregar un newSettlement
     $scope.refreshFormData = function() {
@@ -135,9 +123,6 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     };
 
 
-
-
-
     //TODO - NO BORRAR!
     $scope.calculateSaleTotal = function(sale){
         return SettlementService.calculateSaleTotal(sale);
@@ -152,21 +137,6 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     	return SettlementService.calculateAllSalesTotal($scope.form.sales);
         
     };
-    
-    //TODO - Borrar porque NO SE USA.
-    $scope.calculateSaldoAFavor = function(){
-    	
-    	//TODO - Aca hay que invocar a un método del SettlementService que permita
-    	//obtener para el cliente en cuesti{on, cuanto saldo a favor tiene, que seria...
-    	//tener todos los Settlement que no hayan sido descontados...
-    	
-    	if($scope.form.person != null){
-    		($scope.calculateAllSalesTotal()) - ($scope.calculateAllSalesTotal())  
-    	}else
-    		return 0;
-    		
-    	
-    }
     
     //Se usa multiples veces.
     $scope.calculateSettlementsTotal = function(){
