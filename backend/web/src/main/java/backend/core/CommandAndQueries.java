@@ -26,6 +26,7 @@ import backend.person.iva_category.IVACategory;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.iva_category.IVACategoryService;
 import backend.person.settlement.Settlement;
+import backend.person.settlement.SettlementDTO;
 import backend.product.BatchCodeGenerator;
 import backend.product.Product;
 import backend.product.ProductDTO;
@@ -771,6 +772,13 @@ public class CommandAndQueries {
 			
 		//La deuda del cliente es menor o igual que los pagos hechos?
 		return (mDebt.compareTo(pClient.totalPaid()) == 1);
+	}
+	
+	public void setClientSettlements(Long pClientId, List<SettlementDTO> pUpdatedSettlements) throws BusinessException{
+		
+		Set<Settlement> mUpdatedClientSettlements = this.iMapper.mapAsSet(pUpdatedSettlements, Settlement.class);
+		
+		this.iPersonService.setClientSettlements(pClientId, mUpdatedClientSettlements);
 	}
 	
 	/**

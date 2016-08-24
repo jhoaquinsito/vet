@@ -22,6 +22,7 @@ import backend.exception.ErrorDTO;
 import backend.person.PersonDTO;
 import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.iva_category.IVACategoryDTO;
+import backend.person.settlement.SettlementDTO;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.product.ProductDTO;
 import backend.product.ProductForSaleDTO;
@@ -448,6 +449,13 @@ public class ApplicationRESTController {
 	public @ResponseBody List<PersonDTO> listClients() throws BusinessException {
 
 		return this.iCommandAndQueries.getClients();
+	}
+	
+	@RequestMapping(value = "client/{pClientId}/settlements", method = RequestMethod.POST)
+	public void setClientSettlements(@PathVariable Long pClientId, @RequestBody List<SettlementDTO> pUpdatedClientSettlements) throws BusinessException {
+
+		this.iCommandAndQueries.setClientSettlements(pClientId, pUpdatedClientSettlements);
+
 	}
 	
 	// FIN CLIENTES
