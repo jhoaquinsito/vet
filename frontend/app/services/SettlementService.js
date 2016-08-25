@@ -1,19 +1,8 @@
-app.factory('SettlementService', function(Restangular) {
-	//Nota: Es importante saber que a la fecha, Settlement no tiene un servicio propio.
-	//Un settlement es responsabilidad de un Client, y por eso se usa dicho servicio.
-    var serviceClient 	= Restangular.service('client');
+app.factory('SettlementService', function($http,Restangular, config) {
     var serviceDueSales = Restangular.service('duesales');
-    var serviceLegalPerson = Restangular.service('legalperson');
-    var serviceNaturalPerson = Restangular.service('naturalperson');
     
-    //TODO - Esta función está identica en el ClientService.
     this.save = function(client) {
-        if (client.cuit != null) {
-            client.client = true;
-            return serviceLegalPerson.post(client);
-        } else {
-            return serviceNaturalPerson.post(client);
-        }
+        return $http.post(config.API_BASE_URL + '/client/' + client.id +'/settlements' , client.settlements);
     };
     
     this.getDueSalesByClientId = function(clientId) {
