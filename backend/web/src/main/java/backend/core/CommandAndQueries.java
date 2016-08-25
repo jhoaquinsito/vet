@@ -489,40 +489,53 @@ public class CommandAndQueries {
 		// map dto to domain object
 		LegalPerson mLegalPerson = iMapper.map(pLegalPersonDTO, LegalPerson.class);
 		
-		//Si el cliente no es nuevo y tiene ventas adeudadas
-		if(mLegalPerson.getId() != null && !this.clientIsInDebt(mLegalPerson)){
-			
-			
-			Settlement surplusSettlement = new Settlement();
-			
-			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
-			if( mLegalPerson.totalPaid().compareTo(this.getClientDebt(mLegalPerson)) > 0 ){
-				
-				//Reestablezco la lista Settlements
-				mLegalPerson.setSettlements(mLegalPerson.getSettlementListWithSurplus(this.getClientDebt(mLegalPerson)));
-				
-				surplusSettlement = ((TreeSet<Settlement>) mLegalPerson.getSettlements()).last();
-				
-				//Removemos el último elemento.
-				mLegalPerson.getSettlements().remove(surplusSettlement);
-				
-				//Descuento los pagos del cliente
-				mLegalPerson.discountSettlements();
-				
-				//Agrego el nuevo Settlement NO descontado a la person
-				mLegalPerson.addSettlement(surplusSettlement);
-			}else{
-				//Descuento los pagos del cliente
-				mLegalPerson.discountSettlements();
-			}
-			
-			//Cancelo la deuda del cliente
-			this.cancelClientDebt(mLegalPerson);
+		//Si el cliente no es nuevo
+		if(mLegalPerson.getId() != null){
+			mLegalPerson = (LegalPerson) this.processClientDebt(mLegalPerson);
 		}
 		
 		mLegalPerson = this.iLegalPersonService.save(mLegalPerson);
 		
 		return mLegalPerson.getId();
+	}
+	
+	public Person processClientDebt(Person pClient) throws BusinessException{
+		// si la persona tiene ventas adeudadas
+		if (!this.clientIsInDebt(pClient)){
+			
+			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
+			if( pClient.totalPaid().compareTo(this.getClientDebt(pClient.getId())) > 0 ){
+				pClient = this.addSurplusSettlementTo(pClient);
+			}else{
+				//Descuento los pagos del cliente
+				pClient.discountSettlements();
+			}
+			
+			//Cancelo la deuda del cliente
+			this.cancelClientDebt(pClient);
+		}
+		
+		return pClient;
+	}
+	
+	private Person addSurplusSettlementTo(Person pClient) throws BusinessException{
+		Settlement surplusSettlement = new Settlement();
+		
+		//Reestablezco la lista Settlements
+		pClient.setSettlements(pClient.getSettlementListWithSurplus(this.getClientDebt(pClient.getId())));
+		
+		surplusSettlement = ((TreeSet<Settlement>) pClient.getSettlements()).last();
+		
+		//Removemos el último elemento.
+		pClient.getSettlements().remove(surplusSettlement);
+		
+		//Descuento los pagos del cliente
+		pClient.discountSettlements();
+		
+		//Agrego el nuevo Settlement NO descontado a la person
+		pClient.addSettlement(surplusSettlement);
+		
+		return pClient;
 	}
 	
 	/***
@@ -575,34 +588,9 @@ public class CommandAndQueries {
 			throw new BusinessException(CommandAndQueries.cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE);
 		}
 		
-		//Si el cliente no es nuevo y tiene ventas adeudadas
-		if(pNaturalPersonDTO.getId() != null && !this.clientIsInDebt(mNaturalPerson)){
-			
-			Settlement surplusSettlement = new Settlement();
-			
-			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
-			if( mNaturalPerson.totalPaid().compareTo(this.getClientDebt(mNaturalPerson)) > 0 ){
-				
-				//Reestablezco la lista Settlements
-				mNaturalPerson.setSettlements(mNaturalPerson.getSettlementListWithSurplus(this.getClientDebt(mNaturalPerson)));
-				
-				surplusSettlement = ((TreeSet<Settlement>) mNaturalPerson.getSettlements()).last();
-				
-				//Removemos el último elemento.
-				mNaturalPerson.getSettlements().remove(surplusSettlement);
-				
-				//Descuento los pagos del cliente
-				mNaturalPerson.discountSettlements();
-				
-				//Agrego el nuevo Settlement NO descontado a la person
-				mNaturalPerson.addSettlement(surplusSettlement);
-			}else{
-				//Descuento los pagos del cliente
-				mNaturalPerson.discountSettlements();
-			}
-			
-			//Cancelo la deuda del cliente
-			this.cancelClientDebt(mNaturalPerson);
+		//Si el cliente no es nuevo
+		if(pNaturalPersonDTO.getId() != null){
+			mNaturalPerson = (NaturalPerson) this.processClientDebt(mNaturalPerson);
 		}
 		
 		mNaturalPerson = this.iNaturalPersonService.save(mNaturalPerson);
@@ -713,11 +701,11 @@ public class CommandAndQueries {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public BigDecimal getClientDebt(Person pClient) throws BusinessException{
+	public BigDecimal getClientDebt(Long pClientId) throws BusinessException{
 		
 		
 		//Recupero las ventas adeudas del cliente.
-		List<Sale> mDueSales = this.iSaleService.getDueSalesByClientId(pClient.getId());
+		List<Sale> mDueSales = this.iSaleService.getDueSalesByClientId(pClientId);
 		Iterator<Sale> mDueSalesIterator = mDueSales.iterator();
 				
 		//Defino una variable para guardar la deuda total del cliente
@@ -768,17 +756,25 @@ public class CommandAndQueries {
 		BigDecimal mDebt = BigDecimal.ZERO;
 				
 		// Calculo la deuda total del cliente
-		mDebt = getClientDebt(pClient);
+		mDebt = getClientDebt(pClient.getId());
 			
 		//La deuda del cliente es menor o igual que los pagos hechos?
 		return (mDebt.compareTo(pClient.totalPaid()) == 1);
 	}
 	
-	public void setClientSettlements(Long pClientId, List<SettlementDTO> pUpdatedSettlements) throws BusinessException{
+	public void setUpdatedSettlementsTo(Long pClientId, List<SettlementDTO> pUpdatedSettlements) throws BusinessException{
 		
 		Set<Settlement> mUpdatedClientSettlements = this.iMapper.mapAsSet(pUpdatedSettlements, Settlement.class);
+
+		Person mClient = this.iPersonService.get(pClientId);
 		
-		this.iPersonService.setClientSettlements(pClientId, mUpdatedClientSettlements);
+		mClient.setSettlements(mUpdatedClientSettlements);
+		
+		Person mStoredClient = this.iPersonService.save(mClient);
+		
+		this.processClientDebt(mStoredClient);
+		
+		this.iPersonService.save(mClient);
 	}
 	
 	/**

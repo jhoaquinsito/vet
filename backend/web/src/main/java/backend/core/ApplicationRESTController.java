@@ -454,7 +454,7 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "client/{pClientId}/settlements", method = RequestMethod.POST)
 	public void setClientSettlements(@PathVariable Long pClientId, @RequestBody List<SettlementDTO> pUpdatedClientSettlements) throws BusinessException {
 
-		this.iCommandAndQueries.setClientSettlements(pClientId, pUpdatedClientSettlements);
+		this.iCommandAndQueries.setUpdatedSettlementsTo(pClientId, pUpdatedClientSettlements);
 
 	}
 	

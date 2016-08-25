@@ -1,11 +1,8 @@
 package backend.person;
 
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import backend.exception.BusinessException;
-import backend.person.settlement.Settlement;
 
 @Service
 public class PersonService {
@@ -52,14 +49,6 @@ public class PersonService {
 		// almaceno el persona legal desactivado y sin los lotes
 		this.iPersonRepository.save(mPersonToDelete);
 		
-	}
-	
-	public void setClientSettlements(Long pClientId, Set<Settlement> pUpdatedClientSettlements) throws BusinessException{
-		Person mClient = this.get(pClientId);
-		
-		mClient.setSettlements(pUpdatedClientSettlements);
-		
-		this.save(mClient);
 	}
 	
 	public Person save(Person pPersonToSave) {
