@@ -101,9 +101,6 @@
                                     <input type="number" class="form-control" name="settlement-account-amount" ng-model="form.sale.settlement.amount" min="0" onkeypress="return this.value.length < 12 && event.charCode >= 46 && event.charCode <= 57">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                Saldo actual: ${{ calculatePersonDebt() - form.sale.settlement.amount  | number: 2}}
-                            </div>
                         </div>
                     </div>
                 </div>

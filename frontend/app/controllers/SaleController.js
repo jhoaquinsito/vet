@@ -195,11 +195,6 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         $scope.resetProductSearchModal();
     };
 
-    $scope.calculatePersonDebt = function() {
-        // TODO analizar si corresponde calcular el saldo actual en el frontend o backend
-        return 0;
-    };
-
     // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
     $scope.isoDateToFormattedString = function(isoDate) {
         var formattedString = null;
