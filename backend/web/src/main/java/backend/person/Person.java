@@ -237,6 +237,9 @@ public class Person  {
 	 */
 	public void addSettlement(Settlement pSettlement){
 		
+		// si el settlement no tiene fecha, entonces le asigno la fecha de hoy
+		if(pSettlement.getDate() == null ) pSettlement.setDate(new Date());
+		
 		Set<Settlement> mSettlements = this.getSettlements();
 		mSettlements.add(pSettlement);
 		this.setSettlements(mSettlements);

@@ -95,7 +95,6 @@ public class CommandAndQueries {
 	
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
 	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
-	private static final String cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE = "La cantidad disponible del producto es insuficiente: ";
 	
 	/**
 	 * Constructor.
@@ -879,54 +878,49 @@ public class CommandAndQueries {
 			if(pSaleDTO.getSettlement() == null)
 				throw new BusinessException(SaleCons.cSALE_SETTLEMENT_NULL_EXCEPTION_MESSAGE);
 			mSale = iMapper.map(pSaleDTO, Sale.class);
-			//Buscamos el Person para agregar el mSale
 			
+			// actualizar el cliente con el pago realizado
 			if (pSaleDTO.getPerson() != null){
-				PersonDTO mPersonDTO = this.getPerson(pSaleDTO.getPerson());
-				Person mPerson = iMapper.map(mPersonDTO, Person.class);
-				Settlement mSettlement = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
-				if(mSettlement.getDate() == null ) mSettlement.setDate(new Date());
 				
-				//Valido Settlement
+				// obtengo el cliente de la venta realizada
+				Person mPerson = this.iPersonService.get(pSaleDTO.getPerson());
+
+				// obtengo el settlement de la venta realizada
+				Settlement mSettlement = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
+				
+				// valido settlement
 				mEntityValidator.validate(mSettlement);
 				
-				
+				// agrego el settlement al cliente
 				mPerson.addSettlement(mSettlement);
+				
+				// agrego el cliente actualizado a la venta
 				mSale.setPerson(mPerson);
-					
+			} else {
+				throw new NullPointerException("La venta debe estar asociada a un cliente.");
 			}
+			
+			// procesar lotes vendidos
 			
 			Set<SaleLine> mSaleLineList = new HashSet<SaleLine>();
 			
 			for(SaleLineLiteDTO mSaleLineLiteDTO : pSaleDTO.getSaleLines()){
 				SaleLine mSaleLine  = iMapper.map(mSaleLineLiteDTO, SaleLine.class);
 				
-				BatchDTO bBatchDTO = this.getBatch(mSaleLineLiteDTO.getBatch());
+				Batch bBatch = this.iBatchService.get(mSaleLineLiteDTO.getBatch());
 				
-				Batch bBatch = iMapper.map(bBatchDTO, Batch.class);
-				
-				//Descuento el stock en el lote correspondiente 
-				BigDecimal bQuantity = BigDecimal.valueOf(mSaleLineLiteDTO.getQuantity());
-				BigDecimal bNewStock = bBatch.getStock().subtract(bQuantity);
-				if(bNewStock.compareTo(BigDecimal.ZERO) >= 0){
-					bBatch.setStock(bNewStock);
-				}else{
-					throw new BusinessException(CommandAndQueries.cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE + bBatch.getProduct().getName());
-				}
+				bBatch.downgradeStockBy(mSaleLineLiteDTO.getQuantity());
 				
 				mSaleLine.setBatch(bBatch);
 				
 				mSaleLineList.add(mSaleLine);
 			}
 			
-			mSale.setDate(new Date());
-			
 			mSale.setSaleLines(mSaleLineList);
 
 		} else {
 			throw new BusinessException(SaleCons.cSALE_NULL_EXCEPTION_MESSAGE);
 		}
-		
 		
 		mSale = this.iSaleService.save(mSale);
 		

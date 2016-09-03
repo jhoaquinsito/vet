@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+
+import backend.core.CommandAndQueries;
 import backend.exception.BusinessException;
 import backend.product.Product;
 
@@ -159,6 +161,17 @@ public class Batch {
 			return true;
 		else
 			return false;
+	}
+	
+	public void downgradeStockBy(float pQuantity) throws BusinessException{
+		//Descuento el stock en el lote correspondiente 
+		BigDecimal mQuantity = BigDecimal.valueOf(pQuantity);
+		BigDecimal mNewStock = this.getStock().subtract(mQuantity);
+		if(mNewStock.compareTo(BigDecimal.ZERO) >= 0){
+			this.setStock(mNewStock);
+		}else{
+			throw new BusinessException(BatchConsts.cINSUFFICIENT_STOCK_EXCEPTION_MESSAGE + this.getProduct().getName());
+		}
 	}
 	
 }

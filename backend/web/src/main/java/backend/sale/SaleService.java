@@ -52,6 +52,12 @@ public class SaleService {
 	 * @throws BusinessException 
 	 */
 	public Sale save(Sale pSaleToSave) throws BusinessException {
+		
+		// si no tiene fecha le asigno la fecha del momento
+		if (pSaleToSave.getDate() == null){
+			pSaleToSave.setDate(new Date());
+		}
+		
 		// verifico que el venta que se intenta guardar no esté eliminado
 		// o que traiga un identificador que no existe
 		if (pSaleToSave.getId() != null){
