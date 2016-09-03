@@ -73,8 +73,8 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     
     //Este método permite refrescar los datos de los DropDown. En este caso solo refresca el del autocomplete de clientes.
     $scope.refreshFormDropdownsData = function() {
-        ClientService.getList().then(function(response) {
-            $scope.form.clients = response.plain();
+        ClientService.getListForDropdown().then(function(response) {
+            $scope.form.clients = response.data;
         });
     };
 

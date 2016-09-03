@@ -1,4 +1,4 @@
-app.factory('ClientService', function(Restangular) {
+app.factory('ClientService', function($http, Restangular, config) {
     var serviceClient = Restangular.service('client');
     var serviceLegalPerson = Restangular.service('legalperson');
     var serviceNaturalPerson = Restangular.service('naturalperson');
@@ -10,6 +10,10 @@ app.factory('ClientService', function(Restangular) {
     this.getList = function() {
         return serviceClient.getList();
     };
+
+    this.getListForDropdown = function() {
+        return $http.get(config.API_BASE_URL + '/client/dropdown');
+    }
 
     this.save = function(client) {
         if (client.cuit != null) {
