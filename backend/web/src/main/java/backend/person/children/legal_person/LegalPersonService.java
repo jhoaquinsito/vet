@@ -1,16 +1,12 @@
 package backend.person.children.legal_person;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
-import backend.person.PersonDTO;
-import backend.person.children.natural_person.NaturalPerson;
-import backend.person.children.natural_person.NaturalPersonService;
 import backend.utils.EntityValidator;
 
 @Service

@@ -19,7 +19,6 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
-import backend.core.CommandAndQueries;
 import backend.exception.BusinessException;
 import backend.product.Product;
 

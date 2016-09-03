@@ -10,12 +10,6 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import org.springframework.data.domain.Persistable;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-
 
 @Entity
 @Table(name = "settlement", uniqueConstraints = { @UniqueConstraint(columnNames = {}) })

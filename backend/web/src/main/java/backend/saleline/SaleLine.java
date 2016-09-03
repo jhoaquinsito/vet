@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 
-import backend.person.settlement.SettlementConsts;
 import backend.product.batch.Batch;
 import backend.sale.Sale;
 

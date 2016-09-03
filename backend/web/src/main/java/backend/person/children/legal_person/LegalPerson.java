@@ -1,6 +1,5 @@
 package backend.person.children.legal_person;
 
-import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;

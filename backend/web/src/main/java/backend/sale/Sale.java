@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -75,6 +74,7 @@ public class Sale implements Persistable<Long>{
 	
 	private String iPayForm;	
 	
+	@Override
 	public Long getId() {
 		return iId;
 	}

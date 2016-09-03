@@ -2,18 +2,14 @@ package backend.product.batch;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import backend.exception.BusinessException;
-import backend.product.Product;
-import backend.product.ProductService;
 
 /**
  * Un <code>BatchService</code> representa un conjunto de servicios relacionados a <code>Batch</code>.

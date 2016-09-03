@@ -165,6 +165,7 @@ public class Product implements Persistable<Long> {
 		this.iUnitPrice = pUnitPrice;
 	}
 
+	@Override
 	public Long getId() {
 		return iId;
 	}

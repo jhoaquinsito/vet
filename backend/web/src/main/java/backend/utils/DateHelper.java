@@ -37,19 +37,19 @@ public class DateHelper {
 	{
 		Calendar calendarA = Calendar.getInstance();
 		calendarA.setTime(pDateA);
-		int yearA 	= calendarA.get(calendarA.YEAR);
-		int monthA 	= calendarA.get(calendarA.MONTH);
-		int dayA 	= calendarA.get(calendarA.DAY_OF_MONTH);
-		int hourA   = calendarA.get(calendarA.HOUR);
-		int minuteA = calendarA.get(calendarA.MINUTE);
+		int yearA 	= calendarA.get(Calendar.YEAR);
+		int monthA 	= calendarA.get(Calendar.MONTH);
+		int dayA 	= calendarA.get(Calendar.DAY_OF_MONTH);
+		int hourA   = calendarA.get(Calendar.HOUR);
+		int minuteA = calendarA.get(Calendar.MINUTE);
 		
 		Calendar calendarB = Calendar.getInstance();
 		calendarB.setTime(pDateB);
-		int yearB 	= calendarB.get(calendarB.YEAR);
-		int monthB 	= calendarB.get(calendarB.MONTH);
-		int dayB 	= calendarB.get(calendarB.DAY_OF_MONTH);
-		int hourB   = calendarB.get(calendarB.HOUR);
-		int minuteB = calendarB.get(calendarB.MINUTE);
+		int yearB 	= calendarB.get(Calendar.YEAR);
+		int monthB 	= calendarB.get(Calendar.MONTH);
+		int dayB 	= calendarB.get(Calendar.DAY_OF_MONTH);
+		int hourB   = calendarB.get(Calendar.HOUR);
+		int minuteB = calendarB.get(Calendar.MINUTE);
 		
 		return (yearA == yearB) && (monthA == monthB) && (dayA == dayB) && (hourA == hourB) && (minuteA == minuteB);
 	}
