@@ -18,7 +18,6 @@
 							required></select>
 					</div>
 				</div>
-
 				<div class="col-md-6">
 					<div class="form-group form-group-sm">
 						<label class="control-label">Fecha de hasta</label> <input
@@ -26,11 +25,7 @@
 							bs-datepicker required>
 					</div>
 				</div>
-
-
-
 			</div>
-
 			<h4>Ventas</h4>
 			<div class="row" ng-if="form.sales.length > 0">
                 <div class="col-md-12">
@@ -45,12 +40,10 @@
 					<th class="col-xs-2">Pagada</th>
 					<th class="col-xs-2">Monto</th>
 				</tr>
-<!-- 		    ng-repeat="sale in form.sales" -->
 				<tr dir-paginate="sale in filtered = (form.sales | itemsPerPage: table.pageSize)" >
 					<td class="table-cell-input">{{sale.date | date:'dd/MM/yyyy	HH:mm'}}</td>
 					<td class="table-cell-input">{{sale.personName }}</td>
 					<td class="table-cell-input">{{sale.payForm }}</td>
-					
 					<td class="table-cell-detail">
 	                	<div>
 	                		<div class="text-icon" style="display: inline-block;" ng-if="sale.paied_out == true" ><i class="fa fa-check-circle"></i></div>
@@ -59,7 +52,6 @@
 	                </td>
 					<td class="table-cell-input">$ {{calculateSaleTotal(sale) | number: 2}}</td>
 				</tr>
-
 				<tr ng-if="form.sales.length == 0 || form.sales == null">
 					<td colspan="4" class="table-cell-empty">No hay ventas para	mostrar</td>
 				</tr>
@@ -69,9 +61,7 @@
                     <h3 class="text-right">Monto Total: $ {{form.totalDeVentas | number: 2}}</h3>
                 </div>
             </div>
-
 		</div>
-
 		<div class="panel-footer">
 			<div class="text-right">
 				<button type="submit" class="btn btn-icon btn-primary">
