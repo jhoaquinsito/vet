@@ -34,6 +34,12 @@ public class PersonService {
 		return mStoredPerson;
 	}
 	
+	public Iterable<Person> getAll() {
+		Iterable<Person> mPeople = this.iPersonRepository.findAll();
+		
+		return mPeople; 
+	}
+	
 	/**
 	 * Método que permite eliminar una persona legal a partir de su identificador.
 	 * La eliminación es de tipo lógica.

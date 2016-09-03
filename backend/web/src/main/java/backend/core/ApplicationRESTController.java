@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
 import backend.person.PersonDTO;
+import backend.person.PersonForDropdownDTO;
 import backend.person.children.natural_person.NaturalPersonDTO;
 import backend.person.iva_category.IVACategoryDTO;
 import backend.person.settlement.SettlementDTO;
@@ -449,6 +450,20 @@ public class ApplicationRESTController {
 	public @ResponseBody List<PersonDTO> listClients() throws BusinessException {
 
 		return this.iCommandAndQueries.getClients();
+	}
+	
+	/**
+	 * Método que permite recuperar la lista completa de personas que son clientes para ser utilizada en un dropdown.
+	 * Esta lista no contiene toda la información de los clientes, sino sólo la necesaria para
+	 * un dropdown: Id, Name, Settlements.
+	 * 
+	 * @return Lista de clientes.
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "client/dropdown", method = RequestMethod.GET)
+	public @ResponseBody List<PersonForDropdownDTO> listClientsForDropdown() throws BusinessException {
+
+		return this.iCommandAndQueries.getClientsForDropdown();
 	}
 	
 	@RequestMapping(value = "client/{pClientId}/settlements", method = RequestMethod.POST)

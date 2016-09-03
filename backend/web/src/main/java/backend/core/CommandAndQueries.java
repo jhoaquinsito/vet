@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import backend.exception.BusinessException;
 import backend.person.Person;
 import backend.person.PersonDTO;
+import backend.person.PersonForDropdownDTO;
 import backend.person.PersonService;
 import backend.person.children.legal_person.LegalPerson;
 import backend.person.children.legal_person.LegalPersonDTO;
@@ -693,6 +694,48 @@ public class CommandAndQueries {
 		}
 		
 		return mClientsList;
+	}
+	
+	/***
+	 * Método que permite recuperar la lista de personas que son clientes para ser utilizada en un dropdown.
+	 * Esta lista no contiene toda la información de los clientes, sino sólo la necesaria para
+	 * un dropdown: Id, Name, Settlements.
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<PersonForDropdownDTO> getClientsForDropdown() throws BusinessException {
+		Iterable<LegalPerson> mLegalPerson = this.iLegalPersonService.getAll();
+		
+		Iterable<NaturalPerson> mNaturalPerson = this.iNaturalPersonService.getAll();
+		
+		List<Person> mClientsList = new ArrayList<Person>();
+		
+		for (LegalPerson bLegalPerson : mLegalPerson){
+			if(bLegalPerson.isClient() && bLegalPerson.isActive())
+			mClientsList.add(bLegalPerson);
+		}
+		
+		for (NaturalPerson bNaturalPerson : mNaturalPerson){
+			if(bNaturalPerson.isActive())
+			mClientsList.add(bNaturalPerson);
+		}
+		
+		//TODO pendiente de refactor:
+		List<PersonForDropdownDTO> mClientsListDTO = new ArrayList<PersonForDropdownDTO>();
+		for (Person bPerson : mClientsList){
+			PersonForDropdownDTO bPersonForDropdownDTO = new PersonForDropdownDTO();
+			bPersonForDropdownDTO.setId(bPerson.getId());
+			bPersonForDropdownDTO.setSettlements(this.iMapper.mapAsSet(bPerson.getSettlements(), SettlementDTO.class));
+			if (bPerson.getClass() == NaturalPerson.class){ // si es persona natural
+				String bPersonLastName = ((NaturalPerson) bPerson).getLastName();
+				bPersonForDropdownDTO.setName(bPerson.getName()+' '+ bPersonLastName);
+			}else{
+				bPersonForDropdownDTO.setName(bPerson.getName());
+			}
+			mClientsListDTO.add(bPersonForDropdownDTO);
+		}
+		
+		return mClientsListDTO;
 	}
 	
 	/***
