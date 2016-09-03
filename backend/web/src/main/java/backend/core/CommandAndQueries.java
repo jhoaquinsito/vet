@@ -58,7 +58,6 @@ import backend.sale.SaleLiteDTO;
 import backend.sale.SaleService;
 import backend.saleline.SaleLine;
 import backend.saleline.SaleLineLiteDTO;
-import backend.utils.EntityValidator;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
 
@@ -871,7 +870,6 @@ public class CommandAndQueries {
 	 */
 	public Long createSale(SaleLiteDTO pSaleDTO) throws BusinessException {
 		
-		EntityValidator mEntityValidator = new EntityValidator();
 		// map dto to domain object
 		Sale mSale;
 		if (pSaleDTO != null){
@@ -887,12 +885,12 @@ public class CommandAndQueries {
 
 				// obtengo el settlement de la venta realizada
 				Settlement mSettlement = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
-				
-				// valido settlement
-				mEntityValidator.validate(mSettlement);
-				
+								
 				// agrego el settlement al cliente
 				mPerson.addSettlement(mSettlement);
+				
+				// proceso la deuda del cliente (descuento pagos, agrego excedentes, cancelo deudas, etc)
+				mPerson = this.processClientDebt(mPerson);
 				
 				// agrego el cliente actualizado a la venta
 				mSale.setPerson(mPerson);
