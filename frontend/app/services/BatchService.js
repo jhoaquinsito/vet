@@ -24,8 +24,6 @@ app.factory('BatchService', function() {
 
     // funcion que agrega un producto a la lista de productos actualizados pendientes de confirmar para actualizar stock
     this.setUpdatedProduct = function(updatedProduct) {
-        console.log(updatedProduct);
-
         // intento obtener el indice del producto actualizado en la lista de productos actualizados
         var updatedProductIndex = arrayGetIndexOfId(updatedProducts, updatedProduct.id);
 

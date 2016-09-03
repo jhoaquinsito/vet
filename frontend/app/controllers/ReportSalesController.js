@@ -74,7 +74,7 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
         return form.$invalid;
     };
 
- // funcion que pasa un objeto Date a un integer ISO
+    // funcion que pasa un objeto Date a un integer ISO
     function dateObjectToIsoDate(dateObject){
         var stringDate = $filter('date')(dateObject, 'yyyyMMdd');
         var isoDate = null;
@@ -85,7 +85,7 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
         return isoDate;
     }
     
- // funcion que transforma un integer ISO del formato yyyyMMdd a un objeto Javascript Date
+    // funcion que transforma un integer ISO del formato yyyyMMdd a un objeto Javascript Date
     function isoDateToDateObject(isoDate){
         var dateObject = null;
 
@@ -103,6 +103,7 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
     }
 
     // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
+    // TODO este metodo esta repetido y forma parte de las utilildades de Date. Refactor pendiente.
     $scope.isoDateToFormattedString = function(isoDate) {
         var formattedString = null;
 
@@ -114,17 +115,12 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
             
             // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
             formattedString = isoDateString.replace(pattern, '$3/$2/$1');
-            //console.log(formattedString);
         }
 
         return formattedString;
     }
     
-    
-    
-    
-    
-  //TODO - NO BORRAR!
+    //TODO - NO BORRAR!
     $scope.calculateSaleTotal = function(sale){
         return ReportSalesService.calculateSaleTotal(sale);
     };
@@ -136,41 +132,7 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
     //TODO - NO BORRAR!
     $scope.calculateAllSalesTotal = function(){
     	return ReportSalesService.calculateAllSalesTotal($scope.form.sales);
-        
     };
     
-    //TODO - Borrar porque NO SE USA.
-    $scope.calculateSaldoAFavor = function(){
-    	
-    	//TODO - Aca hay que invocar a un método del ReportSalesService que permita
-    	//obtener para el cliente en cuesti{on, cuanto saldo a favor tiene, que seria...
-    	//tener todos los Settlement que no hayan sido descontados...
-    	
-    	if($scope.form.person != null){
-    		($scope.calculateAllSalesTotal()) - ($scope.calculateAllSalesTotal())  
-    	}else
-    		return 0;
-    		
-    	
-    }
-    
-    //Se usa multiples veces.
-    $scope.calculateSettlementsTotal = function(){
-    	
-    	//TODO - Aca hay que invocar a un método del ReportSalesService que permita
-    	//obtener para el cliente en cuesti{on, cuanto ha entregado , que seria...
-    	//tener todos los Settlement y hacer su sumatoria
-    	
-    	if($scope.form.person != null && $scope.form.person.id != null){
-    		$scope.form.totalDePagos = ReportSalesService.calculateClienteBalance($scope.form.person);
-    	}else{
-    		$scope.form.totalDePagos = 0;    		
-    	}
-    	return $scope.form.totalDePagos;
-    	
-    }
-    
-    
-
     $scope.init();
 });

@@ -91,6 +91,7 @@ app.controller('ReportBatchDueDateController', function($scope, $location, $root
     }
 
     // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
+    // TODO refactor pendiente: metodo repetido y parte de las DateUtils
     $scope.isoDateToFormattedString = function(isoDate) {
         var formattedString = null;
 
@@ -102,7 +103,6 @@ app.controller('ReportBatchDueDateController', function($scope, $location, $root
             
             // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
             formattedString = isoDateString.replace(pattern, '$3/$2/$1');
-            //console.log(formattedString);
         }
 
         return formattedString;

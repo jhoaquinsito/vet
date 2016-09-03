@@ -91,8 +91,6 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         var request = SettlementService.addSettlement($scope.form.person, $scope.form.newSettlement);
 
         request.success = function(response) {
-        	console.log("response" + response);
-        	
         	//Refrescamos los datos del cliente y de sus ventas.
         	$scope.loadSales(response);
         	$scope.loadCliente(response);
@@ -135,23 +133,16 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     //TODO - NO BORRAR!
     $scope.calculateAllSalesTotal = function(){
     	return SettlementService.calculateAllSalesTotal($scope.form.sales);
-        
     };
     
     //Se usa multiples veces.
     $scope.calculateSettlementsTotal = function(){
-    	
-    	//TODO - Aca hay que invocar a un método del SettlementService que permita
-    	//obtener para el cliente en cuesti{on, cuanto ha entregado , que seria...
-    	//tener todos los Settlement y hacer su sumatoria
-    	
     	if($scope.form.person != null && $scope.form.person.id != null){
     		$scope.form.totalDePagos = SettlementService.calculateClienteBalance($scope.form.person);
     	}else{
     		$scope.form.totalDePagos = 0;    		
     	}
     	return $scope.form.totalDePagos;
-    	
     }
     
 
