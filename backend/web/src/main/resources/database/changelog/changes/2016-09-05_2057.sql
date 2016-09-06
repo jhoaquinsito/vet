@@ -12,7 +12,7 @@ CREATE OR REPLACE VIEW public.person_balance AS
             batch b,
             product p,
             person per
-          WHERE s.paied_out = false AND b.product = p.id AND per.id = s.person
+          WHERE s.paied_out = false AND b.product = p.id AND per.id = s.person AND sl.sale_id = s.id AND b.id = sl.batch
           GROUP BY per.id) debt_calculation
      LEFT JOIN ( SELECT per.id AS person_id,
             sum(settl.amount) AS credit_total
