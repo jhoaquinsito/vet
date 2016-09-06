@@ -1,11 +1,13 @@
 package backend.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import backend.exception.BusinessException;
+import backend.person.children.natural_person.NaturalPerson;
 import backend.product.Product;
 import backend.product.ProductDTO;
 import backend.product.ProductService;
@@ -36,7 +38,22 @@ public class ReportQueries {
 		
 		Iterable<PersonBalance> mPersonBalances = this.iPersonBalanceService.getAll();
 		
-		return this.iMapper.mapAsList(mPersonBalances, PersonBalanceDTO.class);
+		// TODO refactor this:
+		List<PersonBalanceDTO> mPersonBalanceDTOs = new ArrayList<PersonBalanceDTO>();
+		for (PersonBalance bPersonBalance : mPersonBalances){
+			PersonBalanceDTO bPersonBalanceDTO = new PersonBalanceDTO();
+			bPersonBalanceDTO.setDebtTotal(bPersonBalance.getDebtTotal());
+			bPersonBalanceDTO.setCreditTotal(bPersonBalance.getCreditTotal());
+			if (bPersonBalance.getPerson().getClass() == NaturalPerson.class){ // si es persona natural
+				String bPersonLastName = ((NaturalPerson) bPersonBalance.getPerson()).getLastName();
+				bPersonBalanceDTO.setPersonName(bPersonBalance.getPerson().getName()+' '+ bPersonLastName);
+			}else{
+				bPersonBalanceDTO.setPersonName(bPersonBalance.getPerson().getName());
+			}
+			mPersonBalanceDTOs.add(bPersonBalanceDTO);
+		}
+		
+		return mPersonBalanceDTOs;
 		
 	}
 	
