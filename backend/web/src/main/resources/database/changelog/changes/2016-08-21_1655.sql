@@ -3,13 +3,9 @@
 
 BEGIN TRANSACTION;
 
--- elimino la columna de cuit que era numeric
-ALTER TABLE legal_person
-	DROP cuit;
-
--- agrego la nueva columna cuit varchar(20)
-ALTER TABLE legal_person
-   ADD COLUMN cuit character varying(20) NOT NULL;
+-- cambio la columna de cuit a string (era numeric)
+ALTER TABLE legal_person 
+	ALTER COLUMN cuit TYPE character varying(20);
 
 	
 COMMIT;
