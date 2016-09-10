@@ -247,5 +247,23 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         return false;
     };
 
+    // verifico si el boton de aceptar en el modal de busqueda de productos/lote debe estar deshabilitado o no
+    $scope.isModalAcceptButtonDisabled = function(){
+        // si no tiene ningun producto cargado en el modal entonces tiene que estar deshabilitado
+        if ($scope.form.searchProductModal.product != null){
+            if ($scope.form.searchProductModal.product.batches != null){
+                // si todos los batches están en cero o vacíos entonces tiene que estar deshabilitado
+                for (var i = 0; i < $scope.form.searchProductModal.product.batches.length; i++) {
+                    if ($scope.form.searchProductModal.product.batches[i].unitsToSell != null && 
+                            $scope.form.searchProductModal.product.batches[i].unitsToSell != 0){
+                        return false;
+                    } 
+                }
+            }
+        }
+
+        return true;
+    }
+
     $scope.init();
 });
