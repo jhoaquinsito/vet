@@ -107,7 +107,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.isSaveButtonDisabled = function(){
         var isBatchSaveDisabled = false;
         if ($scope.form.product != null){
-            isBatchSaveDisabled = !BatchService.productHasBatches($scope.form.product);
+            isBatchSaveDisabled = $scope.thereArentBatchesToShow();
         }
         return isBatchSaveDisabled;
     }
@@ -126,8 +126,6 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         // limpio los campos de agregar batch
         $scope.form.batch = {};
     };
-
-
 
     // funcion que se ejecuta al eliminar un lote de la lista de lotes de la pantalla Cargar lote
     $scope.removeBatchToTableAction = function(batch) {
@@ -183,6 +181,22 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.isoDateToFormattedString = function(isoDate) {
         return DateUtilsService.isoDateToFormattedString(isoDate);
     }
+
+    // funcion que determina si hay lotes para mostrar o no, en la pantalla de cargar lote
+    $scope.thereArentBatchesToShow = function() {
+        if ($scope.form.product != null){
+            if (BatchService.productHasBatches($scope.form.product)){
+                for (var i = 0; i < $scope.form.product.batches.length; i++) {
+                    // si tiene id entonces no hay que mostrarlo (porque son los viejos que ya existian en el sistema)
+                    if ($scope.form.product.batches[i].id == null){
+                        return false;
+                    } 
+                }             
+            }
+        }
+
+        return true;
+    }    
 
     $scope.init();
 });

@@ -75,17 +75,17 @@
                             <th></th>
                         </tr>
                         <tr ng-repeat="batch in form.product.batches">
-                            <td>
+                            <td ng-if="batch.id == null">
                                 <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
                                 <span ng-if="batch.isoDueDate != null">{{ isoDateToFormattedString(batch.isoDueDate) }}</span>
                             </td>
-                            <td>{{batch.stock}}</td>
-                            <td class="table-cell-actions">
+                            <td ng-if="batch.id == null">{{batch.stock}}</td>
+                            <td ng-if="batch.id == null" class="table-cell-actions">
                                 <button ng-click="editBatchFromTableAction(batch)" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></button>
                                 <button ng-click="removeBatchToTableAction(batch)" class="btn btn-sm btn-info" data-title="Quitar" bs-tooltip><i class="fa fa-close"></i></button>
                             </td>
                         </tr>
-                        <tr ng-if="form.product.batches.length == 0 || form.product.batches == null">
+                        <tr ng-if="thereArentBatchesToShow()">
                             <td colspan="3" class="table-cell-empty">No hay lotes para mostrar</td>
                         </tr>
                     </table>
