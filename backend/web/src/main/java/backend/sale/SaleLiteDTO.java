@@ -7,6 +7,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import backend.form_of_sale.FormOfSale;
 import backend.person.settlement.SettlementDTO;
 import backend.saleline.SaleLineLiteDTO;
 
@@ -35,8 +36,8 @@ public class SaleLiteDTO {
 	
 	private SettlementDTO iSettlement;
 	
-	private String iPayForm;	
 	
+	private FormOfSale iFormOfSale;
 	
 	public Long getId() {
 		return iId;
@@ -104,11 +105,11 @@ public class SaleLiteDTO {
 		this.iSettlement = pSettlement;
 	}
 	
-	public String getPayForm() {
-		return iPayForm;
+	public FormOfSale getFormOfSale() {
+		return iFormOfSale;
 	}
 
-	public void setPayForm(String pPayForm) {
-		this.iPayForm = pPayForm;
+	public void setFormOfSale(FormOfSale iFormOfSale) {
+		this.iFormOfSale = iFormOfSale;
 	}
 }

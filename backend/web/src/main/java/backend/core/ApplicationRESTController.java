@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
+import backend.form_of_sale.FormOfSale;
+import backend.form_of_sale.FormOfSaleDTO;
+import backend.form_of_sale.FormOfSaleForSalesReportDTO;
 import backend.person.PersonDTO;
 import backend.person.PersonForDropdownDTO;
 import backend.person.children.natural_person.NaturalPersonDTO;
@@ -154,7 +157,8 @@ public class ApplicationRESTController {
 	 * 
 	 */
 	@RequestMapping(value = "products/byduedate", method = RequestMethod.GET)
-	public List<BatchDTO> getProductsByExpirationDate(@RequestParam(value = "days", required = true) Integer days, @RequestParam(value = "beginDate", required = false) Integer beginDate) throws BusinessException {
+	public List<BatchDTO> getProductsByExpirationDate(@RequestParam(value = "days", required = true) Integer days, 
+													  @RequestParam(value = "beginDate", required = false) Integer beginDate) throws BusinessException {
 		Date mBeginDate = new Date();
 		
 
@@ -165,7 +169,8 @@ public class ApplicationRESTController {
 	}
 	
 	@RequestMapping(value = "products/toExpirate", method = RequestMethod.GET)
-	public boolean areProductsToExpirate(@RequestParam(value = "days", required = true) Integer days, @RequestParam(value = "beginDate", required = false) Integer beginDate) throws BusinessException {
+	public boolean areProductsToExpirate(@RequestParam(value = "days", required = true) Integer days, 
+										 @RequestParam(value = "beginDate", required = false) Integer beginDate) throws BusinessException {
 		Date mBeginDate = new Date();
 		
 
@@ -543,18 +548,17 @@ public class ApplicationRESTController {
 	 * @return
 	 * @throws BusinessException
 	 */
-	@RequestMapping(value = "sale/report", method = RequestMethod.GET)
+	@RequestMapping(value = "sale/report", method = RequestMethod.POST)
 	public List<SaleLiteDTO> getSalesForReport
-	(@RequestParam(value = "payForm", required = true) String payForm, 
-	 @RequestParam(value = "beginDate", required = false) Integer beginDate,
-	 @RequestParam(value = "endDate", required = false) Integer endDate) throws BusinessException {
+	(@RequestBody FormOfSaleForSalesReportDTO pFormOfSaleForSalesReport) throws BusinessException {
+		
 		Date mBeginDate = new Date();
 		Date mEndDate = new Date();
 
-		if(beginDate != null)
-			mBeginDate 	= DateHelper.getDate(beginDate);
-		if(endDate != null)
-			mEndDate 	= DateHelper.getDate(endDate);
+		if(pFormOfSaleForSalesReport.getBeginDate() != null)
+			mBeginDate 	= DateHelper.getDate(pFormOfSaleForSalesReport.getBeginDate());
+		if(pFormOfSaleForSalesReport.getEndDate() != null)
+			mEndDate 	= DateHelper.getDate(pFormOfSaleForSalesReport.getEndDate());
 		
 		//Como la IsoDueDate carece de la parte temporal, es necesario agregar 1 día mas, para contemplar el dia entero en la EndDate
 		Calendar c = Calendar.getInstance();
@@ -563,7 +567,7 @@ public class ApplicationRESTController {
 		mEndDate = (c.getTime());  
 		
 		
-		return this.iCommandAndQueries.getSalesForReport(mBeginDate, mEndDate, payForm);
+		return this.iCommandAndQueries.getSalesForReport(mBeginDate, mEndDate, pFormOfSaleForSalesReport);
 	}
 
 	/**
@@ -639,6 +643,14 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "client/{id}", method = RequestMethod.DELETE)
 	public void deleteClientById(@PathVariable Long id) throws BusinessException {
 		this.iCommandAndQueries.deletePerson(id);
+	}
+	
+	@RequestMapping(value = "formofsale", method = RequestMethod.GET)
+	public List<FormOfSaleDTO> listFormOfSales() throws BusinessException {
+
+		List<FormOfSaleDTO> mFormOfSaleDTOList = this.iCommandAndQueries.getFormOfSales();
+
+		return mFormOfSaleDTOList;
 	}
 	
 	// FIN VENTAS

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import backend.exception.BusinessException;
 import backend.exception.ExceptionUtils;
+import backend.form_of_sale.FormOfSale;
+import backend.form_of_sale.FormOfSaleForSalesReportDTO;
 import backend.product.Product;
 import backend.sale.Sale;
 import backend.sale.SaleRepository;
@@ -241,7 +243,7 @@ public class SaleService {
 	 *        al mismo tiempo que como puede ser un gran listado, puede generar excepcion por gran cantidad de datos.
 	 * @throws BusinessException
 	 */
-	public List<Sale> getReportSales(Date pBeginDate,Date pEndDate, String pSalePayingForm) throws BusinessException{
+	public List<Sale> getReportSales(Date pBeginDate,Date pEndDate, FormOfSaleForSalesReportDTO pFormOfSale) throws BusinessException{
 		List<Sale> mReportSales = new ArrayList<Sale>();
 		Iterable<Sale> mSales = this.getAll();
 		Iterator<Sale> mSalesIterator = mSales.iterator();
@@ -252,27 +254,12 @@ public class SaleService {
 			boolean bSaleIsBetweenDates = bSale.getDate().after(pBeginDate) && bSale.getDate().before(pEndDate);
 			
 			if(bSaleIsBetweenDates){
-				//Si el tipo de pago es "Efectivo"
-				Boolean mIsPaidInCash = bSale.isSalePaidedInCash();
+				//Si el tipo de pago es -1 (un tipo de pago especial)
 				
-				if(mIsPaidInCash)
-					bSale.setPayForm("Contado");
-				else
-					bSale.setPayForm("Cuenta Corriente");
-				
-				if(pSalePayingForm.toUpperCase().compareTo("Todas".toUpperCase()) == 0 ){
+				if(pFormOfSale.getId() == (0) ){
 					mReportSales.add(bSale);
 					continue;
-				}
-				
-				if(pSalePayingForm.toUpperCase().compareTo("Contado".toUpperCase()) == 0 &&
-						mIsPaidInCash){
-					mReportSales.add(bSale);
-					continue;
-				}
-				//Si el tipo es "Cuenta Corriente" 
-				if(pSalePayingForm.toUpperCase().compareTo("Cuenta Corriente".toUpperCase()) == 0 &&
-						!mIsPaidInCash){
+				}else if(bSale.getFormOfSale().getId()==(pFormOfSale.getId())){
 					mReportSales.add(bSale);
 					continue;
 				}

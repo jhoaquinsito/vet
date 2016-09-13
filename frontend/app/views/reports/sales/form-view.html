@@ -13,8 +13,8 @@
 				<div class="col-md-6">
 					<div class="form-group form-group-sm">
 						<label class="control-label">Forma de pago</label> <select
-							class="form-control" name="paied_out" ng-model="form.paied_out"
-							ng-options="paiedOutOption.value as paiedOutOption.label for paiedOutOption in form.paiedOutOptions"
+							class="form-control" name="formOfSale" ng-model="form.formOfSale"
+							ng-options="formOfSaleOption as formOfSaleOption.description for formOfSaleOption in form.formOfSaleOptions"
 							required></select>
 					</div>
 				</div>
@@ -43,11 +43,11 @@
 				<tr dir-paginate="sale in filtered = (form.sales | itemsPerPage: table.pageSize)" >
 					<td class="table-cell-input">{{sale.date | date:'dd/MM/yyyy	HH:mm'}}</td>
 					<td class="table-cell-input">{{sale.personName }}</td>
-					<td class="table-cell-input">{{sale.payForm }}</td>
+					<td class="table-cell-input">{{sale.formOfSale.description }}</td>
 					<td class="table-cell-detail">
 	                	<div>
-	                		<div class="text-icon" style="display: inline-block;" ng-if="sale.paied_out == true" ><i class="fa fa-check-circle"></i></div>
-	                    	<div class="text-icon" style="display: inline-block;" ng-if="sale.paied_out == false"><i class="fa fa-times-circle"></i></div>
+	                		<div class="text-icon" style="display: inline-block;" ng-if="sale.paiedOut" ><i class="fa fa-check-circle"></i></div>
+	                    	<div class="text-icon" style="display: inline-block;" ng-if="!sale.paiedOut"><i class="fa fa-times-circle"></i></div>
 	                   	</div>
 	                </td>
 					<td class="table-cell-input">$ {{calculateSaleTotal(sale) | number: 2}}</td>

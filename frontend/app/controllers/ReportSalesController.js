@@ -1,4 +1,4 @@
-app.controller('ReportSalesController', function($scope, $location, $rootScope, $route, $routeParams,$filter, $modal, ReportSalesService, MessageService, config) {
+app.controller('ReportSalesController', function($scope, $location, $rootScope, $route, $routeParams,$filter, $modal, ReportSalesService,FormOfSaleService, MessageService, config) {
     $scope.name = 'Reporte - Ventas';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -15,7 +15,10 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
     $scope.resetFormData = function() {
         $scope.form = {
     		invoiced: null,
-            paied_out: null,
+            formOfSale: {
+            	id:0,
+            	description:"Todas"
+            },
     		beginIsoDueDate: dateObjectToIsoDate($scope.form.beginIsoDueDate),
     		endIsoDueDate: 	 dateObjectToIsoDate($scope.form.endIsoDueDate),
             sales : [],
@@ -25,12 +28,25 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
 
     $scope.refreshFormDropdownsData = function() {
 
-        $scope.form.invoiceOptions = ReportSalesService.getInvoiceOptions();
-        $scope.form.invoiced = $scope.form.invoiceOptions[0].value;
+        $scope.form.invoiceOptions 	= ReportSalesService.getInvoiceOptions();
+        $scope.form.invoiced 		= $scope.form.invoiceOptions[0].value;
 
 
-        $scope.form.paiedOutOptions = ReportSalesService.getPaiedOutOptions();
-        $scope.form.paied_out = $scope.form.paiedOutOptions[0].value;
+        
+        FormOfSaleService.getList().then(function(response) {
+        	//TODO - GGorosito: Es está la forma correcta? 
+        	
+            var formOfSaleList = response.plain();
+            var formOfSaleDefault = { id: 0, description : "Todas" };
+            $scope.form.formOfSaleOptions = [];
+            $scope.form.formOfSaleOptions.push(formOfSaleDefault);
+            //$scope.form.formOfSaleOptions.concat(formOfSaleList);
+            $scope.form.formOfSaleOptions.push.apply($scope.form.formOfSaleOptions, formOfSaleList)
+            //
+            $scope.form.formOfSale = $scope.form.formOfSaleOptions[1].value;
+        });
+        
+        
 
     };
     
@@ -122,7 +138,7 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
     
     //TODO - NO BORRAR!
     $scope.calculateSaleTotal = function(sale){
-        return ReportSalesService.calculateSaleTotal(sale);
+    	return ReportSalesService.calculateSaleTotal(sale);
     };
     //TODO - NO BORRAR!
     $scope.calculateSaleTotalUpdated = function(sale){

@@ -1,4 +1,4 @@
-app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, $modal, SaleService, ProductService, ClientService, MessageService, config) {
+app.controller('SaleController', function($scope, $location, $rootScope, $route, $routeParams, $modal, SaleService, ProductService, ClientService,FormOfSaleService, MessageService, config) {
     $scope.name = 'Ventas';
     $scope.action = $route.current.action;
     $scope.table = {};
@@ -16,7 +16,10 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     $scope.resetFormData = function() {
         $scope.form.sale = {
             invoiced: false,
-            paied_out: null,
+            formOfSale: {
+            	id: 1,
+            	description: "Contado"
+            },
             person: null,
             saleLines: [],
             settlement: {
@@ -96,9 +99,16 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         $scope.form.sale.invoiced = $scope.form.invoiceOptions[0].value;
 
 
-        $scope.form.paiedOutOptions = SaleService.getPaiedOutOptions();
-        $scope.form.sale.paied_out = $scope.form.paiedOutOptions[0].value;
+        
 
+        FormOfSaleService.getList().then(function(response) {
+        	//TODO - GGorosito: Es está la forma correcta? 
+        	
+            var formOfSaleList = response.plain();
+            $scope.form.formOfSaleOptions = formOfSaleList;
+            //
+            $scope.form.formOfSale = $scope.form.formOfSaleOptions[0].value;
+        });
     };
 
     $scope.addSaleLineAction = function() {

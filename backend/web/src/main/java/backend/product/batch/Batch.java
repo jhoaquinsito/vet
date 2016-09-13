@@ -140,7 +140,7 @@ public class Batch {
 	
 
 	/**
-	 * Este método permite determinar si un lote aún si ha expirado, o expirará,
+	 * Este método permite determinar si un lote aún si expirará ante una determinada fecha
 	 * teniendo en cuenta dos parámetros
 	 * 1. Una fecha de inicio, y 2. una cantidad de días a tener en cuenta.
 	 * @param pBeginDate
@@ -156,7 +156,7 @@ public class Batch {
 		
 		Date pBeginDateWithAddedDays = mCalendar.getTime();
 		
-		if(pBeginDateWithAddedDays.compareTo(this.getDueDate()) >= 0)
+		if(pBeginDateWithAddedDays.compareTo(this.getDueDate()) <= 0)
 			return true;
 		else
 			return false;
