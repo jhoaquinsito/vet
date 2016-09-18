@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -499,43 +498,40 @@ public class CommandAndQueries {
 	}
 	
 	public Person processClientDebt(Person pClient) throws BusinessException{
-		// si la persona tiene ventas adeudadas
-		if (!this.clientIsInDebt(pClient)){
+		BigDecimal mTotalClientDebtAmount = this.getClientDebt(pClient.getId());
+		
+		// si la deuda total del cliente es mayor que cero 
+		// y si los pagos que tiene le alcanzan para cancelar la deuda que tiene
+		if (mTotalClientDebtAmount.compareTo(BigDecimal.ZERO) == 1 &&
+				pClient.totalAmountOfUndiscountedSettlements().compareTo(mTotalClientDebtAmount) >= 0){
 			
-			//Analizo si el total pagado excede el total de la deuda, caso afirmativo, creamos un Settlement con el excedente.
-			if( pClient.totalPaid().compareTo(this.getClientDebt(pClient.getId())) > 0 ){
-				pClient = this.addSurplusSettlementTo(pClient);
-			}else{
-				//Descuento los pagos del cliente
-				pClient.discountSettlements();
+			// me fijo cuanto es la diferencia entre los pagos que tiene a favor y el total de lo que debe
+			// NOTA: es el credito que le va a quedar a favor al cliente.
+			BigDecimal mClientCreditAmount = pClient.totalAmountOfUndiscountedSettlements().subtract(mTotalClientDebtAmount);
+
+			// me fijo si le queda credito (si el credito es mayor que cero)
+			if (mClientCreditAmount.compareTo(BigDecimal.ZERO) == 1){
+				// le queda credito, entonces tengo que:
+				// 1. Obtener el primer pago en orden cronológico que no este marcado como descontado. 			
+				// 2. Si el monto del pago es <= a la deuda -> pongo el atributo discounted = monto del pago y restarle a la deuda el monto del pago (variable). Continuar con el próximo pago en orden cronológico.
+				// 3. Sino (el monto del pago es mayor a la deuda) -> pongo en el atributo discounted el monto de la deuda.
+				
+				//TODO has tu magia aquí gorito 
+				
+			} else { // no le queda credito, significa que la deuda es exactamente igual a los pagos a favor
+				
+				// marco todos los settlements como descontados
+				pClient.markAsDiscountedAllSettlements();
 			}
 			
-			//Cancelo la deuda del cliente
-			this.cancelClientDebt(pClient);
+			// marco todas las deudas del cliente como pagadas
+			this.iSaleService.payClientSales(pClient.getId());
+			
 		}
 		
 		return pClient;
 	}
 	
-	private Person addSurplusSettlementTo(Person pClient) throws BusinessException{
-		Settlement surplusSettlement = new Settlement();
-		
-		//Reestablezco la lista Settlements
-		pClient.setSettlements(pClient.getSettlementListWithSurplus(this.getClientDebt(pClient.getId())));
-		
-		surplusSettlement = ((TreeSet<Settlement>) pClient.getSettlements()).last();
-		
-		//Removemos el último elemento.
-		pClient.getSettlements().remove(surplusSettlement);
-		
-		//Descuento los pagos del cliente
-		pClient.discountSettlements();
-		
-		//Agrego el nuevo Settlement NO descontado a la person
-		pClient.addSettlement(surplusSettlement);
-		
-		return pClient;
-	}
 	
 	/***
 	 * Este método es una consulta que devuelve la lista completa de Personas Legales
@@ -763,6 +759,7 @@ public class CommandAndQueries {
 				BigDecimal bProductQuantity = BigDecimal.valueOf(bSaleLine.getQuantity());
 						
 				//Obtengo el precio unitario actual del producto de la línea
+				//TODO para esto debería usarse directamente el precio del producto que hay en la venta (ya es el último)
 				BigDecimal bProductPrice = this.iProductService.get(bSaleLine.getBatch().getProduct().getId()).getUnitPrice();
 
 						
@@ -785,24 +782,6 @@ public class CommandAndQueries {
 		return mDebt;
 	}
 	
-	/**
-	 * Determina si el cliente tiene deuda o no. Si el total adeudado es menor o igual
-	 * a la suma de los pagos no descontados del cliente, entonce no tiene deuda.
-	 * @param pClient el cliente del cual se quiere cancelar la deuda.
-	 * @throws BusinessException 
-	 */
-	public Boolean clientIsInDebt(Person pClient) throws BusinessException{
-		
-		//Defino una variable para guardar la deuda total del cliente
-		BigDecimal mDebt = BigDecimal.ZERO;
-				
-		// Calculo la deuda total del cliente
-		mDebt = getClientDebt(pClient.getId());
-			
-		//La deuda del cliente es menor o igual que los pagos hechos?
-		return (mDebt.compareTo(pClient.totalPaid()) == 1);
-	}
-	
 	public void setUpdatedSettlementsTo(Long pClientId, List<SettlementDTO> pUpdatedSettlements) throws BusinessException{
 		
 		Set<Settlement> mUpdatedClientSettlements = this.iMapper.mapAsSet(pUpdatedSettlements, Settlement.class);
@@ -818,16 +797,7 @@ public class CommandAndQueries {
 		this.iPersonService.save(mClient);
 	}
 	
-	/**
-	 * Cancela la deuda de un cliente, es decir, pone todas las ventas asociadas
-	 * como pagadas.
-	 * @param pClient el cliente del cual se quiere cancelar la deuda.
-	 * @throws BusinessException 
-	 */
-	public void cancelClientDebt(Person pClient) throws BusinessException{
-		//Marco las ventas como pagas
-		this.iSaleService.payClientSales(pClient.getId());
-	}
+
 		
 	// FIN CLIENTES
 	
@@ -865,38 +835,33 @@ public class CommandAndQueries {
 	 * Este método es un comando que permite guardar una Venta (SALE).
 	 * 
 	 * @param pSaleDTO venta a guardar
-	 * @return identificador de la venta guardada
+	 * @return identificador de la venta guardada, o 0 (cero) si no se pudo guardar
 	 * @throws BusinessException 
 	 */
 	public Long createSale(SaleLiteDTO pSaleDTO) throws BusinessException {
 		
-		// map dto to domain object
-		Sale mSale;
-		if (pSaleDTO != null){
-			if(pSaleDTO.getSettlement() == null)
-				throw new BusinessException(SaleCons.cSALE_SETTLEMENT_NULL_EXCEPTION_MESSAGE);
+		Long mSaleId = 0L;
+		
+		if (pSaleDTO != null && pSaleDTO.isValid()){
+			// map dto to domain object
+			Sale mSale;
+			
 			mSale = iMapper.map(pSaleDTO, Sale.class);
 			
 			// actualizar el cliente con el pago realizado
-			if (pSaleDTO.getPerson() != null){
 				
-				// obtengo el cliente de la venta realizada
-				Person mPerson = this.iPersonService.get(pSaleDTO.getPerson());
+			// obtengo el settlement de la venta realizada
+			Settlement mSettlement = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
+			
+			// obtengo el cliente de la venta realizada
+			Person mPerson = this.iPersonService.get(pSaleDTO.getPerson());
 
-				// obtengo el settlement de la venta realizada
-				Settlement mSettlement = iMapper.map(pSaleDTO.getSettlement(), Settlement.class);
-								
-				// agrego el settlement al cliente
-				mPerson.addSettlement(mSettlement);
-				
-				// proceso la deuda del cliente (descuento pagos, agrego excedentes, cancelo deudas, etc)
-				mPerson = this.processClientDebt(mPerson);
-				
-				// agrego el cliente actualizado a la venta
-				mSale.setPerson(mPerson);
-			} else {
-				throw new NullPointerException("La venta debe estar asociada a un cliente.");
-			}
+			// agrego el settlement al cliente
+			mPerson.addSettlement(mSettlement);
+			
+			// agrego el cliente actualizado a la ventapPersonToSave
+			mSale.setPerson(mPerson);
+			
 			
 			// procesar lotes vendidos
 			
@@ -915,14 +880,21 @@ public class CommandAndQueries {
 			}
 			
 			mSale.setSaleLines(mSaleLineList);
+			
+			mSale = this.iSaleService.save(mSale);
+			
+			mSaleId = mSale.getId();
+			
+			// proceso la deuda del cliente (descuento pagos, agrego excedentes, cancelo deudas, etc)
+			mPerson = this.processClientDebt(mPerson);
+			
+			this.iPersonService.save(mPerson);
 
 		} else {
 			throw new BusinessException(SaleCons.cSALE_NULL_EXCEPTION_MESSAGE);
 		}
 		
-		mSale = this.iSaleService.save(mSale);
-		
-		return mSale.getId();
+		return mSaleId;
 	}
 	
 	/** Este método retorna las ventas asociadas a un cliente, que aún no han sido pagadas.

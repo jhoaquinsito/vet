@@ -7,6 +7,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import backend.exception.BusinessException;
 import backend.person.settlement.SettlementDTO;
 import backend.saleline.SaleLineLiteDTO;
 
@@ -62,8 +63,6 @@ public class SaleLiteDTO {
 		this.iInvoiced = pInvoiced;
 	}
 
-
-
 	public boolean getPaiedOut() {
 		return iPaiedOut;
 	}
@@ -110,5 +109,16 @@ public class SaleLiteDTO {
 
 	public void setPayForm(String pPayForm) {
 		this.iPayForm = pPayForm;
+	}
+	
+	public boolean isValid() throws BusinessException {
+		if(this.iSettlement == null)
+			throw new BusinessException(SaleCons.cSALE_SETTLEMENT_NULL_EXCEPTION_MESSAGE);
+		if (this.iPerson != null){
+	} else {
+		throw new NullPointerException("La venta debe estar asociada a un cliente.");
+	}
+		
+		return this.iSettlement != null && this.iPerson != null;
 	}
 }
