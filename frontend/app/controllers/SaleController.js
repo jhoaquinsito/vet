@@ -16,6 +16,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     $scope.resetFormData = function() {
         $scope.form.sale = {
             invoiced: false,
+            paiedOut: false,
             formOfSale: {
             	id: 1,
             	description: "Contado"
@@ -38,6 +39,18 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 		{
     		$scope.form.sale.settlement.date = '';
 		}    		
+    });
+
+    $scope.$watch("form.sale.formOfSale", function(newValue, oldValue){
+        
+        if($scope.form.sale.formOfSale.id === 1 ) // pago contado
+        {
+            $scope.form.sale.paiedOut = true;
+            $scope.form.sale.settlement.discounted = true;
+        } else { // cuenta corriente
+            $scope.form.sale.paiedOut = false;
+            $scope.form.sale.settlement.discounted = false;
+        }           
     });
     
     $scope.addSaleAction = function() {
