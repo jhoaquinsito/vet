@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import backend.exception.BusinessException;
+import backend.form_of_sale.FormOfSale;
+import backend.form_of_sale.FormOfSaleDTO;
+import backend.form_of_sale.FormOfSaleForSalesReportDTO;
+import backend.form_of_sale.FormOfSaleService;
 import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.PersonForDropdownDTO;
@@ -90,6 +94,8 @@ public class CommandAndQueries {
 	@Autowired private PersonService iPersonService;
 	@Autowired private IVACategoryService iIVACategoryService;
 	@Autowired private BatchService iBatchService;
+	@Autowired private FormOfSaleService iFormOfSaleService;
+	
 	
 	private static final String cPRODUCT_NULL_EXCEPTION_MESSAGE = "El producto no tiene valores.";
 	private static final String cNATURAL_PERSON_NULL_EXCEPTION_MESSAGE = "La persona física no tiene valores válidos.";
@@ -927,7 +933,7 @@ public class CommandAndQueries {
 	 *        al mismo tiempo que como puede ser un gran listado, puede generar excepcion por gran cantidad de datos.
 	 * @throws BusinessException
 	 */
-	public List<SaleLiteDTO> getSalesForReport(Date pBeginDate,Date pEndDate, String pSalePayingForm) throws BusinessException{
+	public List<SaleLiteDTO> getSalesForReport(Date pBeginDate,Date pEndDate, FormOfSaleForSalesReportDTO pSalePayingForm) throws BusinessException{
 		
 		List<Sale> mSales = this.iSaleService.getReportSales(pBeginDate, pEndDate, pSalePayingForm);
 		
@@ -1006,6 +1012,24 @@ public class CommandAndQueries {
 		return this.iMapper.map(mBatch,BatchDTO.class);
 	}
 		
+	
+	/**
+	 * Este método es una consulta que devuelve la lista completa de Categorías de IVA
+	 * @return lista de Categorias de IVA
+	 * @throws BusinessException : Excepcion con detalles de los errores de negocio
+	 */
+	public List<FormOfSaleDTO> getFormOfSales() throws BusinessException{
+		Iterable<FormOfSale> mFormOfSale = this.iFormOfSaleService.getAll();
+		
+		List<FormOfSaleDTO> mFormOfSaleDTOList = new ArrayList<FormOfSaleDTO>();
+		
+		for (FormOfSale bFormOfSale : mFormOfSale){
+			mFormOfSaleDTOList.add(this.iMapper.map(bFormOfSale,FormOfSaleDTO.class));
+		}
+		
+		return mFormOfSaleDTOList;
+	}
+	
 	// FIN VENTAS
 	
 	//=======================================================================================

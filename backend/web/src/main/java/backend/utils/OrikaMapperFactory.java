@@ -31,7 +31,8 @@ import backend.person.children.legal_person.LegalPerson;
 import backend.person.children.legal_person.LegalPersonDTO;
 import backend.person.children.natural_person.NaturalPerson;
 import backend.person.children.natural_person.NaturalPersonDTO;
-
+import backend.form_of_sale.FormOfSale;
+import backend.form_of_sale.FormOfSaleDTO;
 import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.iva_category.IVACategory;
@@ -137,6 +138,10 @@ public class OrikaMapperFactory {
 			.field("person.name","personName")
 			.byDefault()
 			.register();
+		
+		
+		// FormOfSaleDTO to FormOfSale
+		mapperFactory.classMap(FormOfSaleDTO.class, FormOfSale.class).byDefault().register();
 		
 		return mapperFactory.getMapperFacade();
 	}

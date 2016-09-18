@@ -77,7 +77,11 @@
                         <div class="col-md-12">
                             <div class="form-group form-group-sm">
                                 <label class="control-label">Forma de pago</label>
-                                <select class="form-control" name="paied_out" ng-model="form.sale.paied_out" ng-options="paiedOutOption.value as paiedOutOption.label for paiedOutOption in form.paiedOutOptions" required></select>
+                                <select class="form-control" name="formOfSale" 
+                                ng-model="form.sale.formOfSale" 
+                                ng-options="formOfSaleOption as formOfSaleOption.description for formOfSaleOption in form.formOfSaleOptions"
+                                required></select>
+<!--                                 ng-options="paiedOutOption.value as paiedOutOption.label for paiedOutOption in form.paiedOutOptions"  -->
                             </div>
                         </div>
                     </div>

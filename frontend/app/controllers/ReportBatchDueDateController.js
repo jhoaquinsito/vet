@@ -99,10 +99,10 @@ app.controller('ReportBatchDueDateController', function($scope, $location, $root
             var isoDateString = isoDate.toString();
         
             // regex para formatear la fecha
-            var pattern = /(\d{4})(\d{2})(\d{2})/;
+            var pattern = /(\d{4})(\d{2})(\d{2})/; //ddmmyyyy var pattern = /(\d{2})(\d{2})(\d{4})/;  - yyyymmdd var pattern = /(\d{4})(\d{2})(\d{2})/;
             
             // aplico la regex para formatear la fecha al formato ISO 8601: 'yyyy-MM-dd'
-            formattedString = isoDateString.replace(pattern, '$3/$2/$1');
+            formattedString = isoDateString.replace(pattern, '$3/$2/$1'); //'$1/$2/$3'
         }
 
         return formattedString;

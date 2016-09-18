@@ -4,22 +4,21 @@ app.factory('ReportSalesService', function($http, Restangular, config,$filter) {
     //var serviceReport 	= Restangular.service('products');
     
     this.executeReport = function(form) {
-    	var parameters;
+    	var data;
     	
 
-		parameters = {
-	            "payForm": 	 form.paied_out,
+    	data = {
+	            "id": 	 form.formOfSale.id,
+	            "description": form.formOfSale.description,
 	            "beginDate": dateObjectToIsoDate(form.beginIsoDueDate),
 	            "endDate": 	 dateObjectToIsoDate(form.endIsoDueDate)
 	        };
 
-    
+    	console.log(data);
         var url = config.API_BASE_URL + '/sale/report';
-        return $http.get(url, {
-            params: parameters
-         });
+        return $http.post(url, data);
     };
-    
+   
     this.getInvoiceOptions = function() {
         var invoiceOptions = [
           	{label: 'Todas', value: 'Todas'},
@@ -28,7 +27,9 @@ app.factory('ReportSalesService', function($http, Restangular, config,$filter) {
         ];
         return invoiceOptions;
     };
-
+    
+     // TODO - GGOROSITO - Esto no se uliliza más, reemplazado su uso por el FormOfSaleService
+     /*
     this.getPaiedOutOptions = function() {
         var paiedOutOptions = [
             {label: 'Todas', value: 'Todas'},
@@ -37,6 +38,7 @@ app.factory('ReportSalesService', function($http, Restangular, config,$filter) {
         ];
         return paiedOutOptions;
     };
+     */
 
     
     /**

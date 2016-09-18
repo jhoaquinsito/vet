@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import org.springframework.data.domain.Persistable;
+
+import backend.form_of_sale.FormOfSale;
 import backend.person.Person;
 import backend.person.settlement.Settlement;
 import backend.product.Product;
@@ -72,7 +74,9 @@ public class Sale implements Persistable<Long>{
 	@Valid
 	private Set<SaleLine> iSaleLines;
 	
-	private String iPayForm;	
+	@ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name="form_of_sale")
+	private FormOfSale iFormOfSale;
 	
 	@Override
 	public Long getId() {
@@ -128,14 +132,14 @@ public class Sale implements Persistable<Long>{
 		this.iSaleLines = iSaleLines;
 	}
 
-
-	public String getPayForm() {
-		return iPayForm;
+	public FormOfSale getFormOfSale() {
+		return iFormOfSale;
 	}
 
-	public void setPayForm(String pPayForm) {
-		this.iPayForm = pPayForm;
+	public void setFormOfSale(FormOfSale iFormOfSale) {
+		this.iFormOfSale = iFormOfSale;
 	}
+
 
 	public Set<Product> getProducts(){
 		Set<Product> bProducts = new HashSet<Product>(); 
