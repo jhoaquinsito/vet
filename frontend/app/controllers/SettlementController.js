@@ -66,7 +66,7 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         		concept : "No definido.",
         		paymentMode : "contado",
         		checkNumber : "0",
-        		discounted: false
+        		discounted: 0
             };
     };
     
@@ -92,8 +92,8 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
 
         request.success = function(response) {
         	//Refrescamos los datos del cliente y de sus ventas.
-        	$scope.loadSales(response);
-        	$scope.loadCliente(response);
+        	$scope.loadSales($scope.form.person.id);
+        	$scope.loadCliente($scope.form.person.id);
         	
         	//Emitimos el mensaje de éxito
             MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'success', 'male'), 'success');
@@ -143,6 +143,10 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     		$scope.form.totalDePagos = 0;    		
     	}
     	return $scope.form.totalDePagos;
+    }
+
+    $scope.isSettlementNotDiscounted = function(element, index, array){
+        return (element.amount - element.discounted) > 0;
     }
     
 

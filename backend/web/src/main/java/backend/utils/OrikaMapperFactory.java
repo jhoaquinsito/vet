@@ -37,6 +37,8 @@ import backend.person.Person;
 import backend.person.PersonDTO;
 import backend.person.iva_category.IVACategory;
 import backend.person.iva_category.IVACategoryDTO;
+import backend.person.settlement.Settlement;
+import backend.person.settlement.SettlementDTO;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -142,6 +144,10 @@ public class OrikaMapperFactory {
 		
 		// FormOfSaleDTO to FormOfSale
 		mapperFactory.classMap(FormOfSaleDTO.class, FormOfSale.class).byDefault().register();
+		
+		// FormOfSaleDTO to FormOfSale
+		mapperFactory.classMap(SettlementDTO.class, Settlement.class).byDefault().register();
+		
 		
 		return mapperFactory.getMapperFacade();
 	}

@@ -189,7 +189,7 @@ public class Person  {
 			
 			while(mSettlements.hasNext()){
 				Settlement bSettlement =  mSettlements.next();
-				if(!bSettlement.isDiscounted()){
+				if(!bSettlement.isMarkedAsDiscounted()){
 					mUndiscountedSettlements.add(bSettlement);	
 				}
 			}
@@ -225,7 +225,7 @@ public class Person  {
 		
 		while(mSettlements.hasNext()){
 			Settlement bSettlement =  mSettlements.next();
-			bSettlement.setDiscounted(true);;
+			bSettlement.markAsDiscounted();
 		}
 	}
 	

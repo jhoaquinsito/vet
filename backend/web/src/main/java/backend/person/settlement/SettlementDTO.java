@@ -14,7 +14,7 @@ public class SettlementDTO {
 	private BigDecimal iAmount;
 	private String iConcept;
 	private String iCheckNumber;
-	private boolean iDiscounted;
+	private BigDecimal iDiscounted;
 
 	public Long getId() {
 		return iId;
@@ -56,12 +56,12 @@ public class SettlementDTO {
 		this.iCheckNumber = iCheckNumber;
 	}
 
-	public boolean isDiscounted() {
-		return iDiscounted;
+	public void setDiscounted(BigDecimal pDiscounted) {
+		this.iDiscounted = pDiscounted;
 	}
-
-	public void setDiscounted(boolean iDiscounted) {
-		this.iDiscounted = iDiscounted;
+	
+	public BigDecimal getDiscounted() {
+		return this.iDiscounted;
 	}
 
 }

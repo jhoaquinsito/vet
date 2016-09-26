@@ -46,10 +46,10 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         if($scope.form.sale.formOfSale.id === 1 ) // pago contado
         {
             $scope.form.sale.paiedOut = true;
-            $scope.form.sale.settlement.discounted = true;
+            $scope.form.sale.settlement.discounted = $scope.form.sale.settlement.amount;
         } else { // cuenta corriente
             $scope.form.sale.paiedOut = false;
-            $scope.form.sale.settlement.discounted = false;
+            $scope.form.sale.settlement.discounted = 0;
         }           
     });
     

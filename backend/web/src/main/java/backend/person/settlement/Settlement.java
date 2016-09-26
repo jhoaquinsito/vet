@@ -45,7 +45,8 @@ public class Settlement implements Comparable<Settlement> {
 	private String iCheckNumber;
 	
 	@Column(name = "discounted")
-	private boolean iDiscounted;
+	@DecimalMin(value="0", message= SettlementConsts.cDISCOUNTED_SIZE_VIOLATION_MESSAGE)
+	private BigDecimal iDiscounted;
 
 	public Long getId() {
 		return iSettlementId;
@@ -87,16 +88,22 @@ public class Settlement implements Comparable<Settlement> {
 		this.iCheckNumber = iCheckNumber;
 	}
 
-	public boolean getDiscounted() {
+	public BigDecimal getDiscounted() {
 		return iDiscounted;
 	}
 	
-	public boolean isDiscounted() {
-		return iDiscounted;
+	public boolean isMarkedAsDiscounted() {
+		// si el valor del monto es igual al valor descontado, 
+		// entonces el pago está descontado
+		return iAmount.compareTo(iDiscounted) == 0;
 	}
 
-	public void setDiscounted(boolean iDiscounted) {
-		this.iDiscounted = iDiscounted;
+	public void setDiscounted(BigDecimal pDiscounted) {
+		this.iDiscounted = pDiscounted;
+	}
+	
+	public void markAsDiscounted(){
+		this.iDiscounted = this.iAmount;
 	}
 
 	@Override

@@ -31,10 +31,8 @@ app.factory('SettlementService', function($http,Restangular, config) {
     	 var sum = 0;
          
     	 person.settlements.forEach(function(settlement){
-    		 if(!settlement.discounted){
-    			 var subtotal = settlement.amount;
-                 sum += subtotal;
-    		 }
+    		var subtotal = settlement.amount - settlement.discounted;
+            sum += subtotal;
          });
     	 
          return sum;
