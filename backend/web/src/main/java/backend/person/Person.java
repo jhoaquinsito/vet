@@ -2,7 +2,10 @@ package backend.person;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -198,7 +201,94 @@ public class Person  {
 		return mUndiscountedSettlements;
 	}
 	
+	/**
+	 * Devuleve los pagos no descontados de la persona ordenados de forma
+	 * ascendente
+	 * @return mUndiscountedSettlements
+	 */
+	public List<Settlement> getUndiscountedSettlementsOrderByDateAsc() {
+		
+		List<Settlement> mUndiscountedSettlements = getUndiscountedSettlements();
+		
+		Collections.sort(mUndiscountedSettlements, new Comparator<Settlement>() {
+		    public int compare(Settlement m1, Settlement m2) {
+		        return m1.getDate().compareTo(m2.getDate());
+		    }
+		});
+		
+		return mUndiscountedSettlements;
+	}
+	
+	
+	
 	//==================== Métodos de dominio =========================
+	/***
+	 * Este método permite actualizar el <discount> de un Settlement
+	 * y actualizarlo internamente en la lista de pagos (Settlement) del cliente.
+	 * 
+	 * 
+	 * @param pSettlementToUpdate:
+	 * 								Settlement objetivo a actualizar (Comparación por ID)
+	 * @param pNewDiscountValue
+	 * 								Valor de <discount> a actualizar en el cliente
+	 * 
+	 * Resultado: Lista (Set) de pagos (Settlement) actualizada.
+	 */
+	public void UpdateSettlement(Settlement pSettlementToUpdate, BigDecimal pNewDiscountValue){
+		System.out.println("*****UpdateSettlement******");
+		//Obtengo lista original de Settlements. Servirá de guía para iterar y actualizar un (1) settlement
+		Iterator<Settlement> mActualSettlements = this.getSettlements().iterator();
+		
+		//Lista auxiliar en donde iremos almacenando todos los settlements, con la particularidad que habrá uno actualizado.
+		List<Settlement> mSettlementsUpdated = new ArrayList<Settlement>();
+		
+		while(mActualSettlements.hasNext()){
+			Settlement bSettlement =  mActualSettlements.next();
+			System.out.println("bSettlement " + bSettlement.getDiscounted().toString() );
+			if(bSettlement.getId() == pSettlementToUpdate.getId()){
+				bSettlement.setDiscounted(pNewDiscountValue);
+				System.out.println("bSettlement " + bSettlement.getDiscounted().toString() + " (Updated)" );
+			}	
+			mSettlementsUpdated.add(bSettlement);
+		}
+		
+		Set<Settlement> mSettlementsUpdatedSet = new HashSet<Settlement>(mSettlementsUpdated);
+		
+		this.setSettlements(mSettlementsUpdatedSet);
+		System.out.println("*********************");
+	}
+	
+	/**
+	 * Este método se encarga de realizar la actualización masiva
+	 * de Settlements ( NO DESCONTADOS ) del cliente, tomando en cuenta:
+	 * - El monto total de su deuda
+	 * - Los pagos no descontados (ordenados cronológicamente de forma ascendente)
+	 * @param pTotalClientDebtAmount
+	 */
+	public void UpdateUndiscountedSettlements(BigDecimal pTotalClientDebtAmount){
+		
+		List<Settlement> mUndiscountedSettlements = this.getUndiscountedSettlementsOrderByDateAsc();
+		for(Settlement mUndiscountedSettlement : mUndiscountedSettlements ){
+			
+			//Caso 1: Si el monto del pago no supera la deuda -> Se actualiza el pago: El atributo <discounted> pasa ser igual al monto del pago.
+			// 		   Luego se resta a la deudda el monto del pago procesado (es decir: se va reduciendo la deuda)
+			
+			if(mUndiscountedSettlement.getAmount().compareTo(pTotalClientDebtAmount) <= 0){
+				UpdateSettlement(mUndiscountedSettlement,mUndiscountedSettlement.getAmount());
+				pTotalClientDebtAmount =  pTotalClientDebtAmount.subtract(mUndiscountedSettlement.getAmount());
+			}
+			//Caso 2: El monto del pago SUPERA la deuda -> Se actualiza el pago: El atributo <discounted> pasa ser igual al monto del pago (lo que restaba).
+			//			Luego la deuda queda en cero (0) pues se termino de descontar (es decir: se ha cancelado completamente la deuda)
+			else{
+				UpdateSettlement(mUndiscountedSettlement,pTotalClientDebtAmount);
+				pTotalClientDebtAmount = BigDecimal.ZERO;
+			}
+			
+			if(pTotalClientDebtAmount.compareTo(BigDecimal.ZERO) == 0)
+				return;
+		}
+		
+	}
 	
 	/**
 	 * Devuelve el total de los pagos no descontados realizados por el cliente.

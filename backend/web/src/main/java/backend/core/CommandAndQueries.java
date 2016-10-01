@@ -504,25 +504,25 @@ public class CommandAndQueries {
 	}
 	
 	public Person processClientDebt(Person pClient) throws BusinessException{
+		// Deuda total del cliente
 		BigDecimal mTotalClientDebtAmount = this.getClientDebt(pClient.getId());
+		// Monto total de pagos NO descontados del cliente
+		BigDecimal mTotalClientUndiscoutnedSettlementAmount = pClient.totalAmountOfUndiscountedSettlements();
 		
 		// si la deuda total del cliente es mayor que cero 
 		// y si los pagos que tiene le alcanzan para cancelar la deuda que tiene
-		if (mTotalClientDebtAmount.compareTo(BigDecimal.ZERO) == 1 &&
-				pClient.totalAmountOfUndiscountedSettlements().compareTo(mTotalClientDebtAmount) >= 0){
+		if (mTotalClientDebtAmount.compareTo(BigDecimal.ZERO) == 1 && 
+			mTotalClientUndiscoutnedSettlementAmount.compareTo(mTotalClientDebtAmount) >= 0){
 			
 			// me fijo cuanto es la diferencia entre los pagos que tiene a favor y el total de lo que debe
 			// NOTA: es el credito que le va a quedar a favor al cliente.
-			BigDecimal mClientCreditAmount = pClient.totalAmountOfUndiscountedSettlements().subtract(mTotalClientDebtAmount);
+			BigDecimal mClientCreditAmount = mTotalClientUndiscoutnedSettlementAmount.subtract(mTotalClientDebtAmount);
 
 			// me fijo si le queda credito (si el credito es mayor que cero)
 			if (mClientCreditAmount.compareTo(BigDecimal.ZERO) == 1){
-				// le queda credito, entonces tengo que:
-				// 1. Obtener el primer pago en orden cronológico que no este marcado como descontado. 			
-				// 2. Si el monto del pago es <= a la deuda -> pongo el atributo discounted = monto del pago y restarle a la deuda el monto del pago (variable). Continuar con el próximo pago en orden cronológico.
-				// 3. Sino (el monto del pago es mayor a la deuda) -> pongo en el atributo discounted el monto de la deuda.
 				
-				//TODO has tu magia aquí gorito 
+				pClient.UpdateUndiscountedSettlements(mTotalClientDebtAmount);
+				
 				
 			} else { // no le queda credito, significa que la deuda es exactamente igual a los pagos a favor
 				
@@ -798,9 +798,9 @@ public class CommandAndQueries {
 		
 		Person mStoredClient = this.iPersonService.save(mClient);
 		
-		this.processClientDebt(mStoredClient);
+		Person mStoredClientWithDebtUpdated = this.processClientDebt(mStoredClient);
 		
-		this.iPersonService.save(mClient);
+		this.iPersonService.save(mStoredClientWithDebtUpdated);
 	}
 	
 

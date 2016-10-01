@@ -95,6 +95,11 @@ public class Settlement implements Comparable<Settlement> {
 	public boolean isMarkedAsDiscounted() {
 		// si el valor del monto es igual al valor descontado, 
 		// entonces el pago está descontado
+		if(iDiscounted == null)
+			iDiscounted = BigDecimal.ZERO;
+		if(iAmount == null)
+			iAmount = BigDecimal.ZERO;
+		
 		return iAmount.compareTo(iDiscounted) == 0;
 	}
 
