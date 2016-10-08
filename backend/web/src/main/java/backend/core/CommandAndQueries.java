@@ -61,6 +61,7 @@ import backend.sale.SaleLiteDTO;
 import backend.sale.SaleService;
 import backend.saleline.SaleLine;
 import backend.saleline.SaleLineLiteDTO;
+import backend.utils.EntityValidator;
 import backend.utils.OrikaMapperFactory;
 import ma.glasnost.orika.MapperFacade;
 
@@ -848,7 +849,7 @@ public class CommandAndQueries {
 		
 		Long mSaleId = 0L;
 		
-		if (pSaleDTO != null && pSaleDTO.isValid()){
+		if (pSaleDTO != null && EntityValidator.isDTOValid(pSaleDTO)){
 			// map dto to domain object
 			Sale mSale;
 			

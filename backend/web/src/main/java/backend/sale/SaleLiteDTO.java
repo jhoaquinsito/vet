@@ -111,15 +111,5 @@ public class SaleLiteDTO {
 	public void setFormOfSale(FormOfSale iFormOfSale) {
 		this.iFormOfSale = iFormOfSale;
 	}
-	
-	public boolean isValid() throws BusinessException {
-		if(this.iSettlement == null)
-			throw new BusinessException(SaleCons.cSALE_SETTLEMENT_NULL_EXCEPTION_MESSAGE);
-		if (this.iPerson != null){
-	} else {
-		throw new NullPointerException("La venta debe estar asociada a un cliente.");
-	}
-		
-		return this.iSettlement != null && this.iPerson != null;
-	}
+
 }

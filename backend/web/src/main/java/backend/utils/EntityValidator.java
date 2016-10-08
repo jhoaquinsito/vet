@@ -10,6 +10,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import backend.exception.BusinessException;
+import backend.sale.SaleCons;
+import backend.sale.SaleLiteDTO;
 
 /**
  * Un <code>EntityValidator</code> representa un validador de entidades. Su
@@ -104,6 +106,25 @@ public class EntityValidator {
 		}
 
 		return mViolation;
+	}
+	
+	public static final boolean isDTOValid(Object pEntity) throws BusinessException {
+		boolean mEntityIsValid = false;
+		
+		if (pEntity.getClass() == SaleLiteDTO.class){
+			SaleLiteDTO mSaleLiteDTO = (SaleLiteDTO) pEntity;
+			if (mSaleLiteDTO.getSettlement() == null)
+				throw new BusinessException(SaleCons.cSALE_SETTLEMENT_NULL_EXCEPTION_MESSAGE);
+			if (mSaleLiteDTO.getPerson() != null) {
+			} else {
+				throw new NullPointerException("La venta debe estar asociada a un cliente.");
+			}
+			
+			mEntityIsValid = mSaleLiteDTO.getSettlement() != null && mSaleLiteDTO.getPerson() != null;
+		}
+		
+		return mEntityIsValid;
+		
 	}
 
 }
