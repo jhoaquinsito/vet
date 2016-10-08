@@ -34,15 +34,17 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     //Método del scope para encapsular el proceso de obtención de datos de un cliente
     $scope.loadCliente = function(personId) {
     	var requestPerson  = ClientService.getById(personId);
-    	requestPerson.success = function(response){
-    		$scope.$apply(function() {
-    		$scope.form.person = response.plain();
-    		});
-	   	}
+        
+    	requestPerson.success = function(response) {
+            $scope.form.person = response.plain();
+        };
+
     	requestPerson.error = function(response) {
             MessageService.message(MessageService.text('person', 'get', 'error', 'male'), 'danger');
         };
-    }
+        
+        requestPerson.then(requestPerson.success, requestPerson.error);
+    };
     
     //Este Watch permite analizar el dato dle modelo que alberga la persona. Cuando esta cambia, se cargan los datos de sus ventas.
     $scope.$watch("form.person", function(newValue, oldValue){
@@ -145,10 +147,9 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     	return $scope.form.totalDePagos;
     }
 
-    $scope.isSettlementNotDiscounted = function(element, index, array){
-        return (element.amount - element.discounted) > 0;
+    $scope.isSettlementNotDiscounted = function(element) {
+        return element.amount - element.discounted > 0;
     }
-    
-
+        
     $scope.init();
 });
