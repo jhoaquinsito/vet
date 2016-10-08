@@ -94,7 +94,11 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
 
         request.then(request.success, request.error);
     };
-
+    $scope.$watch('form.client.cuit', function(newVal, oldVal) {
+	  if($scope.form.supplier.cuit.length > 11) {       
+	    $scope.form.supplier.cuit = oldVal;
+	  }
+	});
     $scope.refreshTableData = function() {
         SupplierService.getList().then(function(response) {
             $scope.suppliers = response.plain();

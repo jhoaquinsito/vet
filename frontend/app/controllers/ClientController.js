@@ -22,6 +22,8 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
                 break;
         }
     };
+    
+    
 
     $scope.listClientsAction = function() {
         $rootScope.setTitle($scope.name, 'Listado de clientes');
@@ -94,6 +96,24 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             $scope.clients = response.plain();
         });
     };
+    $scope.$watch('form.client.cuit', function(newVal, oldVal) {
+  	  if($scope.form.client.cuit.length > 11) {       
+  	    $scope.form.client.cuit = oldVal;
+  	  }
+  	});
+    $scope.$watch('form.client.nationalId', function(newVal, oldVal) {
+	  if($scope.form.client.nationalId.length > 8) {       
+	    $scope.form.client.nationalId = oldVal;
+	  }
+	});
+    
+    $scope.$watch("form.sale.settlement.checkNumber", function(newValue, oldValue){
+    	
+    	if($scope.form.sale.settlement.checkNumber === '' )
+		{
+    		$scope.form.sale.settlement.date = '';
+		}    		
+    });
 
     $scope.resetFormData = function() {
         $scope.form.client = {
