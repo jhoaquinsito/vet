@@ -522,7 +522,8 @@ public class CommandAndQueries {
 			// me fijo si le queda credito (si el credito es mayor que cero)
 			if (mClientCreditAmount.compareTo(BigDecimal.ZERO) == 1){
 				
-				pClient.UpdateUndiscountedSettlements(mTotalClientDebtAmount);
+				
+				pClient.discountAmountFromSettlements(mTotalClientDebtAmount);
 				
 				
 			} else { // no le queda credito, significa que la deuda es exactamente igual a los pagos a favor

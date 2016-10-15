@@ -115,6 +115,14 @@ public class Settlement implements Comparable<Settlement> {
 	  public int compareTo(Settlement o) {
 	    return getDate().compareTo(o.getDate());
 	  }
+	
+	public BigDecimal obtainUndiscountedAmount(){
+		return this.iAmount.subtract(this.iDiscounted);
+	}
+	
+	public void discount(BigDecimal pAmountToBeDiscounted){
+		this.iDiscounted = this.iDiscounted.add(pAmountToBeDiscounted);
+	}
 
 //	@Override
 //	public boolean isNew() {
