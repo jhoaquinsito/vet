@@ -72,6 +72,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         {
             $scope.form.sale.paiedOut = true;
             $scope.form.sale.settlement.amount = $scope.calculateSaleTotal();
+            $scope.form.sale.settlement.discounted = $scope.form.sale.settlement.amount;
         }
         
         var request = SaleService.save(angular.copy($scope.form.sale));
