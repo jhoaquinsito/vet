@@ -76,18 +76,35 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group form-group-sm">
-                                <label class="control-label">Forma de pago</label>
+                                <label class="control-label">Forma de venta</label>
                                 <select class="form-control" name="formOfSale" 
                                 ng-model="form.sale.formOfSale" 
-                                ng-options="formOfSaleOption as formOfSaleOption.description for formOfSaleOption in form.formOfSaleOptions"
+                                ng-options="formOfSaleOption as formOfSaleOption.description for formOfSaleOption in form.formOfSaleOptions track by formOfSaleOption.id"
                                 required></select>
 <!--                                 ng-options="paiedOutOption.value as paiedOutOption.label for paiedOutOption in form.paiedOutOptions"  -->
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <!-- Comento funcionalidad de calculo de vuelto para pagos al contado:
-                        <div ng-if="form.sale.paied_out">
+                    <div class="row" ng-if="!form.sale.paiedOut">
+                        <div class="col-md-12">
+	                        <label class="control-label">Forma de pago</label>
+	                    </div>
+	                    <div class="form-group form-group-sm">
+	                    	 <div class="col-md-6">
+	                    		<label for="paymentModeContado">Pago en efectivo </label>
+				      			<input id="paymentModeContado" type="radio" name="paymentMode" ng-model="form.sale.settlement.paymentMode" value="efectivo">
+				      		</div>
+				      		<div class="col-md-6">
+				     			<label for="paymentModeCheque">Pago con cheque</label>
+				      			<input id="paymentModeCheque" type="radio" name="paymentMode" ng-model="form.sale.settlement.paymentMode" value="cheque">
+				      		</div>
+	                    </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                	<div class="row">
+                	<!-- Comento funcionalidad de calculo de vuelto para pagos al contado:
+                        <div ng-if="form.sale.paiedOut">
                             <div class="col-md-12">
                                 <div class="form-group form-group-sm">
                                     <label class="control-label">Paga con</label>
@@ -98,7 +115,7 @@
                                 Vuelto ${{form.cashAmount - calculateSaleTotal() | number: 2}}
                             </div>
                         </div> -->
-                        <div ng-if="!form.sale.paied_out">
+                        <div ng-if="!form.sale.paiedOut">
                             <div class="col-md-12">
                                 <div class="form-group form-group-sm">
                                     <label class="control-label">Entrega</label>
@@ -106,25 +123,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-md-offset-1">
-                    <div class="row">
-                        <div class="col-md-12">
+                	 </div>
+                
+                    <div class="row" ng-show="form.sale.settlement.paymentMode == 'cheque'">
+                        <div class="col-md-6">
                             <div class="form-group form-group-sm">
                                 <label class="control-label">N° de cheque</label>
                                 <input type="text" class="form-control" name="settlement-checknumber" ng-model="form.sale.settlement.checkNumber" >
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group form-group-sm">
                                 <label class="control-label">Fecha de vencimiento del cheque</label>
                                 <input type="text" class="form-control" name="settlement-date" ng-model="form.sale.settlement.date" bs-datepicker ng-disabled="!(!!form.sale.settlement.checkNumber)">
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

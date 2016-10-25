@@ -14,6 +14,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     };
 
     $scope.resetFormData = function() {
+    	console.log("Pase por el resetFormData");
         $scope.form.sale = {
             invoiced: false,
             paiedOut: false,
@@ -25,10 +26,11 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             saleLines: [],
             settlement: {
                 date: null,
-                amount: null,
+                amount: 0,
                 concept: null,
                 checkNumber: null,
-                discounted: null
+                discounted: null,
+                paymentMode : "efectivo"
             }
         };
     };
@@ -42,14 +44,14 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     });
 
     $scope.$watch("form.sale.formOfSale", function(newValue, oldValue){
-        
+    	
         if($scope.form.sale.formOfSale.id === 1 ) // pago contado
         {
             $scope.form.sale.paiedOut = true;
-            $scope.form.sale.settlement.discounted = $scope.form.sale.settlement.amount;
+            $scope.form.sale.settlement.amount = $scope.calculateSaleTotal();
         } else { // cuenta corriente
             $scope.form.sale.paiedOut = false;
-            $scope.form.sale.settlement.discounted = 0;
+            $scope.form.sale.settlement.amount = 0;
         }           
     });
     
@@ -65,6 +67,13 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             return null;
         }
 
+        //25/10/2016 - GGorosito - Check de seguridad para asignar el monto en la venta por contado.
+        if($scope.form.sale.formOfSale.id === 1 ) // Pago contado
+        {
+            $scope.form.sale.paiedOut = true;
+            $scope.form.sale.settlement.amount = $scope.calculateSaleTotal();
+        }
+        
         var request = SaleService.save(angular.copy($scope.form.sale));
 
         request.success = function(response) {
@@ -120,7 +129,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             var formOfSaleList = response.plain();
             $scope.form.formOfSaleOptions = formOfSaleList;
             //
-            $scope.form.formOfSale = $scope.form.formOfSaleOptions[0].value;
+
+            $scope.form.formOfSale = $scope.form.formOfSaleOptions[0];
         });
     };
 

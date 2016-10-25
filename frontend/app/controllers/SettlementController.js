@@ -66,7 +66,7 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         $scope.form.newSettlement 	= {
         		amount : 0,
         		concept : "No definido.",
-        		paymentMode : "contado",
+        		paymentMode : "Contado",
         		checkNumber : "0",
         		discounted: 0
             };
