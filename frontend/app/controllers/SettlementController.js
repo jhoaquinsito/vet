@@ -13,6 +13,8 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     };
 
     $scope.settlementDetailAction = function() {
+    	$rootScope.setTitle($scope.name, 'Realizar pago');
+    	
     	$scope.refreshFormData();
     	$scope.refreshFormDropdownsData();
     };
@@ -64,11 +66,12 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     //Este método permite limpiar los datos del modelo asociado con el pequeño formulario para agregar un newSettlement
     $scope.refreshFormData = function() {
         $scope.form.newSettlement 	= {
+        		date: Date.now(),
         		amount : 0,
         		concept : "No definido.",
-        		paymentMode : "Contado",
         		checkNumber : "0",
-        		discounted: 0
+        		discounted: 0,
+        		paymentMode : "efectivo"
             };
     };
     

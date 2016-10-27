@@ -459,3 +459,11 @@ textarea.form-control {
 #sidebar.mini-sidebar .report-items .list-group-item span {
     opacity: 1;
 }
+
+.no-padding-right{
+    padding-right: 0px;	
+}
+
+.no-padding-left{
+    padding-left: 0px;	
+}

@@ -91,7 +91,7 @@
 	                    </div>
 	                    <div class="form-group form-group-sm">
 	                    	 <div class="col-md-6">
-	                    		<label for="paymentModeContado">Pago en efectivo </label>
+	                    		<label for="paymentModeContado">Pago en efectivo</label>
 				      			<input id="paymentModeContado" type="radio" name="paymentMode" ng-model="form.sale.settlement.paymentMode" value="efectivo">
 				      		</div>
 				      		<div class="col-md-6">
@@ -126,18 +126,18 @@
                 	 </div>
                 
                     <div class="row" ng-show="form.sale.settlement.paymentMode == 'cheque'">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group form-group-sm">
                                 <label class="control-label">N° de cheque</label>
                                 <input type="text" class="form-control" name="settlement-checknumber" ng-model="form.sale.settlement.checkNumber" >
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label class="control-label">Fecha de vencimiento del cheque</label>
-                                <input type="text" class="form-control" name="settlement-date" ng-model="form.sale.settlement.date" bs-datepicker ng-disabled="!(!!form.sale.settlement.checkNumber)">
-                            </div>
-                        </div>
+<!--                         <div class="col-md-7"> -->
+<!--                             <div class="form-group form-group-sm"> -->
+<!--                                 <label class="control-label">Fecha de vencimiento del cheque</label> -->
+<!--                                 <input type="text" class="form-control" name="settlement-date" ng-model="form.sale.settlement.date" bs-datepicker ng-disabled="!(!!form.sale.settlement.checkNumber)"> -->
+<!--                             </div> -->
+<!--                         </div> -->
                     </div>
                     
                 </div>

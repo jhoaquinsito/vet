@@ -86,17 +86,17 @@
 	            </div>
 	            
 	            <div class="row">
-	                <div class="col-md-6">
+	                <div class="col-md-7">
 	                    <div class="form-group form-group-sm">
 	                        <h3 class="control-label">Entregas Realizadas</h3>
 	                    </div>
 	                    <div>
 	                    	<table class="table table-bordered table-hover table-main">
 		                        <tr>
-		                        	<th class="col-xs-3">Fecha</th>
+		                        	<th class="col-xs-2">Fecha</th>
 		                            <th class="col-xs-2">Monto</th>
 		                            <th class="col-xs-2">Descontado</th>
-		                            <th class="col-xs-5">Concepto</th>
+		                            <th class="col-xs-4">Concepto</th>
 		                            <th class="col-xs-2">N° de Cheque</th>
 		                        </tr>
 		                        <!-- Recordar hacer la variable en el scope, y que obtenga aquellos pagos descontados que son lso que se van a visualizar. -->
@@ -115,40 +115,52 @@
 			                </div>
 			            </div>
 	                </div>
-	                <div class="col-md-5 col-md-offset-1">
-	                	<div class="form-group form-group-sm">
+	                <div class="col-md-5">
+	                	<div class="col-md-12 col-lg-12">
 	                        <h3 class="control-label">Nueva Entrega</h3>
 	                    </div>
-	                    <div class="form-group form-group-sm" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
+	                    <div class="col-md-12 col-lg-12" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
 	                        <label class="control-label mandatory">Concepto</label>
-	                        <div class="input-group col-lg-12">
+	                        <div class="form-group form-group-sm">
 		                        <input type="text" ng-maxlength="250" class="form-control" name="concept" ng-model="form.newSettlement.concept" >
 	                        </div>
 	                    </div>
-	                    <div class="form-group form-group-sm">
+	                    <div class="col-md-12 col-lg-12">
 	                        <label class="control-label">Elija una forma de pago</label>
 	                    </div>
-	                    <div class="form-group form-group-sm">
-	                    	 <div class="col-md-6">
-	                    		<label for="paymentModeContado">Pago al contado </label>
-				      			<input id="paymentModeContado" type="radio" name="paymentMode" ng-model="form.newSettlement.paymentMode" value="contado">
+	                    <div class="col-md-12 col-lg-12">
+	                    	 <div class="col-md-5 no-padding-left">
+	                    		<label for="paymentModeContado">Pago en efectivo</label>
+				      			<input id="paymentModeContado" type="radio" name="paymentMode" ng-model="form.newSettlement.paymentMode" value="efectivo">
 				      		</div>
-				      		<div class="col-md-6">
+				      		<div class="col-md-7 no-padding-left">
 				     			<label for="paymentModeCheque">Pago con cheque</label>
 				      			<input id="paymentModeCheque" type="radio" name="paymentMode" ng-model="form.newSettlement.paymentMode" value="cheque">
 				      		</div>
 	                    </div>
 	                    <br>
-	                    <div class="form-group form-group-sm">
+	                    <div class="col-md-12 col-lg-12">
 	                        <div ng-show="form.newSettlement.paymentMode == 'cheque'">
-		                        <label class="control-label mandatory">N° de cheque:</label>                        
-		                        <div class="input-group col-lg-12">
-			                        <input type="text" ng-maxlength="8" class="form-control" name="checkNumber" ng-model="form.newSettlement.checkNumber" >
+<!-- 		                         <label class="control-label mandatory">N° de cheque:</label>                         -->
+<!-- 		                        <div class="input-group col-lg-12"> -->
+<!-- 			                        <input type="text" ng-maxlength="8" class="form-control" name="checkNumber" ng-model="form.newSettlement.checkNumber" > -->
+<!-- 		                        </div> -->
+		                        <div class="col-md-12 no-padding-left">
+		                            <div class="form-group form-group-sm">
+		                                <label class="control-label mandatory">N° de cheque</label>
+		                                <input type="text" class="form-control" name="settlement-checknumber" ng-model="form.newSettlement.checkNumber" >
+		                            </div>
 		                        </div>
+<!-- 		                        <div class="col-md-7 no-padding-left no-padding-right"> -->
+<!-- 		                            <div class="form-group form-group-sm" style="font-size:13px;"> -->
+<!-- 		                                <label class="control-label">Fecha de vencimiento del cheque</label> -->
+<!-- 		                                <input type="text" class="form-control" name="settlement-date" ng-model="form.newSettlement.date" bs-datepicker ng-disabled="!(!!form.newSettlement.checkNumber)"> -->
+<!-- 		                            </div> -->
+<!-- 		                        </div> -->
 		                    </div>
 	                    </div>
 	                    <br>
-	                    <div class="form-group form-group-sm" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
+	                    <div class="col-md-12 col-lg-12" ng-class="{'has-error': form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required}">
 	                        <label class="control-label mandatory">Monto</label>
 	                        <span ng-show="form.newSettlement.amount.$dirty && form.newSettlement.amount.$error.required" class="help-block">Este campo es obligatorio</span>
 	                        <div class="input-group input-group-sm">

@@ -27,7 +27,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             settlement: {
                 date: null,
                 amount: 0,
-                concept: null,
+                concept: "Pago auto-generado por Venta.",
                 checkNumber: null,
                 discounted: null,
                 paymentMode : "efectivo"
