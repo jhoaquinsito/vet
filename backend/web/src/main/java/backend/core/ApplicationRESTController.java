@@ -588,18 +588,17 @@ public class ApplicationRESTController {
 	
 	
 	/**
-	 * Metodo API que permite recuperar la lista de las distintas 
-	 * ventas (SALE).
+	 * Metodo API que permite recuperar las ventas de un cliente que no han sido pagadas.
 	 * 
 	 * @return List<SaleDTO>
-	 * 							: Lista de ventas completa
+	 * 							: Lista de ventas sin pagar del cliente
 	 * @throws BusinessException 
 	 * 							: Excepcion de negocio, manejada por: handleBusinessException
 	 */
 	@RequestMapping(value = "duesales/{clientId}", method = RequestMethod.GET)
-	public @ResponseBody List<SaleDTO> getDueSalesByClientId(@PathVariable Long clientId) throws BusinessException {
+	public @ResponseBody List<SaleDTO> getDueSalesByClientId(@PathVariable Long pClientId) throws BusinessException {
 
-		return this.iCommandAndQueries.getDueSalesByClientId(clientId);
+		return this.iCommandAndQueries.getDueSalesByClientId(pClientId);
 	}
 	
 	/**

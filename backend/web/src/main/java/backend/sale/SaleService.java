@@ -195,7 +195,7 @@ public class SaleService {
 	
 
 	/**
-	 * Devuelve las ventas correspondientes a un cliente determinado.
+	 * Devuelve las ventas correspondientes a un cliente determinado que no han sido pagadas.
 	 * @param pClientId el identificador del cliente del que se quieren recuperar las ventas.
 	 * @return mClientSales las ventas del cliente.
 	 * @throws BusinessException

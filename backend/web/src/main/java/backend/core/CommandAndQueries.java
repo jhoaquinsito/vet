@@ -906,18 +906,15 @@ public class CommandAndQueries {
 	}
 	
 	/** Este método retorna las ventas asociadas a un cliente, que aún no han sido pagadas.
-	 * @param pClientId
-	 * @return
+	 * @param pClientId identificador del cliente asociado a las ventas
+	 * @return ventas no pagadas asociadas al cliente
 	 * @throws BusinessException 
 	 */
 	public List<SaleDTO> getDueSalesByClientId(Long pClientId) throws BusinessException {
+
+		Iterable<Sale> mSales = this.iSaleService.getDueSalesByClientId(pClientId);
 		
-		List<SaleDTO> mSaleDTOList 	= new ArrayList<SaleDTO>();
-		Iterable<Sale> mSale 		= this.iSaleService.getDueSalesByClientId(pClientId);
-		
-		for (Sale bSale : mSale){
-			mSaleDTOList.add(this.iMapper.map(bSale,SaleDTO.class));
-		}
+		List<SaleDTO> mSaleDTOList = this.iMapper.mapAsList(mSales, SaleDTO.class);
 		
 		return mSaleDTOList;
 	}
