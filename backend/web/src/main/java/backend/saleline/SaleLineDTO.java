@@ -11,8 +11,6 @@ public class SaleLineDTO {
 	private float iUnit_Price;
 	
 	private float iDiscount;
-
-	//private SaleDTO iSale;
 		
 	private BatchDTO iBatch;
 	
@@ -31,14 +29,6 @@ public class SaleLineDTO {
 	public void setUnit_Price(float pUnit_Price) {
 		this.iUnit_Price = pUnit_Price;
 	}
-
-//	public SaleDTO getSale() {
-//		return iSale;
-//	}
-//
-//	public void setSale(SaleDTO pSale) {
-//		this.iSale = pSale;
-//	}
 
 	public float getDiscount() {
 		return iDiscount;
