@@ -19,9 +19,11 @@ import backend.report.person_balance.PersonBalance;
 import backend.report.person_balance.PersonBalanceDTO;
 import backend.sale.Sale;
 import backend.sale.SaleDTO;
+import backend.sale.SaleForReportDTO;
 import backend.sale.SaleLiteDTO;
 import backend.saleline.SaleLine;
 import backend.saleline.SaleLineDTO;
+import backend.saleline.SaleLineForReportDTO;
 import backend.saleline.SaleLineLiteDTO;
 import backend.person.city.City;
 import backend.person.city.CityDTO;
@@ -147,6 +149,27 @@ public class OrikaMapperFactory {
 		
 		// FormOfSaleDTO to FormOfSale
 		mapperFactory.classMap(SettlementDTO.class, Settlement.class).byDefault().register();
+		
+	
+		// Sale to SaleForReportDTO
+		mapperFactory.classMap(Sale.class, SaleForReportDTO.class)
+		.field("person.id", "personId")
+		.field("person.name", "personName")
+		.field("person.IVACategory.id", "personIVACategoryId")
+		.field("person.IVACategory.percentage", "personIVACategoryPercentage")
+		.byDefault()
+		.register();
+		
+		// SaleLine to SaleLineForReportDTO
+		mapperFactory.classMap(SaleLine.class, SaleLineForReportDTO.class)
+		.field("batch.id", "batchId")
+		.field("batch.isoDueDate", "batchIsoDueDate")
+		.field("batch.stock", "batchStock")
+		.field("batch.product.name", "batchProductName")
+		.field("batch.product.measureUnit.abbreviation", "batchProductMeasureUnitAbbreviation")
+		.field("batch.product.unitPrice", "batchProductUnitPrice")
+		.byDefault()
+		.register();
 		
 		
 		return mapperFactory.getMapperFacade();

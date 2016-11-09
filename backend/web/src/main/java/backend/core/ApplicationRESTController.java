@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import backend.exception.BusinessException;
 import backend.exception.ErrorDTO;
-import backend.form_of_sale.FormOfSale;
 import backend.form_of_sale.FormOfSaleDTO;
 import backend.form_of_sale.FormOfSaleForSalesReportDTO;
 import backend.person.PersonDTO;
@@ -39,6 +38,7 @@ import backend.product.measure_unit.MeasureUnitDTO;
 import backend.product.presentation.PresentationDTO;
 import backend.report.person_balance.PersonBalanceDTO;
 import backend.sale.SaleDTO;
+import backend.sale.SaleForReportDTO;
 import backend.sale.SaleLiteDTO;
 import backend.utils.DateHelper;
 import backend.utils.ZebraPrintHelper;
@@ -595,8 +595,8 @@ public class ApplicationRESTController {
 	 * @throws BusinessException 
 	 * 							: Excepcion de negocio, manejada por: handleBusinessException
 	 */
-	@RequestMapping(value = "duesales/{clientId}", method = RequestMethod.GET)
-	public @ResponseBody List<SaleDTO> getDueSalesByClientId(@PathVariable Long pClientId) throws BusinessException {
+	@RequestMapping(value = "duesales/{pClientId}", method = RequestMethod.GET)
+	public @ResponseBody List<SaleForReportDTO> getDueSalesByClientId(@PathVariable Long pClientId) throws BusinessException {
 
 		return this.iCommandAndQueries.getDueSalesByClientId(pClientId);
 	}

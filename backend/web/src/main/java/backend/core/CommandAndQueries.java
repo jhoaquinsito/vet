@@ -57,6 +57,7 @@ import backend.product.presentation.PresentationService;
 import backend.sale.Sale;
 import backend.sale.SaleCons;
 import backend.sale.SaleDTO;
+import backend.sale.SaleForReportDTO;
 import backend.sale.SaleLiteDTO;
 import backend.sale.SaleService;
 import backend.saleline.SaleLine;
@@ -910,11 +911,11 @@ public class CommandAndQueries {
 	 * @return ventas no pagadas asociadas al cliente
 	 * @throws BusinessException 
 	 */
-	public List<SaleDTO> getDueSalesByClientId(Long pClientId) throws BusinessException {
+	public List<SaleForReportDTO> getDueSalesByClientId(Long pClientId) throws BusinessException {
 
 		Iterable<Sale> mSales = this.iSaleService.getDueSalesByClientId(pClientId);
 		
-		List<SaleDTO> mSaleDTOList = this.iMapper.mapAsList(mSales, SaleDTO.class);
+		List<SaleForReportDTO> mSaleDTOList = this.iMapper.mapAsList(mSales, SaleForReportDTO.class);
 		
 		return mSaleDTOList;
 	}
