@@ -50,7 +50,7 @@
 		                            <td class="table-cell-input">
 		                            	<ul>
 										    <li ng-repeat="saleLine in sale.saleLines">
-										    	{{saleLine.batch.product.name}} ({{saleLine.quantity}} {{saleLine.batch.product.measureUnit.abbreviation}} )
+										    	{{saleLine.batchProductName}} ({{saleLine.quantity}} {{saleLine.batchProductMeasureUnitAbbreviation}} )
 										    </li>
 										</ul>
 		                            </td>
@@ -64,7 +64,7 @@
 		                            <td class="table-cell-input">
 		                            	<ul>
 										    <li ng-repeat="saleLine in sale.saleLines">
-										    	$ {{saleLine.batch.product.unitPrice | number: 2}}
+										    	$ {{saleLine.batchProductUnitPrice | number: 2}}
 										    </li>
 										</ul>
 		                            </td>
