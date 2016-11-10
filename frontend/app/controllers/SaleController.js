@@ -14,7 +14,6 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     };
 
     $scope.resetFormData = function() {
-    	console.log("Pase por el resetFormData");
         $scope.form.sale = {
             invoiced: false,
             paiedOut: false,
@@ -125,11 +124,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         
 
         FormOfSaleService.getList().then(function(response) {
-        	//TODO - GGorosito: Es está la forma correcta? 
-        	
             var formOfSaleList = response.plain();
             $scope.form.formOfSaleOptions = formOfSaleList;
-            //
 
             $scope.form.formOfSale = $scope.form.formOfSaleOptions[0];
         });
