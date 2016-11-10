@@ -37,6 +37,10 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.confirmUpdatedProductsAction = function(form) {
         // si hay productos para actualizar
         if ($scope.confirmation.updatedProducts.length > 0) {
+
+            // reconciliacion de lotes de todos los productos
+            $scope.confirmation.updatedProducts = BatchService.reconcileProductsBatches($scope.confirmation.updatedProducts);
+
             var request = ProductService.saveBunch($scope.confirmation.updatedProducts);
 
             request.success = function(response) {
@@ -107,7 +111,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.isSaveButtonDisabled = function(){
         var isBatchSaveDisabled = false;
         if ($scope.form.product != null){
-            isBatchSaveDisabled = $scope.thereArentBatchesToShow();
+            isBatchSaveDisabled = !BatchService.productHasBatches($scope.form.product);
         }
         return isBatchSaveDisabled;
     }
@@ -121,7 +125,8 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
         };
 
         // actualizo la lista de batches con el batch
-        $scope.form.product.batches = BatchService.updateListWithBatch($scope.form.product.batches, batch);
+        if ($scope.form.product.batchesToConfirm == undefined) { $scope.form.product.batchesToConfirm = []; } 
+        $scope.form.product.batchesToConfirm = BatchService.updateListWithBatch($scope.form.product.batchesToConfirm, batch);
 
         // limpio los campos de agregar batch
         $scope.form.batch = {};
@@ -180,23 +185,7 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
     $scope.isoDateToFormattedString = function(isoDate) {
         return DateUtilsService.isoDateToFormattedString(isoDate);
-    }
-
-    // funcion que determina si hay lotes para mostrar o no, en la pantalla de cargar lote
-    $scope.thereArentBatchesToShow = function() {
-        if ($scope.form.product != null){
-            if (BatchService.productHasBatches($scope.form.product)){
-                for (var i = 0; i < $scope.form.product.batches.length; i++) {
-                    // si tiene id entonces no hay que mostrarlo (porque son los viejos que ya existian en el sistema)
-                    if ($scope.form.product.batches[i].id == null){
-                        return false;
-                    } 
-                }             
-            }
-        }
-
-        return true;
-    }    
+    }   
 
     $scope.init();
 });

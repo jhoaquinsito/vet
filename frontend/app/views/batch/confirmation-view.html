@@ -17,10 +17,8 @@
                         <div>{{updatedProduct.name}}</div>
                     </td>
                     <td class="table-cell-detail">
-                        <div ng-repeat="batch in updatedProduct.batches">
-                            <div ng-if="batch.id == null">
-                                Cantidad: {{batch.stock}} | Vencimiento: {{ batch.isoDueDate ? isoDateToFormattedString(batch.isoDueDate) : 'Sin vencimiento'}} <br/>
-                            </div>
+                        <div ng-repeat="batch in updatedProduct.batchesToConfirm">
+                            Cantidad: {{batch.stock}} | Vencimiento: {{ batch.isoDueDate ? isoDateToFormattedString(batch.isoDueDate) : 'Sin vencimiento'}} <br/>
                         </div>
                     </td>
                     <td class="table-cell-detail">

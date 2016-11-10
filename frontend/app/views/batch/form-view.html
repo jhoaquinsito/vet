@@ -62,7 +62,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <button type="button" ng-click="addBatchToTableAction()" ng-disabled="form.product.batches == null || form.batch.stock == null" class="btn btn-sm btn-info" style="margin-top:23px;"><i class="fa fa-save"></i> Guardar lote</button>
+                            <button type="button" ng-click="addBatchToTableAction()" ng-disabled="form.batch.stock == null" class="btn btn-sm btn-info" style="margin-top:23px;"><i class="fa fa-save"></i> Guardar lote</button>
                         </div>
                     </div>
                 </div>
@@ -74,18 +74,18 @@
                             <th class="col-xs-6">Cantidad</th>
                             <th></th>
                         </tr>
-                        <tr ng-repeat="batch in form.product.batches">
-                            <td ng-if="batch.id == null">
+                        <tr ng-repeat="batch in form.product.batchesToConfirm">
+                            <td>
                                 <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
                                 <span ng-if="batch.isoDueDate != null">{{ isoDateToFormattedString(batch.isoDueDate) }}</span>
                             </td>
-                            <td ng-if="batch.id == null">{{batch.stock}}</td>
-                            <td ng-if="batch.id == null" class="table-cell-actions">
+                            <td>{{batch.stock}}</td>
+                            <td class="table-cell-actions">
                                 <button ng-click="editBatchFromTableAction(batch)" class="btn btn-sm btn-info" data-title="Editar" bs-tooltip><i class="fa fa-pencil"></i></button>
                                 <button ng-click="removeBatchToTableAction(batch)" class="btn btn-sm btn-info" data-title="Quitar" bs-tooltip><i class="fa fa-close"></i></button>
                             </td>
                         </tr>
-                        <tr ng-if="thereArentBatchesToShow()">
+                        <tr ng-if="form.product.batchesToConfirm.length == 0 || form.product.batchesToConfirm == null">
                             <td colspan="3" class="table-cell-empty">No hay lotes para mostrar</td>
                         </tr>
                     </table>

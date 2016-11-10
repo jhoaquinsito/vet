@@ -69,9 +69,9 @@ app.factory('BatchService', function() {
     // funcion que elimina un lote del la lista de lotes de un producto
     // devuelve el producto sin el lote
     this.removeBatchFromProductBatches = function(product, batchToBeRemoved){
-        product.batches.forEach(function(item, key) {
+        product.batchesToConfirm.forEach(function(item, key) {
             if (item == batchToBeRemoved) {
-                product.batches.splice(key, 1);
+                product.batchesToConfirm.splice(key, 1);
             }
         });
 
@@ -118,7 +118,7 @@ app.factory('BatchService', function() {
     // devuelve: true, si tiene lotes; false, si no
     this.productHasBatches = function(product){
         var hasBatches = true;
-        if (product.batches === undefined || product.batches.length == 0){
+        if (product.batchesToConfirm === undefined || product.batchesToConfirm.length == 0){
             hasBatches = false;
         }
         return hasBatches;
@@ -142,6 +142,24 @@ app.factory('BatchService', function() {
             }
         }
         return -1;
+    };
+
+    this.reconcileProductsBatches = function(updatedProducts) {
+        for (var i = 0; i < updatedProducts.length; i++) {
+            if (updatedProducts[i].batchesToConfirm != null && updatedProducts[i].batchesToConfirm.length > 0) {
+                // reconciliar cada batch pendiente a confirmar
+                for (var x = 0; x < updatedProducts[i].batchesToConfirm.length; x++) {
+                    var batchToConfirmIndex = getBatchIndexByIsoDueDate(updatedProducts[i].batches, updatedProducts[i].batchesToConfirm[x].isoDueDate);
+                    if (batchToConfirmIndex != -1){ // si existe, lo mergeo
+                        updatedProducts[i].batches[batchToConfirmIndex].stock = updatedProducts[i].batches[batchToConfirmIndex].stock + updatedProducts[i].batchesToConfirm[x].stock;
+                    } else { // si no existe, lo agrego
+                        updatedProducts[i].batches.push(updatedProducts[i].batchesToConfirm[x]);
+                    }
+                }
+            }
+        }
+
+        return updatedProducts;
     };
 
     return this;
