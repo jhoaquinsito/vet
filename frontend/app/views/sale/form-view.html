@@ -144,7 +144,7 @@
         </div>
         <div class="panel-footer">
             <div class="text-right">
-                <button type="button" ng-click="saveSaleAction(saleForm)" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Registrar</button>
+                <button type="button" ng-click="saveSaleAction(saleForm)" ng-disabled="form.sale.saleLines == null || form.sale.saleLines.length == 0" class="btn btn-icon btn-primary"><i class="fa fa-floppy-o"></i>Registrar</button>
             </div>
         </div>
     </div>
