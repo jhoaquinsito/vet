@@ -79,7 +79,7 @@
                                 <label class="control-label">Forma de venta</label>
                                 <select class="form-control" name="formOfSale" 
                                 ng-model="form.sale.formOfSale" 
-                                ng-options="formOfSaleOption as formOfSaleOption.description for formOfSaleOption in form.formOfSaleOptions track by formOfSaleOption.id"
+                                ng-options="formOfSaleOption.description for formOfSaleOption in form.formOfSaleOptions track by formOfSaleOption.id"
                                 required></select>
                             </div>
                         </div>

@@ -42,9 +42,27 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 		}    		
     });
 
+    $scope.$watch("form.sale.person", function(newValue, oldValue){
+
+        // si el cliente no es null, y tiene un id, entonces todas las formas de pago
+        if (newValue != null && angular.isNumber(newValue)) {
+            FormOfSaleService.getList().then(function(response) {
+                $scope.form.formOfSaleOptions = response.plain();
+                $scope.form.formOfSale = FormOfSaleService.selectCashOption($scope.form.formOfSaleOptions);
+            });
+        // si el cliente es "", o null entonces contado
+        } else if (newValue == null || newValue == "") {
+            FormOfSaleService.getList().then(function(response) {
+                var mFormOfSaleOptions = response.plain();
+                $scope.form.formOfSaleOptions = FormOfSaleService.getListForFinalConsumer(mFormOfSaleOptions);
+                $scope.form.formOfSale = FormOfSaleService.selectCashOption($scope.form.formOfSaleOptions);
+            });
+        }          
+    });
+
     $scope.$watch("form.sale.formOfSale", function(newValue, oldValue){
     	
-        if($scope.form.sale.formOfSale.id === 1 ) // pago contado
+        if($scope.form.sale.formOfSale != null && $scope.form.sale.formOfSale.id === 1 ) // pago contado
         {
             $scope.form.sale.paiedOut = true;
             $scope.form.sale.settlement.amount = $scope.calculateSaleTotal();
@@ -120,15 +138,12 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         $scope.form.invoiceOptions = SaleService.getInvoiceOptions();
         $scope.form.sale.invoiced = $scope.form.invoiceOptions[0].value;
 
-
-        
-
         FormOfSaleService.getList().then(function(response) {
-            var formOfSaleList = response.plain();
-            $scope.form.formOfSaleOptions = formOfSaleList;
-
-            $scope.form.formOfSale = $scope.form.formOfSaleOptions[0];
+            var mFormOfSaleOptions = response.plain();
+            $scope.form.formOfSaleOptions = FormOfSaleService.getListForFinalConsumer(mFormOfSaleOptions);
+            $scope.form.formOfSale = FormOfSaleService.selectCashOption($scope.form.formOfSaleOptions);
         });
+
     };
 
     $scope.addSaleLineAction = function() {
