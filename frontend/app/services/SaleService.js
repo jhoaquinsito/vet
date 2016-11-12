@@ -7,7 +7,7 @@ app.factory('SaleService', function($filter, Restangular) {
             sale.settlement.amount = sale.paied_out ? this.calculateSaleTotal(sale) : 0;
         }
 
-        if (sale.person == null) {
+        if (sale.person == null || sale.person == "") {
             sale.person = 1;
         }
 
