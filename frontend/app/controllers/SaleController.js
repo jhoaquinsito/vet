@@ -209,7 +209,23 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
     $scope.resetProductSearchModal = function() {
         $scope.form.searchProductModal.product = null;
+        $scope.form.searchProductModal.validationMessage = null;
     };
+
+    $scope.$watch('form.searchProductModal.product.batches', function(newVal, oldVal) {
+        if ($scope.form.searchProductModal != null && $scope.form.searchProductModal.product != null && $scope.form.searchProductModal.product.batches != null) {
+            for (var i = 0; i < $scope.form.searchProductModal.product.batches.length; i++) {
+                if (!(($scope.form.searchProductModal.product.batches[i].unitsToSell | 0) === $scope.form.searchProductModal.product.batches[i].unitsToSell) && 
+                        $scope.form.searchProductModal.product.measureUnit.abbreviation == "U.")
+                {
+                    $scope.form.searchProductModal.validationMessage = "Productos por unidad no se pueden vender fraccionados.";
+                    break;
+                } else {
+                    $scope.form.searchProductModal.validationMessage = null;
+                }
+            }
+        }
+    }, true);
 
     $scope.acceptProductSearchModal = function() {
         $scope.form.searchProductModal.product.batches.forEach(function(batch, index, batches) {
@@ -295,7 +311,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     // verifico si el boton de aceptar en el modal de busqueda de productos/lote debe estar deshabilitado o no
     $scope.isModalAcceptButtonDisabled = function(){
         // si no tiene ningun producto cargado en el modal entonces tiene que estar deshabilitado
-        if ($scope.form.searchProductModal.product != null){
+        // si tiene cargado algo en el validationMessage en el modal entonces tiene que estar deshabilitado
+        if ($scope.form.searchProductModal.product != null && $scope.form.searchProductModal.validationMessage == null){
             if ($scope.form.searchProductModal.product.batches != null){
                 // si todos los batches están en cero o vacíos entonces tiene que estar deshabilitado
                 for (var i = 0; i < $scope.form.searchProductModal.product.batches.length; i++) {
