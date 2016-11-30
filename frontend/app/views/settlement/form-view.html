@@ -148,7 +148,7 @@
 		                        <div class="col-md-12 no-padding-left">
 		                            <div class="form-group form-group-sm">
 		                                <label class="control-label mandatory">N° de cheque</label>
-		                                <input type="text" class="form-control" name="settlement-checknumber" ng-model="form.newSettlement.checkNumber" >
+		                                <input type="text"  class="form-control" name="settlement-checknumber" ng-model="form.newSettlement.checkNumber" onkeypress="return /^\d*[\.\d]*$/.test(this.value+String.fromCharCode(event.charCode))" >
 		                            </div>
 		                        </div>
 <!-- 		                        <div class="col-md-7 no-padding-left no-padding-right"> -->

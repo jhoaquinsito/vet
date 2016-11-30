@@ -61,6 +61,12 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
 			
     		
     });
+    //Este watch permite limitar la cnatidad de caracteres en el campo de NUMERO DE CHEQUE
+    $scope.$watch('form.newSettlement.checkNumber', function(newVal, oldVal) {
+  	  if($scope.form.newSettlement.checkNumber.length > 8) {       
+  	    $scope.form.newSettlement.checkNumber = oldVal;
+  	  }
+  	});
     
     
     //Este método permite limpiar los datos del modelo asociado con el pequeño formulario para agregar un newSettlement
