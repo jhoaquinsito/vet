@@ -56,7 +56,7 @@
                     <div class="col-md-6">
                         <div class="form-group form-group-sm" ng-class="{'has-error': clientForm.cuit.$dirty && clientForm.cuit.$error.required}">
                             <label class="control-label mandatory">CUIT</label>
-                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit"  ng-maxlength="11" onkeypress="return /^\d*[\-\d]*$/.test(this.value+String.fromCharCode(event.charCode))" required>
+                            <input type="text" class="form-control" name="cuit" ng-model="form.client.cuit"   onkeypress="return /^\d*[\-\d]*$/.test(this.value+String.fromCharCode(event.charCode))" required>
                             <!-- La expresion regular valida que el cuit comience con un nro y que sea formado por numeros y guiones medios -->
                             <span ng-show="clientForm.cuit.$dirty && clientForm.cuit.$error.required" class="help-block">Este campo es obligatorio</span>
                         </div>
