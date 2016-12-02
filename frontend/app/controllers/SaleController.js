@@ -42,6 +42,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 		}    		
     });
 
+
+
     $scope.$watch("form.sale.person", function(newValue, oldValue){
 
         // si el cliente no es null, y tiene un id, entonces todas las formas de pago
@@ -77,6 +79,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
 
         $scope.resetFormData();
         $scope.refreshFormDropdownsData();
+        $scope.resetProductSearchModal();
     };
 
     $scope.saveSaleAction = function(form) {
@@ -98,6 +101,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'success', 'female'), 'success');
 
             $scope.resetFormData();
+            $scope.refreshFormDropdownsData();
 
             $location.path('sales');
         };
