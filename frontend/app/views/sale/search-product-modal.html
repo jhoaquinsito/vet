@@ -27,13 +27,13 @@
                                 <th class="col-xs-3">Stock</th>
                                 <th class="col-xs-3">Cant. a vender</th>
                             </tr>
-                            <tr ng-repeat="batch in form.searchProductModal.product.batches | filter: hasStock">
-                                <td class="table-cell-input">
+                            <tr ng-repeat="batch in form.searchProductModal.product.batches">
+                                <td class="table-cell-input" ng-if="hasStock(batch)">
                                     <span ng-if="batch.isoDueDate == null">Sin vencimiento</span>
                                     <span ng-if="batch.isoDueDate != null">{{isoDateToFormattedString(batch.isoDueDate)}}</span>
                                 </td>
-                                <td class="table-cell-input">{{ batch.stock + ' ' + form.searchProductModal.product.measureUnit.abbreviation }}</td>
-                                <td class="table-cell-input">
+                                <td class="table-cell-input" ng-if="hasStock(batch)">{{ batch.stock + ' ' + form.searchProductModal.product.measureUnit.abbreviation }}</td>
+                                <td class="table-cell-input" ng-if="hasStock(batch)">
                                     <input type="number" class="form-control text-right" name="discount-{{batch.id}}" ng-model="form.searchProductModal.product.batches[$index].unitsToSell" ng-init="initializeUnitsToSell($index)" min="0" >
                                 </td>
                             </tr>
