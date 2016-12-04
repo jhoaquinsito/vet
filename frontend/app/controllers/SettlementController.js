@@ -94,8 +94,6 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
                     client.fullName = client.name;
                 }
             });
-
-            console.log($scope.form.clients);
         });
     };
 
