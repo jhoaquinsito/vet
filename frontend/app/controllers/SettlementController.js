@@ -21,6 +21,7 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     
     //Método del scope para encapsular el proceso de obtención de datos de las ventas de un cliente
     $scope.loadSales = function(clientId) {
+        //TODO to be removed: check form.person != null
     	$scope.form.personLoaded = true;
 		var requestSales   = SettlementService.getDueSalesByClientId(clientId);
 		requestSales.success = function(response){
@@ -32,21 +33,18 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         };
         requestSales.then(requestSales.success, requestSales.error);
     }
-    
-    //Método del scope para encapsular el proceso de obtención de datos de un cliente
-    $scope.loadCliente = function(personId) {
-    	var requestPerson  = ClientService.getById(personId);
-        
-    	requestPerson.success = function(response) {
-            $scope.form.person = response.plain();
-        };
 
-    	requestPerson.error = function(response) {
-            MessageService.message(MessageService.text('person', 'get', 'error', 'male'), 'danger');
+    $scope.loadClientSettlements = function(clientId){
+
+        var request = SettlementService.getSettlements(clientId);
+        request.success = function(response){
+            $scope.form.clientSettlements = response.data;
+        }
+        request.error = function(response) {
+            MessageService.message(MessageService.text('settlements', 'get', 'error', 'male'), 'danger');
         };
-        
-        requestPerson.then(requestPerson.success, requestPerson.error);
-    };
+        request.then(request.success, request.error);
+    }
     
     //Este Watch permite analizar el dato dle modelo que alberga la persona. Cuando esta cambia, se cargan los datos de sus ventas.
     $scope.$watch("form.person", function(newValue, oldValue){
@@ -54,8 +52,10 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     	if(typeof $scope.form.person !== 'undefined' && typeof $scope.form.person.id !== 'undefined')
 		{
     		$scope.loadSales($scope.form.person.id);
+            $scope.loadClientSettlements($scope.form.person.id);
     		
 		}else{
+            //TODO to be removed: check form.person != null
 			$scope.form.personLoaded = null;
 		}
 			
@@ -99,12 +99,12 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
         //Incluimos la fecha actual en milisegundos
         $scope.form.newSettlement.date = Date.now();
         
-        var request = SettlementService.addSettlement($scope.form.person, $scope.form.newSettlement);
+        var request = SettlementService.addSettlement($scope.form.person.id, $scope.form.clientSettlements, $scope.form.newSettlement);
 
         request.success = function(response) {
         	//Refrescamos los datos del cliente y de sus ventas.
         	$scope.loadSales($scope.form.person.id);
-        	$scope.loadCliente($scope.form.person.id);
+            $scope.loadClientSettlements($scope.form.person.id);
         	
         	//Emitimos el mensaje de éxito
             MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'success', 'male'), 'success');
@@ -149,7 +149,7 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     //Se usa multiples veces.
     $scope.calculateSettlementsTotal = function(){
     	if($scope.form.person != null && $scope.form.person.id != null){
-    		$scope.form.totalDePagos = SettlementService.calculateClienteBalance($scope.form.person);
+    		$scope.form.totalDePagos = SettlementService.calculateClienteBalance($scope.form.clientSettlements);
     	}else{
     		$scope.form.totalDePagos = 0;    		
     	}

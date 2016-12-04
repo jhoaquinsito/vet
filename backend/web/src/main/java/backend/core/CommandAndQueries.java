@@ -541,6 +541,12 @@ public class CommandAndQueries {
 		return pClient;
 	}
 	
+	public List<SettlementDTO> getClientSettlements(Long pClientId) throws BusinessException {
+		Set<Settlement> mClientSettlements = this.iPersonService.getClientSettlements(pClientId);
+		
+		return this.iMapper.mapAsList(mClientSettlements, SettlementDTO.class);
+	}
+	
 	
 	/***
 	 * Este método es una consulta que devuelve la lista completa de Personas Legales

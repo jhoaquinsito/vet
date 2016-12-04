@@ -478,6 +478,12 @@ public class ApplicationRESTController {
 
 	}
 	
+	@RequestMapping(value = "client/{pClientId}/settlements", method = RequestMethod.GET)
+	public @ResponseBody List<SettlementDTO> getClientSettlements(@PathVariable Long pClientId) throws BusinessException {
+
+		return this.iCommandAndQueries.getClientSettlements(pClientId);
+	}
+	
 	// FIN CLIENTES
 	
 	//=======================================================================================

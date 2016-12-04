@@ -1,8 +1,11 @@
 package backend.person;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import backend.exception.BusinessException;
+import backend.person.settlement.Settlement;
 
 @Service
 public class PersonService {
@@ -38,6 +41,10 @@ public class PersonService {
 		Iterable<Person> mPeople = this.iPersonRepository.findAll();
 		
 		return mPeople; 
+	}
+	
+	public Set<Settlement> getClientSettlements(Long pPersonId) throws BusinessException{
+		return this.get(pPersonId).getSettlements();
 	}
 	
 	/**

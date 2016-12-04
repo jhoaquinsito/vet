@@ -1,10 +1,7 @@
 app.factory('SettlementService', function($http,Restangular, config) {
+    //TODO to be removed:
     var serviceDueSales = Restangular.service('duesales');
-    
-    this.save = function(client) {
-        return $http.post(config.API_BASE_URL + '/client/' + client.id +'/settlements' , client.settlements);
-    };
-    
+    //TODO to be removed:
     this.getDueSalesByClientId = function(clientId) {
         return serviceDueSales.one(clientId).get();
     };
@@ -15,10 +12,15 @@ app.factory('SettlementService', function($http,Restangular, config) {
      * en la lista original del cliente.
      * Y luego hace el Save. correspondiente.
      */
-   this.addSettlement = function(client,settlement){
-	   var settlements = client.settlements;
-	   client.settlements.push(settlement);
-	   return this.save(client);
+   this.addSettlement = function(clientId, settlements, newSettlement){
+	   // agrego el nuevo settlement a la lista de settlements actual
+       settlements.push(newSettlement);
+
+	   return $http.post(config.API_BASE_URL + '/client/' + clientId +'/settlements', settlements);
+   }
+
+   this.getSettlements = function(clientId){
+        return $http.get(config.API_BASE_URL + '/client/'+ clientId +'/settlements');
    }
 
 
@@ -27,13 +29,15 @@ app.factory('SettlementService', function($http,Restangular, config) {
 	 * Este método devuelve el total de los pagos 
 	 * no descontados realizados por el cliente.
 	 */
-    this.calculateClienteBalance = function(person){
+    this.calculateClienteBalance = function(settlements){
     	 var sum = 0;
          
-    	 person.settlements.forEach(function(settlement){
-    		var subtotal = settlement.amount - settlement.discounted;
-            sum += subtotal;
-         });
+    	 if (settlements != undefined) {
+             settlements.forEach(function(settlement){
+        		var subtotal = settlement.amount - settlement.discounted;
+                sum += subtotal;
+             });
+         }
     	 
          return sum;
     }
