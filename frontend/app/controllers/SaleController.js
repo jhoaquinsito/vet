@@ -125,8 +125,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
     };
 
     $scope.refreshFormDropdownsData = function() {
-        ClientService.getList().then(function(response) {
-            var clients = response.plain();
+        ClientService.getListForDropdown().then(function(response) {
+            var clients = response.data;
 
             clients.forEach(function(client) {
                 client.fullName = client.name + (client.lastName ? ' ' + client.lastName : '');
