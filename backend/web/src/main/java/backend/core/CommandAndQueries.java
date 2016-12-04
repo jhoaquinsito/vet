@@ -734,10 +734,9 @@ public class CommandAndQueries {
 		for (Person bPerson : mClientsList){
 			PersonForDropdownDTO bPersonForDropdownDTO = new PersonForDropdownDTO();
 			bPersonForDropdownDTO.setId(bPerson.getId());
-			bPersonForDropdownDTO.setSettlements(this.iMapper.mapAsSet(bPerson.getSettlements(), SettlementDTO.class));
 			if (bPerson.getClass() == NaturalPerson.class){ // si es persona natural
-				String bPersonLastName = ((NaturalPerson) bPerson).getLastName();
-				bPersonForDropdownDTO.setName(bPerson.getName()+' '+ bPersonLastName);
+				bPersonForDropdownDTO.setName(bPerson.getName());
+				bPersonForDropdownDTO.setLastName(((NaturalPerson) bPerson).getLastName());
 			}else{
 				bPersonForDropdownDTO.setName(bPerson.getName());
 			}

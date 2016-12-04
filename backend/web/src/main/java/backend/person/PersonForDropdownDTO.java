@@ -1,16 +1,14 @@
 package backend.person;
 
-import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import backend.person.settlement.SettlementDTO;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class PersonForDropdownDTO  {
 
 	private Long iId;
 	private String iName;
-	private Set<SettlementDTO> iSettlements;
+	private String iLastName;
 	
 	public Long getId() {
 		return iId;
@@ -24,11 +22,11 @@ public class PersonForDropdownDTO  {
 	public void setName(String pName) {
 		this.iName = pName;
 	}
-	public Set<SettlementDTO> getSettlements() {
-		return iSettlements;
+	public String getLastName() {
+		return iLastName;
 	}
-	public void setSettlements(Set<SettlementDTO> pSettlements) {
-		this.iSettlements = pSettlements;
+	public void setLastName(String pLastName) {
+		this.iLastName = pLastName;
 	}
 
 }

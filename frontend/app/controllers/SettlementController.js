@@ -86,6 +86,16 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
     $scope.refreshFormDropdownsData = function() {
         ClientService.getListForDropdown().then(function(response) {
             $scope.form.clients = response.data;
+
+            $scope.form.clients.forEach(function(client,index,clients){
+                if (client.lastName != null){
+                    client.fullName = client.name + ' ' + client.lastName;
+                } else {
+                    client.fullName = client.name;
+                }
+            });
+
+            console.log($scope.form.clients);
         });
     };
 
