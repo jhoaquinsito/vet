@@ -73,10 +73,6 @@ public class LegalPersonService {
 		// verifico que la persona legal que se intenta guardar no esté eliminada
 		// o que traiga un identificador que no existe
 		// TODO refactor esto:
-		LegalPerson mStoredLegalPerson;
-		if (pLegalPersonToSave.getId() != null){
-			 mStoredLegalPerson = this.iLegalPersonRepository.findOne(pLegalPersonToSave.getId());
-		}
 		
 		//valido la entidad
 		this.iEntityValidator.validate(pLegalPersonToSave);
