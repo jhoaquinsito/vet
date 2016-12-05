@@ -331,5 +331,10 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
         return true;
     }
 
+    $scope.isRegisterSaleButtonDisabled = function(){
+        // el boton de registrar venta queda deshabilitado si no hay lineas de venta o no hay un cliente seleccionado
+        return $scope.form.sale.saleLines == null || $scope.form.sale.saleLines.length == 0 || typeof($scope.form.sale.person) == "string";
+    };
+
     $scope.init();
 });
