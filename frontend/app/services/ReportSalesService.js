@@ -14,7 +14,6 @@ app.factory('ReportSalesService', function($http, Restangular, config,$filter) {
 	            "endDate": 	 dateObjectToIsoDate(form.endIsoDueDate)
 	        };
 
-    	console.log(data);
         var url = config.API_BASE_URL + '/sale/report';
         return $http.post(url, data);
     };
