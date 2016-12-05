@@ -47,6 +47,10 @@ public class PersonService {
 		return this.get(pPersonId).getSettlements();
 	}
 	
+	public boolean existsActiveByName(String pPersonName){
+		return this.iPersonRepository.existsActiveByName(pPersonName);
+	}
+	
 	/**
 	 * Método que permite eliminar una persona legal a partir de su identificador.
 	 * La eliminación es de tipo lógica.

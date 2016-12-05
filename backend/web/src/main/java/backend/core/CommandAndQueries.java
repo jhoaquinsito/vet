@@ -500,7 +500,13 @@ public class CommandAndQueries {
 			mLegalPerson = (LegalPerson) this.processClientDebt(mLegalPerson);
 		}
 		
-		mLegalPerson = this.iLegalPersonService.save(mLegalPerson);
+		if (!this.iPersonService.existsActiveByName(mLegalPerson.getName())){
+			// si no existe el nombre, guardo
+			mLegalPerson = this.iLegalPersonService.save(mLegalPerson);
+		} else {
+			//TODO tener las constantes en otra clase
+			throw new BusinessException(LegalPersonService.cLEGALPERSON_DUPLICATED_NAME);
+		}
 		
 		return mLegalPerson.getId();
 	}

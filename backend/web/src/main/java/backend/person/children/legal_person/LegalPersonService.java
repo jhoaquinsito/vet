@@ -17,6 +17,7 @@ public class LegalPersonService {
 	private static final String cLEGALPERSON_CLIENT_EXISTENT_CUIT   = "La persona legal no puede guardarse, actualmente existe un cliente   activo con el mismo CUIT.";
 	private static final String cLEGALPERSON_SUPPLIER_EXISTENT_CUIT = "La persona legal no puede guardarse, actualmente existe un proveedor activo con el mismo CUIT.";
 	private static final String cLEGALPERSON_NOT_ACTIVE_EXCEPTION_MESSAGE   = "La persona legal que desea consultar no está activa.";
+	public static final String cLEGALPERSON_DUPLICATED_NAME = "La persona legal que desea guardar coincide con el nombre de una persona legal existente.";
 	
 	@Autowired private LegalPersonRepository iLegalPersonRepository;
 	
@@ -72,17 +73,15 @@ public class LegalPersonService {
 	public LegalPerson save(LegalPerson pLegalPersonToSave) throws BusinessException {
 		// verifico que la persona legal que se intenta guardar no esté eliminada
 		// o que traiga un identificador que no existe
-		// TODO refactor esto:
-		
+		// TODO refactor esto de las validaciones:
 		//valido la entidad
 		this.iEntityValidator.validate(pLegalPersonToSave);
 		
 		//valido casos específicos.
 		this.Validate(pLegalPersonToSave);
 		
-		// guardo el producto
+		// guardo la persona legal
 		LegalPerson mLegalPersonSaved = this.tryToSave(pLegalPersonToSave);
-		
 		
 		return mLegalPersonSaved;
 	}
