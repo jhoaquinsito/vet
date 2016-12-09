@@ -28,5 +28,9 @@ app.factory('ClientService', function($http, Restangular, config) {
         return serviceClient.one(clientId).remove();
     };
 
+    this.getFullName = function(client){
+        return (client.cuit ? client.name : client.name + ' ' +client.lastName);
+    }
+
     return this;
 });
