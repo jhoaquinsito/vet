@@ -129,7 +129,7 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             var clients = response.data;
 
             clients.forEach(function(client) {
-                client.fullName = client.name + (client.lastName ? ' ' + client.lastName : '');
+                 client.fullName = ClientService.getFullName(client);
             });
 
             $scope.form.clients = clients;

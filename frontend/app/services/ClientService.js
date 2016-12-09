@@ -29,7 +29,7 @@ app.factory('ClientService', function($http, Restangular, config) {
     };
 
     this.getFullName = function(client){
-        return (client.cuit ? client.name : client.name + ' ' +client.lastName);
+        return client.name + (client.lastName ? ' ' + client.lastName : '');
     }
 
     return this;
