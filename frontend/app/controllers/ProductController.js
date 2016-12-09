@@ -257,37 +257,16 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
         var productDrugName = null;
         // verifico que el DrugName no sea undefined or null or '' or '      '
         if (!!product.drug && !!product.drug.name && !!product.drug.name.trim()) {
-            productDrugName = product.drug.name;
+            productDrugName = product.drug.name.toLowerCase();
         }
 
-        searchCriteriaList = searchCriteria.split(' ');
-
-        var criteriaAppliesToName;
+        if (productName.indexOf(searchCriteria) != -1 || (productDrugName != null && productDrugName.indexOf(searchCriteria) != -1)){
+            criteriaMatches = true;
+        } else {
+            criteriaMatches = false;
+        }
         
-        for (criteriaIndex = 0; criteriaIndex < searchCriteriaList.length; criteriaIndex++) { 
-            // checkeo que el criterio de busqueda este dentro del nombre del producto
-            if (productName.indexOf(searchCriteriaList[criteriaIndex]) != -1){
-                criteriaAppliesToName = true;
-            } else {
-                criteriaAppliesToName = false;
-            }
-
-            // checkeo que el criterio de busqueda este dentro del nombre de la droga (si existe)
-            if (!!productDrugName){
-                if (!(productDrugName.indexOf(searchCriteriaList[criteriaIndex]) != -1)){
-                    if (!criteriaAppliesToName){
-                        return false;
-                    }    
-                }
-            } else {
-                if (!criteriaAppliesToName){
-                    return false;
-                }
-            }
-
-        }
-
-        return true;
+        return criteriaMatches;
     };
 
     // funcion que transforma un integer ISO del formato yyyyMMdd a un string yyyy/MM/dd
