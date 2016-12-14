@@ -44,6 +44,8 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
             $scope.form.formOfSaleOptions.push.apply($scope.form.formOfSaleOptions, formOfSaleList)
             //
             $scope.form.formOfSale = $scope.form.formOfSaleOptions[1].value;
+        }, function(response){
+            MessageService.message(MessageService.text('lista de formas de venta', 'get', 'error', 'female'), 'danger');
         });
         
         
@@ -72,9 +74,13 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
         	$scope.form.totalDeVentas 	= $scope.calculateAllSalesTotal();
         };
         request.error = function(response) {
-        	$scope.form.sales 			= [];
-        	//this.text = function(entity, action, type, gender)
-            MessageService.message(MessageService.text('Reporte - Ventas.',  'Reportes', 'error', 'male'), 'danger');
+            //TODO tomas: revisar si esto está bien:
+        	$scope.form.sales = [];
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('reporte de ventas',  'report', 'error', 'male'), 'danger');
+            }
         };
 
         request.then(request.success, request.error);

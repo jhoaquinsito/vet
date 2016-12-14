@@ -30,7 +30,11 @@ app.controller('BarcodeController', function($scope, $location, $rootScope, $rou
                 $location.path('products');
             };
             request.error = function(response) {
-                MessageService.message(MessageService.text('código de barra', 'print', 'error', 'male'), 'danger');
+                if (response.data != null && response.data.message != null){
+                    MessageService.message(response.data.message,'danger');
+                } else {
+                    MessageService.message(MessageService.text('código de barra', 'print', 'error', 'male'), 'danger');
+                }
 
                 $location.path('products');
             };
@@ -44,6 +48,8 @@ app.controller('BarcodeController', function($scope, $location, $rootScope, $rou
     $scope.refreshFormDropdownsData = function() {
         ProductService.getList().then(function(response) {
             $scope.form.products = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de productos', 'get', 'error', 'female'), 'danger');
         });
 
     };

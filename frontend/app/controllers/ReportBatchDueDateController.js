@@ -44,9 +44,13 @@ app.controller('ReportBatchDueDateController', function($scope, $location, $root
 
         };
         request.error = function(response) {
-        	$scope.form.batches 			= [];
-        	//this.text = function(entity, action, type, gender)
-            MessageService.message(MessageService.text('Reporte - Vencimiento de lotes.',  'Reportes', 'error', 'male'), 'danger');
+        	//TODO tomas: revisar si esto esta bien:
+            $scope.form.batches = [];
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('reporte de vencimiento de lotes',  'report', 'error', 'male'), 'danger');
+            }
         };
 
         request.then(request.success, request.error);

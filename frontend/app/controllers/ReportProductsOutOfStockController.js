@@ -22,6 +22,8 @@ app.controller('ReportProductsOutOfStockController', function($scope, $location,
     $scope.refreshTableData = function() {
         ReportProductsOutOfStockService.getList().then(function(response) {
             $scope.products = response.data;
+        }, function(response){
+            MessageService.message(MessageService.text('lista de productos sin stock', 'get', 'error', 'female'), 'danger');
         });
     };
 

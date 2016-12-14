@@ -61,7 +61,11 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
                 $scope.refreshTableData();
             };
             request.error = function(response) {
-                MessageService.message(MessageService.text('producto', 'remove', 'error', 'male'), 'danger');
+                if (response.data != null && response.data.message != null){
+                    MessageService.message(response.data.message,'danger');
+                } else {
+                    MessageService.message(MessageService.text('producto', 'remove', 'error', 'male'), 'danger');
+                }
             };
 
             request.then(request.success, request.error);
@@ -90,7 +94,11 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             $location.path('products');
         };
         request.error = function(response) {
-            MessageService.message(MessageService.text('producto', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('producto', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            }
 
             $location.path('products');
         };
@@ -153,6 +161,8 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
     $scope.refreshTableData = function() {
         ProductService.getList().then(function(response) {
             $scope.products = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de productos', 'get', 'error', 'female'), 'danger');
         });
     };
 
@@ -181,7 +191,11 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
             $scope.form.product = response.plain();
         };
         request.error = function(response) {
-            MessageService.message('El producto solicitado no existe', 'danger');
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('producto', 'get', 'error', 'male'), 'danger');
+            }
 
             $location.path('products');
         };
@@ -192,26 +206,38 @@ app.controller('ProductController', function($scope, $location, $rootScope, $rou
     $scope.refreshFormDropdownsData = function() {
         CategoryService.getList().then(function(response) {
             $scope.form.categories = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de categorias', 'get', 'error', 'female'), 'danger');
         });
 
         DrugService.getList().then(function(response) {
             $scope.form.drugs = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de drogas', 'get', 'error', 'female'), 'danger');
         });
 
         ManufacturerService.getList().then(function(response) {
             $scope.form.manufacturers = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de laboratorios', 'get', 'error', 'female'), 'danger');
         });
 
         MeasureUnitService.getList().then(function(response) {
             $scope.form.measureUnits = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de unidades de medida', 'get', 'error', 'female'), 'danger');
         });
 
         PresentationService.getList().then(function(response) {
             $scope.form.presentations = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de presentaciones', 'get', 'error', 'female'), 'danger');
         });
 
         SupplierService.getList().then(function(response) {
             $scope.form.suppliers = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de proveedores', 'get', 'error', 'female'), 'danger');
         });
 
         $scope.form.ivas = ProductService.getIvaOptions();

@@ -92,6 +92,8 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
             });
 
             $scope.form.clients = clients;
+        }, function(response){
+            MessageService.message(MessageService.text('lista de clientes', 'get', 'error', 'female'), 'danger');
         });
     };
 

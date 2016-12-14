@@ -52,7 +52,11 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
                 $scope.refreshTableData();
             };
             request.error = function(response) {
-                MessageService.message(MessageService.text('proveedor', 'remove', 'error', 'male'), 'danger');
+                if (response.data != null && response.data.message != null){
+                    MessageService.message(response.data.message,'danger');
+                } else {
+                    MessageService.message(MessageService.text('proveedor', 'remove', 'error', 'male'), 'danger');
+                }
             };
 
             request.then(request.success, request.error);
@@ -72,7 +76,11 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
             $location.path('suppliers');
         };
         request.error = function(response) {
-            MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('proveedor', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            }
 
             $location.path('suppliers');
         };
@@ -87,7 +95,11 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
             $scope.form.supplier = response.plain();
         };
         request.error = function(response) {
-            MessageService.message('El proveedor solicitado no existe', 'danger');
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('proveedor', 'get', 'error', 'male'), 'danger');
+            }
 
             $location.path('suppliers');
         };
@@ -102,6 +114,8 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
     $scope.refreshTableData = function() {
         SupplierService.getList().then(function(response) {
             $scope.suppliers = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de proveedores', 'get', 'error', 'female'), 'danger');
         });
     };
 
@@ -123,6 +137,8 @@ app.controller('SupplierController', function($scope, $location, $rootScope, $ro
     $scope.refreshFormDropdownsData = function() {
         IvaCategoryService.getList().then(function(response) {
             $scope.form.ivacategories = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de categorias de IVA', 'get', 'error', 'female'), 'danger');
         });
     };
 

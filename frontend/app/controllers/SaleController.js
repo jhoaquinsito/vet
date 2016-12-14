@@ -51,6 +51,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             FormOfSaleService.getList().then(function(response) {
                 $scope.form.formOfSaleOptions = response.plain();
                 $scope.form.formOfSale = FormOfSaleService.selectCashOption($scope.form.formOfSaleOptions);
+            }, function(response){
+                MessageService.message(MessageService.text('lista de formas de venta', 'get', 'error', 'female'), 'danger');
             });
         // si el cliente es "", o null entonces contado
         } else if (newValue == null || newValue == "") {
@@ -58,6 +60,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
                 var mFormOfSaleOptions = response.plain();
                 $scope.form.formOfSaleOptions = FormOfSaleService.getListForFinalConsumer(mFormOfSaleOptions);
                 $scope.form.formOfSale = FormOfSaleService.selectCashOption($scope.form.formOfSaleOptions);
+            }, function(response){
+                MessageService.message(MessageService.text('lista de formas de venta', 'get', 'error', 'female'), 'danger');
             });
         }          
     });
@@ -106,7 +110,11 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             $location.path('sales');
         };
         request.error = function(response) {
-            MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'error', 'female'), 'danger');
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('venta', $routeParams.id == null ? 'add' : 'edit', 'error', 'female'), 'danger');
+            }
 
             $location.path('sales');
         };
@@ -133,10 +141,14 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             });
 
             $scope.form.clients = clients;
+        }, function(response){
+            MessageService.message(MessageService.text('lista de clientes', 'get', 'error', 'female'), 'danger');
         });
 
         ProductService.getList().then(function(response) {
             $scope.form.products = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de productos', 'get', 'error', 'female'), 'danger');
         });
 
         $scope.form.invoiceOptions = SaleService.getInvoiceOptions();
@@ -146,6 +158,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
             var mFormOfSaleOptions = response.plain();
             $scope.form.formOfSaleOptions = FormOfSaleService.getListForFinalConsumer(mFormOfSaleOptions);
             $scope.form.formOfSale = FormOfSaleService.selectCashOption($scope.form.formOfSaleOptions);
+        }, function(response){
+            MessageService.message(MessageService.text('lista de formas de venta', 'get', 'error', 'female'), 'danger');
         });
 
     };
@@ -170,6 +184,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
                 newSaleLine.discount = 0;
 
                 $scope.form.sale.saleLines = SaleService.updateSaleLinesWithNewSaleLine($scope.form.sale.saleLines, newSaleLine);
+            }, function(response){
+                MessageService.message(MessageService.text('producto por codigo de lote', 'get', 'error', 'male'), 'danger');
             });
 
             // reset del productBatchCode que usó para buscar producto
@@ -199,6 +215,8 @@ app.controller('SaleController', function($scope, $location, $rootScope, $route,
                 $scope.form.searchProductModal.product = SaleService.populateProductWithSaleLineUnitsToSell(product, $scope.form.sale.saleLines);
                 // muestro 
                 productSearchModal.$promise.then(productSearchModal.show);
+            }, function(response){
+                MessageService.message(MessageService.text('producto', 'get', 'error', 'male'), 'danger');
             });
 
         } else {

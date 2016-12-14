@@ -22,6 +22,8 @@ app.controller('ReportClientsInDebtController', function($scope, $location, $roo
     $scope.refreshTableData = function() {
         ReportClientsInDebtService.getList().then(function(response) {
             $scope.clients = response.data;
+        }, function(response){
+            MessageService.message(MessageService.text('lista de deudores', 'get', 'error', 'female'), 'danger');
         });
     };
 

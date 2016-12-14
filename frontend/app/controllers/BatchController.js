@@ -50,7 +50,11 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
             };
 
             request.error = function(response) {
-                MessageService.message(MessageService.text('stock de los Productos', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+                if (response.data != null && response.data.message != null){
+                    MessageService.message(response.data.message,'danger');
+                } else {
+                    MessageService.message(MessageService.text('stock de los productos', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+                }
 
                 $location.path('batches/bulk_update');
             };
@@ -156,6 +160,8 @@ app.controller('BatchController', function($scope, $location, $rootScope, $route
     $scope.refreshFormDropdownsData = function() {
         ProductService.getList().then(function(response) {
             $scope.form.products = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de productos', 'get', 'error', 'female'), 'danger');
         });
 
         $scope.form.ivas = ProductService.getIvaOptions();

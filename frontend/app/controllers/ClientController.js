@@ -63,7 +63,11 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
                 $scope.refreshTableData();
             };
             request.error = function(response) {
-                MessageService.message(MessageService.text('cliente', 'remove', 'error', 'male'), 'danger');
+                if (response.data != null && response.data.message != null){
+                    MessageService.message(response.data.message,'danger');
+                } else {
+                    MessageService.message(MessageService.text('cliente', 'remove', 'error', 'male'), 'danger');
+                }
             };
 
             request.then(request.success, request.error);
@@ -83,7 +87,11 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             $location.path('clients');
         };
         request.error = function(response) {
-            MessageService.message(MessageService.text('cliente', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('cliente', $routeParams.id == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            }
 
             $location.path('clients');
         };
@@ -101,6 +109,8 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
 
             $scope.clients = clients;
 
+        }, function(response){
+            MessageService.message(MessageService.text('lista de clientes', 'get', 'error', 'female'), 'danger');
         });
     };
     $scope.$watch('form.client.cuit', function(newVal, oldVal) {
@@ -147,7 +157,11 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
             $scope.form.client.clientType = response.cuit == null ? 'NATURAL_PERSON' : 'LEGAL_PERSON';
         };
         request.error = function(response) {
-            MessageService.message('El cliente solicitado no existe', 'danger');
+            if (response.data != null && response.data.message != null){
+                MessageService.message(response.data.message,'danger');
+            } else {
+                MessageService.message(MessageService.text('cliente', 'get', 'error', 'male'), 'danger');
+            }
 
             $location.path('clients');
         };
@@ -158,6 +172,8 @@ app.controller('ClientController', function($scope, $location, $rootScope, $rout
     $scope.refreshFormDropdownsData = function() {
         IvaCategoryService.getList().then(function(response) {
             $scope.form.ivacategories = response.plain();
+        }, function(response){
+            MessageService.message(MessageService.text('lista de categorias de IVA', 'get', 'error', 'female'), 'danger');
         });
     };
 
