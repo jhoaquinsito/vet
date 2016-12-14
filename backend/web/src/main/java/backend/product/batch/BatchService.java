@@ -112,6 +112,8 @@ public class BatchService {
 				if(mBatch.isGoingToExpire(pBeginDate, pDaysToCheck))
 					mResult.add(mBatch);
 			}
+		// TODO catchear la excepcion correspondiente
+		// TODO NOTA: creo que en este caso no hace falta un try-catch
 		} catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}

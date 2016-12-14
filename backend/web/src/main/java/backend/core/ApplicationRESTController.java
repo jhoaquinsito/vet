@@ -557,7 +557,7 @@ public class ApplicationRESTController {
 	@RequestMapping(value = "sale/report", method = RequestMethod.POST)
 	public List<SaleLiteDTO> getSalesForReport
 	(@RequestBody FormOfSaleForSalesReportDTO pFormOfSaleForSalesReport) throws BusinessException {
-		
+		//TODO esta logica no debería estar acá, analizar responsabilidades:
 		Date mBeginDate = new Date();
 		Date mEndDate = new Date();
 
