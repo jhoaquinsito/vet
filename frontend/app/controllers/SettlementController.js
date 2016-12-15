@@ -104,28 +104,31 @@ app.controller('SettlementController', function($scope, $location, $rootScope, $
             return null;
         }
 
-        //Incluimos la fecha actual en milisegundos
-        $scope.form.newSettlement.date = Date.now();
+        MessageService.confirm('¿Está seguro que desea agregar el siguiente pago por $'+ $scope.form.newSettlement.amount +'?').then(function() {
+            //Incluimos la fecha actual en milisegundos
+            $scope.form.newSettlement.date = Date.now();
+
+            var request = SettlementService.addSettlement($scope.form.person.id, $scope.form.clientSettlements, $scope.form.newSettlement);
+
+            request.success = function(response) {
+            	//Refrescamos los datos del cliente y de sus ventas.
+            	$scope.loadSales($scope.form.person.id);
+                $scope.loadClientSettlements($scope.form.person.id);
+            	
+            	//Emitimos el mensaje de éxito
+                MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'success', 'male'), 'success');
+                
+                $scope.refreshFormData();
+                
+            };
+            request.error = function(response) {
+            	//Emitimos el mensaje de fallo.
+                MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'error', 'male'), 'danger');
+            };
+
+            request.then(request.success, request.error);
+        });
         
-        var request = SettlementService.addSettlement($scope.form.person.id, $scope.form.clientSettlements, $scope.form.newSettlement);
-
-        request.success = function(response) {
-        	//Refrescamos los datos del cliente y de sus ventas.
-        	$scope.loadSales($scope.form.person.id);
-            $scope.loadClientSettlements($scope.form.person.id);
-        	
-        	//Emitimos el mensaje de éxito
-            MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'success', 'male'), 'success');
-            
-            $scope.refreshFormData();
-            
-        };
-        request.error = function(response) {
-        	//Emitimos el mensaje de fallo.
-            MessageService.message(MessageService.text('pago', 34 == null ? 'add' : 'edit', 'error', 'male'), 'danger');
-        };
-
-        request.then(request.success, request.error);
     };
 
     //TODO - NO BORRAR!
