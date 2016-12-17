@@ -6,7 +6,7 @@
                 <th class="col-xs-2 text-right">Minimo stock</th>
                 <th class="col-xs-2 text-right">Stock actual</th>
             </tr>
-            <tr dir-paginate="product in filtered = (products | itemsPerPage: table.pageSize)">
+            <tr dir-paginate="product in filtered = (products | orderBy:'name' | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">{{product.name}}</td>
                 <td class="table-cell-number">{{product.minimumStock}}</td>
                 <td class="table-cell-number">{{calculateProductStock(product)}}</td>
