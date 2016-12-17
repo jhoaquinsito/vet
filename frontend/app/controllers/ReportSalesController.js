@@ -1,5 +1,5 @@
 app.controller('ReportSalesController', function($scope, $location, $rootScope, $route, $routeParams,$filter, $modal, ReportSalesService,FormOfSaleService, MessageService, config) {
-    $scope.name = 'Reporte - Ventas';
+    $scope.name = 'Reportes';
     $scope.action = $route.current.action;
     $scope.table = {};
     $scope.form = {};
@@ -53,7 +53,7 @@ app.controller('ReportSalesController', function($scope, $location, $rootScope, 
     };
     
     $scope.reportsAction = function() {
-        $rootScope.setTitle($scope.name, 'Reporte - Ventas');
+        $rootScope.setTitle($scope.name, 'Ventas');
 
         $scope.resetFormData();
         $scope.refreshFormDropdownsData();

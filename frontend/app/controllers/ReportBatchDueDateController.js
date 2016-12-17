@@ -1,5 +1,5 @@
 app.controller('ReportBatchDueDateController', function($scope, $location, $rootScope, $route, $routeParams,$filter, $modal, ReportBatchDueDateService, MessageService, config) {
-    $scope.name = 'Reporte - Vencimiento de Lotes';
+    $scope.name = 'Reportes';
     $scope.action = $route.current.action;
     $scope.table = {};
     $scope.form = {};
@@ -24,7 +24,7 @@ app.controller('ReportBatchDueDateController', function($scope, $location, $root
     
     
     $scope.reportsAction = function() {
-        $rootScope.setTitle($scope.name, 'Reporte - Vencimiento de Lotes');
+        $rootScope.setTitle($scope.name, 'Vencimiento de Lotes');
 
         $scope.resetFormData();
     };

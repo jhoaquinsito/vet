@@ -1,5 +1,5 @@
 app.controller('ReportProductsOutOfStockController', function($scope, $location, $rootScope, $route, $routeParams, $modal, ReportProductsOutOfStockService, ProductService, MessageService, config) {
-    $scope.name = 'Productos';
+    $scope.name = 'Reportes';
     $scope.action = $route.current.action;
     $scope.table = {};
     
@@ -12,7 +12,7 @@ app.controller('ReportProductsOutOfStockController', function($scope, $location,
     };
     
     $scope.productsOutOfStockAction = function() {
-        $rootScope.setTitle($scope.name, 'Listado de productos sin stock minimo');
+        $rootScope.setTitle($scope.name, 'Listado de productos a reponer');
 
         $scope.table.pageSize = config.TABLE_PAGE_SIZE;
 

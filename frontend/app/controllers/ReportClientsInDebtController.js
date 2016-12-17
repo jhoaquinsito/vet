@@ -1,5 +1,5 @@
 app.controller('ReportClientsInDebtController', function($scope, $location, $rootScope, $route, $routeParams, $modal, ReportClientsInDebtService, MessageService, config) {
-    $scope.name = 'Deudores';
+    $scope.name = 'Reportes';
     $scope.action = $route.current.action;
     $scope.table = {};
     
