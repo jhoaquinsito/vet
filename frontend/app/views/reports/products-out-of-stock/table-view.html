@@ -8,8 +8,8 @@
             </tr>
             <tr dir-paginate="product in filtered = (products | orderBy:'name' | itemsPerPage: table.pageSize)">
                 <td class="table-cell-detail">{{product.name}}</td>
-                <td class="table-cell-number">{{product.minimumStock}}</td>
-                <td class="table-cell-number">{{calculateProductStock(product)}}</td>
+                <td class="table-cell-number">{{product.minimumStock}} {{product.measureUnit.abbreviation}}</td>
+                <td class="table-cell-number">{{calculateProductStock(product)}} {{product.measureUnit.abbreviation}}</td>
             </tr>
             <tr ng-if="clients.length == 0 || filtered.length == 0">
                 <td colspan="4" class="table-cell-empty">No hay clientes que acrediten deudas</td>
